@@ -61,13 +61,18 @@ export function getRoomTypeById(id: string): RoomTypeOption | undefined {
   return ROOM_TYPES.find((r) => r.id === id)
 }
 
-// Generate a prompt with room type context
+// Generate a prompt with room type context and architectural preservation
 export function generatePrompt(template: StyleTemplate, roomType: string | null): string {
-  if (!roomType) {
-    return template.prompt
+  const preserveStructure = "Do not move, remove, or modify windows, walls, doors, or any architectural elements. Keep the room layout exactly as shown."
+
+  let prompt = template.prompt
+
+  if (roomType) {
+    const roomLabel = roomType.replace(/-/g, " ")
+    prompt = `This is a ${roomLabel}. ${prompt}`
   }
-  const roomLabel = roomType.replace(/-/g, " ")
-  return `This is a ${roomLabel}. ${template.prompt}`
+
+  return `${prompt} ${preserveStructure}`
 }
 
 export const STYLE_TEMPLATES: StyleTemplate[] = [
