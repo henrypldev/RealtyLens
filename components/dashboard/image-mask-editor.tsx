@@ -200,7 +200,7 @@ export function ImageMaskEditor({ image, onClose }: ImageMaskEditorProps) {
 
     // Auto-generate prompt based on mode
     const generatedPrompt = mode === "remove"
-      ? "Remove the marked object and seamlessly fill with the surrounding background, matching the room's style and lighting"
+      ? "Empty background, seamless continuation of the surrounding walls, floor and room environment, clean space, no objects"
       : `Add a ${objectToAdd.trim()} in the marked area, matching the room's style and lighting`
 
     // Create a temporary canvas for the final mask
@@ -221,7 +221,7 @@ export function ImageMaskEditor({ image, onClose }: ImageMaskEditorProps) {
 
     // Temporarily change all path colors to white for the mask
     originalPaths.forEach((path) => {
-      (path as { stroke?: string }).stroke = "white"
+      path.set('stroke', 'white')
     })
     fabricCanvas.renderAll()
 
@@ -232,9 +232,9 @@ export function ImageMaskEditor({ image, onClose }: ImageMaskEditorProps) {
 
     // Restore original colors
     originalPaths.forEach((path) => {
-      (path as { stroke?: string }).stroke = mode === "remove"
+      path.set('stroke', mode === "remove"
         ? "rgba(239, 68, 68, 0.6)"
-        : "rgba(34, 197, 94, 0.6)"
+        : "rgba(34, 197, 94, 0.6)")
     })
     fabricCanvas.renderAll()
 
