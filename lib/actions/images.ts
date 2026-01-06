@@ -187,11 +187,17 @@ export async function recordUploadedImages(
 
     // Trigger image processing using Trigger.dev tasks
     for (const image of uploadedImages) {
-      // Update status to processing
-      await updateImageGeneration(image.id, { status: "processing" })
-
       // Trigger the background task
       const handle = await processImageTask.trigger({ imageId: image.id })
+
+      // Store run ID in metadata and update status
+      await updateImageGeneration(image.id, {
+        status: "processing",
+        metadata: {
+          ...(image.metadata as object),
+          runId: handle.id,
+        },
+      })
 
       // Store run ID for real-time subscription
       image.runId = handle.id
@@ -414,18 +420,22 @@ export async function retryImageProcessing(
   }
 
   try {
-    // Reset status to processing for retry
+    // Trigger the background task first to get runId
+    const handle = await processImageTask.trigger({ imageId })
+
+    // Reset status to processing for retry and store runId in metadata
     const updated = await updateImageGeneration(imageId, {
       status: "processing",
       errorMessage: null,
+      metadata: {
+        ...(image.metadata as object),
+        runId: handle.id,
+      },
     })
 
     if (!updated) {
       return { success: false, error: "Failed to update image" }
     }
-
-    // Trigger the background task
-    const handle = await processImageTask.trigger({ imageId })
 
     // Update project counts
     await updateProjectCounts(image.projectId)
@@ -522,6 +532,9 @@ export async function regenerateImage(
   const prompt = generatePrompt(template, roomType)
 
   try {
+    // Trigger the background task first to get runId
+    const handle = await processImageTask.trigger({ imageId })
+
     // Reset status to processing and update prompt if using new template
     const updated = await updateImageGeneration(imageId, {
       status: "processing",
@@ -533,15 +546,13 @@ export async function regenerateImage(
         templateId: template.id,
         templateName: template.name,
         roomType,
+        runId: handle.id,
       },
     })
 
     if (!updated) {
       return { success: false, error: "Failed to update image" }
     }
-
-    // Trigger the background task
-    const handle = await processImageTask.trigger({ imageId })
 
     // Update project counts
     await updateProjectCounts(image.projectId)

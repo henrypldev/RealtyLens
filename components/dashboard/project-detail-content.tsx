@@ -86,22 +86,36 @@ interface ImageGroup {
 function RealtimeProcessingLabel({
   runId,
   accessToken,
-  fallback = "Enhancing\u2026",
+  fallback = "Enhancing…",
+  onComplete,
 }: {
   runId?: string
   accessToken?: string | null
   fallback?: string
+  onComplete?: () => void
 }) {
   const { run } = useRealtimeRun<typeof processImageTask>(runId ?? "", {
     accessToken: accessToken ?? "",
     enabled: !!runId && !!accessToken,
   })
 
+  // Track completion
+  const prevStatusRef = React.useRef<string | undefined>()
+  React.useEffect(() => {
+    const currentStatus = run?.status
+    if (prevStatusRef.current !== currentStatus) {
+      if (currentStatus === "COMPLETED" && prevStatusRef.current && prevStatusRef.current !== "COMPLETED") {
+        onComplete?.()
+      }
+      prevStatusRef.current = currentStatus
+    }
+  }, [run?.status, onComplete])
+
   if (!runId || !accessToken) {
     return <span className="text-sm font-medium text-white">{fallback}</span>
   }
 
-  const status = run?.metadata?.status as { label?: string } | undefined
+  const status = run?.metadata?.status as { label?: string; progress?: number } | undefined
   const label = status?.label || fallback
 
   return <span className="text-sm font-medium text-white">{label}</span>
@@ -121,6 +135,7 @@ function ImageCard({
   onVersionClick,
   runId,
   accessToken,
+  onProcessingComplete,
 }: {
   image: ImageGeneration
   index: number
@@ -135,6 +150,7 @@ function ImageCard({
   onVersionClick?: () => void
   runId?: string
   accessToken?: string | null
+  onProcessingComplete?: () => void
 }) {
   const isCompleted = image.status === "completed"
   const displayUrl = isCompleted && image.resultImageUrl ? image.resultImageUrl : image.originalImageUrl
@@ -179,7 +195,8 @@ function ImageCard({
                 <RealtimeProcessingLabel
                   runId={runId}
                   accessToken={accessToken}
-                  fallback="Enhancing\u2026"
+                  fallback="Enhancing…"
+                  onComplete={onProcessingComplete}
                 />
               </div>
             ) : image.status === "pending" ? (
@@ -649,8 +666,47 @@ export function ProjectDetailContent({ project, images }: ProjectDetailContentPr
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false)
 
   // Real-time run tracking for processing images
-  const [runIds, setRunIds] = React.useState<Map<string, string>>(new Map()) // imageId -> runId
+  const [runIds, setRunIds] = React.useState<Map<string, string>>(() => {
+    // Extract runIds from processing images on initial load
+    const initialRunIds = new Map<string, string>()
+    for (const img of images) {
+      if (img.status === "processing" || img.status === "pending") {
+        const metadata = img.metadata as { runId?: string } | null
+        if (metadata?.runId) {
+          initialRunIds.set(img.id, metadata.runId)
+        }
+      }
+    }
+    return initialRunIds
+  })
   const [accessToken, setAccessToken] = React.useState<string | null>(null)
+
+  // Update runIds when images change (e.g., after server refresh with new processing images)
+  React.useEffect(() => {
+    setRunIds((prevRunIds) => {
+      const newRunIds = new Map<string, string>()
+      for (const img of images) {
+        if (img.status === "processing" || img.status === "pending") {
+          const metadata = img.metadata as { runId?: string } | null
+          if (metadata?.runId) {
+            newRunIds.set(img.id, metadata.runId)
+          }
+        }
+      }
+      // Only update if there are actual changes
+      if (newRunIds.size === prevRunIds.size) {
+        let same = true
+        for (const [key, value] of newRunIds) {
+          if (prevRunIds.get(key) !== value) {
+            same = false
+            break
+          }
+        }
+        if (same) return prevRunIds
+      }
+      return newRunIds
+    })
+  }, [images])
 
   const template = getTemplateById(project.styleTemplateId)
   const status = statusConfig[project.status as ProjectStatus] || statusConfig.pending
@@ -1090,6 +1146,10 @@ export function ProjectDetailContent({ project, images }: ProjectDetailContentPr
                   }}
                   runId={runIds.get(group.latestVersion.id)}
                   accessToken={accessToken}
+                  onProcessingComplete={() => {
+                    toast.success("Image processing complete!")
+                    router.refresh()
+                  }}
                 />
               ))}
             </div>

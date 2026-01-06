@@ -47,7 +47,7 @@ export const inpaintImageTask = task({
       // Step 1: Fetch image record
       metadata.set("status", {
         step: "fetching",
-        label: "Loading image\u2026",
+        label: "Loading image…",
         progress: 10,
       } satisfies InpaintImageStatus)
 
@@ -64,7 +64,7 @@ export const inpaintImageTask = task({
       // Step 2: Prepare images
       metadata.set("status", {
         step: "preparing",
-        label: mode === "remove" ? "Processing mask\u2026" : "Preparing edit\u2026",
+        label: mode === "remove" ? "Processing mask…" : "Preparing edit…",
         progress: 25,
       } satisfies InpaintImageStatus)
 
@@ -98,7 +98,7 @@ export const inpaintImageTask = task({
       // Step 3: Process with AI
       metadata.set("status", {
         step: "processing",
-        label: mode === "remove" ? "Removing selected area\u2026" : "Generating edit\u2026",
+        label: mode === "remove" ? "Removing selected area…" : "Generating edit…",
         progress: 50,
       } satisfies InpaintImageStatus)
 
@@ -178,7 +178,7 @@ export const inpaintImageTask = task({
       // Step 4: Save result
       metadata.set("status", {
         step: "saving",
-        label: "Saving new version\u2026",
+        label: "Saving new version…",
         progress: 80,
       } satisfies InpaintImageStatus)
 

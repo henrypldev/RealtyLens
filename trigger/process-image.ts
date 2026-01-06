@@ -29,7 +29,7 @@ export const processImageTask = task({
       // Step 1: Fetch image record
       metadata.set("status", {
         step: "fetching",
-        label: "Loading image\u2026",
+        label: "Loading image…",
         progress: 10,
       } satisfies ProcessImageStatus)
 
@@ -57,7 +57,7 @@ export const processImageTask = task({
       // Step 2: Upload to Fal.ai storage
       metadata.set("status", {
         step: "uploading",
-        label: "Preparing for AI\u2026",
+        label: "Preparing for AI…",
         progress: 25,
       } satisfies ProcessImageStatus)
 
@@ -81,7 +81,7 @@ export const processImageTask = task({
       // Step 3: Call Fal.ai API
       metadata.set("status", {
         step: "processing",
-        label: "Enhancing image\u2026",
+        label: "Enhancing image…",
         progress: 50,
       } satisfies ProcessImageStatus)
 
@@ -114,7 +114,7 @@ export const processImageTask = task({
       // Step 4: Save to Supabase
       metadata.set("status", {
         step: "saving",
-        label: "Saving result\u2026",
+        label: "Saving result…",
         progress: 80,
       } satisfies ProcessImageStatus)
 
