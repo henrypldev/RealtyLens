@@ -414,6 +414,46 @@ export async function toggleSystemAdminAction(
 }
 
 // ============================================================================
+// Update User Name
+// ============================================================================
+
+export async function updateUserNameAction(
+  userId: string,
+  name: string
+): Promise<ActionResult<User>> {
+  const adminCheck = await verifySystemAdmin();
+  if (adminCheck.error) {
+    return { success: false, error: adminCheck.error };
+  }
+
+  try {
+    if (!name.trim()) {
+      return { success: false, error: "Name cannot be empty" };
+    }
+
+    const [updated] = await db
+      .update(user)
+      .set({
+        name: name.trim(),
+        updatedAt: new Date(),
+      })
+      .where(eq(user.id, userId))
+      .returning();
+
+    if (!updated) {
+      return { success: false, error: "User not found" };
+    }
+
+    revalidatePath("/admin/users");
+    revalidatePath(`/admin/users/${userId}`);
+    return { success: true, data: updated };
+  } catch (error) {
+    console.error("[admin:updateUserName] Error:", error);
+    return { success: false, error: "Failed to update user name" };
+  }
+}
+
+// ============================================================================
 // Delete User
 // ============================================================================
 

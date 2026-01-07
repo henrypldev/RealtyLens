@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -42,6 +43,7 @@ import {
 import type { UserRole, AdminUserDetail } from "@/lib/types/admin";
 import {
   updateUserRoleAction,
+  updateUserNameAction,
   toggleSystemAdminAction,
   deleteUserAction,
 } from "@/lib/actions/admin";
@@ -71,11 +73,13 @@ export function EditUserDialog({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // Form state
+  const [name, setName] = useState(user.name);
   const [role, setRole] = useState<UserRole>(user.role);
   const [isSystemAdmin, setIsSystemAdmin] = useState(user.isSystemAdmin);
 
   // Reset form when user changes
   React.useEffect(() => {
+    setName(user.name);
     setRole(user.role);
     setIsSystemAdmin(user.isSystemAdmin);
   }, [user]);
@@ -86,8 +90,18 @@ export function EditUserDialog({
     startTransition(async () => {
       try {
         // Track what changed
+        const nameChanged = name !== user.name;
         const roleChanged = role !== user.role;
         const adminChanged = isSystemAdmin !== user.isSystemAdmin;
+
+        // Update name if changed
+        if (nameChanged) {
+          const result = await updateUserNameAction(user.id, name);
+          if (!result.success) {
+            toast.error(result.error);
+            return;
+          }
+        }
 
         // Update role if changed
         if (roleChanged) {
@@ -144,6 +158,7 @@ export function EditUserDialog({
   const handleClose = () => {
     if (!isPending) {
       // Reset to original values
+      setName(user.name);
       setRole(user.role);
       setIsSystemAdmin(user.isSystemAdmin);
       setSaved(false);
@@ -151,7 +166,7 @@ export function EditUserDialog({
     }
   };
 
-  const hasChanges = role !== user.role || isSystemAdmin !== user.isSystemAdmin;
+  const hasChanges = name !== user.name || role !== user.role || isSystemAdmin !== user.isSystemAdmin;
 
   return (
     <>
@@ -207,6 +222,23 @@ export function EditUserDialog({
               </div>
             ) : (
               <>
+                {/* Profile Section */}
+                <div className="space-y-4">
+                  <h4 className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                    Profile
+                  </h4>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">Name</Label>
+                    <Input
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      disabled={isPending}
+                      placeholder="User name"
+                    />
+                  </div>
+                </div>
+
                 {/* Role Section */}
                 <div className="space-y-4">
                   <h4 className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
