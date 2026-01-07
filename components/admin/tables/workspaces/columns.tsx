@@ -19,6 +19,8 @@ import {
   IconEye,
   IconUserCircle,
   IconBan,
+  IconTrash,
+  IconPlayerPlay,
 } from "@tabler/icons-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo } from "react";
@@ -159,13 +161,18 @@ const ActionsCell = memo(
     ownerName,
     ownerEmail,
     workspaceName,
+    status,
     onImpersonate,
+    onSuspend,
+    onActivate,
+    onDelete,
   }: {
     workspaceId: string;
     ownerId: string | null;
     ownerName: string | null;
     ownerEmail: string | null;
     workspaceName: string;
+    status: WorkspaceStatus;
     onImpersonate?: (user: {
       id: string;
       name: string;
@@ -173,8 +180,12 @@ const ActionsCell = memo(
       workspaceId: string;
       workspaceName: string;
     }) => void;
+    onSuspend?: (workspaceId: string, workspaceName: string) => void;
+    onActivate?: (workspaceId: string, workspaceName: string) => void;
+    onDelete?: (workspaceId: string, workspaceName: string) => void;
   }) => {
     const canImpersonate = ownerId && ownerName && ownerEmail;
+    const isSuspended = status === "suspended";
 
     return (
       <div className="flex items-center justify-center">
@@ -211,12 +222,29 @@ const ActionsCell = memo(
               </DropdownMenuItem>
             )}
             <DropdownMenuSeparator />
+            {isSuspended ? (
+              <DropdownMenuItem
+                onClick={() => onActivate?.(workspaceId, workspaceName)}
+                className="text-[var(--accent-green)] focus:text-[var(--accent-green)]"
+              >
+                <IconPlayerPlay className="mr-2 h-4 w-4" />
+                Activate workspace
+              </DropdownMenuItem>
+            ) : (
+              <DropdownMenuItem
+                onClick={() => onSuspend?.(workspaceId, workspaceName)}
+                className="text-[var(--accent-amber)] focus:text-[var(--accent-amber)]"
+              >
+                <IconBan className="mr-2 h-4 w-4" />
+                Suspend workspace
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem
-              onClick={() => console.log("Suspend", workspaceId)}
+              onClick={() => onDelete?.(workspaceId, workspaceName)}
               className="text-destructive focus:text-destructive"
             >
-              <IconBan className="mr-2 h-4 w-4" />
-              Suspend workspace
+              <IconTrash className="mr-2 h-4 w-4" />
+              Delete workspace
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -226,15 +254,18 @@ const ActionsCell = memo(
 );
 ActionsCell.displayName = "ActionsCell";
 
-export function createWorkspaceColumns(
+export function createWorkspaceColumns(options?: {
   onImpersonate?: (user: {
     id: string;
     name: string;
     email: string;
     workspaceId: string;
     workspaceName: string;
-  }) => void,
-): ColumnDef<AdminWorkspaceRow>[] {
+  }) => void;
+  onSuspend?: (workspaceId: string, workspaceName: string) => void;
+  onActivate?: (workspaceId: string, workspaceName: string) => void;
+  onDelete?: (workspaceId: string, workspaceName: string) => void;
+}): ColumnDef<AdminWorkspaceRow>[] {
   return [
     {
       id: "workspace",
@@ -339,7 +370,11 @@ export function createWorkspaceColumns(
           ownerName={row.original.ownerName}
           ownerEmail={row.original.ownerEmail}
           workspaceName={row.original.name}
-          onImpersonate={onImpersonate}
+          status={row.original.status}
+          onImpersonate={options?.onImpersonate}
+          onSuspend={options?.onSuspend}
+          onActivate={options?.onActivate}
+          onDelete={options?.onDelete}
         />
       ),
     },

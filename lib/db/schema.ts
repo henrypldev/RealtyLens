@@ -120,6 +120,34 @@ export const verification = pgTable(
 );
 
 // ============================================================================
+// Invitation (workspace invitations)
+// ============================================================================
+
+export const invitation = pgTable(
+  "invitation",
+  {
+    id: text("id").primaryKey(),
+    email: text("email").notNull(),
+    workspaceId: text("workspace_id")
+      .notNull()
+      .references(() => workspace.id, { onDelete: "cascade" }),
+    role: text("role").notNull().default("owner"), // "owner" | "admin" | "member"
+    token: text("token").notNull().unique(),
+    expiresAt: timestamp("expires_at").notNull(),
+    acceptedAt: timestamp("accepted_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (table) => [
+    index("invitation_email_idx").on(table.email),
+    index("invitation_token_idx").on(table.token),
+    index("invitation_workspace_idx").on(table.workspaceId),
+  ]
+);
+
+export type Invitation = typeof invitation.$inferSelect;
+export type NewInvitation = typeof invitation.$inferInsert;
+
+// ============================================================================
 // Project (groups multiple image generations)
 // ============================================================================
 
