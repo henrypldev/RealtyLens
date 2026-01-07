@@ -107,6 +107,7 @@ export const generateVideoClipTask = task({
       // Prepare Kling input with proper typing
       const klingInput: KlingVideoInput = {
         image_url: falImageUrl,
+        tail_image_url: falImageUrl, // Start and end with the same frame for consistency
         prompt: motionPrompt,
         duration: (clip.durationSeconds?.toString() || "5") as "5" | "10",
         aspect_ratio: videoProjectData.videoProject.aspectRatio as "16:9" | "9:16" | "1:1",

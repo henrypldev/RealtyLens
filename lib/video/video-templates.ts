@@ -100,6 +100,73 @@ export const VIDEO_TEMPLATES = [
       },
     ],
   },
+  {
+    id: "room-tour",
+    name: "Detailed Room Tour",
+    description: "A focused look at a single room from multiple angles.",
+    thumbnailUrl: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80",
+    estimatedDuration: 15,
+    slots: [
+      {
+        roomType: "other",
+        label: "The Hero Shot",
+        description: "The best angle of the room",
+      },
+      {
+        roomType: "other",
+        label: "Feature Detail",
+        description: "Close-up of a key architectural feature or finish",
+      },
+      {
+        roomType: "other",
+        label: "Wide Angle",
+        description: "Showing the full layout and connection to other spaces",
+      },
+    ],
+  },
+  {
+    id: "exterior-special",
+    name: "Exterior Showcase",
+    description: "Highlighting the property's curb appeal and outdoor living.",
+    thumbnailUrl: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80",
+    estimatedDuration: 15,
+    slots: [
+      {
+        roomType: "exterior-front",
+        label: "Curb Appeal",
+        description: "The classic front-on hero shot",
+      },
+      {
+        roomType: "exterior-back",
+        label: "Outdoor Living",
+        description: "Patio, deck, or landscaping detail",
+      },
+      {
+        roomType: "exterior-front",
+        label: "Entrance Flow",
+        description: "Moving towards the front door",
+      },
+    ],
+  },
+  {
+    id: "social-teaser",
+    name: "Social Media Teaser",
+    description: "Fast-paced, high-impact edit perfect for Instagram or TikTok.",
+    thumbnailUrl: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80",
+    estimatedDuration: 10,
+    slots: [
+      {
+        roomType: "living-room",
+        label: "The Hook",
+        description: "The most visually striking interior feature",
+      },
+      {
+        roomType: "exterior-front",
+        label: "Final Reveal",
+        description: "The classic money shot of the exterior",
+      },
+    ],
+  },
 ] satisfies VideoTemplate[]
 
 export function getVideoTemplateById(id: string): VideoTemplate | undefined {

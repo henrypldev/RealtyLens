@@ -80,6 +80,7 @@ export const KLING_VIDEO_PRO = "fal-ai/kling-video/v2.6/pro/image-to-video"
 // Input type for Kling Video Pro
 export interface KlingVideoInput {
   image_url: string // Source image URL
+  tail_image_url?: string // Optional end frame image URL
   prompt: string // Motion description
   duration?: "5" | "10" // Video duration in seconds
   aspect_ratio?: "16:9" | "9:16" | "1:1"
