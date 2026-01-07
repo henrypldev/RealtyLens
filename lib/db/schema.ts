@@ -276,6 +276,13 @@ export const videoClip = pgTable(
       { onDelete: "set null" }
     ),
 
+    // End image (optional, falls back to sourceImageUrl if null)
+    endImageUrl: text("end_image_url"),
+    endImageGenerationId: text("end_image_generation_id").references(
+      () => imageGeneration.id,
+      { onDelete: "set null" }
+    ),
+
     // Room type for sequencing
     roomType: text("room_type").notNull(), // stue | soverom | kjokken | bad | etc (English keys used internally)
     roomLabel: text("room_label"), // Custom label like "Master Bedroom", "Front Yard"
@@ -285,6 +292,10 @@ export const videoClip = pgTable(
 
     // AI generation settings
     motionPrompt: text("motion_prompt"), // Motion description for Kling
+
+    // Transition settings
+    transitionType: text("transition_type").notNull().default("cut"), // "cut" | "seamless"
+    transitionClipUrl: text("transition_clip_url"), // Generated transition video URL
 
     // Output
     clipUrl: text("clip_url"), // Kling output URL

@@ -59,10 +59,11 @@ export const compileVideoTask = task({
       const { videoProject, musicTrack } = projectData;
       const clips = await getVideoClips(videoProjectId);
 
-      // Filter to only completed clips
-      const completedClips = clips.filter(
-        (c) => c.status === "completed" && c.clipUrl,
-      );
+      // Filter to only completed clips and sort by sequence order
+      const completedClips = clips
+        .filter((c) => c.status === "completed" && c.clipUrl)
+        .sort((a, b) => a.sequenceOrder - b.sequenceOrder);
+      
       if (completedClips.length === 0) {
         throw new Error("No completed clips to compile");
       }
@@ -86,11 +87,23 @@ export const compileVideoTask = task({
       } satisfies CompileVideoStatus);
 
       const clipPaths: string[] = [];
+      let totalItems = completedClips.length;
+      
+      // Count transitions that need to be downloaded
+      for (let i = 0; i < completedClips.length - 1; i++) {
+        if (completedClips[i].transitionType === "seamless" && completedClips[i].transitionClipUrl) {
+          totalItems++;
+        }
+      }
+
+      let itemIndex = 0;
       for (let i = 0; i < completedClips.length; i++) {
         const clip = completedClips[i];
+        
+        // Download main clip
         const clipPath = join(
           workDir,
-          `clip_${String(i).padStart(3, "0")}.mp4`,
+          `clip_${String(itemIndex).padStart(3, "0")}.mp4`,
         );
 
         logger.info(`Downloading clip ${i + 1}/${completedClips.length}`, {
@@ -108,11 +121,38 @@ export const compileVideoTask = task({
         const buffer = await response.arrayBuffer();
         writeFileSync(clipPath, Buffer.from(buffer));
         clipPaths.push(clipPath);
+        itemIndex++;
+
+        // Download transition clip if seamless transition is enabled
+        if (i < completedClips.length - 1 && clip.transitionType === "seamless" && clip.transitionClipUrl) {
+          const transitionPath = join(
+            workDir,
+            `transition_${String(itemIndex).padStart(3, "0")}.mp4`,
+          );
+
+          logger.info(`Downloading transition ${itemIndex}/${totalItems}`, {
+            clipId: clip.id,
+            transitionClipUrl: clip.transitionClipUrl,
+          });
+
+          const transitionResponse = await fetch(clip.transitionClipUrl);
+          if (!transitionResponse.ok) {
+            logger.warn(`Failed to download transition for clip ${clip.id}, continuing without it`, {
+              status: transitionResponse.status,
+            });
+            // Continue without transition - fall back to cut
+          } else {
+            const transitionBuffer = await transitionResponse.arrayBuffer();
+            writeFileSync(transitionPath, Buffer.from(transitionBuffer));
+            clipPaths.push(transitionPath);
+            itemIndex++;
+          }
+        }
 
         metadata.set("status", {
           step: "downloading",
-          label: `Downloaded ${i + 1}/${completedClips.length} clips`,
-          progress: 10 + Math.round((i / completedClips.length) * 30),
+          label: `Downloaded ${itemIndex}/${totalItems} items`,
+          progress: 10 + Math.round((itemIndex / totalItems) * 30),
         } satisfies CompileVideoStatus);
       }
 
@@ -199,11 +239,17 @@ export const compileVideoTask = task({
         "video/mp4",
       );
 
-      // Calculate total duration
-      const totalDuration = completedClips.reduce(
+      // Calculate total duration (including transitions)
+      let totalDuration = completedClips.reduce(
         (sum, clip) => sum + (clip.durationSeconds ?? 5),
         0,
       );
+      // Add 5 seconds for each seamless transition (Kling minimum duration)
+      for (let i = 0; i < completedClips.length - 1; i++) {
+        if (completedClips[i].transitionType === "seamless" && completedClips[i].transitionClipUrl) {
+          totalDuration += 5; // Transition clips are 5 seconds (Kling minimum)
+        }
+      }
 
       // Update video project
       await updateVideoProject(videoProjectId, {

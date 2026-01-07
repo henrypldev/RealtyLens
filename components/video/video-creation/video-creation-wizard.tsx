@@ -201,11 +201,14 @@ export function VideoCreationWizard() {
         musicVolume: creation.musicVolume,
         generateNativeAudio: creation.generateNativeAudio,
         clips: creation.images.map((img) => ({
-          sourceImageUrl: img.url,
-          imageGenerationId: img.imageGenerationId ?? null,
+          sourceImageUrl: img.startImageUrl || img.url,
+          imageGenerationId: img.startImageGenerationId || img.imageGenerationId || null,
+          endImageUrl: img.endImageUrl || img.url,
+          endImageGenerationId: img.endImageGenerationId || img.imageGenerationId || null,
           roomType: img.roomType,
           roomLabel: img.roomLabel || null,
           sequenceOrder: img.sequenceOrder,
+          transitionType: img.transitionType || "cut",
         })),
       });
 
@@ -325,7 +328,10 @@ export function VideoCreationWizard() {
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto">
-        <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
+        <div className={cn(
+            "mx-auto px-4 py-8 sm:px-6 transition-all duration-500",
+            creation.step === "storyboard" ? "max-w-full lg:px-12" : "max-w-5xl"
+        )}>
           <div className="animate-fade-in-up">
             {creation.step === "select-template" && (
               <SelectTemplateStep
@@ -340,6 +346,8 @@ export function VideoCreationWizard() {
                 selectedTemplateId={creation.selectedTemplateId}
                 images={creation.images}
                 onAddImageToSlot={creation.addImageToSlot}
+                onUpdateSlotImage={creation.updateSlotImage}
+                onUpdateTransitionType={creation.updateTransitionType}
                 onRemoveImage={creation.removeImage}
               />
             )}

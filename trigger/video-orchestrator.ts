@@ -6,6 +6,7 @@ import {
   updateVideoProjectCounts,
 } from "@/lib/db/queries";
 import { generateVideoClipTask } from "./generate-video-clip";
+import { generateTransitionClipTask } from "./generate-transition-clip";
 import { compileVideoTask } from "./compile-video";
 import {
   calculateVideoCost,
@@ -86,17 +87,14 @@ export const generateVideoTask = task({
         clipCount: clips.length,
       });
 
-      // Trigger all clip generation tasks and wait for them with sequential transitions
+      // Trigger all clip generation tasks and wait for them
       const clipResults = await generateVideoClipTask.batchTriggerAndWait(
-        clips.map((clip, index) => {
-          // Calculate the next clip for transition (wraps around for loop)
-          const nextClip = clips[(index + 1) % clips.length];
-          
+        clips.map((clip) => {
           return {
             payload: {
               clipId: clip.id,
-              tailImageUrl: nextClip.sourceImageUrl,
-              targetRoomLabel: nextClip.roomLabel || nextClip.roomType.replace(/-/g, " "),
+              tailImageUrl: clip.endImageUrl || clip.sourceImageUrl,
+              targetRoomLabel: clip.roomLabel || clip.roomType.replace(/-/g, " "),
             }
           };
         }),
@@ -125,6 +123,62 @@ export const generateVideoTask = task({
           failedCount: failedClips.length,
           failedClipIds: failedClips.map((r) => r.taskIdentifier),
         });
+      }
+
+      // Step 2.5: Generate transition clips for seamless transitions
+      const clipsWithTransitions = clips.filter((clip, index) => {
+        // Check if this clip has seamless transition enabled
+        // and there's a next clip
+        return clip.transitionType === "seamless" && index < clips.length - 1;
+      });
+
+      if (clipsWithTransitions.length > 0) {
+        metadata.set("status", {
+          step: "generating",
+          label: `Generating ${clipsWithTransitions.length} transitions…`,
+          clipIndex: successfulClips.length,
+          totalClips: successfulClips.length + clipsWithTransitions.length,
+          progress: 60,
+        } satisfies GenerateVideoStatus);
+
+        logger.info("Generating transition clips", {
+          transitionCount: clipsWithTransitions.length,
+        });
+
+        // Reload clips to get updated clip URLs
+        const updatedClips = await getVideoClips(videoProjectId);
+
+        const transitionResults = await generateTransitionClipTask.batchTriggerAndWait(
+          clipsWithTransitions.map((clip, index) => {
+            const clipIndex = clips.findIndex(c => c.id === clip.id);
+            const nextClip = clips[clipIndex + 1];
+            
+            return {
+              payload: {
+                clipId: clip.id,
+                fromImageUrl: clip.endImageUrl || clip.sourceImageUrl,
+                toImageUrl: nextClip.sourceImageUrl,
+                videoProjectId,
+                workspaceId: videoProject.workspaceId,
+                aspectRatio: videoProject.aspectRatio as "16:9" | "9:16" | "1:1",
+              }
+            };
+          }),
+        );
+
+        const successfulTransitions = transitionResults.runs.filter((r) => r.ok);
+        const failedTransitions = transitionResults.runs.filter((r) => !r.ok);
+
+        logger.info("Transition generation completed", {
+          successful: successfulTransitions.length,
+          failed: failedTransitions.length,
+        });
+
+        if (failedTransitions.length > 0) {
+          logger.warn("Some transitions failed to generate", {
+            failedCount: failedTransitions.length,
+          });
+        }
       }
 
       // Step 3: Compile video

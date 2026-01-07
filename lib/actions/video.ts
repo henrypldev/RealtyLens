@@ -47,10 +47,13 @@ export interface CreateVideoInput {
   clips: Array<{
     sourceImageUrl: string;
     imageGenerationId?: string | null;
+    endImageUrl?: string | null;
+    endImageGenerationId?: string | null;
     roomType: VideoRoomType;
     roomLabel?: string | null;
     sequenceOrder: number;
     durationSeconds?: number;
+    transitionType?: "cut" | "seamless";
   }>;
 }
 
@@ -59,6 +62,9 @@ export interface UpdateClipInput {
   roomType?: VideoRoomType;
   roomLabel?: string | null;
   motionPrompt?: string | null;
+  endImageUrl?: string | null;
+  endImageGenerationId?: string | null;
+  transitionType?: "cut" | "seamless";
 }
 
 // ============================================================================
@@ -117,10 +123,13 @@ export async function createVideoProject(input: CreateVideoInput) {
       videoProjectId: videoProject.id,
       sourceImageUrl: clip.sourceImageUrl,
       imageGenerationId: clip.imageGenerationId ?? null,
+      endImageUrl: clip.endImageUrl ?? null,
+      endImageGenerationId: clip.endImageGenerationId ?? null,
       roomType: clip.roomType,
       roomLabel: clip.roomLabel ?? null,
       sequenceOrder: clip.sequenceOrder,
       motionPrompt: getMotionPrompt(clip.roomType),
+      transitionType: clip.transitionType ?? "cut",
       durationSeconds: clip.durationSeconds ?? VIDEO_DEFAULTS.CLIP_DURATION,
       status: "pending",
     }));
@@ -314,6 +323,18 @@ export async function updateClip(input: UpdateClipInput) {
 
   if (input.motionPrompt !== undefined) {
     updateData.motionPrompt = input.motionPrompt;
+  }
+
+  if (input.endImageUrl !== undefined) {
+    updateData.endImageUrl = input.endImageUrl;
+  }
+
+  if (input.endImageGenerationId !== undefined) {
+    updateData.endImageGenerationId = input.endImageGenerationId;
+  }
+
+  if (input.transitionType !== undefined) {
+    updateData.transitionType = input.transitionType;
   }
 
   await updateVideoClip(input.clipId, updateData);

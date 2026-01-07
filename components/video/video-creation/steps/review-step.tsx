@@ -9,6 +9,7 @@ import {
   IconCurrencyDollar,
   IconPhoto,
   IconAspectRatio,
+  IconArrowRight,
 } from "@tabler/icons-react";
 
 import { cn } from "@/lib/utils";
@@ -147,14 +148,44 @@ export function ReviewStep({
 
                   {/* Clip Card */}
                   <div className="flex flex-1 items-center gap-4 rounded-xl border bg-card p-3">
-                    <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-lg bg-muted">
-                      <Image
-                        src={image.url}
-                        alt={`Clip ${index + 1}`}
-                        fill
-                        className="object-cover"
-                        sizes="80px"
-                      />
+                    <div className="relative h-14 w-24 shrink-0 overflow-hidden rounded-lg bg-muted flex border">
+                      {image.startImageUrl &&
+                      image.endImageUrl &&
+                      image.startImageUrl !== image.endImageUrl ? (
+                        <>
+                          <div className="relative flex-1">
+                            <Image
+                              src={image.startImageUrl}
+                              alt={`Clip ${index + 1} start`}
+                              fill
+                              className="object-cover"
+                              sizes="48px"
+                            />
+                            <div className="absolute top-0.5 left-0.5 px-1 py-0 rounded bg-black/60 text-[7px] font-bold text-white uppercase backdrop-blur-sm z-10">Start</div>
+                          </div>
+                          <div className="relative flex-1 border-l border-white/20">
+                            <Image
+                              src={image.endImageUrl}
+                              alt={`Clip ${index + 1} end`}
+                              fill
+                              className="object-cover"
+                              sizes="48px"
+                            />
+                            <div className="absolute top-0.5 right-0.5 px-1 py-0 rounded bg-black/60 text-[7px] font-bold text-white uppercase backdrop-blur-sm z-10">End</div>
+                          </div>
+                          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex h-4 w-4 items-center justify-center rounded-full bg-background border shadow-xs">
+                             <IconArrowRight className="h-2.5 w-2.5 text-muted-foreground" />
+                          </div>
+                        </>
+                      ) : (
+                        <Image
+                          src={image.url}
+                          alt={`Clip ${index + 1}`}
+                          fill
+                          className="object-cover"
+                          sizes="96px"
+                        />
+                      )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="font-medium truncate">

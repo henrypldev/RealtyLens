@@ -25,9 +25,16 @@ export interface VideoImageItem {
   id: string;
   url: string;
   imageGenerationId?: string | null;
+  startImageUrl: string;
+  startImageId: string;
+  startImageGenerationId?: string | null;
+  endImageUrl: string;
+  endImageId: string;
+  endImageGenerationId?: string | null;
   roomType: VideoRoomType;
   roomLabel: string;
   sequenceOrder: number;
+  transitionType?: "cut" | "seamless";
 }
 
 export interface VideoCreationState {
@@ -98,7 +105,14 @@ export function useVideoCreation() {
 
         const imagesWithOrder = newImages.map((img, i) => ({
           ...img,
+          startImageUrl: img.url,
+          startImageId: img.id,
+          startImageGenerationId: img.imageGenerationId,
+          endImageUrl: img.url,
+          endImageId: img.id,
+          endImageGenerationId: img.imageGenerationId,
           sequenceOrder: maxOrder + i + 1,
+          transitionType: img.transitionType || "cut",
         }));
         const combined = [...prev.images, ...imagesWithOrder];
         // Limit to max images
@@ -113,7 +127,7 @@ export function useVideoCreation() {
 
   // Specialized function for storyboard slots
   const addImageToSlot = React.useCallback(
-    (image: Omit<VideoImageItem, "sequenceOrder">, slotIndex: number) => {
+    (image: Omit<VideoImageItem, "sequenceOrder" | "startImageUrl" | "startImageGenerationId" | "endImageUrl" | "endImageGenerationId">, slotIndex: number) => {
       setState((prev) => {
         // Remove any existing image in this slot
         const filtered = prev.images.filter(
@@ -123,7 +137,14 @@ export function useVideoCreation() {
         // Add new image at specific sequence order (1-based)
         const newImage = {
           ...image,
+          startImageUrl: image.url,
+          startImageId: image.id,
+          startImageGenerationId: image.imageGenerationId,
+          endImageUrl: image.url,
+          endImageId: image.id,
+          endImageGenerationId: image.imageGenerationId,
           sequenceOrder: slotIndex + 1,
+          transitionType: image.transitionType || "cut",
         };
 
         return {
@@ -133,6 +154,50 @@ export function useVideoCreation() {
       });
     },
     [],
+  );
+
+  const updateSlotImage = React.useCallback(
+    (slotIndex: number, type: "start" | "end", image: { id: string; url: string; imageGenerationId?: string | null }) => {
+      setState((prev) => {
+        const existingImage = prev.images.find(img => img.sequenceOrder === slotIndex + 1);
+        if (!existingImage) return prev;
+
+        const updatedImage = { ...existingImage };
+        if (type === "start") {
+          updatedImage.id = image.id;
+          updatedImage.url = image.url;
+          updatedImage.startImageUrl = image.url;
+          updatedImage.startImageId = image.id;
+          updatedImage.startImageGenerationId = image.imageGenerationId;
+        } else {
+          updatedImage.endImageUrl = image.url;
+          updatedImage.endImageId = image.id;
+          updatedImage.endImageGenerationId = image.imageGenerationId;
+        }
+
+        return {
+          ...prev,
+          images: prev.images.map(img => img.sequenceOrder === slotIndex + 1 ? updatedImage : img)
+        };
+      });
+    },
+    []
+  );
+
+  const updateTransitionType = React.useCallback(
+    (slotIndex: number, transitionType: "cut" | "seamless") => {
+      setState((prev) => {
+        return {
+          ...prev,
+          images: prev.images.map(img => 
+            img.sequenceOrder === slotIndex + 1 
+              ? { ...img, transitionType }
+              : img
+          )
+        };
+      });
+    },
+    []
   );
 
   const removeImage = React.useCallback((id: string) => {
@@ -305,6 +370,8 @@ export function useVideoCreation() {
     setProjectName,
     addImages,
     addImageToSlot,
+    updateSlotImage,
+    updateTransitionType,
     removeImage,
     updateImage,
     reorderImages,

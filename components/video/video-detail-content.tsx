@@ -23,6 +23,8 @@ import {
   IconRefresh,
   IconTrash,
   IconAspectRatio,
+  IconArrowRight,
+  IconScissors,
 } from "@tabler/icons-react";
 import { toast } from "sonner";
 import { useRealtimeRun } from "@trigger.dev/react-hooks";
@@ -203,6 +205,8 @@ function RealtimeVideoProgress({
               {status?.label ||
                 (step === "compiling"
                   ? "Compiling video…"
+                  : step === "generating" && status?.label?.includes("transitions")
+                  ? status.label
                   : `Generating clip ${currentClip} of ${total}`)}
             </div>
             <div className="text-sm text-muted-foreground">
@@ -210,6 +214,8 @@ function RealtimeVideoProgress({
                 ? "Preparing video generation"
                 : step === "compiling"
                   ? "Adding transitions and music"
+                  : step === "generating" && status?.label?.includes("transitions")
+                  ? "Creating seamless transitions between clips"
                   : step === "completed"
                     ? "Your video is ready"
                     : "Creating cinematic clips from your images"}
@@ -591,77 +597,171 @@ export function VideoDetailContent({
                     (r) => r.id === clip.roomType,
                   );
                   const clipStatus = clipStatusConfig[clip.status];
+                  const nextClip = clips[index + 1];
+                  const showTransition = clip.transitionType === "seamless" && index < clips.length - 1;
 
                   return (
-                    <div
-                      key={clip.id}
-                      className={cn(
-                        "relative overflow-hidden rounded-xl border bg-card",
-                        clip.status === "processing" &&
-                          "ring-2 ring-[var(--accent-teal)]",
-                        clip.status === "failed" && "ring-2 ring-destructive",
-                      )}
-                    >
-                      {/* Thumbnail */}
-                      <div className="relative aspect-video bg-muted">
-                        <Image
-                          src={clip.sourceImageUrl}
-                          alt={
-                            clip.roomLabel ||
-                            roomConfig?.label ||
-                            `Clip ${index + 1}`
-                          }
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 640px) 50vw, 33vw"
-                        />
-
-                        {/* Sequence number */}
-                        <div className="absolute top-2 left-2 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-xs font-bold text-white">
-                          {index + 1}
-                        </div>
-
-                        {/* Status indicator */}
-                        <div className="absolute top-2 right-2">
-                          <div
-                            className={cn(
-                              "h-2.5 w-2.5 rounded-full",
-                              clipStatus.color,
-                            )}
-                          />
-                        </div>
-
-                        {/* Processing shimmer */}
-                        {clip.status === "processing" && (
-                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
+                    <React.Fragment key={clip.id}>
+                      {/* Main Clip Card */}
+                      <div
+                        className={cn(
+                          "relative overflow-hidden rounded-xl border bg-card",
+                          clip.status === "processing" &&
+                            "ring-2 ring-[var(--accent-teal)]",
+                          clip.status === "failed" && "ring-2 ring-destructive",
                         )}
+                      >
+                        {/* Thumbnail */}
+                        <div className="relative aspect-video bg-muted">
+                          {clip.status === "pending" || clip.status === "processing" ? (
+                            <div className="absolute inset-0 flex items-center justify-center bg-muted/50">
+                              <IconLoader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                            </div>
+                          ) : (
+                            <Image
+                              src={clip.sourceImageUrl}
+                              alt={
+                                clip.roomLabel ||
+                                roomConfig?.label ||
+                                `Clip ${index + 1}`
+                              }
+                              fill
+                              className="object-cover"
+                              sizes="(max-width: 640px) 50vw, 33vw"
+                            />
+                          )}
 
-                        {/* Retry button for failed clips */}
-                        {clip.status === "failed" && (
-                          <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-                            <Button
-                              size="sm"
-                              variant="secondary"
-                              onClick={() => handleRetryClip(clip.id)}
-                              className="gap-1"
-                            >
-                              <IconRefresh className="h-3.5 w-3.5" />
-                              Retry
-                            </Button>
+                          {/* Sequence number */}
+                          <div className="absolute top-2 left-2 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-xs font-bold text-white">
+                            {index + 1}
                           </div>
-                        )}
+
+                          {/* Status indicator */}
+                          <div className="absolute top-2 right-2">
+                            <div
+                              className={cn(
+                                "h-2.5 w-2.5 rounded-full",
+                                clipStatus.color,
+                              )}
+                            />
+                          </div>
+
+                          {/* Processing shimmer */}
+                          {clip.status === "processing" && (
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
+                          )}
+
+                          {/* Retry button for failed clips */}
+                          {clip.status === "failed" && (
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+                              <Button
+                                size="sm"
+                                variant="secondary"
+                                onClick={() => handleRetryClip(clip.id)}
+                                className="gap-1"
+                              >
+                                <IconRefresh className="h-3.5 w-3.5" />
+                                Retry
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Info */}
+                        <div className="p-2.5">
+                          <div className="text-sm font-medium truncate">
+                            {clip.roomLabel || roomConfig?.label || "Unknown"}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {clip.durationSeconds || 5}s • {clipStatus.label}
+                          </div>
+                        </div>
                       </div>
 
-                      {/* Info */}
-                      <div className="p-2.5">
-                        <div className="text-sm font-medium truncate">
-                          {clip.roomLabel || roomConfig?.label || "Unknown"}
+                      {/* Transition Card */}
+                      {showTransition && (
+                        <div
+                          className={cn(
+                            "relative overflow-hidden rounded-xl border-2 border-dashed bg-muted/30",
+                            clip.transitionClipUrl
+                              ? "border-[var(--accent-teal)]/30 bg-[var(--accent-teal)]/5"
+                              : "border-muted-foreground/20",
+                          )}
+                        >
+                          <div className="relative aspect-video flex flex-col items-center justify-center p-3">
+                            {clip.transitionClipUrl ? (
+                              <>
+                                <video
+                                  src={clip.transitionClipUrl}
+                                  className="absolute inset-0 w-full h-full object-cover rounded-lg"
+                                  muted
+                                  loop
+                                  playsInline
+                                />
+                                <div className="absolute inset-0 bg-black/20 rounded-lg" />
+                                <div className="relative z-10 flex flex-col items-center gap-1.5">
+                                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--accent-teal)]/20 border border-[var(--accent-teal)]/30">
+                                    <IconArrowRight className="h-4 w-4 text-[var(--accent-teal)]" />
+                                  </div>
+                                  <span className="text-[9px] font-bold text-[var(--accent-teal)] uppercase tracking-wider">
+                                    Seamless
+                                  </span>
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted border-2 border-dashed border-muted-foreground/30">
+                                  {isProcessing && !clip.transitionClipUrl ? (
+                                    <IconLoader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                                  ) : (
+                                    <IconScissors className="h-5 w-5 text-muted-foreground" />
+                                  )}
+                                </div>
+                                <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mt-2">
+                                  {isProcessing && !clip.transitionClipUrl ? "Generating Transition" : "Transition"}
+                                </span>
+                                {nextClip && (
+                                  <div className="flex items-center gap-1 mt-1">
+                                    <div className="relative w-6 h-4 rounded overflow-hidden border border-muted-foreground/20">
+                                      {clip.endImageUrl && (
+                                        <Image
+                                          src={clip.endImageUrl}
+                                          alt="From"
+                                          fill
+                                          className="object-cover opacity-60"
+                                          sizes="24px"
+                                        />
+                                      )}
+                                    </div>
+                                    <IconArrowRight className="h-3 w-3 text-muted-foreground" />
+                                    <div className="relative w-6 h-4 rounded overflow-hidden border border-muted-foreground/20">
+                                      {nextClip.sourceImageUrl && (
+                                        <Image
+                                          src={nextClip.sourceImageUrl}
+                                          alt="To"
+                                          fill
+                                          className="object-cover opacity-60"
+                                          sizes="24px"
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+                              </>
+                            )}
+                          </div>
+                          <div className="p-2 text-center border-t border-muted-foreground/10">
+                            <div className="text-[10px] font-medium text-muted-foreground">
+                              {clip.transitionClipUrl 
+                                ? "5s • Ready" 
+                                : isProcessing 
+                                  ? "5s • Generating..." 
+                                  : "5s • Pending"}
+                            </div>
+                          </div>
                         </div>
-                        <div className="text-xs text-muted-foreground">
-                          {clip.durationSeconds || 5}s • {clipStatus.label}
-                        </div>
-                      </div>
-                    </div>
+                      )}
+                    </React.Fragment>
                   );
                 })}
               </div>
