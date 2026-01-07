@@ -2,11 +2,10 @@
  * Video generation constants and pricing
  */
 
-// Kling Video v2.6 Pro pricing
+// Video generation pricing
 export const VIDEO_PRICING = {
-  COST_PER_SECOND: 0.07, // $0.07 per second
-  COST_PER_5_SECOND_CLIP: 0.35, // $0.35 per 5-second clip
-  COST_PER_10_SECOND_CLIP: 0.70, // $0.70 per 10-second clip
+  COST_PER_SECOND_NO_AUDIO: 0.07, // $0.07 per second
+  COST_PER_SECOND_WITH_AUDIO: 0.14, // $0.14 per second
 } as const
 
 // Video duration options
@@ -49,11 +48,19 @@ export const VIDEO_DEFAULTS = {
   ASPECT_RATIO: "16:9" as VideoAspectRatio,
   CLIP_DURATION: 5 as VideoDuration,
   MUSIC_VOLUME: 50, // 50% volume
+  GENERATE_NATIVE_AUDIO: true, // New default
 } as const
 
 // Calculate estimated cost for video
-export function calculateVideoCost(clipCount: number, durationPerClip: VideoDuration = 5): number {
-  return clipCount * VIDEO_PRICING.COST_PER_SECOND * durationPerClip
+export function calculateVideoCost(
+  clipCount: number, 
+  durationPerClip: VideoDuration = 5,
+  withAudio: boolean = true
+): number {
+  const costPerSecond = withAudio 
+    ? VIDEO_PRICING.COST_PER_SECOND_WITH_AUDIO 
+    : VIDEO_PRICING.COST_PER_SECOND_NO_AUDIO;
+  return clipCount * costPerSecond * durationPerClip
 }
 
 // Format cost for display

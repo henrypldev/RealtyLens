@@ -145,6 +145,7 @@ export function VideoCreationWizard() {
         aspectRatio: creation.aspectRatio,
         musicTrackId: creation.selectedMusicTrack?.id ?? null,
         musicVolume: creation.musicVolume,
+        generateNativeAudio: creation.generateNativeAudio,
         clips: creation.images.map((img) => ({
           sourceImageUrl: img.url,
           imageGenerationId: img.imageGenerationId ?? null,
@@ -193,7 +194,11 @@ export function VideoCreationWizard() {
   }, [creation, router])
 
   const currentStepInfo = stepTitles[creation.step]
-  const estimatedCost = calculateVideoCost(creation.images.length)
+  const estimatedCost = calculateVideoCost(
+    creation.images.length, 
+    5, // Assuming default 5s clips for now
+    creation.generateNativeAudio
+  )
 
   // Determine which steps to show based on mode
   const steps = creation.selectedTemplateId ? TEMPLATE_STEPS : CUSTOM_STEPS
@@ -284,6 +289,8 @@ export function VideoCreationWizard() {
                 onVolumeChange={creation.setMusicVolume}
                 aspectRatio={creation.aspectRatio}
                 onAspectRatioChange={creation.setAspectRatio}
+                generateNativeAudio={creation.generateNativeAudio}
+                onGenerateNativeAudioChange={creation.setGenerateNativeAudio}
               />
             )}
             {creation.step === "review" && (

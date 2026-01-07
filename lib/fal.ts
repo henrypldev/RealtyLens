@@ -84,6 +84,7 @@ export interface KlingVideoInput {
   prompt: string // Motion description
   duration?: "5" | "10" // Video duration in seconds
   aspect_ratio?: "16:9" | "9:16" | "1:1"
+  generate_audio?: boolean // Whether to generate native audio
   negative_prompt?: string // Terms to avoid
   cfg_scale?: number // 0-1, how closely to follow prompt
 }

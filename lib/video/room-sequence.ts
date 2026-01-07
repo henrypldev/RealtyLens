@@ -4,42 +4,41 @@ import type { VideoRoomType } from "@/lib/db/schema"
  * Room type definitions and sequencing logic for property tour videos
  */
 
-// Room type display configuration (English keys, Norwegian labels)
+// Room type display configuration (Unified English labels)
 export const VIDEO_ROOM_TYPES: Array<{
   id: VideoRoomType
   label: string
-  englishLabel: string
   icon: string
   emoji: string
   order: number
 }> = [
-  { id: "exterior", label: "Eksteriør", englishLabel: "Exterior", icon: "IconBuildingSkyscraper", emoji: "🏠", order: 1 },
-  { id: "hallway", label: "Gang/Entré", englishLabel: "Hallway/Entrance", icon: "IconDoor", emoji: "🚪", order: 2 },
-  { id: "living-room", label: "Stue", englishLabel: "Living Room", icon: "IconSofa", emoji: "🛋️", order: 3 },
-  { id: "kitchen", label: "Kjøkken", englishLabel: "Kitchen", icon: "IconToolsKitchen2", emoji: "🍳", order: 4 },
-  { id: "dining-room", label: "Spisestue", englishLabel: "Dining Room", icon: "IconArmchair", emoji: "🍽️", order: 5 },
-  { id: "tv-room", label: "TV-stue / Mediarom", englishLabel: "TV Room/Media Room", icon: "IconDeviceTv", emoji: "📺", order: 6 },
-  { id: "bedroom", label: "Soverom", englishLabel: "Bedroom", icon: "IconBed", emoji: "🛏️", order: 7 },
-  { id: "childrens-room", label: "Barnerom", englishLabel: "Children's Room", icon: "IconMoodBoy", emoji: "🧸", order: 8 },
-  { id: "bathroom", label: "Bad", englishLabel: "Bathroom", icon: "IconBath", emoji: "🚿", order: 9 },
-  { id: "toilet", label: "Toalett", englishLabel: "Toilet", icon: "IconToiletPaper", emoji: "🚽", order: 10 },
-  { id: "walk-in-closet", label: "Garderobe", englishLabel: "Walk-in Closet", icon: "IconHanger", emoji: "👕", order: 11 },
-  { id: "laundry-room", label: "Vaskerom", englishLabel: "Laundry Room", icon: "IconWashMachine", emoji: "🧺", order: 12 },
-  { id: "office", label: "Kontor/Arbeidsrom", englishLabel: "Office/Workspace", icon: "IconDesk", emoji: "💼", order: 13 },
-  { id: "library", label: "Bibliotek / Leserom", englishLabel: "Library/Reading Room", icon: "IconBooks", emoji: "📚", order: 14 },
-  { id: "gym", label: "Treningsrom", englishLabel: "Gym/Exercise Room", icon: "IconBarbell", emoji: "🏋️", order: 15 },
-  { id: "sauna", label: "Badstue", englishLabel: "Sauna", icon: "IconSteam", emoji: "🧖", order: 16 },
-  { id: "pool-area", label: "Bassengområde", englishLabel: "Pool Area", icon: "IconSwimming", emoji: "🏊", order: 17 },
-  { id: "hobby-room", label: "Hobbyrom / Verksted", englishLabel: "Hobby Room/Workshop", icon: "IconTools", emoji: "🛠️", order: 18 },
-  { id: "pantry", label: "Matbod / Spiskammer", englishLabel: "Pantry", icon: "IconBuildingStore", emoji: "🥫", order: 19 },
-  { id: "storage-room", label: "Bod/Lager", englishLabel: "Storage Room", icon: "IconBox", emoji: "📦", order: 20 },
-  { id: "utility-room", label: "Teknisk rom", englishLabel: "Utility Room", icon: "IconSettings", emoji: "⚙️", order: 21 },
-  { id: "conservatory", label: "Vinterhage", englishLabel: "Conservatory/Sunroom", icon: "IconLeaf", emoji: "🌱", order: 22 },
-  { id: "garage", label: "Garasje", englishLabel: "Garage", icon: "IconCar", emoji: "🚗", order: 23 },
-  { id: "terrace", label: "Terrasse / Balkong", englishLabel: "Terrace/Balcony", icon: "IconSun", emoji: "🌤️", order: 24 },
-  { id: "garden", label: "Hage", englishLabel: "Garden", icon: "IconTree", emoji: "🌳", order: 25 },
-  { id: "landscape", label: "Landskap", englishLabel: "Landscape", icon: "IconMountain", emoji: "🌄", order: 26 },
-  { id: "other", label: "Annet", englishLabel: "Other", icon: "IconPhoto", emoji: "🏠", order: 27 },
+  { id: "exterior", label: "Exterior", icon: "IconBuildingSkyscraper", emoji: "🏠", order: 1 },
+  { id: "hallway", label: "Hallway/Entrance", icon: "IconDoor", emoji: "🚪", order: 2 },
+  { id: "living-room", label: "Living Room", icon: "IconSofa", emoji: "🛋️", order: 3 },
+  { id: "kitchen", label: "Kitchen", icon: "IconToolsKitchen2", emoji: "🍳", order: 4 },
+  { id: "dining-room", label: "Dining Room", icon: "IconArmchair", emoji: "🍽️", order: 5 },
+  { id: "tv-room", label: "TV Room/Media Room", icon: "IconDeviceTv", emoji: "📺", order: 6 },
+  { id: "bedroom", label: "Bedroom", icon: "IconBed", emoji: "🛏️", order: 7 },
+  { id: "childrens-room", label: "Children's Room", icon: "IconMoodBoy", emoji: "🧸", order: 8 },
+  { id: "bathroom", label: "Bathroom", icon: "IconBath", emoji: "🚿", order: 9 },
+  { id: "toilet", label: "Toilet", icon: "IconToiletPaper", emoji: "🚽", order: 10 },
+  { id: "walk-in-closet", label: "Walk-in Closet", icon: "IconHanger", emoji: "👕", order: 11 },
+  { id: "laundry-room", label: "Laundry Room", icon: "IconWashMachine", emoji: "🧺", order: 12 },
+  { id: "office", label: "Office/Workspace", icon: "IconDesk", emoji: "💼", order: 13 },
+  { id: "library", label: "Library/Reading Room", icon: "IconBooks", emoji: "📚", order: 14 },
+  { id: "gym", label: "Gym/Exercise Room", icon: "IconBarbell", emoji: "🏋️", order: 15 },
+  { id: "sauna", label: "Sauna", icon: "IconSteam", emoji: "🧖", order: 16 },
+  { id: "pool-area", label: "Pool Area", icon: "IconSwimming", emoji: "🏊", order: 17 },
+  { id: "hobby-room", label: "Hobby Room/Workshop", icon: "IconTools", emoji: "🛠️", order: 18 },
+  { id: "pantry", label: "Pantry", icon: "IconBuildingStore", emoji: "🥫", order: 19 },
+  { id: "storage-room", label: "Storage Room", icon: "IconBox", emoji: "📦", order: 20 },
+  { id: "utility-room", label: "Utility Room", icon: "IconSettings", emoji: "⚙️", order: 21 },
+  { id: "conservatory", label: "Conservatory/Sunroom", icon: "IconLeaf", emoji: "🌱", order: 22 },
+  { id: "garage", label: "Garage", icon: "IconCar", emoji: "🚗", order: 23 },
+  { id: "terrace", label: "Terrace/Balcony", icon: "IconSun", emoji: "🌤️", order: 24 },
+  { id: "garden", label: "Garden", icon: "IconTree", emoji: "🌳", order: 25 },
+  { id: "landscape", label: "Landscape", icon: "IconMountain", emoji: "🌄", order: 26 },
+  { id: "other", label: "Other", icon: "IconPhoto", emoji: "🏠", order: 27 },
 ]
 
 // Room sequence order for property tours
@@ -88,7 +87,6 @@ export interface ClipWithRoom {
   id: string
   roomType: VideoRoomType
   sequenceOrder: number
-  [key: string]: unknown
 }
 
 export function autoSequenceClips<T extends ClipWithRoom>(clips: T[]): T[] {
@@ -111,7 +109,7 @@ export function reindexSequenceOrders<T extends ClipWithRoom>(clips: T[]): T[] {
   return clips.map((clip, index) => ({
     ...clip,
     sequenceOrder: index + 1,
-  }))
+  } as T))
 }
 
 // Get room type from common image project room types

@@ -9,11 +9,12 @@ import {
   IconVolumeOff,
   IconCheck,
   IconAspectRatio,
+  IconSparkles,
 } from "@tabler/icons-react"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
+import { Checkbox } from "@/components/ui/checkbox"
 import { MUSIC_CATEGORIES, VIDEO_ASPECT_RATIOS } from "@/lib/video/video-constants"
 import type { MusicTrack, VideoAspectRatio } from "@/lib/db/schema"
 
@@ -24,6 +25,8 @@ interface SelectMusicStepProps {
   onVolumeChange: (volume: number) => void
   aspectRatio: VideoAspectRatio
   onAspectRatioChange: (ratio: VideoAspectRatio) => void
+  generateNativeAudio: boolean
+  onGenerateNativeAudioChange: (generate: boolean) => void
 }
 
 // Mock music tracks - in production, these would come from the database
@@ -117,6 +120,8 @@ export function SelectMusicStep({
   onVolumeChange,
   aspectRatio,
   onAspectRatioChange,
+  generateNativeAudio,
+  onGenerateNativeAudioChange,
 }: SelectMusicStepProps) {
   const [activeCategory, setActiveCategory] = React.useState<string>("all")
   const [playingId, setPlayingId] = React.useState<string | null>(null)
@@ -133,6 +138,45 @@ export function SelectMusicStep({
 
   return (
     <div className="space-y-8">
+      {/* Native Audio Toggle */}
+      <div className="rounded-xl border-2 border-(--accent-teal)/30 bg-(--accent-teal)/5 p-6 transition-all">
+        <div className="flex items-start gap-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-(--accent-teal) text-white shadow-lg shadow-(--accent-teal)/20">
+            <IconSparkles className="h-6 w-6" />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold">AI Native Audio Generation</h3>
+                <p className="text-sm text-muted-foreground">
+                  Our AI can generate cinematic audio and speech directly with the video.
+                </p>
+              </div>
+              <Checkbox 
+                id="native-audio" 
+                checked={generateNativeAudio} 
+                onCheckedChange={(checked) => onGenerateNativeAudioChange(!!checked)}
+                className="h-6 w-6 border-2"
+              />
+            </div>
+            
+            {generateNativeAudio && (
+              <div className="mt-4 animate-fade-in space-y-3">
+                <div className="flex items-center gap-2 text-sm text-(--accent-teal) font-medium">
+                  <IconCheck className="h-4 w-4" />
+                  Premium Production Quality ($0.14/sec)
+                </div>
+                <div className="text-xs text-muted-foreground leading-relaxed">
+                  <p>• Synchronized environmental sounds and atmosphere</p>
+                  <p>• Native speech synthesis (lowercase for speech, UPPERCASE for proper nouns)</p>
+                  <p>• Professional audio-visual coherence</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* Aspect Ratio Selection */}
       <div>
         <h3 className="mb-3 flex items-center gap-2 text-sm font-medium">

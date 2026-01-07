@@ -88,7 +88,27 @@ export const generateVideoClipTask = task({
       logger.info("Uploaded to Fal.ai storage", { falImageUrl })
 
       // Step 3: Generate motion prompt
-      const motionPrompt = clip.motionPrompt || getMotionPrompt(clip.roomType as VideoRoomType)
+      let motionPrompt = clip.motionPrompt || getMotionPrompt(clip.roomType as VideoRoomType)
+
+      // Step 3.5: Handle native audio generation
+      const generateAudio = videoProjectData.videoProject.generateNativeAudio
+      if (generateAudio) {
+        const track = videoProjectData.musicTrack
+        const roomName = clip.roomLabel || clip.roomType.replace(/-/g, " ")
+        
+        let audioPrompt = ""
+        if (track) {
+          const mood = track.mood ? `${track.mood} ` : ""
+          audioPrompt = `Background audio: ${mood}${track.category} music inspired by "${track.name}".`
+        } else {
+          audioPrompt = "Background cinematic ambient music."
+        }
+        
+        // Add environmental sounds based on room
+        const ambientSounds = `Ambient environmental sounds of a ${roomName}.`
+        
+        motionPrompt = `${motionPrompt} ${audioPrompt} ${ambientSounds}`
+      }
 
       // Step 4: Call Kling Video API
       metadata.set("status", {
@@ -102,6 +122,7 @@ export const generateVideoClipTask = task({
         prompt: motionPrompt,
         duration: clip.durationSeconds?.toString() || "5",
         aspectRatio: videoProjectData.videoProject.aspectRatio,
+        generate_audio: generateAudio,
       })
 
       // Prepare Kling input with proper typing
@@ -111,6 +132,7 @@ export const generateVideoClipTask = task({
         prompt: motionPrompt,
         duration: (clip.durationSeconds?.toString() || "5") as "5" | "10",
         aspect_ratio: videoProjectData.videoProject.aspectRatio as "16:9" | "9:16" | "1:1",
+        generate_audio: generateAudio,
         negative_prompt: DEFAULT_NEGATIVE_PROMPT,
       }
 

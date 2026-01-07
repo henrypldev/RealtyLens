@@ -31,6 +31,7 @@ export interface VideoCreationState {
   aspectRatio: VideoAspectRatio
   selectedMusicTrack: MusicTrack | null
   musicVolume: number
+  generateNativeAudio: boolean
   isSubmitting: boolean
 }
 
@@ -47,6 +48,7 @@ export function useVideoCreation() {
     aspectRatio: VIDEO_DEFAULTS.ASPECT_RATIO,
     selectedMusicTrack: null,
     musicVolume: VIDEO_DEFAULTS.MUSIC_VOLUME,
+    generateNativeAudio: VIDEO_DEFAULTS.GENERATE_NATIVE_AUDIO,
     isSubmitting: false,
   })
 
@@ -172,12 +174,12 @@ export function useVideoCreation() {
     setState((prev) => ({ ...prev, musicVolume: Math.min(100, Math.max(0, volume)) }))
   }, [])
 
-  const setIsSubmitting = React.useCallback((submitting: boolean) => {
-    setState((prev) => ({ ...prev, isSubmitting: submitting }))
+  const setGenerateNativeAudio = React.useCallback((generate: boolean) => {
+    setState((prev) => ({ ...prev, generateNativeAudio: generate }))
   }, [])
 
-  const getCurrentStepList = React.useCallback((state: VideoCreationState) => {
-    return state.selectedTemplateId ? TEMPLATE_FLOW_STEPS : CUSTOM_FLOW_STEPS
+  const setIsSubmitting = React.useCallback((submitting: boolean) => {
+    setState((prev) => ({ ...prev, isSubmitting: submitting }))
   }, [])
 
   const goToNextStep = React.useCallback(() => {
@@ -252,6 +254,7 @@ export function useVideoCreation() {
       aspectRatio: VIDEO_DEFAULTS.ASPECT_RATIO,
       selectedMusicTrack: null,
       musicVolume: VIDEO_DEFAULTS.MUSIC_VOLUME,
+      generateNativeAudio: VIDEO_DEFAULTS.GENERATE_NATIVE_AUDIO,
       isSubmitting: false,
     })
   }, [])
@@ -270,6 +273,7 @@ export function useVideoCreation() {
     setAspectRatio,
     setMusicTrack,
     setMusicVolume,
+    setGenerateNativeAudio,
     setIsSubmitting,
     goToNextStep,
     goToPreviousStep,

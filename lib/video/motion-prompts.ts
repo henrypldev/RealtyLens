@@ -1,11 +1,9 @@
 import type { VideoRoomType } from "@/lib/db/schema"
 
 /**
- * Default motion prompts for Kling Video v2.6 Pro generation
+ * Default motion prompts for video generation
  *
- * Best practices from Kling 2.6 Pro Prompt Guide:
- * @see https://fal.ai/learn/devs/kling-2-6-pro-prompt-guide
- *
+ * Best practices for real estate video prompts:
  * Structure: [Camera action] + [Direction/Speed] + [Distance/Framing] + [Subject focus] + [Style]
  *
  * Key principles:
@@ -123,8 +121,7 @@ export const DEFAULT_NEGATIVE_PROMPT =
 
 /**
  * Prompt enhancement tips for real estate videos
- * Based on Kling 2.6 Pro Prompt Guide best practices
- * @see https://fal.ai/learn/devs/kling-2-6-pro-prompt-guide
+ * Based on professional cinematography best practices
  */
 export const PROMPT_TIPS = [
   "Use 'camera tracks left/right' for horizontal movement",

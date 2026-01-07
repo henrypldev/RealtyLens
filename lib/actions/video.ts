@@ -30,6 +30,7 @@ export interface CreateVideoInput {
   aspectRatio?: VideoAspectRatio
   musicTrackId?: string | null
   musicVolume?: number
+  generateNativeAudio?: boolean
   clips: Array<{
     sourceImageUrl: string
     imageGenerationId?: string | null
@@ -65,7 +66,13 @@ export async function createVideoProject(input: CreateVideoInput) {
   const { user, workspace } = userData
 
   // Calculate estimated cost
-  const estimatedCost = costToCents(calculateVideoCost(input.clips.length))
+  const estimatedCost = costToCents(
+    calculateVideoCost(
+      input.clips.length, 
+      VIDEO_DEFAULTS.CLIP_DURATION, 
+      input.generateNativeAudio ?? VIDEO_DEFAULTS.GENERATE_NATIVE_AUDIO
+    )
+  )
 
   // Create video project
   const videoProject = await dbCreateVideoProject({
@@ -75,6 +82,7 @@ export async function createVideoProject(input: CreateVideoInput) {
     aspectRatio: input.aspectRatio ?? VIDEO_DEFAULTS.ASPECT_RATIO,
     musicTrackId: input.musicTrackId ?? null,
     musicVolume: input.musicVolume ?? VIDEO_DEFAULTS.MUSIC_VOLUME,
+    generateNativeAudio: input.generateNativeAudio ?? VIDEO_DEFAULTS.GENERATE_NATIVE_AUDIO,
     status: "draft",
     clipCount: input.clips.length,
     completedClipCount: 0, 
@@ -213,6 +221,7 @@ export async function updateVideoSettings(
     aspectRatio?: VideoAspectRatio
     musicTrackId?: string | null
     musicVolume?: number
+    generateNativeAudio?: boolean
   }
 ) {
   const session = await auth.api.getSession({ headers: await headers() })

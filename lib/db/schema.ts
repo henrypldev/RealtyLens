@@ -124,7 +124,7 @@ export const project = pgTable(
     // Project details
     name: text("name").notNull(),
     styleTemplateId: text("style_template_id").notNull(),
-    roomType: text("room_type"), // living-room | bedroom | kitchen | bathroom | dining-room | office
+    roomType: text("room_type"), // living-room | bedroom | kitchen | bathroom | dining-room | office | exterior | etc (Comprehensive list in RoomType)
     thumbnailUrl: text("thumbnail_url"),
 
     // Status tracking
@@ -212,6 +212,7 @@ export const videoProject = pgTable(
     aspectRatio: text("aspect_ratio").notNull().default("16:9"), // "16:9" | "9:16" | "1:1"
     musicTrackId: text("music_track_id"), // FK to music_track or null for no music
     musicVolume: integer("music_volume").notNull().default(50), // 0-100
+    generateNativeAudio: boolean("generate_native_audio").notNull().default(true),
 
     // Output
     finalVideoUrl: text("final_video_url"),
