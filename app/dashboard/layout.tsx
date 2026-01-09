@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { ImpersonationBanner } from "@/components/admin/impersonation-banner";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { auth } from "@/lib/auth";
+import { constructMetadata } from "@/lib/constructMetadata";
 import { getUserWithWorkspace } from "@/lib/db/queries";
 
-export const metadata: Metadata = {
+export const metadata = constructMetadata({
   title: "Dashboard | Proppi",
   description: "Manage your property photos and AI edits",
-};
+  noIndex: true,
+});
 
 export default async function DashboardLayout({
   children,

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BlogPostPage } from "@/components/landing/blog-post-page";
 import { getAllPostSlugs, getPostBySlug, getRelatedPosts } from "@/lib/blog";
+import { constructMetadata } from "@/lib/constructMetadata";
 
 interface BlogPostProps {
   params: Promise<{ slug: string }>;
@@ -22,22 +23,20 @@ export async function generateMetadata({
   const post = await getPostBySlug(slug);
 
   if (!post) {
-    return {
+    return constructMetadata({
       title: "Post Not Found | Proppi",
-    };
+      noIndex: true,
+    });
   }
 
-  return {
+  return constructMetadata({
     title: `${post.title} | Proppi Blog`,
     description: post.description,
-    openGraph: {
-      title: post.title,
-      description: post.description,
-      type: "article",
-      publishedTime: post.date,
-      authors: [post.author],
-    },
-  };
+    canonical: `/blog/${slug}`,
+    type: "article",
+    publishedTime: post.date,
+    authors: [post.author],
+  });
 }
 
 export default async function BlogPost({ params }: BlogPostProps) {

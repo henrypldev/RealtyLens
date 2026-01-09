@@ -2,6 +2,13 @@ import { AdminHeader } from "@/components/admin/admin-header";
 import { ImpersonationBanner } from "@/components/admin/impersonation-banner";
 import { Toaster } from "@/components/ui/sonner";
 import { requireSystemAdmin } from "@/lib/admin-auth";
+import { constructMetadata } from "@/lib/constructMetadata";
+
+export const metadata = constructMetadata({
+  title: "Admin | Proppi",
+  description: "Platform administration",
+  noIndex: true,
+});
 
 export default async function AdminLayout({
   children,

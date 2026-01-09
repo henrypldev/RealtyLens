@@ -1,6 +1,6 @@
-import type { Metadata } from "next";
 import { Suspense } from "react";
 import { HelpPage } from "@/components/landing/help-page";
+import { constructMetadata } from "@/lib/constructMetadata";
 import {
   getAllHelpArticles,
   getArticlesByCategory,
@@ -8,11 +8,12 @@ import {
   helpCategories,
 } from "@/lib/help";
 
-export const metadata: Metadata = {
+export const metadata = constructMetadata({
   title: "Help Center | Proppi",
   description:
     "Get help with Proppi. Browse our knowledge base for guides, tutorials, and answers to frequently asked questions.",
-};
+  canonical: "/help",
+});
 
 export default function Help() {
   const articles = getAllHelpArticles();

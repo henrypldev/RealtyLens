@@ -1,9 +1,12 @@
 import { LegalPage, LegalSection } from "@/components/landing/legal-page";
+import { constructMetadata } from "@/lib/constructMetadata";
 
-export const metadata = {
+export const metadata = constructMetadata({
   title: "Terms of Service - Proppi",
   description: "Terms and conditions for using Proppi services.",
-};
+  canonical: "/terms",
+  noIndex: true,
+});
 
 export default function TermsPage() {
   return (

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { HelpCategoryPage } from "@/components/landing/help-category-page";
+import { constructMetadata } from "@/lib/constructMetadata";
 import {
   getArticlesByCategory,
   getCategoryBySlug,
@@ -26,15 +27,17 @@ export async function generateMetadata({
   const category = getCategoryBySlug(categorySlug);
 
   if (!category) {
-    return {
+    return constructMetadata({
       title: "Category Not Found | Proppi Help",
-    };
+      noIndex: true,
+    });
   }
 
-  return {
+  return constructMetadata({
     title: `${category.title} | Proppi Help`,
     description: category.description,
-  };
+    canonical: `/help/${categorySlug}`,
+  });
 }
 
 export default async function HelpCategory({ params }: HelpCategoryProps) {

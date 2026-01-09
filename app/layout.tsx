@@ -1,6 +1,6 @@
-import type { Metadata } from "next";
 import { Geist_Mono, Outfit } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { constructMetadata } from "@/lib/constructMetadata";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -13,10 +13,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Proppi",
-  description: "AI-powered real estate photo editor",
-};
+export const metadata = constructMetadata();
 
 export default function RootLayout({
   children,

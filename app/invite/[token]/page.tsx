@@ -1,6 +1,13 @@
 import { notFound } from "next/navigation";
 import { getInvitationByTokenAction } from "@/lib/actions/invitations";
+import { constructMetadata } from "@/lib/constructMetadata";
 import { InviteAcceptForm } from "./invite-accept-form";
+
+export const metadata = constructMetadata({
+  title: "Accept Invitation | Proppi",
+  description: "Join a workspace on Proppi",
+  noIndex: true,
+});
 
 interface InvitePageProps {
   params: Promise<{ token: string }>;

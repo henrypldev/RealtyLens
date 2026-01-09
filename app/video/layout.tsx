@@ -1,14 +1,15 @@
-import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { auth } from "@/lib/auth";
+import { constructMetadata } from "@/lib/constructMetadata";
 import { getUserWithWorkspace } from "@/lib/db/queries";
 
-export const metadata: Metadata = {
+export const metadata = constructMetadata({
   title: "Videos | Proppi",
   description: "Create and manage property tour videos",
-};
+  noIndex: true,
+});
 
 export default async function VideoLayout({
   children,

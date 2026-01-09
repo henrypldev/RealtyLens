@@ -1,9 +1,12 @@
 import { LegalPage, LegalSection } from "@/components/landing/legal-page";
+import { constructMetadata } from "@/lib/constructMetadata";
 
-export const metadata = {
+export const metadata = constructMetadata({
   title: "Privacy Policy - Proppi",
   description: "How we collect, use, and protect your personal information.",
-};
+  canonical: "/privacy",
+  noIndex: true,
+});
 
 export default function PrivacyPage() {
   return (

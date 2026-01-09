@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
+import { constructMetadata } from "@/lib/constructMetadata";
 
-export const metadata: Metadata = {
+export const metadata = constructMetadata({
   title: "Sign In | Proppi",
-  description: "Sign in to Proppi",
-};
+  description: "Sign in to your Proppi account",
+  noIndex: true,
+});
 
 export default function AuthLayout({
   children,
