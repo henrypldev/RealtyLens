@@ -1,21 +1,11 @@
-import {
-  IconClock,
-  IconMovie,
-  IconPhoto,
-  IconPlayerPlay,
-  IconPlus,
-} from "@tabler/icons-react";
+import { IconClock, IconMovie, IconPhoto, IconPlayerPlay, IconPlus } from "@tabler/icons-react";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
-import {
-  getUserWithWorkspace,
-  getVideoProjectStats,
-  getVideoProjects,
-} from "@/lib/db/queries";
+import { getUserWithWorkspace, getVideoProjectStats, getVideoProjects } from "@/lib/db/queries";
 import { cn } from "@/lib/utils";
 import { formatVideoCost } from "@/lib/video/video-constants";
 
@@ -59,11 +49,7 @@ export default async function VideoPage() {
               Create cinematic property tour videos from your images
             </p>
           </div>
-          <Button
-            asChild
-            className="gap-2"
-            style={{ backgroundColor: "var(--accent-teal)" }}
-          >
+          <Button asChild className="gap-2" style={{ backgroundColor: "var(--accent-teal)" }}>
             <Link href="/video/new">
               <IconPlus className="h-4 w-4" />
               Create Video
@@ -103,10 +89,7 @@ export default async function VideoPage() {
               <span className="text-[var(--accent-amber)]">$</span>
               <span>Total Spent</span>
             </div>
-            <div
-              className="mt-2 font-bold text-2xl"
-              style={{ color: "var(--accent-amber)" }}
-            >
+            <div className="mt-2 font-bold text-2xl" style={{ color: "var(--accent-amber)" }}>
               {formatVideoCost(stats.totalCostCents / 100)}
             </div>
           </div>
@@ -120,8 +103,8 @@ export default async function VideoPage() {
             </div>
             <h3 className="mt-4 font-semibold text-lg">No videos yet</h3>
             <p className="mt-1 max-w-sm text-muted-foreground">
-              Create your first property tour video by combining your enhanced
-              images into a cinematic presentation.
+              Create your first property tour video by combining your enhanced images into a
+              cinematic presentation.
             </p>
             <Button
               asChild
@@ -143,7 +126,7 @@ export default async function VideoPage() {
                   className={cn(
                     "group relative overflow-hidden rounded-2xl border bg-card transition-all duration-200",
                     "hover:-translate-y-0.5 hover:border-[var(--accent-teal)]/50 hover:shadow-lg",
-                    "animate-fade-in-up"
+                    "animate-fade-in-up",
                   )}
                   href={`/video/${video.id}`}
                   key={video.id}
@@ -181,9 +164,7 @@ export default async function VideoPage() {
                     {video.durationSeconds && (
                       <div className="absolute right-3 bottom-3 rounded bg-black/70 px-2 py-0.5 font-medium text-white text-xs">
                         {Math.floor(video.durationSeconds / 60)}:
-                        {(video.durationSeconds % 60)
-                          .toString()
-                          .padStart(2, "0")}
+                        {(video.durationSeconds % 60).toString().padStart(2, "0")}
                       </div>
                     )}
                   </div>
@@ -196,20 +177,15 @@ export default async function VideoPage() {
                         <IconPhoto className="h-3.5 w-3.5" />
                         <span>{video.clipCount} clips</span>
                       </div>
-                      <span>
-                        {new Date(video.createdAt).toLocaleDateString()}
-                      </span>
+                      <span>{new Date(video.createdAt).toLocaleDateString()}</span>
                     </div>
 
                     {/* Progress for generating videos */}
-                    {(video.status === "generating" ||
-                      video.status === "compiling") && (
+                    {(video.status === "generating" || video.status === "compiling") && (
                       <div className="mt-3">
                         <div className="flex justify-between text-xs">
                           <span className="text-muted-foreground">
-                            {video.status === "generating"
-                              ? "Generating clips"
-                              : "Compiling video"}
+                            {video.status === "generating" ? "Generating clips" : "Compiling video"}
                           </span>
                           <span className="font-medium text-[var(--accent-teal)]">
                             {video.completedClipCount}/{video.clipCount}

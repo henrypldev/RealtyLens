@@ -73,9 +73,7 @@ export function getFeaturedPosts(): BlogPostMeta[] {
 }
 
 export function getPostsByCategory(category: string): BlogPostMeta[] {
-  return getAllPosts().filter(
-    (post) => post.category.toLowerCase() === category.toLowerCase()
-  );
+  return getAllPosts().filter((post) => post.category.toLowerCase() === category.toLowerCase());
 }
 
 export function getAllCategories(): string[] {
@@ -117,16 +115,10 @@ export function getAllPostSlugs(): string[] {
   }
 
   const files = fs.readdirSync(BLOG_DIRECTORY);
-  return files
-    .filter((file) => file.endsWith(".md"))
-    .map((file) => file.replace(/\.md$/, ""));
+  return files.filter((file) => file.endsWith(".md")).map((file) => file.replace(/\.md$/, ""));
 }
 
-export function getRelatedPosts(
-  currentSlug: string,
-  category: string,
-  limit = 3
-): BlogPostMeta[] {
+export function getRelatedPosts(currentSlug: string, category: string, limit = 3): BlogPostMeta[] {
   return getAllPosts()
     .filter((post) => post.slug !== currentSlug && post.category === category)
     .slice(0, limit);

@@ -11,7 +11,7 @@ interface UseInpaintReturn {
     maskDataUrl: string,
     prompt: string,
     mode: EditMode,
-    replaceNewerVersions?: boolean
+    replaceNewerVersions?: boolean,
   ) => Promise<{ success: boolean; runId?: string }>;
   isProcessing: boolean;
   error: string | null;
@@ -36,7 +36,7 @@ export function useInpaint(): UseInpaintReturn {
       maskDataUrl: string,
       prompt: string,
       mode: EditMode,
-      replaceNewerVersions = false
+      replaceNewerVersions = false,
     ): Promise<{ success: boolean; runId?: string }> => {
       if (!(imageId && prompt)) {
         setError("Missing required fields");
@@ -59,7 +59,7 @@ export function useInpaint(): UseInpaintReturn {
           prompt,
           mode,
           maskDataUrl,
-          replaceNewerVersions
+          replaceNewerVersions,
         );
 
         if (!result.success) {
@@ -77,7 +77,7 @@ export function useInpaint(): UseInpaintReturn {
         return { success: false };
       }
     },
-    []
+    [],
   );
 
   return {

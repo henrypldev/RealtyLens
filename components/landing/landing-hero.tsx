@@ -43,8 +43,7 @@ export function LandingHero() {
       <div
         className="pointer-events-none absolute top-0 left-1/2 -z-10 h-[500px] w-[800px] -translate-x-1/2 rounded-full blur-3xl"
         style={{
-          background:
-            "radial-gradient(circle, var(--landing-accent) 0%, transparent 70%)",
+          background: "radial-gradient(circle, var(--landing-accent) 0%, transparent 70%)",
           opacity: 0.08,
         }}
       />
@@ -73,9 +72,7 @@ export function LandingHero() {
         >
           Create Stunning
           <br />
-          <span style={{ color: "var(--landing-accent)" }}>
-            Property Photos
-          </span>
+          <span style={{ color: "var(--landing-accent)" }}>Property Photos</span>
           <br />
           Instantly with AI
         </h1>
@@ -124,10 +121,7 @@ export function LandingHero() {
             >
               50,000+
             </p>
-            <p
-              className="mt-1 text-sm"
-              style={{ color: "var(--landing-text-muted)" }}
-            >
+            <p className="mt-1 text-sm" style={{ color: "var(--landing-text-muted)" }}>
               Photos enhanced
             </p>
           </div>
@@ -142,10 +136,7 @@ export function LandingHero() {
             >
               30 sec
             </p>
-            <p
-              className="mt-1 text-sm"
-              style={{ color: "var(--landing-text-muted)" }}
-            >
+            <p className="mt-1 text-sm" style={{ color: "var(--landing-text-muted)" }}>
               Average time
             </p>
           </div>
@@ -160,10 +151,7 @@ export function LandingHero() {
             >
               +85%
             </p>
-            <p
-              className="mt-1 text-sm"
-              style={{ color: "var(--landing-text-muted)" }}
-            >
+            <p className="mt-1 text-sm" style={{ color: "var(--landing-text-muted)" }}>
               Listing engagement
             </p>
           </div>
@@ -176,8 +164,7 @@ export function LandingHero() {
           className="relative overflow-hidden rounded-2xl p-1.5 md:rounded-3xl"
           style={{
             backgroundColor: "var(--landing-card)",
-            boxShadow:
-              "0 25px 50px -12px var(--landing-shadow), 0 0 0 1px var(--landing-border)",
+            boxShadow: "0 25px 50px -12px var(--landing-shadow), 0 0 0 1px var(--landing-border)",
           }}
         >
           {/* Browser Chrome */}
@@ -220,10 +207,7 @@ export function LandingHero() {
                     opacity: 0.2,
                   }}
                 />
-                <p
-                  className="font-medium text-sm"
-                  style={{ color: "var(--landing-text-muted)" }}
-                >
+                <p className="font-medium text-sm" style={{ color: "var(--landing-text-muted)" }}>
                   App Preview
                 </p>
               </div>

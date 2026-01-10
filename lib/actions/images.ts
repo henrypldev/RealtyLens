@@ -38,12 +38,8 @@ export type ActionResult<T> =
 // Generate signed upload URLs for client-side direct upload
 export async function createSignedUploadUrls(
   projectId: string,
-  files: { name: string; type: string }[]
-): Promise<
-  ActionResult<
-    { imageId: string; signedUrl: string; token: string; path: string }[]
-  >
-> {
+  files: { name: string; type: string }[],
+): Promise<ActionResult<{ imageId: string; signedUrl: string; token: string; path: string }[]>> {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -53,11 +49,7 @@ export async function createSignedUploadUrls(
   }
 
   // Get user's workspace
-  const currentUser = await db
-    .select()
-    .from(user)
-    .where(eq(user.id, session.user.id))
-    .limit(1);
+  const currentUser = await db.select().from(user).where(eq(user.id, session.user.id)).limit(1);
 
   if (!currentUser[0]?.workspaceId) {
     return { success: false, error: "Workspace not found" };
@@ -83,12 +75,7 @@ export async function createSignedUploadUrls(
       files.slice(0, maxNew).map(async (file) => {
         const imageId = crypto.randomUUID();
         const extension = getExtensionFromContentType(file.type);
-        const path = getImagePath(
-          workspaceId,
-          projectId,
-          `${imageId}.${extension}`,
-          "original"
-        );
+        const path = getImagePath(workspaceId, projectId, `${imageId}.${extension}`, "original");
 
         const { signedUrl, token } = await createSignedUploadUrl(path);
 
@@ -98,7 +85,7 @@ export async function createSignedUploadUrls(
           token,
           path,
         };
-      })
+      }),
     );
 
     return { success: true, data: signedUrls };
@@ -122,7 +109,7 @@ export async function recordUploadedImages(
     fileSize: number;
     contentType: string;
     roomType?: string | null;
-  }[]
+  }[],
 ): Promise<ActionResult<ImageWithRunId[]>> {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -133,11 +120,7 @@ export async function recordUploadedImages(
   }
 
   // Get user's workspace
-  const currentUser = await db
-    .select()
-    .from(user)
-    .where(eq(user.id, session.user.id))
-    .limit(1);
+  const currentUser = await db.select().from(user).where(eq(user.id, session.user.id)).limit(1);
 
   if (!currentUser[0]?.workspaceId) {
     return { success: false, error: "Workspace not found" };
@@ -200,58 +183,24 @@ export async function recordUploadedImages(
     // Update project counts
     await updateProjectCounts(projectId);
 
-    // Import payment functions dynamically to avoid circular dependencies
-    const {
-      canUseInvoiceBilling,
-      createInvoicePayment,
-      getProjectPaymentStatus,
-    } = await import("./payments");
+    // Check if project is already paid
+    const { getProjectPaymentStatus } = await import("./payments");
+    const paymentStatus = await getProjectPaymentStatus(projectId);
 
-    // Check if workspace is invoice eligible
-    const invoiceEligibility = await canUseInvoiceBilling(workspaceId);
+    if (paymentStatus.isPaid) {
+      for (const image of uploadedImages) {
+        const handle = await processImageTask.trigger({ imageId: image.id });
 
-    if (invoiceEligibility.eligible) {
-      // Invoice-eligible workspace: Create invoice payment and process immediately
-      const paymentResult = await createInvoicePayment(projectId);
+        await updateImageGeneration(image.id, {
+          status: "processing",
+          metadata: {
+            ...(image.metadata as object),
+            runId: handle.id,
+          },
+        });
 
-      if (paymentResult.success) {
-        // Trigger processing for invoice customers
-        for (const image of uploadedImages) {
-          const handle = await processImageTask.trigger({ imageId: image.id });
-
-          await updateImageGeneration(image.id, {
-            status: "processing",
-            metadata: {
-              ...(image.metadata as object),
-              runId: handle.id,
-            },
-          });
-
-          image.runId = handle.id;
-        }
+        image.runId = handle.id;
       }
-    } else {
-      // Non-invoice workspace: Check if already paid (shouldn't be at this point)
-      const paymentStatus = await getProjectPaymentStatus(projectId);
-
-      if (paymentStatus.isPaid) {
-        // Already paid - trigger processing
-        for (const image of uploadedImages) {
-          const handle = await processImageTask.trigger({ imageId: image.id });
-
-          await updateImageGeneration(image.id, {
-            status: "processing",
-            metadata: {
-              ...(image.metadata as object),
-              runId: handle.id,
-            },
-          });
-
-          image.runId = handle.id;
-        }
-      }
-      // If not paid, images stay in "pending" status
-      // Payment will be handled via Stripe checkout, and webhook will trigger processing
     }
 
     revalidatePath("/dashboard");
@@ -266,10 +215,10 @@ export async function recordUploadedImages(
 
 /**
  * Trigger processing for all pending images in a project
- * Called by Stripe webhook after successful payment
+ * Called by Polar webhook after successful payment
  */
 export async function triggerProjectProcessing(
-  projectId: string
+  projectId: string,
 ): Promise<ActionResult<{ processedCount: number }>> {
   try {
     const projectData = await getProjectById(projectId);
@@ -278,9 +227,7 @@ export async function triggerProjectProcessing(
     }
 
     // Get all pending images for this project
-    const pendingImages = projectData.images.filter(
-      (img) => img.status === "pending"
-    );
+    const pendingImages = projectData.images.filter((img) => img.status === "pending");
 
     if (pendingImages.length === 0) {
       return { success: true, data: { processedCount: 0 } };
@@ -313,9 +260,7 @@ export async function triggerProjectProcessing(
 }
 
 // Delete a single image from a project
-export async function deleteProjectImage(
-  imageId: string
-): Promise<ActionResult<void>> {
+export async function deleteProjectImage(imageId: string): Promise<ActionResult<void>> {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -325,11 +270,7 @@ export async function deleteProjectImage(
   }
 
   // Get user's workspace
-  const currentUser = await db
-    .select()
-    .from(user)
-    .where(eq(user.id, session.user.id))
-    .limit(1);
+  const currentUser = await db.select().from(user).where(eq(user.id, session.user.id)).limit(1);
 
   if (!currentUser[0]?.workspaceId) {
     return { success: false, error: "Workspace not found" };
@@ -380,7 +321,7 @@ export async function deleteProjectImage(
 
 // Delete multiple selected images and their versions
 export async function deleteSelectedImages(
-  imageIds: string[]
+  imageIds: string[],
 ): Promise<ActionResult<{ deletedCount: number }>> {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -395,11 +336,7 @@ export async function deleteSelectedImages(
   }
 
   // Get user's workspace
-  const currentUser = await db
-    .select()
-    .from(user)
-    .where(eq(user.id, session.user.id))
-    .limit(1);
+  const currentUser = await db.select().from(user).where(eq(user.id, session.user.id)).limit(1);
 
   if (!currentUser[0]?.workspaceId) {
     return { success: false, error: "Workspace not found" };
@@ -434,8 +371,8 @@ export async function deleteSelectedImages(
       .where(
         or(
           inArray(imageGeneration.id, Array.from(rootIds)),
-          inArray(imageGeneration.parentId, Array.from(rootIds))
-        )
+          inArray(imageGeneration.parentId, Array.from(rootIds)),
+        ),
       );
 
     // Track project IDs for updating counts later
@@ -466,9 +403,7 @@ export async function deleteSelectedImages(
 
     // Delete all version chain images from database
     const imageIdsToDelete = allVersionImages.map((img) => img.id);
-    await db
-      .delete(imageGeneration)
-      .where(inArray(imageGeneration.id, imageIdsToDelete));
+    await db.delete(imageGeneration).where(inArray(imageGeneration.id, imageIdsToDelete));
 
     // Update project counts for all affected projects
     for (const projectId of projectIds) {
@@ -486,9 +421,7 @@ export async function deleteSelectedImages(
 }
 
 // Retry failed image processing
-export async function retryImageProcessing(
-  imageId: string
-): Promise<ActionResult<ImageWithRunId>> {
+export async function retryImageProcessing(imageId: string): Promise<ActionResult<ImageWithRunId>> {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -498,11 +431,7 @@ export async function retryImageProcessing(
   }
 
   // Get user's workspace
-  const currentUser = await db
-    .select()
-    .from(user)
-    .where(eq(user.id, session.user.id))
-    .limit(1);
+  const currentUser = await db.select().from(user).where(eq(user.id, session.user.id)).limit(1);
 
   if (!currentUser[0]?.workspaceId) {
     return { success: false, error: "Workspace not found" };
@@ -554,7 +483,7 @@ export async function updateImageStatus(
   imageId: string,
   status: "pending" | "processing" | "completed" | "failed",
   resultUrl?: string,
-  errorMessage?: string
+  errorMessage?: string,
 ): Promise<ActionResult<ImageGeneration>> {
   const image = await getImageGenerationById(imageId);
   if (!image) {
@@ -588,7 +517,7 @@ export async function updateImageStatus(
 // Regenerate an image with the same or different style
 export async function regenerateImage(
   imageId: string,
-  newTemplateId?: string
+  newTemplateId?: string,
 ): Promise<ActionResult<ImageWithRunId>> {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -599,11 +528,7 @@ export async function regenerateImage(
   }
 
   // Get user's workspace
-  const currentUser = await db
-    .select()
-    .from(user)
-    .where(eq(user.id, session.user.id))
-    .limit(1);
+  const currentUser = await db.select().from(user).where(eq(user.id, session.user.id)).limit(1);
 
   if (!currentUser[0]?.workspaceId) {
     return { success: false, error: "Workspace not found" };
@@ -616,8 +541,7 @@ export async function regenerateImage(
   }
 
   // Get the template (use new one if provided, otherwise use existing)
-  const templateId =
-    newTemplateId || (image.metadata as { templateId?: string })?.templateId;
+  const templateId = newTemplateId || (image.metadata as { templateId?: string })?.templateId;
   const template = templateId ? getTemplateById(templateId) : null;
 
   if (!template) {
@@ -627,9 +551,7 @@ export async function regenerateImage(
   // Get project to get room type for prompt generation
   const projectData = await getProjectById(image.projectId);
   const roomType =
-    projectData?.project.roomType ||
-    (image.metadata as { roomType?: string })?.roomType ||
-    null;
+    projectData?.project.roomType || (image.metadata as { roomType?: string })?.roomType || null;
 
   // Generate prompt with room type context
   const prompt = generatePrompt(template, roomType);
@@ -676,7 +598,7 @@ export async function triggerInpaintTask(
   prompt: string,
   mode: EditMode,
   maskDataUrl?: string,
-  replaceNewerVersions?: boolean
+  replaceNewerVersions?: boolean,
 ): Promise<ActionResult<{ runId: string }>> {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -687,11 +609,7 @@ export async function triggerInpaintTask(
   }
 
   // Get user's workspace
-  const currentUser = await db
-    .select()
-    .from(user)
-    .where(eq(user.id, session.user.id))
-    .limit(1);
+  const currentUser = await db.select().from(user).where(eq(user.id, session.user.id)).limit(1);
 
   if (!currentUser[0]?.workspaceId) {
     return { success: false, error: "Workspace not found" };
@@ -732,9 +650,7 @@ export async function triggerInpaintTask(
 function extractPathFromUrl(url: string): string | null {
   try {
     const urlObj = new URL(url);
-    const pathMatch = urlObj.pathname.match(
-      /\/storage\/v1\/object\/public\/[^/]+\/(.+)/
-    );
+    const pathMatch = urlObj.pathname.match(/\/storage\/v1\/object\/public\/[^/]+\/(.+)/);
     return pathMatch ? pathMatch[1] : null;
   } catch {
     return null;

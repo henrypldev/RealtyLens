@@ -16,13 +16,11 @@ export function WelcomeEmail({ name }: WelcomeEmailProps) {
       <Text style={paragraph}>Hi {name},</Text>
 
       <Text style={paragraph}>
-        Thanks for signing up for Proppi. We&apos;re excited to have you on
-        board!
+        Thanks for signing up for Proppi. We&apos;re excited to have you on board!
       </Text>
 
       <Text style={paragraph}>
-        With Proppi, you can transform your real estate photos with AI-powered
-        enhancements:
+        With Proppi, you can transform your real estate photos with AI-powered enhancements:
       </Text>
 
       <Section style={features}>
@@ -30,16 +28,13 @@ export function WelcomeEmail({ name }: WelcomeEmailProps) {
           <strong>Virtual Staging</strong> - Add furniture to empty rooms
         </Text>
         <Text style={featureItem}>
-          <strong>Lighting Enhancement</strong> - Perfect natural and artificial
-          lighting
+          <strong>Lighting Enhancement</strong> - Perfect natural and artificial lighting
         </Text>
         <Text style={featureItem}>
-          <strong>Decluttering</strong> - Remove personal items and organize
-          spaces
+          <strong>Decluttering</strong> - Remove personal items and organize spaces
         </Text>
         <Text style={featureItem}>
-          <strong>Exterior Improvements</strong> - Enhance curb appeal and
-          landscaping
+          <strong>Exterior Improvements</strong> - Enhance curb appeal and landscaping
         </Text>
       </Section>
 

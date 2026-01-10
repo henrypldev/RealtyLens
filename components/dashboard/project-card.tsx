@@ -26,11 +26,7 @@ const statusConfig: Record<
   ProjectStatus,
   {
     label: string;
-    variant:
-      | "status-active"
-      | "status-pending"
-      | "status-completed"
-      | "status-archived";
+    variant: "status-active" | "status-pending" | "status-completed" | "status-archived";
     icon: React.ReactNode;
   }
 > = {
@@ -71,8 +67,7 @@ function formatRelativeDate(date: Date): string {
 
 export function ProjectCard({ project, className, style }: ProjectCardProps) {
   const template = getTemplateById(project.styleTemplateId);
-  const status =
-    statusConfig[project.status as ProjectStatus] || statusConfig.pending;
+  const status = statusConfig[project.status as ProjectStatus] || statusConfig.pending;
 
   return (
     <Link
@@ -80,7 +75,7 @@ export function ProjectCard({ project, className, style }: ProjectCardProps) {
         "group relative flex flex-col overflow-hidden rounded-2xl bg-card ring-1 ring-foreground/5 transition-all duration-300",
         "hover:-translate-y-1 hover:shadow-lg hover:ring-foreground/10",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-        className
+        className,
       )}
       href={`/dashboard/${project.id}`}
       style={
@@ -111,10 +106,7 @@ export function ProjectCard({ project, className, style }: ProjectCardProps) {
 
         {/* Status badge */}
         <div className="absolute top-3 right-3">
-          <Badge
-            className="gap-1 shadow-sm backdrop-blur-sm"
-            variant={status.variant}
-          >
+          <Badge className="gap-1 shadow-sm backdrop-blur-sm" variant={status.variant}>
             {status.icon}
             {status.label}
           </Badge>

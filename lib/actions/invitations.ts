@@ -27,7 +27,7 @@ export async function createWorkspaceWithInviteAction(
   name: string,
   email: string,
   plan: WorkspacePlan,
-  sendEmail = true
+  sendEmail = true,
 ): Promise<
   ActionResult<{
     workspace: { id: string; name: string };
@@ -85,17 +85,9 @@ export async function createWorkspaceWithInviteAction(
     // Send invite email if requested
     if (sendEmail) {
       try {
-        await sendInviteEmail(
-          email,
-          "Proppi Admin",
-          newWorkspace.name,
-          inviteLink
-        );
+        await sendInviteEmail(email, "Proppi Admin", newWorkspace.name, inviteLink);
       } catch (emailError) {
-        console.error(
-          "[invitations:createWorkspaceWithInvite] Email failed:",
-          emailError
-        );
+        console.error("[invitations:createWorkspaceWithInvite] Email failed:", emailError);
         // Don't fail the action if email fails - user can copy the link
       }
     }
@@ -124,7 +116,7 @@ export async function createWorkspaceWithInviteAction(
 // ============================================================================
 
 export async function resendInvitationAction(
-  invitationId: string
+  invitationId: string,
 ): Promise<ActionResult<{ expiresAt: Date }>> {
   const adminCheck = await verifySystemAdmin();
   if (adminCheck.error) {
@@ -169,7 +161,7 @@ export async function resendInvitationAction(
       existingInvite.invitation.email,
       "Proppi Admin",
       existingInvite.workspaceName,
-      inviteLink
+      inviteLink,
     );
 
     return { success: true, data: { expiresAt: newExpiresAt } };
@@ -230,7 +222,7 @@ export async function getInvitationByTokenAction(token: string): Promise<
 export async function acceptInvitationAction(
   token: string,
   name: string,
-  password: string
+  password: string,
 ): Promise<ActionResult<{ redirectTo: string }>> {
   try {
     // Get invitation
@@ -241,9 +233,7 @@ export async function acceptInvitationAction(
       })
       .from(invitation)
       .innerJoin(workspace, eq(invitation.workspaceId, workspace.id))
-      .where(
-        and(eq(invitation.token, token), gt(invitation.expiresAt, new Date()))
-      );
+      .where(and(eq(invitation.token, token), gt(invitation.expiresAt, new Date())));
 
     if (!result) {
       return { success: false, error: "Invitation not found or has expired" };
@@ -329,9 +319,7 @@ export async function acceptInvitationAction(
 // Delete Invitation (Admin only)
 // ============================================================================
 
-export async function deleteInvitationAction(
-  invitationId: string
-): Promise<ActionResult<void>> {
+export async function deleteInvitationAction(invitationId: string): Promise<ActionResult<void>> {
   const adminCheck = await verifySystemAdmin();
   if (adminCheck.error) {
     return { success: false, error: adminCheck.error };
@@ -365,7 +353,7 @@ export async function deleteInvitationAction(
  */
 export async function createWorkspaceMemberInvitation(
   email: string,
-  role: UserRole
+  role: UserRole,
 ): Promise<ActionResult<{ token: string; inviteUrl: string }>> {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
@@ -374,10 +362,7 @@ export async function createWorkspaceMemberInvitation(
     }
 
     // Get current user with workspace
-    const [currentUser] = await db
-      .select()
-      .from(user)
-      .where(eq(user.id, session.user.id));
+    const [currentUser] = await db.select().from(user).where(eq(user.id, session.user.id));
 
     if (!currentUser?.workspaceId) {
       return { success: false, error: "Workspace not found" };
@@ -398,9 +383,7 @@ export async function createWorkspaceMemberInvitation(
     const [existingMember] = await db
       .select()
       .from(user)
-      .where(
-        and(eq(user.email, normalizedEmail), eq(user.workspaceId, workspaceId))
-      );
+      .where(and(eq(user.email, normalizedEmail), eq(user.workspaceId, workspaceId)));
 
     if (existingMember) {
       return {
@@ -418,14 +401,13 @@ export async function createWorkspaceMemberInvitation(
           eq(invitation.email, normalizedEmail),
           eq(invitation.workspaceId, workspaceId),
           isNull(invitation.acceptedAt),
-          gt(invitation.expiresAt, new Date())
-        )
+          gt(invitation.expiresAt, new Date()),
+        ),
       );
 
     if (existingInvitation) {
       // Return existing invitation link
-      const baseUrl =
-        process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
       return {
         success: true,
         data: {
@@ -484,10 +466,7 @@ export async function getWorkspacePendingInvitations(): Promise<
       return { success: false, error: "Not authenticated" };
     }
 
-    const [currentUser] = await db
-      .select()
-      .from(user)
-      .where(eq(user.id, session.user.id));
+    const [currentUser] = await db.select().from(user).where(eq(user.id, session.user.id));
 
     if (!currentUser?.workspaceId) {
       return { success: false, error: "Workspace not found" };
@@ -507,8 +486,8 @@ export async function getWorkspacePendingInvitations(): Promise<
         and(
           eq(invitation.workspaceId, currentUser.workspaceId),
           isNull(invitation.acceptedAt),
-          gt(invitation.expiresAt, new Date())
-        )
+          gt(invitation.expiresAt, new Date()),
+        ),
       )
       .orderBy(invitation.createdAt);
 
@@ -530,7 +509,7 @@ export async function getWorkspacePendingInvitations(): Promise<
  * User must be logged in and email must match the invitation
  */
 export async function acceptInvitationAsLoggedInUser(
-  token: string
+  token: string,
 ): Promise<ActionResult<{ redirectTo: string }>> {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
@@ -590,10 +569,7 @@ export async function acceptInvitationAsLoggedInUser(
       .where(eq(user.id, session.user.id));
 
     // Mark invitation as accepted
-    await db
-      .update(invitation)
-      .set({ acceptedAt: new Date() })
-      .where(eq(invitation.id, result.id));
+    await db.update(invitation).set({ acceptedAt: new Date() }).where(eq(invitation.id, result.id));
 
     revalidatePath("/dashboard");
     revalidatePath("/dashboard/settings");
@@ -611,19 +587,14 @@ export async function acceptInvitationAsLoggedInUser(
 /**
  * Cancel/revoke a workspace invitation
  */
-export async function cancelWorkspaceInvitation(
-  invitationId: string
-): Promise<ActionResult<void>> {
+export async function cancelWorkspaceInvitation(invitationId: string): Promise<ActionResult<void>> {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session?.user) {
       return { success: false, error: "Not authenticated" };
     }
 
-    const [currentUser] = await db
-      .select()
-      .from(user)
-      .where(eq(user.id, session.user.id));
+    const [currentUser] = await db.select().from(user).where(eq(user.id, session.user.id));
 
     if (!currentUser?.workspaceId) {
       return { success: false, error: "Workspace not found" };
@@ -642,10 +613,7 @@ export async function cancelWorkspaceInvitation(
       .select()
       .from(invitation)
       .where(
-        and(
-          eq(invitation.id, invitationId),
-          eq(invitation.workspaceId, currentUser.workspaceId)
-        )
+        and(eq(invitation.id, invitationId), eq(invitation.workspaceId, currentUser.workspaceId)),
       );
 
     if (!inv) {

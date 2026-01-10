@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  IconCheck,
-  IconEdit,
-  IconLoader2,
-  IconShieldCheck,
-  IconTrash,
-} from "@tabler/icons-react";
+import { IconCheck, IconEdit, IconLoader2, IconShieldCheck, IconTrash } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useState, useTransition } from "react";
@@ -60,12 +54,7 @@ const roleOptions: { value: UserRole; label: string; color: string }[] = [
   { value: "member", label: "Member", color: "var(--accent-teal)" },
 ];
 
-export function EditUserDialog({
-  open,
-  onOpenChange,
-  user,
-  onSuccess,
-}: EditUserDialogProps) {
+export function EditUserDialog({ open, onOpenChange, user, onSuccess }: EditUserDialogProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [saved, setSaved] = useState(false);
@@ -166,9 +155,7 @@ export function EditUserDialog({
   };
 
   const hasChanges =
-    name !== user.name ||
-    role !== user.role ||
-    isSystemAdmin !== user.isSystemAdmin;
+    name !== user.name || role !== user.role || isSystemAdmin !== user.isSystemAdmin;
 
   return (
     <>
@@ -181,14 +168,10 @@ export function EditUserDialog({
                 <div
                   className="flex h-8 w-8 items-center justify-center rounded-lg"
                   style={{
-                    backgroundColor:
-                      "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
+                    backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
                   }}
                 >
-                  <IconEdit
-                    className="h-4 w-4"
-                    style={{ color: "var(--accent-teal)" }}
-                  />
+                  <IconEdit className="h-4 w-4" style={{ color: "var(--accent-teal)" }} />
                 </div>
                 Edit User
               </DialogTitle>
@@ -206,14 +189,10 @@ export function EditUserDialog({
                 <div
                   className="flex h-16 w-16 items-center justify-center rounded-full"
                   style={{
-                    backgroundColor:
-                      "color-mix(in oklch, var(--accent-green) 15%, transparent)",
+                    backgroundColor: "color-mix(in oklch, var(--accent-green) 15%, transparent)",
                   }}
                 >
-                  <IconCheck
-                    className="h-8 w-8"
-                    style={{ color: "var(--accent-green)" }}
-                  />
+                  <IconCheck className="h-8 w-8" style={{ color: "var(--accent-green)" }} />
                 </div>
                 <div>
                   <p className="font-semibold text-lg">User Updated!</p>
@@ -273,8 +252,7 @@ export function EditUserDialog({
                       </SelectContent>
                     </Select>
                     <p className="text-muted-foreground text-xs">
-                      The user&apos;s role within their workspace. Owner has
-                      full access.
+                      The user&apos;s role within their workspace. Owner has full access.
                     </p>
                   </div>
                 </div>
@@ -327,9 +305,7 @@ export function EditUserDialog({
 
                   <div className="flex items-center justify-between rounded-lg border border-destructive/20 bg-destructive/5 p-4">
                     <div>
-                      <p className="font-medium text-destructive">
-                        Delete User
-                      </p>
+                      <p className="font-medium text-destructive">Delete User</p>
                       <p className="text-muted-foreground text-sm">
                         Permanently remove this user and all their data
                       </p>
@@ -353,12 +329,7 @@ export function EditUserDialog({
           {/* Footer */}
           {!saved && (
             <div className="flex items-center justify-end gap-3 border-t bg-muted/30 px-6 py-4">
-              <Button
-                disabled={isPending}
-                onClick={handleClose}
-                type="button"
-                variant="outline"
-              >
+              <Button disabled={isPending} onClick={handleClose} type="button" variant="outline">
                 Cancel
               </Button>
               <Button
@@ -390,9 +361,8 @@ export function EditUserDialog({
           <AlertDialogHeader>
             <AlertDialogTitle>Delete User</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete <strong>{user.name}</strong>? This
-              action cannot be undone. All of their data including projects and
-              videos will be permanently removed.
+              Are you sure you want to delete <strong>{user.name}</strong>? This action cannot be
+              undone. All of their data including projects and videos will be permanently removed.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

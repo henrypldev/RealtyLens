@@ -27,9 +27,7 @@ export function BlogPage({ posts, categories }: BlogPageProps) {
       if (search) {
         const searchLower = search.toLowerCase();
         const matchesTitle = post.title.toLowerCase().includes(searchLower);
-        const matchesDescription = post.description
-          .toLowerCase()
-          .includes(searchLower);
+        const matchesDescription = post.description.toLowerCase().includes(searchLower);
         if (!(matchesTitle || matchesDescription)) {
           return false;
         }
@@ -42,10 +40,7 @@ export function BlogPage({ posts, categories }: BlogPageProps) {
   const regularPosts = filteredPosts.filter((post) => !post.featured);
 
   return (
-    <div
-      className="min-h-screen"
-      style={{ backgroundColor: "var(--landing-bg)" }}
-    >
+    <div className="min-h-screen" style={{ backgroundColor: "var(--landing-bg)" }}>
       <LandingNav />
 
       <main>
@@ -68,9 +63,8 @@ export function BlogPage({ posts, categories }: BlogPageProps) {
               className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed md:text-xl"
               style={{ color: "var(--landing-text-muted)" }}
             >
-              Tips, guides, and industry insights to help you create stunning
-              property listings. Learn from experts and elevate your real estate
-              photography.
+              Tips, guides, and industry insights to help you create stunning property listings.
+              Learn from experts and elevate your real estate photography.
             </p>
           </div>
         </section>
@@ -146,10 +140,7 @@ export function BlogPage({ posts, categories }: BlogPageProps) {
         )}
 
         {/* All Posts Grid */}
-        <section
-          className="px-6 py-16"
-          style={{ backgroundColor: "var(--landing-bg-alt)" }}
-        >
+        <section className="px-6 py-16" style={{ backgroundColor: "var(--landing-bg-alt)" }}>
           <div className="mx-auto max-w-5xl">
             <div className="mb-8 flex items-center justify-between">
               <h2
@@ -200,10 +191,7 @@ export function BlogPage({ posts, categories }: BlogPageProps) {
                     style={{ color: "var(--landing-text-muted)" }}
                   />
                 </div>
-                <h3
-                  className="font-semibold text-lg"
-                  style={{ color: "var(--landing-text)" }}
-                >
+                <h3 className="font-semibold text-lg" style={{ color: "var(--landing-text)" }}>
                   No articles found
                 </h3>
                 <p
@@ -255,8 +243,8 @@ export function BlogPage({ posts, categories }: BlogPageProps) {
               className="mx-auto mt-4 max-w-lg text-lg leading-relaxed"
               style={{ color: "var(--landing-text-muted)" }}
             >
-              Get the latest tips, guides, and product updates delivered to your
-              inbox. No spam, unsubscribe anytime.
+              Get the latest tips, guides, and product updates delivered to your inbox. No spam,
+              unsubscribe anytime.
             </p>
             <form className="mx-auto mt-8 flex max-w-md flex-col gap-3 sm:flex-row">
               <input

@@ -3,11 +3,7 @@ import { execSync } from "child_process";
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
-import {
-  getVideoClips,
-  getVideoProjectById,
-  updateVideoProject,
-} from "@/lib/db/queries";
+import { getVideoClips, getVideoProjectById, updateVideoProject } from "@/lib/db/queries";
 import { getVideoPath, uploadVideo } from "@/lib/supabase";
 
 export interface CompileVideoPayload {
@@ -15,13 +11,7 @@ export interface CompileVideoPayload {
 }
 
 export interface CompileVideoStatus {
-  step:
-    | "fetching"
-    | "downloading"
-    | "compiling"
-    | "uploading"
-    | "completed"
-    | "failed";
+  step: "fetching" | "downloading" | "compiling" | "uploading" | "completed" | "failed";
   label: string;
   progress?: number;
 }
@@ -103,10 +93,7 @@ export const compileVideoTask = task({
         const clip = completedClips[i];
 
         // Download main clip
-        const clipPath = join(
-          workDir,
-          `clip_${String(itemIndex).padStart(3, "0")}.mp4`
-        );
+        const clipPath = join(workDir, `clip_${String(itemIndex).padStart(3, "0")}.mp4`);
 
         logger.info(`Downloading clip ${i + 1}/${completedClips.length}`, {
           clipId: clip.id,
@@ -115,9 +102,7 @@ export const compileVideoTask = task({
 
         const response = await fetch(clip.clipUrl!);
         if (!response.ok) {
-          throw new Error(
-            `Failed to download clip ${clip.id}: ${response.status}`
-          );
+          throw new Error(`Failed to download clip ${clip.id}: ${response.status}`);
         }
 
         const buffer = await response.arrayBuffer();
@@ -133,7 +118,7 @@ export const compileVideoTask = task({
         ) {
           const transitionPath = join(
             workDir,
-            `transition_${String(itemIndex).padStart(3, "0")}.mp4`
+            `transition_${String(itemIndex).padStart(3, "0")}.mp4`,
           );
 
           logger.info(`Downloading transition ${itemIndex}/${totalItems}`, {
@@ -152,7 +137,7 @@ export const compileVideoTask = task({
               `Failed to download transition for clip ${clip.id}, continuing without it`,
               {
                 status: transitionResponse.status,
-              }
+              },
             );
             // Continue without transition - fall back to cut
           }
@@ -216,10 +201,7 @@ export const compileVideoTask = task({
         });
       } catch (ffmpegError) {
         logger.error("FFmpeg compilation failed", {
-          error:
-            ffmpegError instanceof Error
-              ? ffmpegError.message
-              : "Unknown error",
+          error: ffmpegError instanceof Error ? ffmpegError.message : "Unknown error",
         });
         throw new Error("Video compilation failed - FFmpeg error");
       }
@@ -236,22 +218,18 @@ export const compileVideoTask = task({
       } satisfies CompileVideoStatus);
 
       const outputBuffer = readFileSync(outputPath);
-      const finalVideoPath = getVideoPath(
-        videoProject.workspaceId,
-        videoProjectId,
-        "final.mp4"
-      );
+      const finalVideoPath = getVideoPath(videoProject.workspaceId, videoProjectId, "final.mp4");
 
       const finalVideoUrl = await uploadVideo(
         new Uint8Array(outputBuffer),
         finalVideoPath,
-        "video/mp4"
+        "video/mp4",
       );
 
       // Calculate total duration (including transitions)
       let totalDuration = completedClips.reduce(
         (sum, clip) => sum + (clip.durationSeconds ?? 5),
-        0
+        0,
       );
       // Add 5 seconds for each seamless transition (Kling minimum duration)
       for (let i = 0; i < completedClips.length - 1; i++) {
@@ -292,8 +270,7 @@ export const compileVideoTask = task({
         durationSeconds: totalDuration,
       };
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Unknown error";
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
 
       logger.error("Video compilation failed", {
         videoProjectId,
@@ -315,8 +292,7 @@ export const compileVideoTask = task({
       } catch (dbError) {
         logger.error("Failed to update project status in database", {
           videoProjectId,
-          error:
-            dbError instanceof Error ? dbError.message : "Unknown DB error",
+          error: dbError instanceof Error ? dbError.message : "Unknown DB error",
         });
       }
 

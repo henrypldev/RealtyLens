@@ -19,12 +19,7 @@ export interface AdminStats {
 
 export interface RecentActivity {
   id: string;
-  type:
-    | "user_joined"
-    | "workspace_created"
-    | "image_generated"
-    | "plan_upgraded"
-    | "user_invited";
+  type: "user_joined" | "workspace_created" | "image_generated" | "plan_upgraded" | "user_invited";
   description: string;
   timestamp: Date;
   metadata: {
@@ -63,8 +58,7 @@ export function getAdminStats(): AdminStats {
   return {
     totalWorkspaces: workspaces.length,
     activeWorkspaces: workspaces.filter((w) => w.status === "active").length,
-    suspendedWorkspaces: workspaces.filter((w) => w.status === "suspended")
-      .length,
+    suspendedWorkspaces: workspaces.filter((w) => w.status === "suspended").length,
     trialWorkspaces: workspaces.filter((w) => w.status === "trial").length,
     totalUsers: users.length,
     activeUsers: users.filter((u) => u.status === "active").length,
@@ -165,7 +159,5 @@ export function getRecentActivity(limit = 10): RecentActivity[] {
   }
 
   // Sort by timestamp (newest first) and limit
-  return activities
-    .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
-    .slice(0, limit);
+  return activities.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime()).slice(0, limit);
 }

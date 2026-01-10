@@ -1,10 +1,4 @@
-import {
-  IconArrowLeft,
-  IconCreditCard,
-  IconRocket,
-  IconUser,
-  IconWand,
-} from "@tabler/icons-react";
+import { IconArrowLeft, IconCreditCard, IconRocket, IconUser, IconWand } from "@tabler/icons-react";
 import Link from "next/link";
 import type { HelpArticleMeta, HelpCategory } from "@/lib/help";
 import { HelpArticleCard } from "./help-article-card";
@@ -23,17 +17,11 @@ interface HelpCategoryPageProps {
   articles: HelpArticleMeta[];
 }
 
-export function HelpCategoryPage({
-  category,
-  articles,
-}: HelpCategoryPageProps) {
+export function HelpCategoryPage({ category, articles }: HelpCategoryPageProps) {
   const Icon = iconMap[category.icon as keyof typeof iconMap] || IconRocket;
 
   return (
-    <div
-      className="min-h-screen"
-      style={{ backgroundColor: "var(--landing-bg)" }}
-    >
+    <div className="min-h-screen" style={{ backgroundColor: "var(--landing-bg)" }}>
       <LandingNav />
 
       <main>
@@ -58,10 +46,7 @@ export function HelpCategoryPage({
                   border: "1px solid var(--landing-border)",
                 }}
               >
-                <Icon
-                  className="size-7"
-                  style={{ color: "var(--landing-accent)" }}
-                />
+                <Icon className="size-7" style={{ color: "var(--landing-accent)" }} />
               </div>
               <div>
                 <h1
@@ -70,10 +55,7 @@ export function HelpCategoryPage({
                 >
                   {category.title}
                 </h1>
-                <p
-                  className="mt-2 text-lg"
-                  style={{ color: "var(--landing-text-muted)" }}
-                >
+                <p className="mt-2 text-lg" style={{ color: "var(--landing-text-muted)" }}>
                   {category.description}
                 </p>
               </div>

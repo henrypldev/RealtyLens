@@ -24,11 +24,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useImpersonation } from "@/hooks/use-impersonation";
 import type { AdminWorkspaceDetail } from "@/lib/db/queries";
-import type {
-  Workspace,
-  WorkspacePlan,
-  WorkspaceStatus,
-} from "@/lib/db/schema";
+import type { Workspace, WorkspacePlan, WorkspaceStatus } from "@/lib/db/schema";
 import { cn } from "@/lib/utils";
 
 interface WorkspaceDetailContentProps {
@@ -52,10 +48,7 @@ const statusLabelMap: Record<WorkspaceStatus, string> = {
 };
 
 // Plan badge variants
-const planVariantMap: Record<
-  WorkspacePlan,
-  "plan-free" | "plan-pro" | "plan-enterprise"
-> = {
+const planVariantMap: Record<WorkspacePlan, "plan-free" | "plan-pro" | "plan-enterprise"> = {
   free: "plan-free",
   pro: "plan-pro",
   enterprise: "plan-enterprise",
@@ -68,10 +61,7 @@ const planLabelMap: Record<WorkspacePlan, string> = {
 };
 
 // Role badge variants
-const roleVariantMap: Record<
-  string,
-  "role-owner" | "role-admin" | "role-member"
-> = {
+const roleVariantMap: Record<string, "role-owner" | "role-admin" | "role-member"> = {
   owner: "role-owner",
   admin: "role-admin",
   member: "role-member",
@@ -125,9 +115,7 @@ function StatItem({
           >
             {value}
           </p>
-          {subValue && (
-            <span className="text-muted-foreground text-xs">{subValue}</span>
-          )}
+          {subValue && <span className="text-muted-foreground text-xs">{subValue}</span>}
         </div>
       </div>
     </div>
@@ -148,10 +136,7 @@ function Section({
 }) {
   return (
     <div
-      className={cn(
-        "animate-fade-in-up rounded-xl bg-card ring-1 ring-foreground/5",
-        className
-      )}
+      className={cn("animate-fade-in-up rounded-xl bg-card ring-1 ring-foreground/5", className)}
     >
       <div className="flex items-center justify-between border-border border-b px-4 py-3">
         <h3 className="font-semibold">{title}</h3>
@@ -184,15 +169,7 @@ function InfoRow({
 }
 
 // Progress bar component
-function ProgressBar({
-  current,
-  total,
-  color,
-}: {
-  current: number;
-  total: number;
-  color: string;
-}) {
+function ProgressBar({ current, total, color }: { current: number; total: number; color: string }) {
   const percentage = total > 0 ? (current / total) * 100 : 0;
   return (
     <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
@@ -207,14 +184,11 @@ function ProgressBar({
   );
 }
 
-export function WorkspaceDetailContent({
-  workspace: data,
-}: WorkspaceDetailContentProps) {
+export function WorkspaceDetailContent({ workspace: data }: WorkspaceDetailContentProps) {
   const router = useRouter();
   const { impersonateUser, isPending } = useImpersonation();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const { workspace, owner, members, stats, recentProjects, recentVideos } =
-    data;
+  const { workspace, owner, members, stats, recentProjects, recentVideos } = data;
 
   const totalSpend = stats.totalImageSpend + stats.totalVideoSpend;
 
@@ -250,8 +224,7 @@ export function WorkspaceDetailContent({
           <div
             className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl font-bold text-xl"
             style={{
-              backgroundColor:
-                "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
+              backgroundColor: "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
               color: "var(--accent-violet)",
             }}
           >
@@ -259,23 +232,15 @@ export function WorkspaceDetailContent({
           </div>
           <div>
             <h1 className="font-bold text-2xl">{workspace.name}</h1>
-            <p className="font-mono text-muted-foreground text-sm">
-              /{workspace.slug}
-            </p>
+            <p className="font-mono text-muted-foreground text-sm">/{workspace.slug}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <Badge variant={statusVariantMap[workspace.status]}>
             {statusLabelMap[workspace.status]}
           </Badge>
-          <Badge variant={planVariantMap[workspace.plan]}>
-            {planLabelMap[workspace.plan]}
-          </Badge>
-          <Button
-            onClick={() => setEditDialogOpen(true)}
-            size="sm"
-            variant="outline"
-          >
+          <Badge variant={planVariantMap[workspace.plan]}>{planLabelMap[workspace.plan]}</Badge>
+          <Button onClick={() => setEditDialogOpen(true)} size="sm" variant="outline">
             <IconEdit className="mr-2 h-4 w-4" />
             Edit
           </Button>
@@ -341,9 +306,7 @@ export function WorkspaceDetailContent({
               <div className="flex items-center justify-between rounded-lg bg-muted/50 p-3">
                 <div className="flex items-center gap-3">
                   <Avatar className="h-10 w-10">
-                    {owner.image && (
-                      <AvatarImage alt={owner.name} src={owner.image} />
-                    )}
+                    {owner.image && <AvatarImage alt={owner.name} src={owner.image} />}
                     <AvatarFallback
                       style={{
                         backgroundColor:
@@ -361,9 +324,7 @@ export function WorkspaceDetailContent({
                   </Avatar>
                   <div>
                     <p className="font-medium">{owner.name}</p>
-                    <p className="text-muted-foreground text-sm">
-                      {owner.email}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{owner.email}</p>
                   </div>
                 </div>
                 <Badge variant="role-owner">Owner</Badge>
@@ -406,12 +367,8 @@ export function WorkspaceDetailContent({
               <div className="flex items-start gap-3 rounded-lg bg-destructive/10 p-3 text-sm">
                 <IconAlertTriangle className="h-5 w-5 shrink-0 text-destructive" />
                 <div>
-                  <p className="font-medium text-destructive">
-                    Suspension Reason
-                  </p>
-                  <p className="text-muted-foreground">
-                    {workspace.suspendedReason}
-                  </p>
+                  <p className="font-medium text-destructive">Suspension Reason</p>
+                  <p className="text-muted-foreground">{workspace.suspendedReason}</p>
                 </div>
               </div>
             )}
@@ -436,9 +393,7 @@ export function WorkspaceDetailContent({
               >
                 <div className="flex items-center gap-3">
                   <Avatar className="h-8 w-8">
-                    {member.image && (
-                      <AvatarImage alt={member.name} src={member.image} />
-                    )}
+                    {member.image && <AvatarImage alt={member.name} src={member.image} />}
                     <AvatarFallback className="text-xs">
                       {member.name
                         .split(" ")
@@ -450,20 +405,14 @@ export function WorkspaceDetailContent({
                   </Avatar>
                   <div>
                     <p className="font-medium text-sm">{member.name}</p>
-                    <p className="text-muted-foreground text-xs">
-                      {member.email}
-                    </p>
+                    <p className="text-muted-foreground text-xs">{member.email}</p>
                   </div>
                 </div>
-                <Badge variant={roleVariantMap[member.role] || "secondary"}>
-                  {member.role}
-                </Badge>
+                <Badge variant={roleVariantMap[member.role] || "secondary"}>{member.role}</Badge>
               </div>
             ))}
             {members.length === 0 && (
-              <p className="py-4 text-center text-muted-foreground text-sm">
-                No members
-              </p>
+              <p className="py-4 text-center text-muted-foreground text-sm">No members</p>
             )}
           </div>
         </Section>
@@ -502,9 +451,7 @@ export function WorkspaceDetailContent({
                 <div className="flex items-center gap-2">
                   <ProgressBar
                     color={
-                      project.status === "completed"
-                        ? "var(--accent-green)"
-                        : "var(--accent-teal)"
+                      project.status === "completed" ? "var(--accent-green)" : "var(--accent-teal)"
                     }
                     current={project.completedCount}
                     total={project.imageCount}
@@ -516,9 +463,7 @@ export function WorkspaceDetailContent({
               </Link>
             ))}
             {recentProjects.length === 0 && (
-              <p className="py-4 text-center text-muted-foreground text-sm">
-                No projects yet
-              </p>
+              <p className="py-4 text-center text-muted-foreground text-sm">No projects yet</p>
             )}
           </div>
         </Section>
@@ -543,8 +488,7 @@ export function WorkspaceDetailContent({
                     variant={
                       video.status === "completed"
                         ? "status-completed"
-                        : video.status === "generating" ||
-                            video.status === "compiling"
+                        : video.status === "generating" || video.status === "compiling"
                           ? "status-active"
                           : video.status === "failed"
                             ? "destructive"
@@ -573,9 +517,7 @@ export function WorkspaceDetailContent({
               </Link>
             ))}
             {recentVideos.length === 0 && (
-              <p className="py-4 text-center text-muted-foreground text-sm">
-                No videos yet
-              </p>
+              <p className="py-4 text-center text-muted-foreground text-sm">No videos yet</p>
             )}
           </div>
         </Section>

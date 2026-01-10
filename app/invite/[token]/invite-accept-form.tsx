@@ -18,10 +18,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  acceptInvitationAction,
-  acceptInvitationAsLoggedInUser,
-} from "@/lib/actions/invitations";
+import { acceptInvitationAction, acceptInvitationAsLoggedInUser } from "@/lib/actions/invitations";
 
 interface InviteAcceptFormProps {
   token: string;
@@ -53,8 +50,7 @@ export function InviteAcceptForm({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showSignUpForm, setShowSignUpForm] = useState(!hasExistingAccount);
 
-  const roleLabel =
-    role === "admin" ? "an admin" : role === "owner" ? "the owner" : "a member";
+  const roleLabel = role === "admin" ? "an admin" : role === "owner" ? "the owner" : "a member";
 
   // Handler for logged-in users accepting directly
   const handleAcceptAsLoggedIn = () => {
@@ -102,19 +98,15 @@ export function InviteAcceptForm({
         <div
           className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full"
           style={{
-            backgroundColor:
-              "color-mix(in oklch, var(--accent-amber) 15%, transparent)",
+            backgroundColor: "color-mix(in oklch, var(--accent-amber) 15%, transparent)",
           }}
         >
-          <IconClock
-            className="h-8 w-8"
-            style={{ color: "var(--accent-amber)" }}
-          />
+          <IconClock className="h-8 w-8" style={{ color: "var(--accent-amber)" }} />
         </div>
         <h1 className="mb-2 font-bold text-xl">Invitation Expired</h1>
         <p className="text-muted-foreground">
-          This invitation link has expired. Please contact the workspace
-          administrator to request a new invitation.
+          This invitation link has expired. Please contact the workspace administrator to request a
+          new invitation.
         </p>
       </div>
     );
@@ -127,19 +119,14 @@ export function InviteAcceptForm({
         <div
           className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full"
           style={{
-            backgroundColor:
-              "color-mix(in oklch, var(--accent-green) 15%, transparent)",
+            backgroundColor: "color-mix(in oklch, var(--accent-green) 15%, transparent)",
           }}
         >
-          <IconCheck
-            className="h-8 w-8"
-            style={{ color: "var(--accent-green)" }}
-          />
+          <IconCheck className="h-8 w-8" style={{ color: "var(--accent-green)" }} />
         </div>
         <h1 className="mb-2 font-bold text-xl">Already Accepted</h1>
         <p className="mb-4 text-muted-foreground">
-          This invitation has already been accepted. You can sign in to access
-          your workspace.
+          This invitation has already been accepted. You can sign in to access your workspace.
         </p>
         <Button className="gap-2" onClick={() => router.push("/sign-in")}>
           Go to Sign In
@@ -149,24 +136,16 @@ export function InviteAcceptForm({
   }
 
   // User is logged in with wrong email
-  if (
-    isLoggedIn &&
-    loggedInEmail &&
-    loggedInEmail.toLowerCase() !== email.toLowerCase()
-  ) {
+  if (isLoggedIn && loggedInEmail && loggedInEmail.toLowerCase() !== email.toLowerCase()) {
     return (
       <div className="rounded-2xl bg-card p-8 text-center ring-1 ring-foreground/5">
         <div
           className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full"
           style={{
-            backgroundColor:
-              "color-mix(in oklch, var(--accent-amber) 15%, transparent)",
+            backgroundColor: "color-mix(in oklch, var(--accent-amber) 15%, transparent)",
           }}
         >
-          <IconAlertTriangle
-            className="h-8 w-8"
-            style={{ color: "var(--accent-amber)" }}
-          />
+          <IconAlertTriangle className="h-8 w-8" style={{ color: "var(--accent-amber)" }} />
         </div>
         <h1 className="mb-2 font-bold text-xl">Wrong Account</h1>
         <p className="mb-2 text-muted-foreground">
@@ -176,8 +155,7 @@ export function InviteAcceptForm({
           You&apos;re signed in as <strong>{loggedInEmail}</strong>
         </p>
         <p className="mb-4 text-muted-foreground text-sm">
-          Please sign out and sign in with the correct email to accept this
-          invitation.
+          Please sign out and sign in with the correct email to accept this invitation.
         </p>
         <Button className="gap-2" onClick={() => router.push("/dashboard")}>
           Go to Dashboard
@@ -187,11 +165,7 @@ export function InviteAcceptForm({
   }
 
   // User is logged in with correct email - show direct accept
-  if (
-    isLoggedIn &&
-    loggedInEmail &&
-    loggedInEmail.toLowerCase() === email.toLowerCase()
-  ) {
+  if (isLoggedIn && loggedInEmail && loggedInEmail.toLowerCase() === email.toLowerCase()) {
     return (
       <div className="rounded-2xl bg-card ring-1 ring-foreground/5">
         {/* Header */}
@@ -199,14 +173,10 @@ export function InviteAcceptForm({
           <div
             className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl"
             style={{
-              backgroundColor:
-                "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
+              backgroundColor: "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
             }}
           >
-            <IconBuilding
-              className="h-7 w-7"
-              style={{ color: "var(--accent-violet)" }}
-            />
+            <IconBuilding className="h-7 w-7" style={{ color: "var(--accent-violet)" }} />
           </div>
           <h1 className="font-bold text-xl">Join {workspaceName}</h1>
           <p className="mt-1 text-muted-foreground text-sm">
@@ -259,14 +229,10 @@ export function InviteAcceptForm({
           <div
             className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl"
             style={{
-              backgroundColor:
-                "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
+              backgroundColor: "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
             }}
           >
-            <IconBuilding
-              className="h-7 w-7"
-              style={{ color: "var(--accent-violet)" }}
-            />
+            <IconBuilding className="h-7 w-7" style={{ color: "var(--accent-violet)" }} />
           </div>
           <h1 className="font-bold text-xl">Join {workspaceName}</h1>
           <p className="mt-1 text-muted-foreground text-sm">
@@ -302,11 +268,7 @@ export function InviteAcceptForm({
             </div>
           </div>
 
-          <Button
-            className="w-full"
-            onClick={() => setShowSignUpForm(true)}
-            variant="outline"
-          >
+          <Button className="w-full" onClick={() => setShowSignUpForm(true)} variant="outline">
             Create New Account Instead
           </Button>
         </div>
@@ -327,14 +289,10 @@ export function InviteAcceptForm({
         <div
           className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl"
           style={{
-            backgroundColor:
-              "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
+            backgroundColor: "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
           }}
         >
-          <IconBuilding
-            className="h-7 w-7"
-            style={{ color: "var(--accent-violet)" }}
-          />
+          <IconBuilding className="h-7 w-7" style={{ color: "var(--accent-violet)" }} />
         </div>
         <h1 className="font-bold text-xl">Join {workspaceName}</h1>
         <p className="mt-1 text-muted-foreground text-sm">
@@ -422,10 +380,7 @@ export function InviteAcceptForm({
         <Button
           className="w-full gap-2"
           disabled={
-            isPending ||
-            !name.trim() ||
-            password.length < 8 ||
-            password !== confirmPassword
+            isPending || !name.trim() || password.length < 8 || password !== confirmPassword
           }
           style={{ backgroundColor: "var(--accent-violet)" }}
           type="submit"

@@ -84,7 +84,7 @@ export function ReviewStep({
               "flex h-10 w-10 items-center justify-center rounded-full",
               musicTrack
                 ? "bg-(--accent-teal)/10 text-(--accent-teal)"
-                : "bg-muted text-muted-foreground"
+                : "bg-muted text-muted-foreground",
             )}
           >
             <IconMusic className="h-5 w-5" />
@@ -114,9 +114,7 @@ export function ReviewStep({
 
           <div className="space-y-3">
             {images.map((image, index) => {
-              const roomConfig = VIDEO_ROOM_TYPES.find(
-                (r) => r.id === image.roomType
-              );
+              const roomConfig = VIDEO_ROOM_TYPES.find((r) => r.id === image.roomType);
               return (
                 <div
                   className="flex animate-fade-in-up items-center gap-4"

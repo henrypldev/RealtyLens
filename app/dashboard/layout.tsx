@@ -12,11 +12,7 @@ export const metadata = constructMetadata({
   noIndex: true,
 });
 
-export default async function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   // Validate session server-side
   const session = await auth.api.getSession({
     headers: await headers(),

@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  IconArrowUp,
-  IconBuilding,
-  IconMail,
-  IconPhoto,
-  IconUserPlus,
-} from "@tabler/icons-react";
+import { IconArrowUp, IconBuilding, IconMail, IconPhoto, IconUserPlus } from "@tabler/icons-react";
 import { Badge } from "@/components/ui/badge";
 import type { RecentActivity } from "@/lib/mock/admin-stats";
 
@@ -65,19 +59,14 @@ export function RecentActivityList({ activities }: RecentActivityListProps) {
               <Icon className="h-4 w-4" style={{ color }} />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-foreground text-sm">
-                {activity.description}
-              </p>
+              <p className="truncate text-foreground text-sm">{activity.description}</p>
               {activity.metadata.workspaceName && (
                 <p className="truncate text-muted-foreground text-xs">
                   {activity.metadata.workspaceName}
                 </p>
               )}
             </div>
-            <Badge
-              className="shrink-0 text-muted-foreground text-xs"
-              variant="outline"
-            >
+            <Badge className="shrink-0 text-muted-foreground text-xs" variant="outline">
               {formatTimeAgo(activity.timestamp)}
             </Badge>
           </div>

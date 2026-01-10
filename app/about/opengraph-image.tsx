@@ -9,8 +9,7 @@ export const contentType = "image/png";
 
 export default async function Image() {
   const title = "About Proppi";
-  const description =
-    "Learn about our mission to transform real estate photography with AI";
+  const description = "Learn about our mission to transform real estate photography with AI";
 
   const [fontBold, fontRegular] = await Promise.all([
     loadOutfitFont(title, 700),
@@ -221,6 +220,6 @@ export default async function Image() {
           style: "normal",
         },
       ],
-    }
+    },
   );
 }

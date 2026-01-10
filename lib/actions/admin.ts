@@ -32,9 +32,7 @@ import type {
 // Types
 // ============================================================================
 
-export type ActionResult<T> =
-  | { success: true; data: T }
-  | { success: false; error: string };
+export type ActionResult<T> = { success: true; data: T } | { success: false; error: string };
 
 // ============================================================================
 // Fetch Workspaces (for pagination)
@@ -44,7 +42,7 @@ export async function fetchAdminWorkspacesAction(
   cursor: string | null,
   limit: number,
   filters: AdminWorkspaceFilters,
-  sort?: [SortableWorkspaceColumn, SortDirection]
+  sort?: [SortableWorkspaceColumn, SortDirection],
 ): Promise<
   ActionResult<{
     data: AdminWorkspaceRow[];
@@ -78,7 +76,7 @@ export async function fetchAdminWorkspacesAction(
 export async function updateWorkspaceStatusAction(
   workspaceId: string,
   status: WorkspaceStatus,
-  reason?: string
+  reason?: string,
 ): Promise<ActionResult<Workspace>> {
   const adminCheck = await verifySystemAdmin();
   if (adminCheck.error) {
@@ -125,7 +123,7 @@ export async function updateWorkspaceStatusAction(
 
 export async function updateWorkspacePlanAction(
   workspaceId: string,
-  plan: WorkspacePlan
+  plan: WorkspacePlan,
 ): Promise<ActionResult<Workspace>> {
   const adminCheck = await verifySystemAdmin();
   if (adminCheck.error) {
@@ -158,9 +156,7 @@ export async function updateWorkspacePlanAction(
 // Delete Workspace
 // ============================================================================
 
-export async function deleteWorkspaceAction(
-  workspaceId: string
-): Promise<ActionResult<void>> {
+export async function deleteWorkspaceAction(workspaceId: string): Promise<ActionResult<void>> {
   const adminCheck = await verifySystemAdmin();
   if (adminCheck.error) {
     return { success: false, error: adminCheck.error };
@@ -196,7 +192,7 @@ export async function updateWorkspaceDetailsAction(
     organizationNumber?: string;
     contactEmail?: string;
     contactPerson?: string;
-  }
+  },
 ): Promise<ActionResult<Workspace>> {
   const adminCheck = await verifySystemAdmin();
   if (adminCheck.error) {
@@ -230,7 +226,7 @@ export async function updateWorkspaceDetailsAction(
 // ============================================================================
 
 export async function impersonateUserAction(
-  userId: string
+  userId: string,
 ): Promise<ActionResult<{ redirectTo: string }>> {
   const adminCheck = await verifySystemAdmin();
   if (adminCheck.error) {
@@ -282,9 +278,7 @@ export async function impersonateUserAction(
   }
 }
 
-export async function stopImpersonatingAction(): Promise<
-  ActionResult<{ redirectTo: string }>
-> {
+export async function stopImpersonatingAction(): Promise<ActionResult<{ redirectTo: string }>> {
   try {
     const cookieStore = await cookies();
     const sessionToken = cookieStore.get("better-auth.session_token")?.value;
@@ -312,7 +306,7 @@ export async function fetchAdminUsersAction(
   cursor: string | null,
   limit: number,
   filters: AdminUserFilters,
-  sort?: [SortableUserColumn, SortDirection]
+  sort?: [SortableUserColumn, SortDirection],
 ): Promise<
   ActionResult<{
     data: AdminUserRow[];
@@ -345,7 +339,7 @@ export async function fetchAdminUsersAction(
 
 export async function updateUserRoleAction(
   userId: string,
-  role: import("@/lib/types/admin").UserRole
+  role: import("@/lib/types/admin").UserRole,
 ): Promise<ActionResult<User>> {
   const adminCheck = await verifySystemAdmin();
   if (adminCheck.error) {
@@ -386,7 +380,7 @@ export async function updateUserRoleAction(
 
 export async function toggleSystemAdminAction(
   userId: string,
-  isSystemAdmin: boolean
+  isSystemAdmin: boolean,
 ): Promise<ActionResult<User>> {
   const adminCheck = await verifySystemAdmin();
   if (adminCheck.error) {
@@ -430,7 +424,7 @@ export async function toggleSystemAdminAction(
 
 export async function updateUserNameAction(
   userId: string,
-  name: string
+  name: string,
 ): Promise<ActionResult<User>> {
   const adminCheck = await verifySystemAdmin();
   if (adminCheck.error) {
@@ -493,7 +487,7 @@ export interface FalUsageResponse {
 
 export async function getFalUsageStats(
   startDate: string,
-  endDate: string
+  endDate: string,
 ): Promise<ActionResult<FalUsageResponse>> {
   const adminCheck = await verifySystemAdmin();
   if (adminCheck.error) {
@@ -531,9 +525,7 @@ export async function getFalUsageStats(
   }
 }
 
-export async function deleteUserAction(
-  userId: string
-): Promise<ActionResult<void>> {
+export async function deleteUserAction(userId: string): Promise<ActionResult<void>> {
   const adminCheck = await verifySystemAdmin();
   if (adminCheck.error) {
     return { success: false, error: adminCheck.error };
@@ -559,16 +551,12 @@ export async function deleteUserAction(
     if (targetUser.role === "owner" && targetUser.workspaceId) {
       return {
         success: false,
-        error:
-          "Cannot delete workspace owner. Delete or transfer the workspace first.",
+        error: "Cannot delete workspace owner. Delete or transfer the workspace first.",
       };
     }
 
     // Delete user (sessions cascade due to FK constraints)
-    const [deleted] = await db
-      .delete(user)
-      .where(eq(user.id, userId))
-      .returning({ id: user.id });
+    const [deleted] = await db.delete(user).where(eq(user.id, userId)).returning({ id: user.id });
 
     if (!deleted) {
       return { success: false, error: "User not found" };

@@ -16,10 +16,7 @@ export async function POST(request: NextRequest) {
     const { videoProjectId } = await request.json();
 
     if (!videoProjectId) {
-      return NextResponse.json(
-        { error: "videoProjectId is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "videoProjectId is required" }, { status: 400 });
     }
 
     const result = await triggerVideoGeneration(videoProjectId);
@@ -29,10 +26,9 @@ export async function POST(request: NextRequest) {
     console.error("Failed to trigger video generation:", error);
     return NextResponse.json(
       {
-        error:
-          error instanceof Error ? error.message : "Failed to trigger video",
+        error: error instanceof Error ? error.message : "Failed to trigger video",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

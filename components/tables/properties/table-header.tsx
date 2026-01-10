@@ -3,10 +3,7 @@
 import { IconArrowDown, IconArrowUp } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import type {
-  SortableColumn,
-  SortDirection,
-} from "@/hooks/use-property-filters";
+import type { SortableColumn, SortDirection } from "@/hooks/use-property-filters";
 
 interface SortButtonProps {
   label: string;
@@ -35,12 +32,8 @@ function SortButton({
       variant="ghost"
     >
       <span>{label}</span>
-      {isActive && currentSortDirection === "asc" && (
-        <IconArrowUp className="h-4 w-4" />
-      )}
-      {isActive && currentSortDirection === "desc" && (
-        <IconArrowDown className="h-4 w-4" />
-      )}
+      {isActive && currentSortDirection === "asc" && <IconArrowUp className="h-4 w-4" />}
+      {isActive && currentSortDirection === "desc" && <IconArrowDown className="h-4 w-4" />}
     </Button>
   );
 }
@@ -88,11 +81,7 @@ interface DataTableHeaderProps {
   onSort: (column: SortableColumn) => void;
 }
 
-export function DataTableHeader({
-  sortColumn,
-  sortDirection,
-  onSort,
-}: DataTableHeaderProps) {
+export function DataTableHeader({ sortColumn, sortDirection, onSort }: DataTableHeaderProps) {
   return (
     <TableHeader>
       <TableRow className="flex hover:bg-transparent">
@@ -124,9 +113,7 @@ export function DataTableHeader({
                   width={column.width}
                 />
               ) : (
-                <span className="font-medium text-muted-foreground">
-                  {column.label}
-                </span>
+                <span className="font-medium text-muted-foreground">{column.label}</span>
               )}
             </TableHead>
           );

@@ -2,11 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { HelpCategoryPage } from "@/components/landing/help-category-page";
 import { constructMetadata } from "@/lib/constructMetadata";
-import {
-  getArticlesByCategory,
-  getCategoryBySlug,
-  helpCategories,
-} from "@/lib/help";
+import { getArticlesByCategory, getCategoryBySlug, helpCategories } from "@/lib/help";
 
 interface HelpCategoryProps {
   params: Promise<{ category: string }>;
@@ -20,9 +16,7 @@ export function generateStaticParams() {
 
 export const dynamicParams = false;
 
-export async function generateMetadata({
-  params,
-}: HelpCategoryProps): Promise<Metadata> {
+export async function generateMetadata({ params }: HelpCategoryProps): Promise<Metadata> {
   const { category: categorySlug } = await params;
   const category = getCategoryBySlug(categorySlug);
 

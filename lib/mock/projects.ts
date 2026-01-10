@@ -62,8 +62,7 @@ function generateMockProjects(count: number): Project[] {
 
   for (let i = 0; i < count; i++) {
     const name = projectNames[i % projectNames.length];
-    const styleTemplateId =
-      styleTemplateIds[Math.floor(random() * styleTemplateIds.length)];
+    const styleTemplateId = styleTemplateIds[Math.floor(random() * styleTemplateIds.length)];
     const imageCount = Math.floor(random() * 8) + 1;
 
     // Weight status distribution: 60% completed, 15% processing, 15% pending, 10% failed
@@ -157,9 +156,7 @@ export function getProjectById(id: string): Project | undefined {
 export function getProjectStats() {
   const total = mockProjects.length;
   const completed = mockProjects.filter((p) => p.status === "completed").length;
-  const processing = mockProjects.filter(
-    (p) => p.status === "processing"
-  ).length;
+  const processing = mockProjects.filter((p) => p.status === "processing").length;
   const totalImages = mockProjects.reduce((sum, p) => sum + p.imageCount, 0);
   const totalCost = mockProjects.reduce((sum, p) => {
     const template = getTemplateById(p.styleTemplateId);

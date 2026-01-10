@@ -3,14 +3,7 @@
 import { IconLoader2 } from "@tabler/icons-react";
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import {
-  useCallback,
-  useDeferredValue,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
 import { usePropertyFilters } from "@/hooks/use-property-filters";
@@ -27,13 +20,8 @@ export function DataTable() {
   const parentRef = useRef<HTMLDivElement>(null);
 
   // Get filters from URL state
-  const {
-    propertyFilters,
-    hasActiveFilters,
-    sortColumn,
-    sortDirection,
-    toggleSort,
-  } = usePropertyFilters();
+  const { propertyFilters, hasActiveFilters, sortColumn, sortDirection, toggleSort } =
+    usePropertyFilters();
 
   // Defer search to debounce filtering
   const deferredFilters = useDeferredValue(propertyFilters);
@@ -196,10 +184,7 @@ export function DataTable() {
           style={{ height: "calc(100vh - 400px)", minHeight: "300px" }}
         >
           <Table>
-            <TableBody
-              className="relative block"
-              style={{ height: rowVirtualizer.getTotalSize() }}
-            >
+            <TableBody className="relative block" style={{ height: rowVirtualizer.getTotalSize() }}>
               {virtualItems.length > 0 ? (
                 virtualItems.map((virtualRow) => {
                   const row = rows[virtualRow.index];
@@ -216,10 +201,7 @@ export function DataTable() {
                 })
               ) : (
                 <TableRow>
-                  <TableCell
-                    className="h-24 text-center"
-                    colSpan={columns.length}
-                  >
+                  <TableCell className="h-24 text-center" colSpan={columns.length}>
                     No results.
                   </TableCell>
                 </TableRow>
@@ -231,19 +213,14 @@ export function DataTable() {
           {isFetchingNextPage && (
             <div className="flex items-center justify-center py-4">
               <IconLoader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-              <span className="ml-2 text-muted-foreground text-sm">
-                Loading more...
-              </span>
+              <span className="ml-2 text-muted-foreground text-sm">Loading more...</span>
             </div>
           )}
         </div>
 
         {/* Footer with count */}
         <div className="border-t px-4 py-3 text-muted-foreground text-sm">
-          <span
-            className="font-mono font-semibold"
-            style={{ color: "var(--accent-teal)" }}
-          >
+          <span className="font-mono font-semibold" style={{ color: "var(--accent-teal)" }}>
             {tableData.length}
           </span>{" "}
           of {filteredTotal} properties

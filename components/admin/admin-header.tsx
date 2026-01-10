@@ -96,7 +96,7 @@ export function AdminHeader() {
                     asChild
                     className={cn(
                       "h-8 gap-2 text-zinc-400 transition-all hover:bg-zinc-800 hover:text-zinc-100",
-                      isActive && "bg-zinc-800 font-medium text-zinc-100"
+                      isActive && "bg-zinc-800 font-medium text-zinc-100",
                     )}
                     key={item.href}
                     size="sm"

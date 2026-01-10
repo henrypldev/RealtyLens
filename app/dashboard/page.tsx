@@ -3,11 +3,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { DashboardContent } from "@/components/dashboard/dashboard-content";
 import { auth } from "@/lib/auth";
-import {
-  getProjectStats,
-  getProjects,
-  getUserWithWorkspace,
-} from "@/lib/db/queries";
+import { getProjectStats, getProjects, getUserWithWorkspace } from "@/lib/db/queries";
 
 export default async function DashboardPage() {
   // Get session

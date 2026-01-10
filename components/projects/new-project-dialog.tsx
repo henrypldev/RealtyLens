@@ -25,10 +25,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useImageUpload } from "@/hooks/use-image-upload";
-import {
-  type CreationStep,
-  useProjectCreation,
-} from "@/hooks/use-project-creation";
+import { type CreationStep, useProjectCreation } from "@/hooks/use-project-creation";
 import { createProjectAction } from "@/lib/actions";
 import { cn } from "@/lib/utils";
 
@@ -44,13 +41,7 @@ const STEPS: { id: CreationStep; label: string; icon: React.ReactNode }[] = [
   { id: "confirm", label: "Confirm", icon: <IconCheck className="h-4 w-4" /> },
 ];
 
-function StepIndicator({
-  steps,
-  currentStep,
-}: {
-  steps: typeof STEPS;
-  currentStep: CreationStep;
-}) {
+function StepIndicator({ steps, currentStep }: { steps: typeof STEPS; currentStep: CreationStep }) {
   const currentIndex = steps.findIndex((s) => s.id === currentStep);
 
   return (
@@ -64,10 +55,9 @@ function StepIndicator({
             <div
               className={cn(
                 "flex items-center gap-2 rounded-full px-3 py-1.5 font-medium text-sm transition-all duration-200",
-                isActive &&
-                  "bg-[var(--accent-teal)]/10 text-[var(--accent-teal)]",
+                isActive && "bg-[var(--accent-teal)]/10 text-[var(--accent-teal)]",
                 isCompleted && "text-[var(--accent-teal)]",
-                !(isActive || isCompleted) && "text-muted-foreground"
+                !(isActive || isCompleted) && "text-muted-foreground",
               )}
             >
               <span
@@ -75,14 +65,10 @@ function StepIndicator({
                   "flex h-6 w-6 items-center justify-center rounded-full text-xs transition-all duration-200",
                   isActive && "bg-[var(--accent-teal)] text-white",
                   isCompleted && "bg-[var(--accent-teal)] text-white",
-                  !(isActive || isCompleted) && "bg-muted text-muted-foreground"
+                  !(isActive || isCompleted) && "bg-muted text-muted-foreground",
                 )}
               >
-                {isCompleted ? (
-                  <IconCheck className="h-3.5 w-3.5" />
-                ) : (
-                  index + 1
-                )}
+                {isCompleted ? <IconCheck className="h-3.5 w-3.5" /> : index + 1}
               </span>
               <span className="hidden sm:inline">{step.label}</span>
             </div>
@@ -91,7 +77,7 @@ function StepIndicator({
               <div
                 className={cn(
                   "h-px w-8 transition-colors duration-200",
-                  index < currentIndex ? "bg-[var(--accent-teal)]" : "bg-border"
+                  index < currentIndex ? "bg-[var(--accent-teal)]" : "bg-border",
                 )}
               />
             )}
@@ -102,10 +88,7 @@ function StepIndicator({
   );
 }
 
-export function NewProjectDialog({
-  open,
-  onOpenChange,
-}: NewProjectDialogProps) {
+export function NewProjectDialog({ open, onOpenChange }: NewProjectDialogProps) {
   const router = useRouter();
   const creation = useProjectCreation();
   const imageUpload = useImageUpload();
@@ -150,81 +133,19 @@ export function NewProjectDialog({
         // Project was created but images failed - still redirect to project
       }
 
-      // Step 3: Check invoice eligibility and handle payment
-      // Import dynamically to ensure it's available
-      const { canUseInvoiceBilling, createStripeCheckoutSession } =
-        await import("@/lib/actions/payments");
+      // Step 3: Handle payment via Polar checkout
+      const { createPolarCheckoutSession } = await import("@/lib/actions/payments");
 
-      const invoiceEligibility = await canUseInvoiceBilling(
-        project.workspaceId
-      );
+      const checkoutResult = await createPolarCheckoutSession(project.id);
 
-      if (invoiceEligibility.eligible) {
-        // Invoice-eligible workspace: Processing started via server action
-        // Just redirect to project page
+      if (checkoutResult.success) {
+        window.location.href = checkoutResult.data.url;
+      } else {
+        console.error("Failed to create checkout:", checkoutResult.error);
         creation.reset();
         imageUpload.reset();
         onOpenChange(false);
-        router.push(`/dashboard/${project.id}`);
-      } else {
-        // Non-invoice workspace: Check for saved payment methods first
-        const { getWorkspacePaymentMethods, chargeWithSavedPaymentMethod } =
-          await import("@/lib/actions/payments");
-
-        const paymentMethodsResult = await getWorkspacePaymentMethods(
-          project.workspaceId
-        );
-
-        if (
-          paymentMethodsResult.success &&
-          paymentMethodsResult.data.paymentMethods.length > 0
-        ) {
-          // Has saved card - charge directly without redirect
-          const defaultCard = paymentMethodsResult.data.paymentMethods[0];
-          const chargeResult = await chargeWithSavedPaymentMethod(
-            project.id,
-            defaultCard.id
-          );
-
-          if (chargeResult.success) {
-            // Payment succeeded - redirect to project
-            creation.reset();
-            imageUpload.reset();
-            onOpenChange(false);
-            router.push(`/dashboard/${project.id}?payment=success`);
-          } else {
-            // Charge failed - fall back to checkout
-            console.error("Saved card charge failed:", chargeResult.error);
-            const checkoutResult = await createStripeCheckoutSession(
-              project.id
-            );
-            if (checkoutResult.success) {
-              window.location.href = checkoutResult.data.url;
-            } else {
-              creation.reset();
-              imageUpload.reset();
-              onOpenChange(false);
-              router.push(`/dashboard/${project.id}?payment=required`);
-            }
-          }
-        } else {
-          // No saved card - redirect to Stripe checkout
-          const checkoutResult = await createStripeCheckoutSession(project.id);
-
-          if (checkoutResult.success) {
-            // Redirect to Stripe Checkout
-            // Don't reset state yet - Stripe will redirect back
-            window.location.href = checkoutResult.data.url;
-          } else {
-            // Checkout creation failed - redirect to project page anyway
-            // User can pay from there
-            console.error("Failed to create checkout:", checkoutResult.error);
-            creation.reset();
-            imageUpload.reset();
-            onOpenChange(false);
-            router.push(`/dashboard/${project.id}?payment=required`);
-          }
-        }
+        router.push(`/dashboard/${project.id}?payment=required`);
       }
     } catch (error) {
       console.error("Project creation error:", error);
@@ -232,10 +153,7 @@ export function NewProjectDialog({
     }
   }, [creation, imageUpload, onOpenChange, router]);
 
-  const stepTitles: Record<
-    CreationStep,
-    { title: string; description: string }
-  > = {
+  const stepTitles: Record<CreationStep, { title: string; description: string }> = {
     upload: {
       title: "Upload Images",
       description: "Add the real estate photos you want to enhance",
@@ -258,21 +176,14 @@ export function NewProjectDialog({
 
   return (
     <Dialog onOpenChange={handleClose} open={open}>
-      <DialogContent
-        className="flex max-h-[90vh] flex-col gap-0 overflow-hidden p-0"
-        size="lg"
-      >
+      <DialogContent className="flex max-h-[90vh] flex-col gap-0 overflow-hidden p-0" size="lg">
         {/* Header */}
         <div className="border-b px-6 py-4">
           <DialogHeader className="space-y-3">
             <StepIndicator currentStep={creation.step} steps={STEPS} />
             <div className="pt-2 text-center">
-              <DialogTitle className="text-xl">
-                {currentStepInfo.title}
-              </DialogTitle>
-              <DialogDescription className="mt-1">
-                {currentStepInfo.description}
-              </DialogDescription>
+              <DialogTitle className="text-xl">{currentStepInfo.title}</DialogTitle>
+              <DialogDescription className="mt-1">{currentStepInfo.description}</DialogDescription>
             </div>
           </DialogHeader>
         </div>
@@ -325,11 +236,7 @@ export function NewProjectDialog({
           </div>
 
           <div className="flex items-center gap-3">
-            <Button
-              disabled={creation.isSubmitting}
-              onClick={handleClose}
-              variant="outline"
-            >
+            <Button disabled={creation.isSubmitting} onClick={handleClose} variant="outline">
               Cancel
             </Button>
 

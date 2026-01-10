@@ -49,11 +49,7 @@ const statusConfig: Record<
   ProjectStatus,
   {
     label: string;
-    variant:
-      | "status-active"
-      | "status-pending"
-      | "status-completed"
-      | "status-archived";
+    variant: "status-active" | "status-pending" | "status-completed" | "status-archived";
     icon: React.ReactNode;
   }
 > = {
@@ -122,9 +118,7 @@ function RealtimeProcessingLabel({
     return <span className="font-medium text-sm text-white">{fallback}</span>;
   }
 
-  const status = run?.metadata?.status as
-    | { label?: string; progress?: number }
-    | undefined;
+  const status = run?.metadata?.status as { label?: string; progress?: number } | undefined;
   const label = status?.label || fallback;
 
   return <span className="font-medium text-sm text-white">{label}</span>;
@@ -163,19 +157,15 @@ function ImageCard({
 }) {
   const isCompleted = image.status === "completed";
   const displayUrl =
-    isCompleted && image.resultImageUrl
-      ? image.resultImageUrl
-      : image.originalImageUrl;
+    isCompleted && image.resultImageUrl ? image.resultImageUrl : image.originalImageUrl;
   const hasMultipleVersions = versionCount && versionCount > 1;
 
   return (
     <div
       className={cn(
         "group relative aspect-square animate-fade-in-up overflow-hidden rounded-xl bg-muted ring-1 transition-all duration-200",
-        isCompleted &&
-          !isSelected &&
-          "ring-foreground/5 hover:shadow-lg hover:ring-foreground/10",
-        isSelected && "shadow-lg ring-2 ring-[var(--accent-teal)]"
+        isCompleted && !isSelected && "ring-foreground/5 hover:shadow-lg hover:ring-foreground/10",
+        isSelected && "shadow-lg ring-2 ring-[var(--accent-teal)]",
       )}
       onClick={() => {
         if (isCompleted) {
@@ -216,9 +206,7 @@ function ImageCard({
             ) : image.status === "pending" ? (
               <div className="flex flex-col items-center gap-2">
                 <IconClock className="h-8 w-8 text-white/70" />
-                <span className="font-medium text-sm text-white/70">
-                  Queued
-                </span>
+                <span className="font-medium text-sm text-white/70">Queued</span>
               </div>
             ) : (
               <div className="flex flex-col items-center gap-2">
@@ -254,7 +242,7 @@ function ImageCard({
             "absolute top-2 left-2 flex h-6 w-6 items-center justify-center rounded-full border-2 transition-all",
             isSelected
               ? "border-[var(--accent-teal)] bg-[var(--accent-teal)]"
-              : "border-white/50 bg-black/20 opacity-0 group-hover:opacity-100"
+              : "border-white/50 bg-black/20 opacity-0 group-hover:opacity-100",
           )}
         >
           {isSelected && <IconCheck className="h-3.5 w-3.5 text-white" />}
@@ -354,15 +342,12 @@ function VersionSelector({
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
           {versions.map((version) => {
             const isSelected = version.id === selectedVersion.id;
-            const displayUrl =
-              version.resultImageUrl || version.originalImageUrl;
+            const displayUrl = version.resultImageUrl || version.originalImageUrl;
             return (
               <button
                 className={cn(
                   "group relative aspect-square overflow-hidden rounded-lg ring-2 transition-all",
-                  isSelected
-                    ? "ring-purple-500"
-                    : "ring-transparent hover:ring-foreground/20"
+                  isSelected ? "ring-purple-500" : "ring-transparent hover:ring-foreground/20",
                 )}
                 key={version.id}
                 onClick={() => setSelectedVersion(version)}
@@ -375,9 +360,7 @@ function VersionSelector({
                   src={displayUrl}
                 />
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2">
-                  <span className="font-medium text-white text-xs">
-                    v{version.version || 1}
-                  </span>
+                  <span className="font-medium text-white text-xs">v{version.version || 1}</span>
                 </div>
                 {isSelected && (
                   <div className="absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-purple-500">
@@ -447,14 +430,14 @@ function ComparisonView({
       if (e.buttons !== 1) return;
       handleMove(e.clientX);
     },
-    [handleMove]
+    [handleMove],
   );
 
   const handleTouchMove = React.useCallback(
     (e: React.TouchEvent) => {
       handleMove(e.touches[0].clientX);
     },
-    [handleMove]
+    [handleMove],
   );
 
   return (
@@ -483,12 +466,7 @@ function ComparisonView({
           className="absolute inset-0 overflow-hidden"
           style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
         >
-          <Image
-            alt="Original"
-            className="object-cover"
-            fill
-            src={originalUrl}
-          />
+          <Image alt="Original" className="object-cover" fill src={originalUrl} />
         </div>
 
         {/* Slider line */}
@@ -535,10 +513,8 @@ function ImageLightbox({
 }) {
   const currentGroup = images[currentIndex];
   const currentImage = currentGroup?.latestVersion;
-  const displayUrl =
-    currentImage?.resultImageUrl || currentImage?.originalImageUrl;
-  const hasEnhancedVersion =
-    currentImage?.resultImageUrl && currentImage.originalImageUrl;
+  const displayUrl = currentImage?.resultImageUrl || currentImage?.originalImageUrl;
+  const hasEnhancedVersion = currentImage?.resultImageUrl && currentImage.originalImageUrl;
 
   // Keyboard navigation
   React.useEffect(() => {
@@ -655,16 +631,13 @@ function ImageLightbox({
       <div className="flex justify-center gap-2 overflow-x-auto px-4 py-4">
         {images.map((group, index) => {
           const thumbUrl =
-            group.latestVersion.resultImageUrl ||
-            group.latestVersion.originalImageUrl;
+            group.latestVersion.resultImageUrl || group.latestVersion.originalImageUrl;
           const isActive = index === currentIndex;
           return (
             <button
               className={cn(
                 "relative h-16 w-16 shrink-0 overflow-hidden rounded-lg ring-2 transition-all",
-                isActive
-                  ? "ring-white"
-                  : "opacity-50 ring-transparent hover:opacity-80"
+                isActive ? "ring-white" : "opacity-50 ring-transparent hover:opacity-80",
               )}
               key={group.rootId}
               onClick={() => onNavigate(index)}
@@ -686,7 +659,7 @@ function ImageLightbox({
 
 interface PaymentStatus {
   isPaid: boolean;
-  method?: "stripe" | "invoice" | "free";
+  method?: "polar" | "invoice" | "free";
   status?: "pending" | "completed" | "failed" | "refunded";
 }
 
@@ -704,24 +677,15 @@ export function ProjectDetailContent({
   paymentStatus,
 }: ProjectDetailContentProps) {
   const router = useRouter();
-  const [isRedirectingToPayment, setIsRedirectingToPayment] =
-    React.useState(false);
-  const [selectedImage, setSelectedImage] =
-    React.useState<ImageGeneration | null>(null);
-  const [editingImage, setEditingImage] =
-    React.useState<ImageGeneration | null>(null);
-  const [editingImageLatestVersion, setEditingImageLatestVersion] =
-    React.useState<number>(1);
+  const [isRedirectingToPayment, setIsRedirectingToPayment] = React.useState(false);
+  const [selectedImage, setSelectedImage] = React.useState<ImageGeneration | null>(null);
+  const [editingImage, setEditingImage] = React.useState<ImageGeneration | null>(null);
+  const [editingImageLatestVersion, setEditingImageLatestVersion] = React.useState<number>(1);
   const [addImagesOpen, setAddImagesOpen] = React.useState(false);
   const [lightboxIndex, setLightboxIndex] = React.useState<number | null>(null);
-  const [retryingImageId, setRetryingImageId] = React.useState<string | null>(
-    null
-  );
-  const [versionSelectorGroup, setVersionSelectorGroup] =
-    React.useState<ImageGroup | null>(null);
-  const [selectedImageIds, setSelectedImageIds] = React.useState<Set<string>>(
-    new Set()
-  );
+  const [retryingImageId, setRetryingImageId] = React.useState<string | null>(null);
+  const [versionSelectorGroup, setVersionSelectorGroup] = React.useState<ImageGroup | null>(null);
+  const [selectedImageIds, setSelectedImageIds] = React.useState<Set<string>>(new Set());
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
 
   // Real-time run tracking for processing images
@@ -768,8 +732,7 @@ export function ProjectDetailContent({
   }, [images]);
 
   const template = getTemplateById(project.styleTemplateId);
-  const status =
-    statusConfig[project.status as ProjectStatus] || statusConfig.pending;
+  const status = statusConfig[project.status as ProjectStatus] || statusConfig.pending;
   const completedImages = images.filter((img) => img.status === "completed");
 
   // Group images by their root ID (original image or first in version chain)
@@ -796,7 +759,7 @@ export function ProjectDetailContent({
     groups.sort(
       (a, b) =>
         new Date(b.latestVersion.createdAt).getTime() -
-        new Date(a.latestVersion.createdAt).getTime()
+        new Date(a.latestVersion.createdAt).getTime(),
     );
 
     return groups;
@@ -811,13 +774,11 @@ export function ProjectDetailContent({
     (image: ImageGeneration) => {
       const rootId = image.parentId || image.id;
       const group = imageGroups.find((g) => g.rootId === rootId);
-      const latestVersion = group
-        ? Math.max(...group.versions.map((v) => v.version || 1))
-        : 1;
+      const latestVersion = group ? Math.max(...group.versions.map((v) => v.version || 1)) : 1;
       setEditingImage(image);
       setEditingImageLatestVersion(latestVersion);
     },
-    [imageGroups]
+    [imageGroups],
   );
 
   const handleRetry = async (imageId: string) => {
@@ -919,8 +880,7 @@ export function ProjectDetailContent({
       const originalName = metadata?.originalFileName || `image-${image.id}`;
       const extension = imageUrl.split(".").pop()?.split("?")[0] || "jpg";
       const baseName = originalName.replace(/\.[^/.]+$/, "");
-      const versionSuffix =
-        (image.version || 1) > 1 ? `-v${image.version}` : "";
+      const versionSuffix = (image.version || 1) > 1 ? `-v${image.version}` : "";
       a.download = `${baseName}${versionSuffix}.${extension}`;
 
       document.body.appendChild(a);
@@ -958,7 +918,7 @@ export function ProjectDetailContent({
   // Polling for processing images (fallback when we don't have realtime)
   React.useEffect(() => {
     const processingImages = images.filter(
-      (img) => img.status === "processing" || img.status === "pending"
+      (img) => img.status === "processing" || img.status === "pending",
     );
 
     if (processingImages.length === 0) return;
@@ -978,11 +938,7 @@ export function ProjectDetailContent({
     const handleKeyDown = (e: KeyboardEvent) => {
       // Don't trigger if user is typing in an input
       const target = e.target as HTMLElement;
-      if (
-        target.tagName === "INPUT" ||
-        target.tagName === "TEXTAREA" ||
-        target.isContentEditable
-      ) {
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable) {
         return;
       }
 
@@ -1026,9 +982,7 @@ export function ProjectDetailContent({
       if (e.key === "e" && !e.metaKey && !e.ctrlKey) {
         if (selectedImageIds.size === 1) {
           const selectedId = Array.from(selectedImageIds)[0];
-          const group = imageGroups.find(
-            (g) => g.latestVersion.id === selectedId
-          );
+          const group = imageGroups.find((g) => g.latestVersion.id === selectedId);
           if (group && group.latestVersion.status === "completed") {
             startEditing(group.latestVersion);
           }
@@ -1065,9 +1019,7 @@ export function ProjectDetailContent({
             </Button>
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="font-bold text-2xl tracking-tight">
-                  {project.name}
-                </h1>
+                <h1 className="font-bold text-2xl tracking-tight">{project.name}</h1>
                 <Badge className="gap-1" variant={status.variant}>
                   {status.icon}
                   {status.label}
@@ -1088,12 +1040,8 @@ export function ProjectDetailContent({
                 onClick={async () => {
                   setIsRedirectingToPayment(true);
                   try {
-                    const { createStripeCheckoutSession } = await import(
-                      "@/lib/actions/payments"
-                    );
-                    const result = await createStripeCheckoutSession(
-                      project.id
-                    );
+                    const { createPolarCheckoutSession } = await import("@/lib/actions/payments");
+                    const result = await createPolarCheckoutSession(project.id);
                     if (result.success) {
                       window.location.href = result.data.url;
                     } else {
@@ -1121,11 +1069,7 @@ export function ProjectDetailContent({
               </Button>
             )}
             {canAddMore && (
-              <Button
-                className="gap-2"
-                onClick={() => setAddImagesOpen(true)}
-                variant="outline"
-              >
+              <Button className="gap-2" onClick={() => setAddImagesOpen(true)} variant="outline">
                 <IconPlus className="h-4 w-4" />
                 Add More
               </Button>
@@ -1149,14 +1093,10 @@ export function ProjectDetailContent({
             <div
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
               style={{
-                backgroundColor:
-                  "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
+                backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
               }}
             >
-              <IconPhoto
-                className="h-4 w-4"
-                style={{ color: "var(--accent-teal)" }}
-              />
+              <IconPhoto className="h-4 w-4" style={{ color: "var(--accent-teal)" }} />
             </div>
             <div>
               <p className="font-medium text-[11px] text-muted-foreground uppercase tracking-wider">
@@ -1175,14 +1115,10 @@ export function ProjectDetailContent({
             <div
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
               style={{
-                backgroundColor:
-                  "color-mix(in oklch, var(--accent-green) 15%, transparent)",
+                backgroundColor: "color-mix(in oklch, var(--accent-green) 15%, transparent)",
               }}
             >
-              <IconCheck
-                className="h-4 w-4"
-                style={{ color: "var(--accent-green)" }}
-              />
+              <IconCheck className="h-4 w-4" style={{ color: "var(--accent-green)" }} />
             </div>
             <div>
               <p className="font-medium text-[11px] text-muted-foreground uppercase tracking-wider">
@@ -1201,14 +1137,10 @@ export function ProjectDetailContent({
             <div
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
               style={{
-                backgroundColor:
-                  "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
+                backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
               }}
             >
-              <IconSparkles
-                className="h-4 w-4"
-                style={{ color: "var(--accent-teal)" }}
-              />
+              <IconSparkles className="h-4 w-4" style={{ color: "var(--accent-teal)" }} />
             </div>
             <div>
               <p className="font-medium text-[11px] text-muted-foreground uppercase tracking-wider">
@@ -1224,14 +1156,10 @@ export function ProjectDetailContent({
             <div
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
               style={{
-                backgroundColor:
-                  "color-mix(in oklch, var(--accent-amber) 15%, transparent)",
+                backgroundColor: "color-mix(in oklch, var(--accent-amber) 15%, transparent)",
               }}
             >
-              <IconClock
-                className="h-4 w-4"
-                style={{ color: "var(--accent-amber)" }}
-              />
+              <IconClock className="h-4 w-4" style={{ color: "var(--accent-amber)" }} />
             </div>
             <div>
               <p className="font-medium text-[11px] text-muted-foreground uppercase tracking-wider">
@@ -1273,9 +1201,7 @@ export function ProjectDetailContent({
                     router.refresh();
                   }}
                   onRetry={() => handleRetry(group.latestVersion.id)}
-                  onToggleSelect={() =>
-                    toggleImageSelection(group.latestVersion.id)
-                  }
+                  onToggleSelect={() => toggleImageSelection(group.latestVersion.id)}
                   onVersionClick={() => {
                     if (group.versions.length > 1) {
                       setVersionSelectorGroup(group);
@@ -1289,9 +1215,7 @@ export function ProjectDetailContent({
           ) : (
             <div className="flex flex-col items-center justify-center rounded-xl border border-foreground/10 border-dashed py-12 text-center">
               <IconPhoto className="h-12 w-12 text-muted-foreground/30" />
-              <p className="mt-4 text-muted-foreground text-sm">
-                No images in this project yet
-              </p>
+              <p className="mt-4 text-muted-foreground text-sm">No images in this project yet</p>
               <Button
                 className="mt-4 gap-2"
                 onClick={() => setAddImagesOpen(true)}
@@ -1316,9 +1240,7 @@ export function ProjectDetailContent({
               >
                 <IconCheck className="h-4 w-4 text-white" />
               </div>
-              <span className="font-medium">
-                {selectedImageIds.size} selected
-              </span>
+              <span className="font-medium">{selectedImageIds.size} selected</span>
             </div>
 
             <div className="h-6 w-px bg-border" />
@@ -1429,8 +1351,8 @@ export function ProjectDetailContent({
               {selectedImageIds.size !== 1 ? "s" : ""}?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. The selected images and all their
-              versions will be permanently deleted.
+              This action cannot be undone. The selected images and all their versions will be
+              permanently deleted.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

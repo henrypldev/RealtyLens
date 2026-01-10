@@ -37,11 +37,7 @@ import {
   updateWorkspacePlanAction,
   updateWorkspaceStatusAction,
 } from "@/lib/actions/admin";
-import type {
-  Workspace,
-  WorkspacePlan,
-  WorkspaceStatus,
-} from "@/lib/db/schema";
+import type { Workspace, WorkspacePlan, WorkspaceStatus } from "@/lib/db/schema";
 import { cn } from "@/lib/utils";
 
 interface EditWorkspaceDialogProps {
@@ -78,27 +74,13 @@ export function EditWorkspaceDialog({
 
   // Form state
   const [name, setName] = useState(workspace.name);
-  const [organizationNumber, setOrganizationNumber] = useState(
-    workspace.organizationNumber || ""
-  );
-  const [contactEmail, setContactEmail] = useState(
-    workspace.contactEmail || ""
-  );
-  const [contactPerson, setContactPerson] = useState(
-    workspace.contactPerson || ""
-  );
-  const [status, setStatus] = useState<WorkspaceStatus>(
-    workspace.status as WorkspaceStatus
-  );
-  const [plan, setPlan] = useState<WorkspacePlan>(
-    workspace.plan as WorkspacePlan
-  );
-  const [suspendedReason, setSuspendedReason] = useState(
-    workspace.suspendedReason || ""
-  );
-  const [invoiceEligible, setInvoiceEligible] = useState(
-    workspace.invoiceEligible
-  );
+  const [organizationNumber, setOrganizationNumber] = useState(workspace.organizationNumber || "");
+  const [contactEmail, setContactEmail] = useState(workspace.contactEmail || "");
+  const [contactPerson, setContactPerson] = useState(workspace.contactPerson || "");
+  const [status, setStatus] = useState<WorkspaceStatus>(workspace.status as WorkspaceStatus);
+  const [plan, setPlan] = useState<WorkspacePlan>(workspace.plan as WorkspacePlan);
+  const [suspendedReason, setSuspendedReason] = useState(workspace.suspendedReason || "");
+  const [invoiceEligible, setInvoiceEligible] = useState(workspace.invoiceEligible);
 
   // Reset form when workspace changes
   React.useEffect(() => {
@@ -127,8 +109,7 @@ export function EditWorkspaceDialog({
 
         const statusChanged = status !== workspace.status;
         const planChanged = plan !== workspace.plan;
-        const invoiceEligibleChanged =
-          invoiceEligible !== workspace.invoiceEligible;
+        const invoiceEligibleChanged = invoiceEligible !== workspace.invoiceEligible;
 
         // Update details if changed
         if (detailsChanged) {
@@ -149,7 +130,7 @@ export function EditWorkspaceDialog({
           const result = await updateWorkspaceStatusAction(
             workspace.id,
             status,
-            status === "suspended" ? suspendedReason.trim() : undefined
+            status === "suspended" ? suspendedReason.trim() : undefined,
           );
           if (!result.success) {
             toast.error(result.error);
@@ -168,13 +149,8 @@ export function EditWorkspaceDialog({
 
         // Update invoice eligibility if changed
         if (invoiceEligibleChanged) {
-          const { setWorkspaceInvoiceEligibility } = await import(
-            "@/lib/actions/payments"
-          );
-          const result = await setWorkspaceInvoiceEligibility(
-            workspace.id,
-            invoiceEligible
-          );
+          const { setWorkspaceInvoiceEligibility } = await import("@/lib/actions/payments");
+          const result = await setWorkspaceInvoiceEligibility(workspace.id, invoiceEligible);
           if (!result.success) {
             toast.error(result.error);
             return;
@@ -220,8 +196,7 @@ export function EditWorkspaceDialog({
     status !== workspace.status ||
     plan !== workspace.plan ||
     invoiceEligible !== workspace.invoiceEligible ||
-    (status === "suspended" &&
-      suspendedReason !== (workspace.suspendedReason || ""));
+    (status === "suspended" && suspendedReason !== (workspace.suspendedReason || ""));
 
   return (
     <Dialog onOpenChange={handleClose} open={open}>
@@ -233,20 +208,14 @@ export function EditWorkspaceDialog({
               <div
                 className="flex h-8 w-8 items-center justify-center rounded-lg"
                 style={{
-                  backgroundColor:
-                    "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
+                  backgroundColor: "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
                 }}
               >
-                <IconEdit
-                  className="h-4 w-4"
-                  style={{ color: "var(--accent-violet)" }}
-                />
+                <IconEdit className="h-4 w-4" style={{ color: "var(--accent-violet)" }} />
               </div>
               Edit Workspace
             </DialogTitle>
-            <DialogDescription>
-              Update workspace details and settings
-            </DialogDescription>
+            <DialogDescription>Update workspace details and settings</DialogDescription>
           </DialogHeader>
         </div>
 
@@ -258,14 +227,10 @@ export function EditWorkspaceDialog({
               <div
                 className="flex h-16 w-16 items-center justify-center rounded-full"
                 style={{
-                  backgroundColor:
-                    "color-mix(in oklch, var(--accent-green) 15%, transparent)",
+                  backgroundColor: "color-mix(in oklch, var(--accent-green) 15%, transparent)",
                 }}
               >
-                <IconCheck
-                  className="h-8 w-8"
-                  style={{ color: "var(--accent-green)" }}
-                />
+                <IconCheck className="h-8 w-8" style={{ color: "var(--accent-green)" }} />
               </div>
               <div>
                 <p className="font-semibold text-lg">Workspace Updated!</p>
@@ -284,10 +249,7 @@ export function EditWorkspaceDialog({
 
                 {/* Name */}
                 <div className="space-y-2">
-                  <Label
-                    className="font-medium text-sm"
-                    htmlFor="workspace-name"
-                  >
+                  <Label className="font-medium text-sm" htmlFor="workspace-name">
                     Workspace Name
                   </Label>
                   <div className="relative">
@@ -321,10 +283,7 @@ export function EditWorkspaceDialog({
 
                 {/* Contact Email */}
                 <div className="space-y-2">
-                  <Label
-                    className="font-medium text-sm"
-                    htmlFor="contact-email"
-                  >
+                  <Label className="font-medium text-sm" htmlFor="contact-email">
                     Contact Email
                   </Label>
                   <div className="relative">
@@ -343,10 +302,7 @@ export function EditWorkspaceDialog({
 
                 {/* Contact Person */}
                 <div className="space-y-2">
-                  <Label
-                    className="font-medium text-sm"
-                    htmlFor="contact-person"
-                  >
+                  <Label className="font-medium text-sm" htmlFor="contact-person">
                     Contact Person
                   </Label>
                   <div className="relative">
@@ -375,9 +331,7 @@ export function EditWorkspaceDialog({
                     <Label className="font-medium text-sm">Status</Label>
                     <Select
                       disabled={isPending}
-                      onValueChange={(value) =>
-                        setStatus(value as WorkspaceStatus)
-                      }
+                      onValueChange={(value) => setStatus(value as WorkspaceStatus)}
                       value={status}
                     >
                       <SelectTrigger>
@@ -426,7 +380,7 @@ export function EditWorkspaceDialog({
                   <div
                     className={cn(
                       "space-y-2 rounded-lg border border-destructive/20 bg-destructive/5 p-4",
-                      "animate-fade-in-up"
+                      "animate-fade-in-up",
                     )}
                   >
                     <div className="flex items-center gap-2 font-medium text-destructive text-sm">
@@ -460,15 +414,10 @@ export function EditWorkspaceDialog({
                           "color-mix(in oklch, var(--accent-amber) 15%, transparent)",
                       }}
                     >
-                      <IconReceipt
-                        className="h-4 w-4"
-                        style={{ color: "var(--accent-amber)" }}
-                      />
+                      <IconReceipt className="h-4 w-4" style={{ color: "var(--accent-amber)" }} />
                     </div>
                     <div className="space-y-0.5">
-                      <Label className="font-medium text-sm">
-                        Invoice Billing
-                      </Label>
+                      <Label className="font-medium text-sm">Invoice Billing</Label>
                       <p className="text-muted-foreground text-xs">
                         Pay via invoice instead of Stripe (Norwegian B2B)
                       </p>
@@ -488,12 +437,7 @@ export function EditWorkspaceDialog({
         {/* Footer */}
         {!saved && (
           <div className="flex items-center justify-end gap-3 border-t bg-muted/30 px-6 py-4">
-            <Button
-              disabled={isPending}
-              onClick={handleClose}
-              type="button"
-              variant="outline"
-            >
+            <Button disabled={isPending} onClick={handleClose} type="button" variant="outline">
               Cancel
             </Button>
             <Button

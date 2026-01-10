@@ -28,15 +28,8 @@ const planLabels: Record<WorkspacePlan, string> = {
 };
 
 export function WorkspacesTableToolbar() {
-  const {
-    filters,
-    hasActiveFilters,
-    setSearch,
-    setStatus,
-    setPlan,
-    clearFilter,
-    clearAll,
-  } = useAdminWorkspaceFilters();
+  const { filters, hasActiveFilters, setSearch, setStatus, setPlan, clearFilter, clearAll } =
+    useAdminWorkspaceFilters();
 
   return (
     <div className="space-y-3">
@@ -77,9 +70,7 @@ export function WorkspacesTableToolbar() {
 
           {/* Plan filter */}
           <Select
-            onValueChange={(value) =>
-              setPlan(value === "all" ? null : (value as WorkspacePlan))
-            }
+            onValueChange={(value) => setPlan(value === "all" ? null : (value as WorkspacePlan))}
             value={filters.plan || "all"}
           >
             <SelectTrigger className="w-full border-foreground/10 bg-background/80 sm:w-[130px]">
@@ -117,10 +108,7 @@ export function WorkspacesTableToolbar() {
             Active filters:
           </span>
           {filters.q && (
-            <Badge
-              className="animate-scale-in gap-1.5 pr-1.5"
-              variant="secondary"
-            >
+            <Badge className="animate-scale-in gap-1.5 pr-1.5" variant="secondary">
               <span className="text-muted-foreground">Search:</span> {filters.q}
               <button
                 className="ml-0.5 rounded-full p-0.5 transition-colors hover:bg-foreground/10"
@@ -132,12 +120,8 @@ export function WorkspacesTableToolbar() {
           )}
 
           {filters.status && (
-            <Badge
-              className="animate-scale-in gap-1.5 pr-1.5"
-              variant="secondary"
-            >
-              <span className="text-muted-foreground">Status:</span>{" "}
-              {statusLabels[filters.status]}
+            <Badge className="animate-scale-in gap-1.5 pr-1.5" variant="secondary">
+              <span className="text-muted-foreground">Status:</span> {statusLabels[filters.status]}
               <button
                 className="ml-0.5 rounded-full p-0.5 transition-colors hover:bg-foreground/10"
                 onClick={() => clearFilter("status")}
@@ -148,12 +132,8 @@ export function WorkspacesTableToolbar() {
           )}
 
           {filters.plan && (
-            <Badge
-              className="animate-scale-in gap-1.5 pr-1.5"
-              variant="secondary"
-            >
-              <span className="text-muted-foreground">Plan:</span>{" "}
-              {planLabels[filters.plan]}
+            <Badge className="animate-scale-in gap-1.5 pr-1.5" variant="secondary">
+              <span className="text-muted-foreground">Plan:</span> {planLabels[filters.plan]}
               <button
                 className="ml-0.5 rounded-full p-0.5 transition-colors hover:bg-foreground/10"
                 onClick={() => clearFilter("plan")}

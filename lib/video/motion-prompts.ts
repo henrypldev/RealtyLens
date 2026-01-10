@@ -96,12 +96,8 @@ export const DEFAULT_MOTION_PROMPTS: Record<VideoRoomType, string> = {
 };
 
 // Get motion prompt for a room type
-export function getMotionPrompt(
-  roomType: VideoRoomType,
-  targetRoomLabel?: string | null
-): string {
-  const basePrompt =
-    DEFAULT_MOTION_PROMPTS[roomType] ?? DEFAULT_MOTION_PROMPTS.other;
+export function getMotionPrompt(roomType: VideoRoomType, targetRoomLabel?: string | null): string {
+  const basePrompt = DEFAULT_MOTION_PROMPTS[roomType] ?? DEFAULT_MOTION_PROMPTS.other;
 
   if (!targetRoomLabel) {
     return basePrompt;
@@ -112,10 +108,7 @@ export function getMotionPrompt(
 }
 
 // Generate a custom motion prompt with room-specific base + user additions
-export function generateMotionPrompt(
-  roomType: VideoRoomType,
-  customAdditions?: string
-): string {
+export function generateMotionPrompt(roomType: VideoRoomType, customAdditions?: string): string {
   const basePrompt = getMotionPrompt(roomType);
 
   if (!customAdditions?.trim()) {

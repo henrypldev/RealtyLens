@@ -9,15 +9,12 @@ interface EmptyProjectsProps {
   className?: string;
 }
 
-export function EmptyProjects({
-  onCreateClick,
-  className,
-}: EmptyProjectsProps) {
+export function EmptyProjects({ onCreateClick, className }: EmptyProjectsProps) {
   return (
     <div
       className={cn(
         "relative flex min-h-[500px] flex-col items-center justify-center gap-6 overflow-hidden rounded-2xl border border-foreground/10 border-dashed bg-muted/30 px-8 py-16 text-center",
-        className
+        className,
       )}
     >
       {/* Background pattern */}
@@ -55,8 +52,8 @@ export function EmptyProjects({
           Your first masterpiece awaits
         </h2>
         <p className="text-base text-muted-foreground">
-          Transform your real estate photos with AI-powered enhancements. Upload
-          images, choose a style, and watch the magic happen.
+          Transform your real estate photos with AI-powered enhancements. Upload images, choose a
+          style, and watch the magic happen.
         </p>
       </div>
 

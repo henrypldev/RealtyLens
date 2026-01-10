@@ -10,11 +10,7 @@ export const metadata = constructMetadata({
   noIndex: true,
 });
 
-export default async function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   // Verify system admin access - redirects if not authorized
   await requireSystemAdmin();
 

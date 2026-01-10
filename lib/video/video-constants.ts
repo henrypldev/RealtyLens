@@ -16,8 +16,7 @@ export const VIDEO_DURATIONS = {
   LONG: 10, // 10 seconds
 } as const;
 
-export type VideoDuration =
-  (typeof VIDEO_DURATIONS)[keyof typeof VIDEO_DURATIONS];
+export type VideoDuration = (typeof VIDEO_DURATIONS)[keyof typeof VIDEO_DURATIONS];
 
 // Video aspect ratios
 export const VIDEO_ASPECT_RATIOS = [
@@ -70,7 +69,7 @@ export const VIDEO_DEFAULTS = {
 export function calculateVideoCost(
   clipCount: number,
   durationPerClip: VideoDuration = 5,
-  withAudio = true
+  withAudio = true,
 ): number {
   const costPerSecond = withAudio
     ? VIDEO_PRICING.COST_PER_SECOND_WITH_AUDIO

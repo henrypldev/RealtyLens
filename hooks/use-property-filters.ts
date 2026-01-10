@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  parseAsArrayOf,
-  parseAsString,
-  parseAsStringLiteral,
-  useQueryStates,
-} from "nuqs";
+import { parseAsArrayOf, parseAsString, parseAsStringLiteral, useQueryStates } from "nuqs";
 import {
   ALL_STATUSES,
   ALL_TAGS,
@@ -14,12 +9,7 @@ import {
 } from "@/lib/mock/properties";
 
 export type SortDirection = "asc" | "desc";
-export type SortableColumn =
-  | "address"
-  | "status"
-  | "editCount"
-  | "totalCost"
-  | "createdAt";
+export type SortableColumn = "address" | "status" | "editCount" | "totalCost" | "createdAt";
 
 // Parsers for URL state
 const propertyFiltersParsers = {

@@ -17,14 +17,8 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-  useVideoCreation,
-  type VideoCreationStep,
-} from "@/hooks/use-video-creation";
-import {
-  createVideoProject,
-  triggerVideoGeneration,
-} from "@/lib/actions/video";
+import { useVideoCreation, type VideoCreationStep } from "@/hooks/use-video-creation";
+import { createVideoProject, triggerVideoGeneration } from "@/lib/actions/video";
 import { cn } from "@/lib/utils";
 import { AssignRoomsStep } from "./steps/assign-rooms-step";
 import { ReviewStep } from "./steps/review-step";
@@ -109,23 +103,18 @@ function StepIndicator({
                 isActive &&
                   "bg-(--accent-teal)/15 text-(--accent-teal) shadow-(--accent-teal)/10 shadow-sm",
                 isCompleted && "text-(--accent-teal)",
-                !(isActive || isCompleted) && "text-muted-foreground"
+                !(isActive || isCompleted) && "text-muted-foreground",
               )}
             >
               <span
                 className={cn(
                   "flex h-7 w-7 items-center justify-center rounded-full font-semibold text-xs transition-all duration-300",
-                  isActive &&
-                    "bg-(--accent-teal) text-white shadow-(--accent-teal)/30 shadow-lg",
+                  isActive && "bg-(--accent-teal) text-white shadow-(--accent-teal)/30 shadow-lg",
                   isCompleted && "bg-(--accent-teal) text-white",
-                  !(isActive || isCompleted) && "bg-muted text-muted-foreground"
+                  !(isActive || isCompleted) && "bg-muted text-muted-foreground",
                 )}
               >
-                {isCompleted ? (
-                  <IconCheck className="h-3.5 w-3.5" />
-                ) : (
-                  step.icon
-                )}
+                {isCompleted ? <IconCheck className="h-3.5 w-3.5" /> : step.icon}
               </span>
               <span className="hidden sm:inline">{step.label}</span>
             </div>
@@ -136,7 +125,7 @@ function StepIndicator({
                   "h-px w-6 transition-all duration-300 sm:w-10",
                   index < currentIndex
                     ? "bg-linear-to-r from-(--accent-teal) to-(--accent-teal)/50"
-                    : "bg-border"
+                    : "bg-border",
                 )}
               />
             )}
@@ -147,10 +136,7 @@ function StepIndicator({
   );
 }
 
-const stepTitles: Record<
-  VideoCreationStep,
-  { title: string; description: string }
-> = {
+const stepTitles: Record<VideoCreationStep, { title: string; description: string }> = {
   "select-template": {
     title: "Choose a Style",
     description: "Start with a template or build from scratch",
@@ -197,11 +183,9 @@ export function VideoCreationWizard() {
         generateNativeAudio: creation.generateNativeAudio,
         clips: creation.images.map((img) => ({
           sourceImageUrl: img.startImageUrl || img.url,
-          imageGenerationId:
-            img.startImageGenerationId || img.imageGenerationId || null,
+          imageGenerationId: img.startImageGenerationId || img.imageGenerationId || null,
           endImageUrl: img.endImageUrl || img.url,
-          endImageGenerationId:
-            img.endImageGenerationId || img.imageGenerationId || null,
+          endImageGenerationId: img.endImageGenerationId || img.imageGenerationId || null,
           roomType: img.roomType,
           roomLabel: img.roomLabel || null,
           sequenceOrder: img.sequenceOrder,
@@ -215,7 +199,7 @@ export function VideoCreationWizard() {
       }
 
       console.log(
-        `[VideoCreationWizard] Project created successfully: ${result.videoProjectId}. Triggering generation...`
+        `[VideoCreationWizard] Project created successfully: ${result.videoProjectId}. Triggering generation...`,
       );
 
       // Trigger video generation
@@ -224,24 +208,18 @@ export function VideoCreationWizard() {
       } catch (triggerError) {
         console.error(
           "[VideoCreationWizard] Trigger failed, but project was created:",
-          triggerError
+          triggerError,
         );
         // We still redirect because the project exists, but we show a different message
-        toast.warning(
-          "Video project created, but generation failed to start automatically.",
-          {
-            description:
-              "You can try to restart the generation from the video details page.",
-            duration: 10_000,
-          }
-        );
+        toast.warning("Video project created, but generation failed to start automatically.", {
+          description: "You can try to restart the generation from the video details page.",
+          duration: 10_000,
+        });
         router.push(`/video/${result.videoProjectId}`);
         return;
       }
 
-      console.log(
-        "[VideoCreationWizard] Video generation triggered successfully"
-      );
+      console.log("[VideoCreationWizard] Video generation triggered successfully");
 
       toast.success("Video generation started!", {
         description: "We'll notify you when your video is ready.",
@@ -250,13 +228,9 @@ export function VideoCreationWizard() {
       // Redirect to video detail page
       router.push(`/video/${result.videoProjectId}`);
     } catch (error) {
-      console.error(
-        "[VideoCreationWizard] General error in handleSubmit:",
-        error
-      );
+      console.error("[VideoCreationWizard] General error in handleSubmit:", error);
       toast.error("Failed to create video", {
-        description:
-          error instanceof Error ? error.message : "Please try again.",
+        description: error instanceof Error ? error.message : "Please try again.",
       });
       creation.setIsSubmitting(false);
     }
@@ -297,12 +271,8 @@ export function VideoCreationWizard() {
               <IconMovie className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="font-bold text-2xl tracking-tight">
-                Create Video
-              </h1>
-              <p className="text-muted-foreground text-sm">
-                Property Tour Generator
-              </p>
+              <h1 className="font-bold text-2xl tracking-tight">Create Video</h1>
+              <p className="text-muted-foreground text-sm">Property Tour Generator</p>
             </div>
           </div>
 
@@ -312,9 +282,7 @@ export function VideoCreationWizard() {
           {/* Step Title */}
           <div className="mt-6 animate-fade-in text-center">
             <h2 className="font-semibold text-xl">{currentStepInfo.title}</h2>
-            <p className="mt-1 text-muted-foreground">
-              {currentStepInfo.description}
-            </p>
+            <p className="mt-1 text-muted-foreground">{currentStepInfo.description}</p>
           </div>
         </div>
       </div>
@@ -324,7 +292,7 @@ export function VideoCreationWizard() {
         <div
           className={cn(
             "mx-auto px-4 py-8 transition-all duration-500 sm:px-6",
-            creation.step === "storyboard" ? "max-w-full lg:px-12" : "max-w-5xl"
+            creation.step === "storyboard" ? "max-w-full lg:px-12" : "max-w-5xl",
           )}
         >
           <div className="animate-fade-in-up">

@@ -9,10 +9,7 @@ import { LandingNav } from "./landing-nav";
 
 export function LandingPage() {
   return (
-    <div
-      className="min-h-screen"
-      style={{ backgroundColor: "var(--landing-bg)" }}
-    >
+    <div className="min-h-screen" style={{ backgroundColor: "var(--landing-bg)" }}>
       <LandingNav />
       <main>
         <LandingHero />

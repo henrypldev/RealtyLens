@@ -11,10 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  ALL_PROJECT_STATUSES_LIST,
-  useProjectFilters,
-} from "@/hooks/use-project-filters";
+import { ALL_PROJECT_STATUSES_LIST, useProjectFilters } from "@/hooks/use-project-filters";
 import type { ProjectStatus } from "@/lib/db/schema";
 
 const statusLabels: Record<ProjectStatus, string> = {
@@ -25,14 +22,8 @@ const statusLabels: Record<ProjectStatus, string> = {
 };
 
 export function ProjectsTableToolbar() {
-  const {
-    filters,
-    hasActiveFilters,
-    setSearch,
-    setStatus,
-    clearFilter,
-    clearAll,
-  } = useProjectFilters();
+  const { filters, hasActiveFilters, setSearch, setStatus, clearFilter, clearAll } =
+    useProjectFilters();
 
   return (
     <div className="space-y-3">
@@ -53,9 +44,7 @@ export function ProjectsTableToolbar() {
         <div className="flex flex-wrap items-center gap-2">
           {/* Status filter */}
           <Select
-            onValueChange={(value) =>
-              setStatus(value === "all" ? null : (value as ProjectStatus))
-            }
+            onValueChange={(value) => setStatus(value === "all" ? null : (value as ProjectStatus))}
             value={filters.status || "all"}
           >
             <SelectTrigger className="w-full border-foreground/10 bg-background/80 sm:w-[150px]">
@@ -115,8 +104,7 @@ export function ProjectsTableToolbar() {
               style={{ animationDelay: "50ms" }}
               variant="secondary"
             >
-              <span className="text-muted-foreground">Status:</span>{" "}
-              {statusLabels[filters.status]}
+              <span className="text-muted-foreground">Status:</span> {statusLabels[filters.status]}
               <button
                 className="ml-0.5 rounded-full p-0.5 transition-colors hover:bg-foreground/10"
                 onClick={() => clearFilter("status")}

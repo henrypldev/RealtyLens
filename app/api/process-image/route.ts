@@ -5,11 +5,7 @@ import {
   updateProjectCounts,
 } from "@/lib/db/queries";
 import { fal, NANO_BANANA_PRO_EDIT, type NanoBananaProOutput } from "@/lib/fal";
-import {
-  getExtensionFromContentType,
-  getImagePath,
-  uploadImage,
-} from "@/lib/supabase";
+import { getExtensionFromContentType, getImagePath, uploadImage } from "@/lib/supabase";
 
 export async function POST(request: NextRequest) {
   try {
@@ -44,13 +40,11 @@ export async function POST(request: NextRequest) {
       // This ensures Fal.ai can access the image reliably
       const imageResponse = await fetch(image.originalImageUrl);
       if (!imageResponse.ok) {
-        throw new Error(
-          `Failed to fetch original image: ${imageResponse.status}`
-        );
+        throw new Error(`Failed to fetch original image: ${imageResponse.status}`);
       }
       const imageBlob = await imageResponse.blob();
       const falImageUrl = await fal.storage.upload(
-        new File([imageBlob], "input.jpg", { type: imageBlob.type })
+        new File([imageBlob], "input.jpg", { type: imageBlob.type }),
       );
 
       console.log("Uploaded to Fal.ai storage:", falImageUrl);
@@ -91,12 +85,12 @@ export async function POST(request: NextRequest) {
         image.workspaceId,
         image.projectId,
         `${imageId}.${extension}`,
-        "result"
+        "result",
       );
       const storedResultUrl = await uploadImage(
         new Uint8Array(resultImageBuffer),
         resultPath,
-        contentType
+        contentType,
       );
 
       // Update image record with result
@@ -120,9 +114,7 @@ export async function POST(request: NextRequest) {
       await updateImageGeneration(imageId, {
         status: "failed",
         errorMessage:
-          processingError instanceof Error
-            ? processingError.message
-            : "Processing failed",
+          processingError instanceof Error ? processingError.message : "Processing failed",
       });
 
       // Update project counts
@@ -131,20 +123,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error: "Processing failed",
-          details:
-            processingError instanceof Error
-              ? processingError.message
-              : "Unknown error",
+          details: processingError instanceof Error ? processingError.message : "Unknown error",
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
   } catch (error) {
     console.error("API error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 

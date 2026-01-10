@@ -137,8 +137,7 @@ function generateMockWorkspaces(count: number): AdminWorkspace[] {
 
     // Plan distribution: 40% free, 40% pro, 20% enterprise
     const planRoll = random();
-    const plan: WorkspacePlan =
-      planRoll < 0.4 ? "free" : planRoll < 0.8 ? "pro" : "enterprise";
+    const plan: WorkspacePlan = planRoll < 0.4 ? "free" : planRoll < 0.8 ? "pro" : "enterprise";
 
     // Member count varies by plan
     const baseMemberCount = plan === "enterprise" ? 8 : plan === "pro" ? 4 : 1;
@@ -218,7 +217,7 @@ export interface GetWorkspacesResponse {
 
 function filterWorkspaces(
   workspaces: AdminWorkspace[],
-  filters: WorkspaceFilters
+  filters: WorkspaceFilters,
 ): AdminWorkspace[] {
   return workspaces.filter((workspace) => {
     // Search filter (name, slug, owner email)
@@ -248,7 +247,7 @@ function filterWorkspaces(
 
 function sortWorkspaces(
   workspaces: AdminWorkspace[],
-  sort?: [SortableWorkspaceColumn, SortDirection]
+  sort?: [SortableWorkspaceColumn, SortDirection],
 ): AdminWorkspace[] {
   if (!sort) return workspaces;
 
@@ -286,7 +285,7 @@ function sortWorkspaces(
 export function getWorkspacesPage(
   cursor: string | null = null,
   limit = 20,
-  filters: WorkspaceFilters = {}
+  filters: WorkspaceFilters = {},
 ): GetWorkspacesResponse {
   const filteredWorkspaces = filterWorkspaces(mockWorkspaces, filters);
   const sortedWorkspaces = sortWorkspaces(filteredWorkspaces, filters.sort);
@@ -316,13 +315,5 @@ export function getWorkspaceById(id: string): AdminWorkspace | undefined {
 }
 
 // Export constants for filters
-export const ALL_WORKSPACE_STATUSES: WorkspaceStatus[] = [
-  "active",
-  "suspended",
-  "trial",
-];
-export const ALL_WORKSPACE_PLANS: WorkspacePlan[] = [
-  "free",
-  "pro",
-  "enterprise",
-];
+export const ALL_WORKSPACE_STATUSES: WorkspaceStatus[] = ["active", "suspended", "trial"];
+export const ALL_WORKSPACE_PLANS: WorkspacePlan[] = ["free", "pro", "enterprise"];

@@ -130,9 +130,7 @@ export function RevenueContent({
   initialError,
 }: RevenueContentProps) {
   const [period, setPeriod] = useState<TimePeriod>("this-month");
-  const [falUsage, setFalUsage] = useState<FalUsageResponse | null>(
-    initialFalUsage
-  );
+  const [falUsage, setFalUsage] = useState<FalUsageResponse | null>(initialFalUsage);
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(initialError);
 
@@ -170,10 +168,8 @@ export function RevenueContent({
   const margin = revenueUSD > 0 ? (profit / revenueUSD) * 100 : 0;
 
   // Aggregate costs by date from time_series buckets
-  const costByDate: Record<
-    string,
-    { cost: number; quantity: number; icon: typeof IconCalendar }
-  > = {};
+  const costByDate: Record<string, { cost: number; quantity: number; icon: typeof IconCalendar }> =
+    {};
   if (falUsage?.time_series) {
     for (const bucket of falUsage.time_series) {
       if (bucket.results.length === 0) continue;
@@ -220,14 +216,10 @@ export function RevenueContent({
               <div
                 className="flex h-10 w-10 items-center justify-center rounded-lg"
                 style={{
-                  backgroundColor:
-                    "color-mix(in oklch, var(--accent-amber) 15%, transparent)",
+                  backgroundColor: "color-mix(in oklch, var(--accent-amber) 15%, transparent)",
                 }}
               >
-                <IconCurrencyDollar
-                  className="h-5 w-5"
-                  style={{ color: "var(--accent-amber)" }}
-                />
+                <IconCurrencyDollar className="h-5 w-5" style={{ color: "var(--accent-amber)" }} />
               </div>
               <div>
                 <p className="text-muted-foreground text-sm">Fal.ai Cost</p>
@@ -247,14 +239,10 @@ export function RevenueContent({
               <div
                 className="flex h-10 w-10 items-center justify-center rounded-lg"
                 style={{
-                  backgroundColor:
-                    "color-mix(in oklch, var(--accent-green) 15%, transparent)",
+                  backgroundColor: "color-mix(in oklch, var(--accent-green) 15%, transparent)",
                 }}
               >
-                <IconReceipt
-                  className="h-5 w-5"
-                  style={{ color: "var(--accent-green)" }}
-                />
+                <IconReceipt className="h-5 w-5" style={{ color: "var(--accent-green)" }} />
               </div>
               <div>
                 <p className="text-muted-foreground text-sm">Revenue</p>
@@ -264,9 +252,7 @@ export function RevenueContent({
                 >
                   {formatNOK(revenueOre)}
                 </span>
-                <p className="text-muted-foreground text-xs">
-                  ~{formatUSD(revenueUSD)}
-                </p>
+                <p className="text-muted-foreground text-xs">~{formatUSD(revenueUSD)}</p>
               </div>
             </div>
           </div>
@@ -277,24 +263,17 @@ export function RevenueContent({
               <div
                 className="flex h-10 w-10 items-center justify-center rounded-lg"
                 style={{
-                  backgroundColor:
-                    "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
+                  backgroundColor: "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
                 }}
               >
-                <IconTrendingUp
-                  className="h-5 w-5"
-                  style={{ color: "var(--accent-violet)" }}
-                />
+                <IconTrendingUp className="h-5 w-5" style={{ color: "var(--accent-violet)" }} />
               </div>
               <div>
                 <p className="text-muted-foreground text-sm">Profit</p>
                 <span
                   className="font-bold text-2xl tabular-nums"
                   style={{
-                    color:
-                      profit >= 0
-                        ? "var(--accent-violet)"
-                        : "var(--accent-red)",
+                    color: profit >= 0 ? "var(--accent-violet)" : "var(--accent-red)",
                   }}
                 >
                   {formatUSD(profit)}
@@ -309,22 +288,17 @@ export function RevenueContent({
               <div
                 className="flex h-10 w-10 items-center justify-center rounded-lg"
                 style={{
-                  backgroundColor:
-                    "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
+                  backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
                 }}
               >
-                <IconPercentage
-                  className="h-5 w-5"
-                  style={{ color: "var(--accent-teal)" }}
-                />
+                <IconPercentage className="h-5 w-5" style={{ color: "var(--accent-teal)" }} />
               </div>
               <div>
                 <p className="text-muted-foreground text-sm">Margin</p>
                 <span
                   className="font-bold text-2xl tabular-nums"
                   style={{
-                    color:
-                      margin >= 0 ? "var(--accent-teal)" : "var(--accent-red)",
+                    color: margin >= 0 ? "var(--accent-teal)" : "var(--accent-red)",
                   }}
                 >
                   {margin.toFixed(1)}%
@@ -341,9 +315,7 @@ export function RevenueContent({
           <div className="flex items-center gap-3">
             <IconAlertTriangle className="h-5 w-5 text-destructive" />
             <div>
-              <p className="font-medium text-destructive">
-                Failed to load Fal.ai usage
-              </p>
+              <p className="font-medium text-destructive">Failed to load Fal.ai usage</p>
               <p className="text-muted-foreground text-sm">{error}</p>
             </div>
           </div>
@@ -360,13 +332,10 @@ export function RevenueContent({
           {Object.keys(costByDate).length > 0 ? (
             <div className="space-y-3">
               {Object.entries(costByDate)
-                .sort(
-                  ([a], [b]) => new Date(b).getTime() - new Date(a).getTime()
-                )
+                .sort(([a], [b]) => new Date(b).getTime() - new Date(a).getTime())
                 .map(([date, data]) => {
                   const Icon = data.icon;
-                  const percentage =
-                    falCost > 0 ? (data.cost / falCost) * 100 : 0;
+                  const percentage = falCost > 0 ? (data.cost / falCost) * 100 : 0;
 
                   return (
                     <div className="flex items-center gap-4" key={date}>
@@ -377,10 +346,7 @@ export function RevenueContent({
                             "color-mix(in oklch, var(--accent-teal) 10%, transparent)",
                         }}
                       >
-                        <Icon
-                          className="h-4 w-4"
-                          style={{ color: "var(--accent-teal)" }}
-                        />
+                        <Icon className="h-4 w-4" style={{ color: "var(--accent-teal)" }} />
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between">
@@ -422,9 +388,7 @@ export function RevenueContent({
         <div className="flex flex-wrap items-center justify-between gap-4 text-muted-foreground text-sm">
           <span>
             Total invoices:{" "}
-            <strong className="text-foreground">
-              {initialRevenueStats.invoiceCount}
-            </strong>
+            <strong className="text-foreground">{initialRevenueStats.invoiceCount}</strong>
           </span>
           <span>
             Paid revenue:{" "}

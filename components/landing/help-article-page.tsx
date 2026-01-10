@@ -11,16 +11,9 @@ interface HelpArticlePageProps {
   relatedArticles: HelpArticleMeta[];
 }
 
-export function HelpArticlePage({
-  article,
-  category,
-  relatedArticles,
-}: HelpArticlePageProps) {
+export function HelpArticlePage({ article, category, relatedArticles }: HelpArticlePageProps) {
   return (
-    <div
-      className="min-h-screen"
-      style={{ backgroundColor: "var(--landing-bg)" }}
-    >
+    <div className="min-h-screen" style={{ backgroundColor: "var(--landing-bg)" }}>
       <LandingNav />
 
       <main>
@@ -89,10 +82,7 @@ export function HelpArticlePage({
 
         {/* Related Articles */}
         {relatedArticles.length > 0 && (
-          <section
-            className="px-6 py-16"
-            style={{ backgroundColor: "var(--landing-bg-alt)" }}
-          >
+          <section className="px-6 py-16" style={{ backgroundColor: "var(--landing-bg-alt)" }}>
             <div className="mx-auto max-w-3xl">
               <h2
                 className="mb-6 font-semibold text-sm uppercase tracking-wider"
@@ -102,10 +92,7 @@ export function HelpArticlePage({
               </h2>
               <div className="space-y-3">
                 {relatedArticles.map((relatedArticle) => (
-                  <HelpArticleCard
-                    article={relatedArticle}
-                    key={relatedArticle.slug}
-                  />
+                  <HelpArticleCard article={relatedArticle} key={relatedArticle.slug} />
                 ))}
               </div>
             </div>

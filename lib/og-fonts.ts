@@ -10,7 +10,7 @@ const FONT_URL_REGEX = /src: url\((.+)\) format\('(opentype|truetype)'\)/;
 export async function loadGoogleFont(
   font: string,
   text: string,
-  weight = 400
+  weight = 400,
 ): Promise<ArrayBuffer> {
   const url = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(font)}:wght@${weight}&text=${encodeURIComponent(text)}`;
 
@@ -29,7 +29,7 @@ export async function loadGoogleFont(
 
 export async function loadOutfitFont(
   text: string,
-  weight: 400 | 500 | 600 | 700 = 700
+  weight: 400 | 500 | 600 | 700 = 700,
 ): Promise<ArrayBuffer> {
   return loadGoogleFont("Outfit", text, weight);
 }

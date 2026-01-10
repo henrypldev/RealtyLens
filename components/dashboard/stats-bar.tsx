@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  IconBuilding,
-  IconSparkles,
-  IconTrendingUp,
-} from "@tabler/icons-react";
+import { IconBuilding, IconSparkles, IconTrendingUp } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 
 type StatItemProps = {
@@ -41,10 +37,7 @@ function StatItem({ icon, label, value, accentColor, delay }: StatItemProps) {
         <p className="font-medium text-[11px] text-muted-foreground uppercase tracking-wider">
           {label}
         </p>
-        <p
-          className="font-mono font-semibold text-lg tabular-nums"
-          style={{ color: accentColor }}
-        >
+        <p className="font-mono font-semibold text-lg tabular-nums" style={{ color: accentColor }}>
           {value}
         </p>
       </div>
@@ -58,11 +51,7 @@ type StatsBarProps = {
   totalEdits: number;
 };
 
-export function StatsBar({
-  totalProperties,
-  activeProperties,
-  totalEdits,
-}: StatsBarProps) {
+export function StatsBar({ totalProperties, activeProperties, totalEdits }: StatsBarProps) {
   return (
     <div className="grid grid-cols-3 gap-3">
       <StatItem

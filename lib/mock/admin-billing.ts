@@ -102,8 +102,7 @@ function generateUninvoicedProjects(): UninvoicedProject[] {
       const projectCount = 1 + Math.floor(random() * 4); // 1-4 projects
 
       for (let i = 0; i < projectCount; i++) {
-        const projectName =
-          projectNames[Math.floor(random() * projectNames.length)];
+        const projectName = projectNames[Math.floor(random() * projectNames.length)];
         const imageCount = 3 + Math.floor(random() * 8); // 3-10 images
 
         // Completed within last 30 days
@@ -125,9 +124,7 @@ function generateUninvoicedProjects(): UninvoicedProject[] {
     });
 
   // Sort by completedAt (newest first)
-  return projects.sort(
-    (a, b) => b.completedAt.getTime() - a.completedAt.getTime()
-  );
+  return projects.sort((a, b) => b.completedAt.getTime() - a.completedAt.getTime());
 }
 
 function generateInvoiceHistory(): InvoiceRecord[] {
@@ -146,9 +143,7 @@ function generateInvoiceHistory(): InvoiceRecord[] {
     // Generate project names for this invoice
     const invoiceProjectNames: string[] = [];
     for (let j = 0; j < projectCount; j++) {
-      invoiceProjectNames.push(
-        projectNames[Math.floor(random() * projectNames.length)]
-      );
+      invoiceProjectNames.push(projectNames[Math.floor(random() * projectNames.length)]);
     }
 
     const amount = projectCount * 1000; // 1000 kr per project
@@ -156,8 +151,7 @@ function generateInvoiceHistory(): InvoiceRecord[] {
 
     // Status distribution: 60% paid, 30% sent, 10% pending
     const statusRoll = random();
-    const status: InvoiceStatus =
-      statusRoll < 0.6 ? "paid" : statusRoll < 0.9 ? "sent" : "pending";
+    const status: InvoiceStatus = statusRoll < 0.6 ? "paid" : statusRoll < 0.9 ? "sent" : "pending";
 
     // Issue date: within last 90 days
     const issueDaysAgo = Math.floor(random() * 90);
@@ -216,9 +210,7 @@ export function getBillingStats(): BillingStats {
   const now = new Date();
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-  const invoicesThisMonth = invoices.filter(
-    (inv) => inv.issueDate >= startOfMonth
-  );
+  const invoicesThisMonth = invoices.filter((inv) => inv.issueDate >= startOfMonth);
   const pendingInvoices = invoices.filter((inv) => inv.status !== "paid");
 
   return {
@@ -227,15 +219,9 @@ export function getBillingStats(): BillingStats {
     invoicedCount: invoices.length,
     invoicedAmount: invoices.reduce((sum, inv) => sum + inv.amount, 0),
     invoicedThisMonth: invoicesThisMonth.length,
-    invoicedAmountThisMonth: invoicesThisMonth.reduce(
-      (sum, inv) => sum + inv.amount,
-      0
-    ),
+    invoicedAmountThisMonth: invoicesThisMonth.reduce((sum, inv) => sum + inv.amount, 0),
     pendingPayment: pendingInvoices.length,
-    pendingPaymentAmount: pendingInvoices.reduce(
-      (sum, inv) => sum + inv.amount,
-      0
-    ),
+    pendingPaymentAmount: pendingInvoices.reduce((sum, inv) => sum + inv.amount, 0),
   };
 }
 

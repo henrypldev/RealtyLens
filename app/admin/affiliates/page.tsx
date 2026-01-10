@@ -40,11 +40,7 @@ export default async function AdminAffiliatesPage() {
 
       {/* Content */}
       <div className="stagger-1 animate-fade-in-up">
-        <AffiliateTab
-          earnings={earnings}
-          relationships={relationships}
-          stats={stats}
-        />
+        <AffiliateTab earnings={earnings} relationships={relationships} stats={stats} />
       </div>
     </div>
   );

@@ -2,33 +2,21 @@ import { IconUsers } from "@tabler/icons-react";
 import { Suspense } from "react";
 import { UsersDataTable } from "@/components/admin/tables/users/data-table";
 import { getAdminUsers } from "@/lib/db/queries";
-import type {
-  SortableUserColumn,
-  SortDirection,
-  UserRole,
-  UserStatus,
-} from "@/lib/types/admin";
+import type { SortableUserColumn, SortDirection, UserRole, UserStatus } from "@/lib/types/admin";
 
 interface AdminUsersPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function AdminUsersPage({
-  searchParams,
-}: AdminUsersPageProps) {
+export default async function AdminUsersPage({ searchParams }: AdminUsersPageProps) {
   const params = await searchParams;
 
   // Parse filters from URL
   const filters = {
     search: typeof params.q === "string" ? params.q : undefined,
-    role:
-      typeof params.role === "string" ? (params.role as UserRole) : undefined,
-    status:
-      typeof params.status === "string"
-        ? (params.status as UserStatus)
-        : undefined,
-    workspaceId:
-      typeof params.workspaceId === "string" ? params.workspaceId : undefined,
+    role: typeof params.role === "string" ? (params.role as UserRole) : undefined,
+    status: typeof params.status === "string" ? (params.status as UserStatus) : undefined,
+    workspaceId: typeof params.workspaceId === "string" ? params.workspaceId : undefined,
   };
 
   // Parse sort from URL
@@ -69,10 +57,7 @@ export default async function AdminUsersPage({
       {/* Data Table */}
       <div className="stagger-1 animate-fade-in-up">
         <Suspense>
-          <UsersDataTable
-            initialData={initialData.data}
-            initialMeta={initialData.meta}
-          />
+          <UsersDataTable initialData={initialData.data} initialMeta={initialData.meta} />
         </Suspense>
       </div>
     </div>

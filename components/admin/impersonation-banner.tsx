@@ -20,10 +20,7 @@ export function ImpersonationBanner() {
         <div className="font-medium text-amber-950 text-sm">
           <span className="hidden sm:inline">Viewing as </span>
           <span className="font-semibold">{targetUser.name}</span>
-          <span className="hidden text-amber-900/80 md:inline">
-            {" "}
-            ({targetUser.email})
-          </span>
+          <span className="hidden text-amber-900/80 md:inline"> ({targetUser.email})</span>
           <span className="hidden text-amber-900/70 lg:inline">
             {" "}
             &middot; {targetUser.workspaceName}

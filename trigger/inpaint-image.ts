@@ -13,11 +13,7 @@ import {
   NANO_BANANA_PRO_EDIT,
   type NanoBananaProOutput,
 } from "@/lib/fal";
-import {
-  getExtensionFromContentType,
-  getImagePath,
-  uploadImage,
-} from "@/lib/supabase";
+import { getExtensionFromContentType, getImagePath, uploadImage } from "@/lib/supabase";
 
 export type EditMode = "remove" | "add";
 
@@ -30,13 +26,7 @@ export interface InpaintImagePayload {
 }
 
 export interface InpaintImageStatus {
-  step:
-    | "fetching"
-    | "preparing"
-    | "processing"
-    | "saving"
-    | "completed"
-    | "failed";
+  step: "fetching" | "preparing" | "processing" | "saving" | "completed" | "failed";
   label: string;
   progress?: number;
 }
@@ -51,13 +41,7 @@ export const inpaintImageTask = task({
     factor: 2,
   },
   run: async (payload: InpaintImagePayload) => {
-    const {
-      imageId,
-      maskDataUrl,
-      prompt,
-      mode = "remove",
-      replaceNewerVersions = false,
-    } = payload;
+    const { imageId, maskDataUrl, prompt, mode = "remove", replaceNewerVersions = false } = payload;
 
     try {
       // Step 1: Fetch image record
@@ -88,9 +72,7 @@ export const inpaintImageTask = task({
 
       const imageResponse = await fetch(sourceImageUrl);
       if (!imageResponse.ok) {
-        throw new Error(
-          `Failed to fetch source image: ${imageResponse.status}`
-        );
+        throw new Error(`Failed to fetch source image: ${imageResponse.status}`);
       }
 
       const imageBuffer = Buffer.from(await imageResponse.arrayBuffer());
@@ -108,7 +90,7 @@ export const inpaintImageTask = task({
         type: imageResponse.headers.get("content-type") || "image/jpeg",
       });
       const falImageUrl = await fal.storage.upload(
-        new File([imageBlob], "input.jpg", { type: imageBlob.type })
+        new File([imageBlob], "input.jpg", { type: imageBlob.type }),
       );
 
       logger.info("Uploaded image to Fal.ai storage", { falImageUrl });
@@ -119,8 +101,7 @@ export const inpaintImageTask = task({
       // Step 3: Process with AI
       metadata.set("status", {
         step: "processing",
-        label:
-          mode === "remove" ? "Removing selected area…" : "Generating edit…",
+        label: mode === "remove" ? "Removing selected area…" : "Generating edit…",
         progress: 50,
       } satisfies InpaintImageStatus);
 
@@ -147,7 +128,7 @@ export const inpaintImageTask = task({
           type: "image/png",
         });
         const falMaskUrl = await fal.storage.upload(
-          new File([maskBlob], "mask.png", { type: "image/png" })
+          new File([maskBlob], "mask.png", { type: "image/png" }),
         );
 
         logger.info("Uploaded mask to Fal.ai storage", { falMaskUrl });
@@ -189,8 +170,7 @@ export const inpaintImageTask = task({
         logger.info("Nano Banana result received");
 
         // Check for result - handle both direct and wrapped response
-        const output =
-          (result as { data?: NanoBananaProOutput }).data || result;
+        const output = (result as { data?: NanoBananaProOutput }).data || result;
         if (!output.images?.[0]?.url) {
           logger.error("No images in response", { result });
           throw new Error("No image returned from Nano Banana");
@@ -223,7 +203,7 @@ export const inpaintImageTask = task({
         image.workspaceId,
         image.projectId,
         `${newImageId}.${extension}`,
-        "result"
+        "result",
       );
 
       logger.info("Uploading to Supabase", { resultPath });
@@ -231,7 +211,7 @@ export const inpaintImageTask = task({
       const storedResultUrl = await uploadImage(
         new Uint8Array(resultImageBuffer),
         resultPath,
-        contentType
+        contentType,
       );
 
       // Calculate version info
@@ -240,14 +220,9 @@ export const inpaintImageTask = task({
 
       // If replacing newer versions, delete them first
       if (replaceNewerVersions) {
-        const deletedCount = await deleteVersionsAfter(
-          rootImageId,
-          currentVersion
-        );
+        const deletedCount = await deleteVersionsAfter(rootImageId, currentVersion);
         if (deletedCount > 0) {
-          logger.info(
-            `Deleted ${deletedCount} newer version(s) before creating new edit`
-          );
+          logger.info(`Deleted ${deletedCount} newer version(s) before creating new edit`);
         }
       }
 

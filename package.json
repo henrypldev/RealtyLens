@@ -6,19 +6,21 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "biome check",
+    "lint:fix": "biome check --write",
+    "format": "biome format --write",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "email": "email dev --dir emails",
-    "trigger": "pnpm dlx trigger.dev@latest dev",
-    "prepare": "husky"
+    "trigger": "bunx trigger.dev@latest dev"
   },
   "dependencies": {
     "@base-ui/react": "^1.0.0",
     "@better-auth/stripe": "^1.4.10",
     "@fal-ai/client": "^1.8.1",
+    "@polar-sh/sdk": "^0.42.1",
     "@radix-ui/react-avatar": "^1.1.11",
     "@react-email/components": "^1.0.3",
     "@supabase/supabase-js": "^2.89.0",
@@ -67,13 +69,9 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "drizzle-kit": "^0.31.8",
-    "eslint": "^9",
-    "eslint-config-next": "16.1.1",
-    "husky": "^9.1.7",
     "react-email": "^5.1.1",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
-    "typescript": "^5",
-    "ultracite": "7.0.10"
+    "typescript": "^5"
   }
 }

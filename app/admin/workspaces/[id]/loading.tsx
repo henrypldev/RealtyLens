@@ -64,10 +64,7 @@ export default function WorkspaceDetailLoading() {
           </div>
           <div className="space-y-2 p-4">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div
-                className="flex items-center justify-between rounded-lg p-2"
-                key={i}
-              >
+              <div className="flex items-center justify-between rounded-lg p-2" key={i}>
                 <div className="flex items-center gap-3">
                   <div className="skeleton h-8 w-8 rounded-full" />
                   <div className="space-y-1">

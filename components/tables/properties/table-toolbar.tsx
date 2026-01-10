@@ -45,15 +45,8 @@ const tagLabels: Record<PropertyTag, string> = {
 };
 
 export function TableToolbar() {
-  const {
-    filters,
-    hasActiveFilters,
-    setSearch,
-    setStatus,
-    toggleTag,
-    clearFilter,
-    clearAll,
-  } = usePropertyFilters();
+  const { filters, hasActiveFilters, setSearch, setStatus, toggleTag, clearFilter, clearAll } =
+    usePropertyFilters();
 
   return (
     <div className="space-y-3">
@@ -74,9 +67,7 @@ export function TableToolbar() {
         <div className="flex flex-wrap items-center gap-2">
           {/* Status filter */}
           <Select
-            onValueChange={(value) =>
-              setStatus(value === "all" ? null : (value as PropertyStatus))
-            }
+            onValueChange={(value) => setStatus(value === "all" ? null : (value as PropertyStatus))}
             value={filters.status || "all"}
           >
             <SelectTrigger className="w-full border-foreground/10 bg-background/80 sm:w-[150px]">
@@ -95,10 +86,7 @@ export function TableToolbar() {
           {/* Tags filter */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                className="gap-2 border-foreground/10 bg-background/80"
-                variant="outline"
-              >
+              <Button className="gap-2 border-foreground/10 bg-background/80" variant="outline">
                 <IconFilter className="h-4 w-4" />
                 Tags
                 {filters.tags && filters.tags.length > 0 && (
@@ -169,8 +157,7 @@ export function TableToolbar() {
               style={{ animationDelay: "50ms" }}
               variant="secondary"
             >
-              <span className="text-muted-foreground">Status:</span>{" "}
-              {statusLabels[filters.status]}
+              <span className="text-muted-foreground">Status:</span> {statusLabels[filters.status]}
               <button
                 className="ml-0.5 rounded-full p-0.5 transition-colors hover:bg-foreground/10"
                 onClick={() => clearFilter("status")}

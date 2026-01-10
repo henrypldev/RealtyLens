@@ -1,12 +1,4 @@
-import {
-  boolean,
-  index,
-  integer,
-  jsonb,
-  pgTable,
-  text,
-  timestamp,
-} from "drizzle-orm/pg-core";
+import { boolean, index, integer, jsonb, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 // ============================================================================
 // Workspace (must be defined before user due to foreign key reference)
@@ -91,7 +83,7 @@ export const session = pgTable(
       onDelete: "set null",
     }),
   },
-  (table) => [index("session_userId_idx").on(table.userId)]
+  (table) => [index("session_userId_idx").on(table.userId)],
 );
 
 export const account = pgTable(
@@ -113,7 +105,7 @@ export const account = pgTable(
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
   },
-  (table) => [index("account_userId_idx").on(table.userId)]
+  (table) => [index("account_userId_idx").on(table.userId)],
 );
 
 export const verification = pgTable(
@@ -126,7 +118,7 @@ export const verification = pgTable(
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
   },
-  (table) => [index("verification_identifier_idx").on(table.identifier)]
+  (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
 // ============================================================================
@@ -151,7 +143,7 @@ export const invitation = pgTable(
     index("invitation_email_idx").on(table.email),
     index("invitation_token_idx").on(table.token),
     index("invitation_workspace_idx").on(table.workspaceId),
-  ]
+  ],
 );
 
 export type Invitation = typeof invitation.$inferSelect;
@@ -192,7 +184,7 @@ export const project = pgTable(
     index("project_workspace_idx").on(table.workspaceId),
     index("project_user_idx").on(table.userId),
     index("project_status_idx").on(table.status),
-  ]
+  ],
 );
 
 // ============================================================================
@@ -237,7 +229,7 @@ export const imageGeneration = pgTable(
     index("image_generation_user_idx").on(table.userId),
     index("image_generation_project_idx").on(table.projectId),
     index("image_generation_parent_idx").on(table.parentId),
-  ]
+  ],
 );
 
 // ============================================================================
@@ -263,9 +255,7 @@ export const videoProject = pgTable(
     aspectRatio: text("aspect_ratio").notNull().default("16:9"), // "16:9" | "9:16" | "1:1"
     musicTrackId: text("music_track_id"), // FK to music_track or null for no music
     musicVolume: integer("music_volume").notNull().default(50), // 0-100
-    generateNativeAudio: boolean("generate_native_audio")
-      .notNull()
-      .default(true),
+    generateNativeAudio: boolean("generate_native_audio").notNull().default(true),
 
     // Output
     finalVideoUrl: text("final_video_url"),
@@ -298,7 +288,7 @@ export const videoProject = pgTable(
     index("video_project_workspace_idx").on(table.workspaceId),
     index("video_project_user_idx").on(table.userId),
     index("video_project_status_idx").on(table.status),
-  ]
+  ],
 );
 
 // ============================================================================
@@ -315,17 +305,15 @@ export const videoClip = pgTable(
 
     // Source image (can be from imageGeneration or external URL)
     sourceImageUrl: text("source_image_url").notNull(),
-    imageGenerationId: text("image_generation_id").references(
-      () => imageGeneration.id,
-      { onDelete: "set null" }
-    ),
+    imageGenerationId: text("image_generation_id").references(() => imageGeneration.id, {
+      onDelete: "set null",
+    }),
 
     // End image (optional, falls back to sourceImageUrl if null)
     endImageUrl: text("end_image_url"),
-    endImageGenerationId: text("end_image_generation_id").references(
-      () => imageGeneration.id,
-      { onDelete: "set null" }
-    ),
+    endImageGenerationId: text("end_image_generation_id").references(() => imageGeneration.id, {
+      onDelete: "set null",
+    }),
 
     // Room type for sequencing
     roomType: text("room_type").notNull(), // stue | soverom | kjokken | bad | etc (English keys used internally)
@@ -357,12 +345,9 @@ export const videoClip = pgTable(
   },
   (table) => [
     index("video_clip_project_idx").on(table.videoProjectId),
-    index("video_clip_sequence_idx").on(
-      table.videoProjectId,
-      table.sequenceOrder
-    ),
+    index("video_clip_sequence_idx").on(table.videoProjectId, table.sequenceOrder),
     index("video_clip_status_idx").on(table.status),
-  ]
+  ],
 );
 
 // ============================================================================
@@ -397,7 +382,7 @@ export const musicTrack = pgTable(
 
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
-  (table) => [index("music_track_category_idx").on(table.category)]
+  (table) => [index("music_track_category_idx").on(table.category)],
 );
 
 // ============================================================================
@@ -462,20 +447,10 @@ export type RoomType =
   | "other";
 
 // Video types
-export type VideoProjectStatus =
-  | "draft"
-  | "generating"
-  | "compiling"
-  | "completed"
-  | "failed";
+export type VideoProjectStatus = "draft" | "generating" | "compiling" | "completed" | "failed";
 export type VideoClipStatus = "pending" | "processing" | "completed" | "failed";
 export type VideoAspectRatio = "16:9" | "9:16" | "1:1";
-export type MusicCategory =
-  | "modern"
-  | "classical"
-  | "upbeat"
-  | "calm"
-  | "cinematic";
+export type MusicCategory = "modern" | "classical" | "upbeat" | "calm" | "cinematic";
 export type VideoRoomType = RoomType; // Unified with RoomType for consistency
 
 // ============================================================================
@@ -505,7 +480,7 @@ export const workspacePricing = pgTable(
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
   },
-  (table) => [index("workspace_pricing_workspace_idx").on(table.workspaceId)]
+  (table) => [index("workspace_pricing_workspace_idx").on(table.workspaceId)],
 );
 
 /**
@@ -546,7 +521,7 @@ export const invoice = pgTable(
     index("invoice_workspace_idx").on(table.workspaceId),
     index("invoice_status_idx").on(table.status),
     index("invoice_fiken_idx").on(table.fikenInvoiceId),
-  ]
+  ],
 );
 
 /**
@@ -591,7 +566,7 @@ export const invoiceLineItem = pgTable(
     index("invoice_line_item_invoice_idx").on(table.invoiceId),
     index("invoice_line_item_project_idx").on(table.projectId),
     index("invoice_line_item_video_idx").on(table.videoProjectId),
-  ]
+  ],
 );
 
 // ============================================================================
@@ -630,11 +605,9 @@ export const affiliateRelationship = pgTable(
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
   },
   (table) => [
-    index("affiliate_relationship_affiliate_idx").on(
-      table.affiliateWorkspaceId
-    ),
+    index("affiliate_relationship_affiliate_idx").on(table.affiliateWorkspaceId),
     index("affiliate_relationship_referred_idx").on(table.referredWorkspaceId),
-  ]
+  ],
 );
 
 /**
@@ -645,30 +618,30 @@ export const affiliateEarning = pgTable(
   {
     id: text("id").primaryKey(),
 
-    // The affiliate earning this commission
     affiliateWorkspaceId: text("affiliate_workspace_id")
       .notNull()
       .references(() => workspace.id, { onDelete: "cascade" }),
 
-    // Link to the relationship
     affiliateRelationshipId: text("affiliate_relationship_id")
       .notNull()
       .references(() => affiliateRelationship.id, { onDelete: "cascade" }),
 
-    // The invoice that generated this earning
-    invoiceId: text("invoice_id")
-      .notNull()
-      .references(() => invoice.id, { onDelete: "cascade" }),
+    // @deprecated Invoice-based earnings - kept for legacy
+    invoiceId: text("invoice_id").references(() => invoice.id, {
+      onDelete: "cascade",
+    }),
+    invoiceAmountOre: integer("invoice_amount_ore"),
 
-    // Earning details
-    invoiceAmountOre: integer("invoice_amount_ore").notNull(), // Original invoice amount
-    commissionPercent: integer("commission_percent").notNull(), // Snapshot of % at time of earning
-    earningAmountOre: integer("earning_amount_ore").notNull(), // Calculated commission
+    // Polar order-based earnings
+    polarOrderId: text("polar_order_id"),
+    orderAmountCents: integer("order_amount_cents"),
 
-    // Payout status: pending | paid_out
+    commissionPercent: integer("commission_percent").notNull(),
+    earningAmountOre: integer("earning_amount_ore").notNull(),
+
     status: text("status").notNull().default("pending"),
     paidOutAt: timestamp("paid_out_at"),
-    paidOutReference: text("paid_out_reference"), // Bank transfer ref, invoice ref, etc.
+    paidOutReference: text("paid_out_reference"),
 
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
@@ -676,8 +649,9 @@ export const affiliateEarning = pgTable(
   (table) => [
     index("affiliate_earning_affiliate_idx").on(table.affiliateWorkspaceId),
     index("affiliate_earning_invoice_idx").on(table.invoiceId),
+    index("affiliate_earning_polar_order_idx").on(table.polarOrderId),
     index("affiliate_earning_status_idx").on(table.status),
-  ]
+  ],
 );
 
 // Billing type exports
@@ -693,19 +667,39 @@ export type NewInvoiceLineItem = typeof invoiceLineItem.$inferInsert;
 export type LineItemStatus = "pending" | "invoiced" | "cancelled";
 
 export type AffiliateRelationship = typeof affiliateRelationship.$inferSelect;
-export type NewAffiliateRelationship =
-  typeof affiliateRelationship.$inferInsert;
+export type NewAffiliateRelationship = typeof affiliateRelationship.$inferInsert;
 
 export type AffiliateEarning = typeof affiliateEarning.$inferSelect;
 export type NewAffiliateEarning = typeof affiliateEarning.$inferInsert;
 export type AffiliateEarningStatus = "pending" | "paid_out";
 
 // ============================================================================
-// STRIPE PAYMENT SCHEMA
+// POLAR PAYMENT SCHEMA
 // ============================================================================
 
 /**
- * Stripe Customer - Links workspace to Stripe customer ID
+ * Polar Customer - Links workspace to Polar customer ID
+ */
+export const polarCustomer = pgTable(
+  "polar_customer",
+  {
+    id: text("id").primaryKey(),
+    workspaceId: text("workspace_id")
+      .notNull()
+      .unique()
+      .references(() => workspace.id, { onDelete: "cascade" }),
+    polarCustomerId: text("polar_customer_id").notNull().unique(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => [
+    index("polar_customer_workspace_idx").on(table.workspaceId),
+    index("polar_customer_polar_idx").on(table.polarCustomerId),
+  ],
+);
+
+/**
+ * @deprecated Use polarCustomer instead - kept for migration compatibility
  */
 export const stripeCustomer = pgTable(
   "stripe_customer",
@@ -715,14 +709,14 @@ export const stripeCustomer = pgTable(
       .notNull()
       .unique()
       .references(() => workspace.id, { onDelete: "cascade" }),
-    stripeCustomerId: text("stripe_customer_id").notNull().unique(), // cus_xxx
+    stripeCustomerId: text("stripe_customer_id").notNull().unique(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
   },
   (table) => [
     index("stripe_customer_workspace_idx").on(table.workspaceId),
     index("stripe_customer_stripe_idx").on(table.stripeCustomerId),
-  ]
+  ],
 );
 
 /**
@@ -741,22 +735,25 @@ export const projectPayment = pgTable(
       .notNull()
       .references(() => workspace.id, { onDelete: "cascade" }),
 
-    // Payment method: 'stripe' | 'invoice' | 'free'
+    // Payment method: 'polar' | 'invoice' | 'free'
     paymentMethod: text("payment_method").notNull(),
 
-    // Stripe fields (for payment_method = 'stripe')
-    stripeCheckoutSessionId: text("stripe_checkout_session_id"), // cs_xxx
-    stripePaymentIntentId: text("stripe_payment_intent_id"), // pi_xxx
+    // Polar fields (for payment_method = 'polar')
+    polarCheckoutId: text("polar_checkout_id"),
+    polarOrderId: text("polar_order_id"),
 
-    // Invoice fields (for payment_method = 'invoice')
-    invoiceLineItemId: text("invoice_line_item_id").references(
-      () => invoiceLineItem.id,
-      { onDelete: "set null" }
-    ),
+    // @deprecated Stripe fields - kept for migration compatibility
+    stripeCheckoutSessionId: text("stripe_checkout_session_id"),
+    stripePaymentIntentId: text("stripe_payment_intent_id"),
+
+    // @deprecated Invoice fields - kept for migration compatibility
+    invoiceLineItemId: text("invoice_line_item_id").references(() => invoiceLineItem.id, {
+      onDelete: "set null",
+    }),
 
     // Amounts
-    amountCents: integer("amount_cents").notNull(), // 9900 = $99 USD or 100000 = 1000 NOK
-    currency: text("currency").notNull(), // 'usd' | 'nok'
+    amountCents: integer("amount_cents").notNull(),
+    currency: text("currency").notNull(),
 
     // Status: 'pending' | 'completed' | 'failed' | 'refunded'
     status: text("status").notNull().default("pending"),
@@ -769,17 +766,20 @@ export const projectPayment = pgTable(
     index("project_payment_project_idx").on(table.projectId),
     index("project_payment_workspace_idx").on(table.workspaceId),
     index("project_payment_status_idx").on(table.status),
-    index("project_payment_stripe_session_idx").on(
-      table.stripeCheckoutSessionId
-    ),
-  ]
+    index("project_payment_polar_checkout_idx").on(table.polarCheckoutId),
+    index("project_payment_polar_order_idx").on(table.polarOrderId),
+  ],
 );
 
-// Stripe type exports
+// Polar type exports
+export type PolarCustomer = typeof polarCustomer.$inferSelect;
+export type NewPolarCustomer = typeof polarCustomer.$inferInsert;
+
+// @deprecated Stripe type exports - kept for migration compatibility
 export type StripeCustomer = typeof stripeCustomer.$inferSelect;
 export type NewStripeCustomer = typeof stripeCustomer.$inferInsert;
 
 export type ProjectPayment = typeof projectPayment.$inferSelect;
 export type NewProjectPayment = typeof projectPayment.$inferInsert;
-export type PaymentMethod = "stripe" | "invoice" | "free";
+export type PaymentMethod = "polar" | "invoice" | "free";
 export type PaymentStatus = "pending" | "completed" | "failed" | "refunded";

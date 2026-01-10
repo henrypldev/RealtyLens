@@ -61,7 +61,7 @@ export default function SignUpPage() {
           toast.error(ctx.error.message || "Failed to create account");
           setIsLoading(false);
         },
-      }
+      },
     );
   };
 
@@ -69,9 +69,7 @@ export default function SignUpPage() {
     <Card>
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">Create an account</CardTitle>
-        <CardDescription>
-          Enter your details below to create your account
-        </CardDescription>
+        <CardDescription>Enter your details below to create your account</CardDescription>
       </CardHeader>
       <CardContent>
         <form className="space-y-4" onSubmit={handleSubmit}>

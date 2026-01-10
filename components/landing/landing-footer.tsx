@@ -45,8 +45,8 @@ export function LandingFooter() {
               className="mt-4 max-w-xs text-sm leading-relaxed"
               style={{ color: "var(--landing-text-muted)" }}
             >
-              Transform your real estate photos with AI-powered enhancements.
-              Professional results in seconds.
+              Transform your real estate photos with AI-powered enhancements. Professional results
+              in seconds.
             </p>
 
             {/* Social Links */}
@@ -62,10 +62,7 @@ export function LandingFooter() {
                 }}
                 target="_blank"
               >
-                <IconBrandX
-                  className="size-4"
-                  style={{ color: "var(--landing-text)" }}
-                />
+                <IconBrandX className="size-4" style={{ color: "var(--landing-text)" }} />
               </a>
               <a
                 aria-label="Follow us on LinkedIn"
@@ -78,20 +75,14 @@ export function LandingFooter() {
                 }}
                 target="_blank"
               >
-                <IconBrandLinkedin
-                  className="size-4"
-                  style={{ color: "var(--landing-text)" }}
-                />
+                <IconBrandLinkedin className="size-4" style={{ color: "var(--landing-text)" }} />
               </a>
             </div>
           </div>
 
           {/* Product Links */}
           <div>
-            <h3
-              className="font-semibold text-sm"
-              style={{ color: "var(--landing-text)" }}
-            >
+            <h3 className="font-semibold text-sm" style={{ color: "var(--landing-text)" }}>
               Product
             </h3>
             <ul className="mt-4 space-y-3">
@@ -111,10 +102,7 @@ export function LandingFooter() {
 
           {/* Company Links */}
           <div>
-            <h3
-              className="font-semibold text-sm"
-              style={{ color: "var(--landing-text)" }}
-            >
+            <h3 className="font-semibold text-sm" style={{ color: "var(--landing-text)" }}>
               Company
             </h3>
             <ul className="mt-4 space-y-3">
@@ -134,10 +122,7 @@ export function LandingFooter() {
 
           {/* Legal Links */}
           <div>
-            <h3
-              className="font-semibold text-sm"
-              style={{ color: "var(--landing-text)" }}
-            >
+            <h3 className="font-semibold text-sm" style={{ color: "var(--landing-text)" }}>
               Legal
             </h3>
             <ul className="mt-4 space-y-3">

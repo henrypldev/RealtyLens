@@ -86,11 +86,7 @@ export function CreateWorkspaceDialog({
     if (!(name.trim() && email.trim())) return;
 
     startTransition(async () => {
-      const result = await createWorkspaceWithInviteAction(
-        name.trim(),
-        email.trim(),
-        plan
-      );
+      const result = await createWorkspaceWithInviteAction(name.trim(), email.trim(), plan);
 
       if (result.success) {
         setCreatedEmail(email);
@@ -138,14 +134,10 @@ export function CreateWorkspaceDialog({
               <div
                 className="flex h-8 w-8 items-center justify-center rounded-lg"
                 style={{
-                  backgroundColor:
-                    "color-mix(in oklch, var(--accent-green) 15%, transparent)",
+                  backgroundColor: "color-mix(in oklch, var(--accent-green) 15%, transparent)",
                 }}
               >
-                <IconPlus
-                  className="h-4 w-4"
-                  style={{ color: "var(--accent-green)" }}
-                />
+                <IconPlus className="h-4 w-4" style={{ color: "var(--accent-green)" }} />
               </div>
               New Workspace
             </DialogTitle>
@@ -163,20 +155,14 @@ export function CreateWorkspaceDialog({
               <div
                 className="flex h-16 w-16 items-center justify-center rounded-full"
                 style={{
-                  backgroundColor:
-                    "color-mix(in oklch, var(--accent-green) 15%, transparent)",
+                  backgroundColor: "color-mix(in oklch, var(--accent-green) 15%, transparent)",
                 }}
               >
-                <IconCheck
-                  className="h-8 w-8"
-                  style={{ color: "var(--accent-green)" }}
-                />
+                <IconCheck className="h-8 w-8" style={{ color: "var(--accent-green)" }} />
               </div>
               <div>
                 <p className="font-semibold text-lg">Workspace Created!</p>
-                <p className="text-muted-foreground text-sm">
-                  Invitation sent to {createdEmail}
-                </p>
+                <p className="text-muted-foreground text-sm">Invitation sent to {createdEmail}</p>
               </div>
 
               {/* Invite Link Copy Section */}
@@ -267,7 +253,7 @@ export function CreateWorkspaceDialog({
                         "flex items-start gap-3 rounded-xl p-4 text-left ring-2 transition-all duration-200",
                         plan === option.value
                           ? "bg-[var(--accent-green)]/5 ring-[var(--accent-green)]"
-                          : "ring-foreground/5 hover:bg-muted/30 hover:ring-foreground/10"
+                          : "ring-foreground/5 hover:bg-muted/30 hover:ring-foreground/10",
                       )}
                       disabled={isPending}
                       key={option.value}
@@ -276,9 +262,7 @@ export function CreateWorkspaceDialog({
                     >
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
-                          <p className="font-medium text-foreground">
-                            {option.label}
-                          </p>
+                          <p className="font-medium text-foreground">{option.label}</p>
                           {plan === option.value && (
                             <IconCheck
                               className="h-4 w-4"
@@ -286,9 +270,7 @@ export function CreateWorkspaceDialog({
                             />
                           )}
                         </div>
-                        <p className="text-muted-foreground text-sm">
-                          {option.description}
-                        </p>
+                        <p className="text-muted-foreground text-sm">{option.description}</p>
                       </div>
                     </button>
                   ))}
@@ -311,12 +293,7 @@ export function CreateWorkspaceDialog({
             </Button>
           ) : (
             <>
-              <Button
-                disabled={isPending}
-                onClick={handleClose}
-                type="button"
-                variant="outline"
-              >
+              <Button disabled={isPending} onClick={handleClose} type="button" variant="outline">
                 Cancel
               </Button>
               <Button

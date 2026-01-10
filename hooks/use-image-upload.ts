@@ -15,7 +15,7 @@ interface UseImageUploadReturn {
   uploadImages: (
     projectId: string,
     files: File[],
-    roomTypes?: (string | null)[]
+    roomTypes?: (string | null)[],
   ) => Promise<boolean>;
   progress: UploadProgress[];
   isUploading: boolean;
@@ -35,11 +35,7 @@ export function useImageUpload(): UseImageUploadReturn {
   }, []);
 
   const uploadImages = useCallback(
-    async (
-      projectId: string,
-      files: File[],
-      roomTypes?: (string | null)[]
-    ): Promise<boolean> => {
+    async (projectId: string, files: File[], roomTypes?: (string | null)[]): Promise<boolean> => {
       if (files.length === 0) return false;
 
       setIsUploading(true);
@@ -61,10 +57,7 @@ export function useImageUpload(): UseImageUploadReturn {
           type: file.type,
         }));
 
-        const urlsResult = await createSignedUploadUrls(
-          projectId,
-          fileMetadata
-        );
+        const urlsResult = await createSignedUploadUrls(projectId, fileMetadata);
 
         if (!urlsResult.success) {
           setError(urlsResult.error);
@@ -81,7 +74,7 @@ export function useImageUpload(): UseImageUploadReturn {
             fileName: files[index].name,
             progress: 0,
             status: "uploading" as const,
-          }))
+          })),
         );
 
         // Step 2: Upload files directly to Supabase
@@ -116,10 +109,8 @@ export function useImageUpload(): UseImageUploadReturn {
             // Mark this file as completed
             setProgress((prev) =>
               prev.map((p) =>
-                p.imageId === imageId
-                  ? { ...p, progress: 100, status: "completed" as const }
-                  : p
-              )
+                p.imageId === imageId ? { ...p, progress: 100, status: "completed" as const } : p,
+              ),
             );
 
             uploadedImages.push({
@@ -138,23 +129,17 @@ export function useImageUpload(): UseImageUploadReturn {
                   ? {
                       ...p,
                       status: "failed" as const,
-                      error:
-                        uploadError instanceof Error
-                          ? uploadError.message
-                          : "Upload failed",
+                      error: uploadError instanceof Error ? uploadError.message : "Upload failed",
                     }
-                  : p
-              )
+                  : p,
+              ),
             );
           }
         }
 
         // Step 3: Record successfully uploaded images in database
         if (uploadedImages.length > 0) {
-          const recordResult = await recordUploadedImages(
-            projectId,
-            uploadedImages
-          );
+          const recordResult = await recordUploadedImages(projectId, uploadedImages);
 
           if (!recordResult.success) {
             setError(recordResult.error);
@@ -172,7 +157,7 @@ export function useImageUpload(): UseImageUploadReturn {
         return false;
       }
     },
-    []
+    [],
   );
 
   return {

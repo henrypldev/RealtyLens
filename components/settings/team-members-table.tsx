@@ -61,21 +61,20 @@ const roleConfig: Record<
   },
 };
 
-const statusConfig: Record<MemberStatus, { label: string; className: string }> =
-  {
-    active: {
-      label: "Active",
-      className: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400",
-    },
-    pending: {
-      label: "Pending",
-      className: "bg-amber-500/15 text-amber-700 dark:text-amber-400",
-    },
-    inactive: {
-      label: "Inactive",
-      className: "bg-zinc-500/15 text-zinc-600 dark:text-zinc-400",
-    },
-  };
+const statusConfig: Record<MemberStatus, { label: string; className: string }> = {
+  active: {
+    label: "Active",
+    className: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400",
+  },
+  pending: {
+    label: "Pending",
+    className: "bg-amber-500/15 text-amber-700 dark:text-amber-400",
+  },
+  inactive: {
+    label: "Inactive",
+    className: "bg-zinc-500/15 text-zinc-600 dark:text-zinc-400",
+  },
+};
 
 function MemberAvatar({ member }: { member: TeamMember }) {
   const initials = member.name
@@ -94,9 +93,7 @@ function MemberAvatar({ member }: { member: TeamMember }) {
           : "linear-gradient(135deg, color-mix(in oklch, var(--accent-teal) 30%, transparent) 0%, color-mix(in oklch, var(--accent-teal) 10%, transparent) 100%)",
       }}
     >
-      {!member.image && (
-        <span style={{ color: "var(--accent-teal)" }}>{initials}</span>
-      )}
+      {!member.image && <span style={{ color: "var(--accent-teal)" }}>{initials}</span>}
     </div>
   );
 }
@@ -145,7 +142,7 @@ function MemberRow({
     <tr
       className={cn(
         "group animate-fade-in-up border-foreground/5 border-b transition-colors hover:bg-muted/30",
-        isCurrentUser && "bg-muted/20"
+        isCurrentUser && "bg-muted/20",
       )}
       style={{ animationDelay: `${index * 30}ms` }}
     >
@@ -155,18 +152,14 @@ function MemberRow({
           <MemberAvatar member={member} />
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <p className="truncate font-medium text-foreground">
-                {member.name}
-              </p>
+              <p className="truncate font-medium text-foreground">{member.name}</p>
               {isCurrentUser && (
                 <span className="font-medium text-[10px] text-muted-foreground uppercase tracking-wider">
                   You
                 </span>
               )}
             </div>
-            <p className="truncate text-muted-foreground text-sm">
-              {member.email}
-            </p>
+            <p className="truncate text-muted-foreground text-sm">{member.email}</p>
           </div>
         </div>
       </td>
@@ -200,7 +193,7 @@ function MemberRow({
         <span
           className={cn(
             "inline-flex items-center rounded-full px-2 py-0.5 font-medium text-xs",
-            status.className
+            status.className,
           )}
         >
           {status.label}
@@ -238,10 +231,7 @@ function MemberRow({
           <DropdownMenuContent align="end" className="w-48">
             {member.status === "pending" && member.inviteToken && (
               <>
-                <DropdownMenuItem
-                  className="gap-2"
-                  onClick={handleCopyInviteLink}
-                >
+                <DropdownMenuItem className="gap-2" onClick={handleCopyInviteLink}>
                   <IconCopy className="h-4 w-4" />
                   Copy Invite Link
                 </DropdownMenuItem>
@@ -286,10 +276,7 @@ function MemberRow({
   );
 }
 
-export function TeamMembersTable({
-  members,
-  currentUserId = "usr_001",
-}: TeamMembersTableProps) {
+export function TeamMembersTable({ members, currentUserId = "usr_001" }: TeamMembersTableProps) {
   // Sort: owner first, then admins, then members, within each group sort by name
   // Pending members go at the end
   const sortedMembers = [...members].sort((a, b) => {

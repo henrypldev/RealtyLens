@@ -46,18 +46,7 @@ const streetNames = [
   "Beach",
 ];
 
-const streetTypes = [
-  "St",
-  "Ave",
-  "Blvd",
-  "Dr",
-  "Ln",
-  "Way",
-  "Ct",
-  "Pl",
-  "Rd",
-  "Cir",
-];
+const streetTypes = ["St", "Ave", "Blvd", "Dr", "Ln", "Way", "Ct", "Pl", "Rd", "Cir"];
 
 const cities = [
   { city: "Los Angeles", state: "CA", zip: "900" },
@@ -77,12 +66,7 @@ const cities = [
   { city: "Las Vegas", state: "NV", zip: "891" },
 ];
 
-const statuses: PropertyStatus[] = [
-  "active",
-  "pending",
-  "completed",
-  "archived",
-];
+const statuses: PropertyStatus[] = ["active", "pending", "completed", "archived"];
 const allTags: PropertyTag[] = [
   "residential",
   "commercial",
@@ -146,12 +130,7 @@ function generateMockProperties(count: number): Property[] {
 // Generate 150 mock properties
 const mockProperties = generateMockProperties(150);
 
-export type SortableColumn =
-  | "address"
-  | "status"
-  | "editCount"
-  | "totalCost"
-  | "createdAt";
+export type SortableColumn = "address" | "status" | "editCount" | "totalCost" | "createdAt";
 export type SortDirection = "asc" | "desc";
 
 export interface PropertyFilters {
@@ -171,10 +150,7 @@ export interface GetPropertiesResponse {
   };
 }
 
-function filterProperties(
-  properties: Property[],
-  filters: PropertyFilters
-): Property[] {
+function filterProperties(properties: Property[], filters: PropertyFilters): Property[] {
   return properties.filter((property) => {
     // Search filter (address, city, state)
     if (filters.search) {
@@ -193,9 +169,7 @@ function filterProperties(
 
     // Tags filter (match any)
     if (filters.tags && filters.tags.length > 0) {
-      const hasMatchingTag = filters.tags.some((tag) =>
-        property.tags.includes(tag)
-      );
+      const hasMatchingTag = filters.tags.some((tag) => property.tags.includes(tag));
       if (!hasMatchingTag) return false;
     }
 
@@ -205,7 +179,7 @@ function filterProperties(
 
 function sortProperties(
   properties: Property[],
-  sort?: [SortableColumn, SortDirection]
+  sort?: [SortableColumn, SortDirection],
 ): Property[] {
   if (!sort) return properties;
 
@@ -240,7 +214,7 @@ function sortProperties(
 export function getPropertiesPage(
   cursor: string | null = null,
   limit = 20,
-  filters: PropertyFilters = {}
+  filters: PropertyFilters = {},
 ): GetPropertiesResponse {
   // Apply filters first, then sort
   const filteredProperties = filterProperties(mockProperties, filters);
@@ -267,12 +241,7 @@ export function getAllProperties(): Property[] {
 }
 
 // Export constants for filters
-export const ALL_STATUSES: PropertyStatus[] = [
-  "active",
-  "pending",
-  "completed",
-  "archived",
-];
+export const ALL_STATUSES: PropertyStatus[] = ["active", "pending", "completed", "archived"];
 export const ALL_TAGS: PropertyTag[] = [
   "residential",
   "commercial",

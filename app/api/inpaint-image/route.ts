@@ -13,11 +13,7 @@ import {
   NANO_BANANA_PRO_EDIT,
   type NanoBananaProOutput,
 } from "@/lib/fal";
-import {
-  getExtensionFromContentType,
-  getImagePath,
-  uploadImage,
-} from "@/lib/supabase";
+import { getExtensionFromContentType, getImagePath, uploadImage } from "@/lib/supabase";
 
 type EditMode = "remove" | "add";
 
@@ -40,16 +36,13 @@ export async function POST(request: NextRequest) {
     if (!(imageId && prompt)) {
       return NextResponse.json(
         { error: "Missing required fields: imageId, prompt" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     // Mask is required for remove mode
     if (mode === "remove" && !maskDataUrl) {
-      return NextResponse.json(
-        { error: "Mask is required for remove mode" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Mask is required for remove mode" }, { status: 400 });
     }
 
     // Get image record from database
@@ -73,9 +66,7 @@ export async function POST(request: NextRequest) {
       // Fetch source image
       const imageResponse = await fetch(sourceImageUrl);
       if (!imageResponse.ok) {
-        throw new Error(
-          `Failed to fetch source image: ${imageResponse.status}`
-        );
+        throw new Error(`Failed to fetch source image: ${imageResponse.status}`);
       }
       const imageBuffer = Buffer.from(await imageResponse.arrayBuffer());
       const imageMetadata = await sharp(imageBuffer).metadata();
@@ -92,7 +83,7 @@ export async function POST(request: NextRequest) {
         type: imageResponse.headers.get("content-type") || "image/jpeg",
       });
       const falImageUrl = await fal.storage.upload(
-        new File([imageBlob], "input.jpg", { type: imageBlob.type })
+        new File([imageBlob], "input.jpg", { type: imageBlob.type }),
       );
 
       console.log("Uploaded image to Fal.ai storage:", falImageUrl);
@@ -117,7 +108,7 @@ export async function POST(request: NextRequest) {
         // Upload resized mask to Fal.ai storage
         const maskBlob = new Blob([resizedMaskBuffer], { type: "image/png" });
         const falMaskUrl = await fal.storage.upload(
-          new File([maskBlob], "mask.png", { type: "image/png" })
+          new File([maskBlob], "mask.png", { type: "image/png" }),
         );
 
         console.log("Uploaded mask to Fal.ai storage:", falMaskUrl);
@@ -160,8 +151,7 @@ export async function POST(request: NextRequest) {
         console.log("Nano Banana result:", JSON.stringify(result, null, 2));
 
         // Check for result - handle both direct and wrapped response
-        const output =
-          (result as { data?: NanoBananaProOutput }).data || result;
+        const output = (result as { data?: NanoBananaProOutput }).data || result;
         if (!output.images?.[0]?.url) {
           console.error("No images in response. Full result:", result);
           throw new Error("No image returned from Nano Banana");
@@ -186,12 +176,12 @@ export async function POST(request: NextRequest) {
         image.workspaceId,
         image.projectId,
         `${newImageId}.${extension}`,
-        "result"
+        "result",
       );
       const storedResultUrl = await uploadImage(
         new Uint8Array(resultImageBuffer),
         resultPath,
-        contentType
+        contentType,
       );
 
       // Calculate version info
@@ -201,14 +191,9 @@ export async function POST(request: NextRequest) {
 
       // If replacing newer versions, delete them first
       if (replaceNewerVersions) {
-        const deletedCount = await deleteVersionsAfter(
-          rootImageId,
-          currentVersion
-        );
+        const deletedCount = await deleteVersionsAfter(rootImageId, currentVersion);
         if (deletedCount > 0) {
-          console.log(
-            `Deleted ${deletedCount} newer version(s) before creating new edit`
-          );
+          console.log(`Deleted ${deletedCount} newer version(s) before creating new edit`);
         }
       }
 
@@ -247,33 +232,23 @@ export async function POST(request: NextRequest) {
       console.error("Inpainting error:", processingError);
 
       // Log full error details for Fal.ai ApiError
-      if (
-        processingError &&
-        typeof processingError === "object" &&
-        "body" in processingError
-      ) {
+      if (processingError && typeof processingError === "object" && "body" in processingError) {
         console.error(
           "Fal.ai error body:",
-          JSON.stringify((processingError as { body: unknown }).body, null, 2)
+          JSON.stringify((processingError as { body: unknown }).body, null, 2),
         );
       }
 
       return NextResponse.json(
         {
           error: "Inpainting failed",
-          details:
-            processingError instanceof Error
-              ? processingError.message
-              : "Unknown error",
+          details: processingError instanceof Error ? processingError.message : "Unknown error",
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
   } catch (error) {
     console.error("API error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

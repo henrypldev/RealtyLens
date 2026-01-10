@@ -41,8 +41,8 @@ export default async function SettingsPage() {
       and(
         eq(invitation.workspaceId, data.workspace.id),
         isNull(invitation.acceptedAt),
-        gt(invitation.expiresAt, new Date())
-      )
+        gt(invitation.expiresAt, new Date()),
+      ),
     );
 
   // Adapt members to TeamMember format

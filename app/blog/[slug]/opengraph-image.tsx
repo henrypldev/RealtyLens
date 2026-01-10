@@ -7,11 +7,7 @@ export const alt = "Proppi Blog";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 
-export default async function Image({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
 
@@ -226,6 +222,6 @@ export default async function Image({
           style: "normal",
         },
       ],
-    }
+    },
   );
 }

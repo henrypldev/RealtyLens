@@ -56,7 +56,7 @@ function SignInForm() {
           toast.error(ctx.error.message || "Invalid email or password");
           setIsLoading(false);
         },
-      }
+      },
     );
   };
 
@@ -64,9 +64,7 @@ function SignInForm() {
     <Card>
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">Welcome back</CardTitle>
-        <CardDescription>
-          Enter your credentials to sign in to your account
-        </CardDescription>
+        <CardDescription>Enter your credentials to sign in to your account</CardDescription>
       </CardHeader>
       <CardContent>
         <form className="space-y-4" onSubmit={handleSubmit}>

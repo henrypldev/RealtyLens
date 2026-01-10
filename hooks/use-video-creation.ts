@@ -2,15 +2,8 @@
 
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import * as React from "react";
-import type {
-  MusicTrack,
-  VideoAspectRatio,
-  VideoRoomType,
-} from "@/lib/db/schema";
-import {
-  autoSequenceClips,
-  reindexSequenceOrders,
-} from "@/lib/video/room-sequence";
+import type { MusicTrack, VideoAspectRatio, VideoRoomType } from "@/lib/db/schema";
+import { autoSequenceClips, reindexSequenceOrders } from "@/lib/video/room-sequence";
 import { VIDEO_DEFAULTS, VIDEO_LIMITS } from "@/lib/video/video-constants";
 import { getVideoTemplateById } from "@/lib/video/video-templates";
 
@@ -77,9 +70,7 @@ export function useVideoCreation() {
   // Step is managed in URL for browser back/forward navigation
   const [step, setStep] = useQueryState(
     "step",
-    parseAsStringLiteral(ALL_STEPS)
-      .withDefault("select-template")
-      .withOptions({ history: "push" })
+    parseAsStringLiteral(ALL_STEPS).withDefault("select-template").withOptions({ history: "push" }),
   );
 
   const [state, setState] = React.useState<VideoCreationState>({
@@ -106,36 +97,30 @@ export function useVideoCreation() {
     setState((prev) => ({ ...prev, projectName: name }));
   }, []);
 
-  const addImages = React.useCallback(
-    (newImages: Omit<VideoImageItem, "sequenceOrder">[]) => {
-      setState((prev) => {
-        // Find the next available sequence order
-        const maxOrder = prev.images.reduce(
-          (max, img) => Math.max(max, img.sequenceOrder),
-          0
-        );
+  const addImages = React.useCallback((newImages: Omit<VideoImageItem, "sequenceOrder">[]) => {
+    setState((prev) => {
+      // Find the next available sequence order
+      const maxOrder = prev.images.reduce((max, img) => Math.max(max, img.sequenceOrder), 0);
 
-        const imagesWithOrder = newImages.map((img, i) => ({
-          ...img,
-          startImageUrl: img.url,
-          startImageId: img.id,
-          startImageGenerationId: img.imageGenerationId,
-          endImageUrl: img.url,
-          endImageId: img.id,
-          endImageGenerationId: img.imageGenerationId,
-          sequenceOrder: maxOrder + i + 1,
-          transitionType: img.transitionType || "seamless",
-        }));
-        const combined = [...prev.images, ...imagesWithOrder];
-        // Limit to max images
-        return {
-          ...prev,
-          images: combined.slice(0, VIDEO_LIMITS.MAX_IMAGES_PER_VIDEO),
-        };
-      });
-    },
-    []
-  );
+      const imagesWithOrder = newImages.map((img, i) => ({
+        ...img,
+        startImageUrl: img.url,
+        startImageId: img.id,
+        startImageGenerationId: img.imageGenerationId,
+        endImageUrl: img.url,
+        endImageId: img.id,
+        endImageGenerationId: img.imageGenerationId,
+        sequenceOrder: maxOrder + i + 1,
+        transitionType: img.transitionType || "seamless",
+      }));
+      const combined = [...prev.images, ...imagesWithOrder];
+      // Limit to max images
+      return {
+        ...prev,
+        images: combined.slice(0, VIDEO_LIMITS.MAX_IMAGES_PER_VIDEO),
+      };
+    });
+  }, []);
 
   // Specialized function for storyboard slots
   const addImageToSlot = React.useCallback(
@@ -149,33 +134,23 @@ export function useVideoCreation() {
         | "endImageGenerationId"
       >,
       slotIndex: number,
-      framesToSet: "start" | "end" | "both" = "both"
+      framesToSet: "start" | "end" | "both" = "both",
     ) => {
       setState((prev) => {
         // Remove any existing image in this slot
-        const filtered = prev.images.filter(
-          (img) => img.sequenceOrder !== slotIndex + 1
-        );
+        const filtered = prev.images.filter((img) => img.sequenceOrder !== slotIndex + 1);
 
         // Add new image at specific sequence order (1-based)
         const newImage = {
           ...image,
-          startImageUrl:
-            framesToSet === "start" || framesToSet === "both" ? image.url : "",
-          startImageId:
-            framesToSet === "start" || framesToSet === "both" ? image.id : "",
+          startImageUrl: framesToSet === "start" || framesToSet === "both" ? image.url : "",
+          startImageId: framesToSet === "start" || framesToSet === "both" ? image.id : "",
           startImageGenerationId:
-            framesToSet === "start" || framesToSet === "both"
-              ? image.imageGenerationId
-              : null,
-          endImageUrl:
-            framesToSet === "end" || framesToSet === "both" ? image.url : "",
-          endImageId:
-            framesToSet === "end" || framesToSet === "both" ? image.id : "",
+            framesToSet === "start" || framesToSet === "both" ? image.imageGenerationId : null,
+          endImageUrl: framesToSet === "end" || framesToSet === "both" ? image.url : "",
+          endImageId: framesToSet === "end" || framesToSet === "both" ? image.id : "",
           endImageGenerationId:
-            framesToSet === "end" || framesToSet === "both"
-              ? image.imageGenerationId
-              : null,
+            framesToSet === "end" || framesToSet === "both" ? image.imageGenerationId : null,
           sequenceOrder: slotIndex + 1,
           transitionType: image.transitionType || "seamless",
         };
@@ -186,19 +161,17 @@ export function useVideoCreation() {
         };
       });
     },
-    []
+    [],
   );
 
   const updateSlotImage = React.useCallback(
     (
       slotIndex: number,
       type: "start" | "end",
-      image: { id: string; url: string; imageGenerationId?: string | null }
+      image: { id: string; url: string; imageGenerationId?: string | null },
     ) => {
       setState((prev) => {
-        const existingImage = prev.images.find(
-          (img) => img.sequenceOrder === slotIndex + 1
-        );
+        const existingImage = prev.images.find((img) => img.sequenceOrder === slotIndex + 1);
         if (!existingImage) return prev;
 
         const updatedImage = { ...existingImage };
@@ -217,12 +190,12 @@ export function useVideoCreation() {
         return {
           ...prev,
           images: prev.images.map((img) =>
-            img.sequenceOrder === slotIndex + 1 ? updatedImage : img
+            img.sequenceOrder === slotIndex + 1 ? updatedImage : img,
           ),
         };
       });
     },
-    []
+    [],
   );
 
   const updateTransitionType = React.useCallback(
@@ -231,14 +204,12 @@ export function useVideoCreation() {
         return {
           ...prev,
           images: prev.images.map((img) =>
-            img.sequenceOrder === slotIndex + 1
-              ? { ...img, transitionType }
-              : img
+            img.sequenceOrder === slotIndex + 1 ? { ...img, transitionType } : img,
           ),
         };
       });
     },
-    []
+    [],
   );
 
   const removeImage = React.useCallback((id: string) => {
@@ -262,33 +233,28 @@ export function useVideoCreation() {
     (id: string, updates: Partial<Omit<VideoImageItem, "id" | "url">>) => {
       setState((prev) => ({
         ...prev,
-        images: prev.images.map((img) =>
-          img.id === id ? { ...img, ...updates } : img
-        ),
+        images: prev.images.map((img) => (img.id === id ? { ...img, ...updates } : img)),
       }));
     },
-    []
+    [],
   );
 
-  const reorderImages = React.useCallback(
-    (fromIndex: number, toIndex: number) => {
-      setState((prev) => {
-        // Only for custom mode
-        if (prev.selectedTemplateId) return prev;
+  const reorderImages = React.useCallback((fromIndex: number, toIndex: number) => {
+    setState((prev) => {
+      // Only for custom mode
+      if (prev.selectedTemplateId) return prev;
 
-        const newImages = [...prev.images];
-        const [removed] = newImages.splice(fromIndex, 1);
-        newImages.splice(toIndex, 0, removed);
-        // Re-index sequence orders
-        const reindexed = newImages.map((img, i) => ({
-          ...img,
-          sequenceOrder: i + 1,
-        }));
-        return { ...prev, images: reindexed };
-      });
-    },
-    []
-  );
+      const newImages = [...prev.images];
+      const [removed] = newImages.splice(fromIndex, 1);
+      newImages.splice(toIndex, 0, removed);
+      // Re-index sequence orders
+      const reindexed = newImages.map((img, i) => ({
+        ...img,
+        sequenceOrder: i + 1,
+      }));
+      return { ...prev, images: reindexed };
+    });
+  }, []);
 
   const autoArrangeByRoomType = React.useCallback(() => {
     setState((prev) => {
@@ -324,9 +290,7 @@ export function useVideoCreation() {
   }, []);
 
   const goToNextStep = React.useCallback(() => {
-    const stepList = state.selectedTemplateId
-      ? TEMPLATE_FLOW_STEPS
-      : CUSTOM_FLOW_STEPS;
+    const stepList = state.selectedTemplateId ? TEMPLATE_FLOW_STEPS : CUSTOM_FLOW_STEPS;
     const currentIndex = stepList.indexOf(step);
     if (currentIndex < stepList.length - 1) {
       setStep(stepList[currentIndex + 1]);
@@ -334,9 +298,7 @@ export function useVideoCreation() {
   }, [step, state.selectedTemplateId, setStep]);
 
   const goToPreviousStep = React.useCallback(() => {
-    const stepList = state.selectedTemplateId
-      ? TEMPLATE_FLOW_STEPS
-      : CUSTOM_FLOW_STEPS;
+    const stepList = state.selectedTemplateId ? TEMPLATE_FLOW_STEPS : CUSTOM_FLOW_STEPS;
     const currentIndex = stepList.indexOf(step);
     if (currentIndex > 0) {
       setStep(stepList[currentIndex - 1]);

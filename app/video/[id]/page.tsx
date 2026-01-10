@@ -34,10 +34,7 @@ export default async function VideoDetailPage({ params }: PageProps) {
   const videoData = await getVideoProjectById(id);
 
   // Check if video exists and belongs to user's workspace
-  if (
-    !videoData ||
-    videoData.videoProject.workspaceId !== userData.workspace.id
-  ) {
+  if (!videoData || videoData.videoProject.workspaceId !== userData.workspace.id) {
     return (
       <div className="flex min-h-[400px] flex-col items-center justify-center gap-4 px-4 text-center">
         <IconMovie className="h-16 w-16 text-muted-foreground/50" />

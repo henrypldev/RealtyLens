@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  IconLayoutGrid,
-  IconPlus,
-  IconSparkles,
-  IconTable,
-} from "@tabler/icons-react";
+import { IconLayoutGrid, IconPlus, IconSparkles, IconTable } from "@tabler/icons-react";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import { useState } from "react";
 import { EmptyProjects } from "@/components/dashboard/empty-projects";
@@ -34,7 +29,7 @@ function ViewToggle({
           "flex h-8 w-8 items-center justify-center rounded-md transition-all duration-200",
           view === "grid"
             ? "bg-background shadow-sm ring-1 ring-foreground/5"
-            : "text-muted-foreground hover:text-foreground"
+            : "text-muted-foreground hover:text-foreground",
         )}
         onClick={() => onViewChange("grid")}
       >
@@ -49,7 +44,7 @@ function ViewToggle({
           "flex h-8 w-8 items-center justify-center rounded-md transition-all duration-200",
           view === "table"
             ? "bg-background shadow-sm ring-1 ring-foreground/5"
-            : "text-muted-foreground hover:text-foreground"
+            : "text-muted-foreground hover:text-foreground",
         )}
         onClick={() => onViewChange("table")}
       >
@@ -76,7 +71,7 @@ export function DashboardContent({ projects, stats }: DashboardContentProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [view, setView] = useQueryState(
     "view",
-    parseAsStringLiteral(["grid", "table"] as const).withDefault("grid")
+    parseAsStringLiteral(["grid", "table"] as const).withDefault("grid"),
   );
 
   const hasProjects = projects.length > 0;

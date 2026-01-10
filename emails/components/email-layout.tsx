@@ -1,13 +1,4 @@
-import {
-  Body,
-  Container,
-  Head,
-  Hr,
-  Html,
-  Preview,
-  Section,
-  Text,
-} from "@react-email/components";
+import { Body, Container, Head, Hr, Html, Preview, Section, Text } from "@react-email/components";
 import type * as React from "react";
 
 interface EmailLayoutProps {
@@ -33,9 +24,7 @@ export function EmailLayout({ preview, children }: EmailLayoutProps) {
           {/* Footer */}
           <Hr style={hr} />
           <Section style={footer}>
-            <Text style={footerText}>
-              Proppi - AI-powered real estate photo editor
-            </Text>
+            <Text style={footerText}>Proppi - AI-powered real estate photo editor</Text>
             <Text style={footerText}>
               © {new Date().getFullYear()} Proppi. All rights reserved.
             </Text>

@@ -3,10 +3,7 @@
 import { IconArrowDown, IconArrowUp } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import type {
-  ProjectSortableColumn,
-  SortDirection,
-} from "@/hooks/use-project-filters";
+import type { ProjectSortableColumn, SortDirection } from "@/hooks/use-project-filters";
 
 interface SortButtonProps {
   label: string;
@@ -32,12 +29,8 @@ function SortButton({
       variant="ghost"
     >
       <span>{label}</span>
-      {isActive && currentSortDirection === "asc" && (
-        <IconArrowUp className="h-4 w-4" />
-      )}
-      {isActive && currentSortDirection === "desc" && (
-        <IconArrowDown className="h-4 w-4" />
-      )}
+      {isActive && currentSortDirection === "asc" && <IconArrowUp className="h-4 w-4" />}
+      {isActive && currentSortDirection === "desc" && <IconArrowDown className="h-4 w-4" />}
     </Button>
   );
 }
@@ -146,9 +139,7 @@ export function ProjectsTableHeader({
                   sortField={column.sortField}
                 />
               ) : (
-                <span className="font-medium text-muted-foreground">
-                  {column.label}
-                </span>
+                <span className="font-medium text-muted-foreground">{column.label}</span>
               )}
             </TableHead>
           );

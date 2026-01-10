@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  IconFileSearch,
-  IconMessageCircle,
-  IconSearch,
-} from "@tabler/icons-react";
+import { IconFileSearch, IconMessageCircle, IconSearch } from "@tabler/icons-react";
 import Link from "next/link";
 import { useMemo } from "react";
 import { useHelpFilters } from "@/hooks/use-help-filters";
@@ -36,9 +32,7 @@ export function HelpPage({
     const searchLower = search.toLowerCase();
     return articles.filter((article) => {
       const matchesTitle = article.title.toLowerCase().includes(searchLower);
-      const matchesDescription = article.description
-        .toLowerCase()
-        .includes(searchLower);
+      const matchesDescription = article.description.toLowerCase().includes(searchLower);
       return matchesTitle || matchesDescription;
     });
   }, [articles, search]);
@@ -46,10 +40,7 @@ export function HelpPage({
   const isSearching = search && search.trim().length > 0;
 
   return (
-    <div
-      className="min-h-screen"
-      style={{ backgroundColor: "var(--landing-bg)" }}
-    >
+    <div className="min-h-screen" style={{ backgroundColor: "var(--landing-bg)" }}>
       <LandingNav />
 
       <main>
@@ -139,10 +130,7 @@ export function HelpPage({
                       style={{ color: "var(--landing-text-muted)" }}
                     />
                   </div>
-                  <h3
-                    className="font-semibold text-lg"
-                    style={{ color: "var(--landing-text)" }}
-                  >
+                  <h3 className="font-semibold text-lg" style={{ color: "var(--landing-text)" }}>
                     No articles found
                   </h3>
                   <p
@@ -159,10 +147,7 @@ export function HelpPage({
 
         {/* Popular Articles */}
         {!isSearching && popularArticles.length > 0 && (
-          <section
-            className="px-6 py-16"
-            style={{ backgroundColor: "var(--landing-bg-alt)" }}
-          >
+          <section className="px-6 py-16" style={{ backgroundColor: "var(--landing-bg-alt)" }}>
             <div className="mx-auto max-w-4xl">
               <h2
                 className="mb-8 text-center font-semibold text-sm uppercase tracking-wider"
@@ -172,10 +157,7 @@ export function HelpPage({
               </h2>
               <div className="grid gap-3 sm:grid-cols-2">
                 {popularArticles.map((article) => (
-                  <HelpArticleCard
-                    article={article}
-                    key={`${article.category}-${article.slug}`}
-                  />
+                  <HelpArticleCard article={article} key={`${article.category}-${article.slug}`} />
                 ))}
               </div>
             </div>
@@ -222,10 +204,7 @@ export function HelpPage({
                 border: "1px solid var(--landing-border)",
               }}
             >
-              <IconMessageCircle
-                className="size-7"
-                style={{ color: "var(--landing-accent)" }}
-              />
+              <IconMessageCircle className="size-7" style={{ color: "var(--landing-accent)" }} />
             </div>
             <h2
               className="font-bold text-2xl tracking-tight"
@@ -237,8 +216,7 @@ export function HelpPage({
               className="mx-auto mt-3 max-w-md text-base leading-relaxed"
               style={{ color: "var(--landing-text-muted)" }}
             >
-              Can&apos;t find what you&apos;re looking for? Our support team is
-              here to help.
+              Can&apos;t find what you&apos;re looking for? Our support team is here to help.
             </p>
             <Link
               className="mt-6 inline-flex h-11 items-center rounded-full px-6 font-medium text-sm transition-all duration-200 hover:scale-[1.03]"

@@ -10,121 +10,57 @@ import { getProjectById, getWorkspaceById } from "@/lib/db/queries";
 import {
   type PaymentMethod,
   type PaymentStatus,
+  polarCustomer,
   projectPayment,
-  stripeCustomer,
-  workspace,
 } from "@/lib/db/schema";
-import { getBaseUrl, STRIPE_CONFIG, stripe } from "@/lib/stripe";
-import { createProjectInvoiceLineItemAction } from "./billing";
+import { getBaseUrl, POLAR_CONFIG, polar } from "@/lib/polar";
 
-// ============================================================================
-// Types
-// ============================================================================
+export type ActionResult<T> = { success: true; data: T } | { success: false; error: string };
 
-export type ActionResult<T> =
-  | { success: true; data: T }
-  | { success: false; error: string };
-
-// ============================================================================
-// Stripe Customer Functions
-// ============================================================================
-
-/**
- * Get or create a Stripe customer for a workspace
- */
-export async function getOrCreateStripeCustomer(
-  workspaceId: string
-): Promise<ActionResult<{ stripeCustomerId: string }>> {
+export async function getOrCreatePolarCustomer(
+  workspaceId: string,
+): Promise<ActionResult<{ polarCustomerId: string }>> {
   try {
-    // Check if we already have a Stripe customer
-    const existing = await db.query.stripeCustomer.findFirst({
-      where: eq(stripeCustomer.workspaceId, workspaceId),
+    const existing = await db.query.polarCustomer.findFirst({
+      where: eq(polarCustomer.workspaceId, workspaceId),
     });
 
     if (existing) {
       return {
         success: true,
-        data: { stripeCustomerId: existing.stripeCustomerId },
+        data: { polarCustomerId: existing.polarCustomerId },
       };
     }
 
-    // Get workspace details
     const workspaceData = await getWorkspaceById(workspaceId);
     if (!workspaceData) {
       return { success: false, error: "Workspace not found" };
     }
 
-    // Create Stripe customer
-    const customer = await stripe.customers.create({
+    const result = await polar.customers.create({
+      organizationId: POLAR_CONFIG.ORGANIZATION_ID,
+      email: workspaceData.contactEmail || `workspace-${workspaceId}@proppi.app`,
       name: workspaceData.name,
-      email: workspaceData.contactEmail || undefined,
+      externalId: workspaceId,
       metadata: {
         workspaceId,
         organizationNumber: workspaceData.organizationNumber || "",
       },
     });
 
-    // Save to database
-    await db.insert(stripeCustomer).values({
+    await db.insert(polarCustomer).values({
       id: nanoid(),
       workspaceId,
-      stripeCustomerId: customer.id,
+      polarCustomerId: result.id,
     });
 
-    return { success: true, data: { stripeCustomerId: customer.id } };
+    return { success: true, data: { polarCustomerId: result.id } };
   } catch (error) {
-    console.error("[payments:getOrCreateStripeCustomer] Error:", error);
-    return { success: false, error: "Failed to create Stripe customer" };
+    console.error("[payments:getOrCreatePolarCustomer] Error:", error);
+    return { success: false, error: "Failed to create Polar customer" };
   }
 }
 
-// ============================================================================
-// Invoice Eligibility Functions
-// ============================================================================
-
-/**
- * Check if a workspace can use invoice billing
- * Requirements: has organization number + invited by admin + marked as eligible
- */
-export async function canUseInvoiceBilling(
-  workspaceId: string
-): Promise<{ eligible: boolean; reason?: string }> {
-  try {
-    const workspaceData = await getWorkspaceById(workspaceId);
-
-    if (!workspaceData) {
-      return { eligible: false, reason: "Workspace not found" };
-    }
-
-    // Must be invited by admin
-    if (!workspaceData.invitedByAdmin) {
-      return { eligible: false, reason: "Not an invited customer" };
-    }
-
-    // Must have organization number (Norwegian business)
-    if (!workspaceData.organizationNumber) {
-      return { eligible: false, reason: "No organization number" };
-    }
-
-    // Must be marked as invoice eligible
-    if (!workspaceData.invoiceEligible) {
-      return { eligible: false, reason: "Not approved for invoicing" };
-    }
-
-    return { eligible: true };
-  } catch (error) {
-    console.error("[payments:canUseInvoiceBilling] Error:", error);
-    return { eligible: false, reason: "Failed to check eligibility" };
-  }
-}
-
-// ============================================================================
-// Project Payment Functions
-// ============================================================================
-
-/**
- * Get payment status for a project
- */
 export async function getProjectPaymentStatus(projectId: string): Promise<{
   isPaid: boolean;
   method?: PaymentMethod;
@@ -150,26 +86,21 @@ export async function getProjectPaymentStatus(projectId: string): Promise<{
   }
 }
 
-/**
- * Create a Stripe checkout session for a project
- */
-export async function createStripeCheckoutSession(
-  projectId: string
-): Promise<ActionResult<{ url: string; sessionId: string }>> {
+export async function createPolarCheckoutSession(
+  projectId: string,
+  productType: "image" | "video" = "image",
+): Promise<ActionResult<{ url: string; checkoutId: string }>> {
   try {
-    // Get session
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session?.user) {
       return { success: false, error: "Unauthorized" };
     }
 
-    // Get project
     const projectData = await getProjectById(projectId);
     if (!projectData) {
       return { success: false, error: "Project not found" };
     }
 
-    // Check if already paid
     const existingPayment = await db.query.projectPayment.findFirst({
       where: eq(projectPayment.projectId, projectId),
     });
@@ -178,44 +109,37 @@ export async function createStripeCheckoutSession(
       return { success: false, error: "Project already paid" };
     }
 
-    // Get or create Stripe customer
-    const customerResult = await getOrCreateStripeCustomer(
-      projectData.project.workspaceId
-    );
-    if (!customerResult.success) {
-      return customerResult;
+    const workspaceData = await getWorkspaceById(projectData.project.workspaceId);
+    if (!workspaceData) {
+      return { success: false, error: "Workspace not found" };
     }
 
     const baseUrl = getBaseUrl();
+    const productId =
+      productType === "video" ? POLAR_CONFIG.PRODUCT_ID_VIDEO : POLAR_CONFIG.PRODUCT_ID_IMAGE;
 
-    // Create checkout session with setup_future_usage to save card
-    const checkoutSession = await stripe.checkout.sessions.create({
-      customer: customerResult.data.stripeCustomerId,
-      mode: "payment",
-      payment_intent_data: {
-        setup_future_usage: "off_session", // Save card for future payments
-      },
-      line_items: [
-        {
-          price: STRIPE_CONFIG.PRICE_PROJECT_USD,
-          quantity: 1,
-        },
-      ],
-      success_url: `${baseUrl}/dashboard/${projectId}?payment=success`,
-      cancel_url: `${baseUrl}/dashboard/${projectId}?payment=cancelled`,
+    const checkout = await polar.checkouts.create({
+      products: [productId],
+      successUrl: `${baseUrl}/dashboard/${projectId}?payment=success`,
+      customerEmail:
+        workspaceData.contactEmail ||
+        session.user.email ||
+        `workspace-${projectData.project.workspaceId}@proppi.app`,
+      customerName: workspaceData.name,
+      customerExternalId: projectData.project.workspaceId,
       metadata: {
         projectId,
         workspaceId: projectData.project.workspaceId,
         userId: session.user.id,
+        productType,
       },
     });
 
-    // Create or update payment record
     if (existingPayment) {
       await db
         .update(projectPayment)
         .set({
-          stripeCheckoutSessionId: checkoutSession.id,
+          polarCheckoutId: checkout.id,
           status: "pending",
           updatedAt: new Date(),
         })
@@ -225,9 +149,12 @@ export async function createStripeCheckoutSession(
         id: nanoid(),
         projectId,
         workspaceId: projectData.project.workspaceId,
-        paymentMethod: "stripe",
-        stripeCheckoutSessionId: checkoutSession.id,
-        amountCents: STRIPE_CONFIG.PROJECT_PRICE_USD_CENTS,
+        paymentMethod: "polar",
+        polarCheckoutId: checkout.id,
+        amountCents:
+          productType === "video"
+            ? POLAR_CONFIG.VIDEO_PRICE_USD_CENTS
+            : POLAR_CONFIG.PROJECT_PRICE_USD_CENTS,
         currency: "usd",
         status: "pending",
       });
@@ -236,112 +163,34 @@ export async function createStripeCheckoutSession(
     return {
       success: true,
       data: {
-        url: checkoutSession.url!,
-        sessionId: checkoutSession.id,
+        url: checkout.url,
+        checkoutId: checkout.id,
       },
     };
   } catch (error) {
-    console.error("[payments:createStripeCheckoutSession] Error:", error);
+    console.error("[payments:createPolarCheckoutSession] Error:", error);
     return { success: false, error: "Failed to create checkout session" };
   }
 }
 
-/**
- * Create invoice payment for eligible workspace
- * This creates a line item and marks the project as paid immediately
- */
-export async function createInvoicePayment(
-  projectId: string
-): Promise<ActionResult<{ paymentId: string }>> {
-  try {
-    // Get session
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session?.user) {
-      return { success: false, error: "Unauthorized" };
-    }
-
-    // Get project
-    const projectData = await getProjectById(projectId);
-    if (!projectData) {
-      return { success: false, error: "Project not found" };
-    }
-
-    // Check if workspace is invoice eligible
-    const eligibility = await canUseInvoiceBilling(
-      projectData.project.workspaceId
-    );
-    if (!eligibility.eligible) {
-      return {
-        success: false,
-        error: eligibility.reason || "Not eligible for invoicing",
-      };
-    }
-
-    // Check if already paid
-    const existingPayment = await db.query.projectPayment.findFirst({
-      where: eq(projectPayment.projectId, projectId),
-    });
-
-    if (existingPayment?.status === "completed") {
-      return { success: false, error: "Project already paid" };
-    }
-
-    // Create invoice line item
-    const lineItemResult = await createProjectInvoiceLineItemAction(
-      projectData.project.workspaceId,
-      projectId,
-      projectData.project.name
-    );
-
-    if (!lineItemResult.success) {
-      return { success: false, error: lineItemResult.error };
-    }
-
-    // Create payment record (marked as completed for invoice customers)
-    const paymentId = nanoid();
-    await db.insert(projectPayment).values({
-      id: paymentId,
-      projectId,
-      workspaceId: projectData.project.workspaceId,
-      paymentMethod: "invoice",
-      invoiceLineItemId: lineItemResult.data.id,
-      amountCents: STRIPE_CONFIG.PROJECT_PRICE_NOK_ORE, // In ore (same as cents concept)
-      currency: "nok",
-      status: "completed", // Invoice customers pay later, but can process immediately
-      paidAt: new Date(),
-    });
-
-    revalidatePath(`/dashboard/${projectId}`);
-    return { success: true, data: { paymentId } };
-  } catch (error) {
-    console.error("[payments:createInvoicePayment] Error:", error);
-    return { success: false, error: "Failed to create invoice payment" };
-  }
-}
-
-/**
- * Handle successful Stripe payment (called from webhook)
- */
-export async function handleStripePaymentSuccess(
-  checkoutSessionId: string,
-  paymentIntentId: string
+export async function handlePolarOrderPaid(
+  checkoutId: string,
+  orderId: string,
 ): Promise<ActionResult<{ projectId: string }>> {
   try {
-    // Find the payment record
     const payment = await db.query.projectPayment.findFirst({
-      where: eq(projectPayment.stripeCheckoutSessionId, checkoutSessionId),
+      where: eq(projectPayment.polarCheckoutId, checkoutId),
     });
 
     if (!payment) {
       return { success: false, error: "Payment record not found" };
     }
 
-    // Update payment status
     await db
       .update(projectPayment)
       .set({
         status: "completed",
-        stripePaymentIntentId: paymentIntentId,
+        polarOrderId: orderId,
         paidAt: new Date(),
         updatedAt: new Date(),
       })
@@ -350,28 +199,23 @@ export async function handleStripePaymentSuccess(
     revalidatePath(`/dashboard/${payment.projectId}`);
     return { success: true, data: { projectId: payment.projectId } };
   } catch (error) {
-    console.error("[payments:handleStripePaymentSuccess] Error:", error);
+    console.error("[payments:handlePolarOrderPaid] Error:", error);
     return { success: false, error: "Failed to handle payment success" };
   }
 }
 
-/**
- * Handle failed/expired Stripe checkout (called from webhook)
- */
-export async function handleStripePaymentFailure(
-  checkoutSessionId: string
+export async function handlePolarPaymentFailure(
+  checkoutId: string,
 ): Promise<ActionResult<{ projectId: string }>> {
   try {
-    // Find the payment record
     const payment = await db.query.projectPayment.findFirst({
-      where: eq(projectPayment.stripeCheckoutSessionId, checkoutSessionId),
+      where: eq(projectPayment.polarCheckoutId, checkoutId),
     });
 
     if (!payment) {
       return { success: false, error: "Payment record not found" };
     }
 
-    // Update payment status
     await db
       .update(projectPayment)
       .set({
@@ -383,57 +227,10 @@ export async function handleStripePaymentFailure(
     revalidatePath(`/dashboard/${payment.projectId}`);
     return { success: true, data: { projectId: payment.projectId } };
   } catch (error) {
-    console.error("[payments:handleStripePaymentFailure] Error:", error);
+    console.error("[payments:handlePolarPaymentFailure] Error:", error);
     return { success: false, error: "Failed to handle payment failure" };
   }
 }
-
-// ============================================================================
-// Admin Functions
-// ============================================================================
-
-/**
- * Toggle invoice eligibility for a workspace (admin only)
- */
-export async function setWorkspaceInvoiceEligibility(
-  workspaceId: string,
-  eligible: boolean
-): Promise<ActionResult<{ success: boolean }>> {
-  try {
-    // Get session and verify admin
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session?.user) {
-      return { success: false, error: "Unauthorized" };
-    }
-
-    // Check if user is system admin
-    const { verifySystemAdmin } = await import("@/lib/admin-auth");
-    const adminCheck = await verifySystemAdmin();
-    if (adminCheck.error) {
-      return { success: false, error: adminCheck.error };
-    }
-
-    // Update workspace
-    await db
-      .update(workspace)
-      .set({
-        invoiceEligible: eligible,
-        invoiceEligibleAt: eligible ? new Date() : null,
-        updatedAt: new Date(),
-      })
-      .where(eq(workspace.id, workspaceId));
-
-    revalidatePath(`/admin/workspaces/${workspaceId}`);
-    return { success: true, data: { success: true } };
-  } catch (error) {
-    console.error("[payments:setWorkspaceInvoiceEligibility] Error:", error);
-    return { success: false, error: "Failed to update invoice eligibility" };
-  }
-}
-
-// ============================================================================
-// Saved Payment Methods Functions
-// ============================================================================
 
 export interface SavedPaymentMethod {
   id: string;
@@ -443,163 +240,50 @@ export interface SavedPaymentMethod {
   expYear: number | null;
 }
 
-/**
- * Get saved payment methods for a workspace
- */
 export async function getWorkspacePaymentMethods(
-  workspaceId: string
+  workspaceId: string,
 ): Promise<ActionResult<{ paymentMethods: SavedPaymentMethod[] }>> {
   try {
-    // Get Stripe customer for workspace
-    const customerRecord = await db.query.stripeCustomer.findFirst({
-      where: eq(stripeCustomer.workspaceId, workspaceId),
+    const customerRecord = await db.query.polarCustomer.findFirst({
+      where: eq(polarCustomer.workspaceId, workspaceId),
     });
 
     if (!customerRecord) {
       return { success: true, data: { paymentMethods: [] } };
     }
 
-    // List payment methods from Stripe
-    const paymentMethods = await stripe.paymentMethods.list({
-      customer: customerRecord.stripeCustomerId,
-      type: "card",
+    const customerSession = await polar.customerSessions.create({
+      customerId: customerRecord.polarCustomerId,
     });
 
-    return {
-      success: true,
-      data: {
-        paymentMethods: paymentMethods.data.map((pm) => ({
-          id: pm.id,
-          brand: pm.card?.brand || null,
-          last4: pm.card?.last4 || null,
-          expMonth: pm.card?.exp_month || null,
-          expYear: pm.card?.exp_year || null,
-        })),
-      },
-    };
-  } catch (error) {
-    console.error("[payments:getWorkspacePaymentMethods] Error:", error);
-    return { success: false, error: "Failed to get payment methods" };
-  }
-}
+    const paymentMethods = await polar.customerPortal.customers.listPaymentMethods(
+      { customerSession: customerSession.token },
+      {},
+    );
 
-/**
- * Charge a project using a saved payment method (off-session)
- */
-export async function chargeWithSavedPaymentMethod(
-  projectId: string,
-  paymentMethodId: string
-): Promise<ActionResult<{ status: string; paymentIntentId: string }>> {
-  try {
-    // Get session
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session?.user) {
-      return { success: false, error: "Unauthorized" };
-    }
-
-    // Get project
-    const projectData = await getProjectById(projectId);
-    if (!projectData) {
-      return { success: false, error: "Project not found" };
-    }
-
-    // Check if already paid
-    const existingPayment = await db.query.projectPayment.findFirst({
-      where: eq(projectPayment.projectId, projectId),
-    });
-
-    if (existingPayment?.status === "completed") {
-      return { success: false, error: "Project already paid" };
-    }
-
-    // Get Stripe customer
-    const customerRecord = await db.query.stripeCustomer.findFirst({
-      where: eq(stripeCustomer.workspaceId, projectData.project.workspaceId),
-    });
-
-    if (!customerRecord) {
-      return { success: false, error: "No Stripe customer found" };
-    }
-
-    // Create PaymentIntent with saved payment method
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: STRIPE_CONFIG.PROJECT_PRICE_USD_CENTS,
-      currency: "usd",
-      customer: customerRecord.stripeCustomerId,
-      payment_method: paymentMethodId,
-      off_session: true,
-      confirm: true,
-      metadata: {
-        projectId,
-        workspaceId: projectData.project.workspaceId,
-        userId: session.user.id,
-      },
-    });
-
-    const isSucceeded = paymentIntent.status === "succeeded";
-
-    // Create or update payment record
-    if (existingPayment) {
-      await db
-        .update(projectPayment)
-        .set({
-          stripePaymentIntentId: paymentIntent.id,
-          status: isSucceeded ? "completed" : "pending",
-          paidAt: isSucceeded ? new Date() : null,
-          updatedAt: new Date(),
-        })
-        .where(eq(projectPayment.id, existingPayment.id));
-    } else {
-      await db.insert(projectPayment).values({
-        id: nanoid(),
-        projectId,
-        workspaceId: projectData.project.workspaceId,
-        paymentMethod: "stripe",
-        stripePaymentIntentId: paymentIntent.id,
-        amountCents: STRIPE_CONFIG.PROJECT_PRICE_USD_CENTS,
-        currency: "usd",
-        status: isSucceeded ? "completed" : "pending",
-        paidAt: isSucceeded ? new Date() : null,
-      });
-    }
-
-    // If payment succeeded, trigger processing immediately
-    if (isSucceeded) {
-      const { triggerProjectProcessing } = await import("@/lib/actions/images");
-      await triggerProjectProcessing(projectId);
-    }
-
-    revalidatePath(`/dashboard/${projectId}`);
-    return {
-      success: true,
-      data: { status: paymentIntent.status, paymentIntentId: paymentIntent.id },
-    };
-  } catch (error) {
-    console.error("[payments:chargeWithSavedPaymentMethod] Error:", error);
-
-    // Handle specific Stripe errors
-    if (error instanceof Error && "type" in error) {
-      const stripeError = error as { type: string; message: string };
-      if (stripeError.type === "StripeCardError") {
-        return { success: false, error: stripeError.message };
+    const methods: SavedPaymentMethod[] = [];
+    for await (const page of paymentMethods) {
+      for (const pm of page.items || []) {
+        if (pm.type === "card" && pm.card) {
+          methods.push({
+            id: pm.stripePaymentMethodId || pm.id || "",
+            brand: pm.card.brand || null,
+            last4: pm.card.last4 || null,
+            expMonth: pm.card.expMonth || null,
+            expYear: pm.card.expYear || null,
+          });
+        }
       }
     }
 
-    return { success: false, error: "Failed to charge payment method" };
+    return { success: true, data: { paymentMethods: methods } };
+  } catch (error) {
+    console.error("[payments:getWorkspacePaymentMethods] Error:", error);
+    return { success: true, data: { paymentMethods: [] } };
   }
 }
 
-// ============================================================================
-// Billing Portal
-// ============================================================================
-
-/**
- * Create a Stripe Billing Portal session for the user's workspace
- * Allows users to manage payment methods and view invoice history
- */
-export async function createBillingPortalSession(): Promise<
-  ActionResult<{ url: string }>
-> {
+export async function createBillingPortalSession(): Promise<ActionResult<{ url: string }>> {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session?.user) {
@@ -611,19 +295,17 @@ export async function createBillingPortalSession(): Promise<
       return { success: false, error: "No workspace found" };
     }
 
-    // Get or create Stripe customer
-    const customerResult = await getOrCreateStripeCustomer(workspaceId);
+    const customerResult = await getOrCreatePolarCustomer(workspaceId);
     if (!customerResult.success) {
       return { success: false, error: customerResult.error };
     }
 
-    // Create billing portal session
-    const portalSession = await stripe.billingPortal.sessions.create({
-      customer: customerResult.data.stripeCustomerId,
-      return_url: `${getBaseUrl()}/dashboard/settings`,
+    const customerSession = await polar.customerSessions.create({
+      customerId: customerResult.data.polarCustomerId,
+      returnUrl: `${getBaseUrl()}/dashboard/settings`,
     });
 
-    return { success: true, data: { url: portalSession.url } };
+    return { success: true, data: { url: customerSession.customerPortalUrl } };
   } catch (error) {
     console.error("[payments:createBillingPortalSession] Error:", error);
     return { success: false, error: "Failed to create billing portal session" };

@@ -3,10 +3,7 @@
 import { IconArrowDown, IconArrowUp } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import type {
-  SortableUserColumn,
-  SortDirection,
-} from "@/hooks/use-admin-user-filters";
+import type { SortableUserColumn, SortDirection } from "@/hooks/use-admin-user-filters";
 
 interface SortButtonProps {
   label: string;
@@ -32,12 +29,8 @@ function SortButton({
       variant="ghost"
     >
       <span>{label}</span>
-      {isActive && currentSortDirection === "asc" && (
-        <IconArrowUp className="h-4 w-4" />
-      )}
-      {isActive && currentSortDirection === "desc" && (
-        <IconArrowDown className="h-4 w-4" />
-      )}
+      {isActive && currentSortDirection === "asc" && <IconArrowUp className="h-4 w-4" />}
+      {isActive && currentSortDirection === "desc" && <IconArrowDown className="h-4 w-4" />}
     </Button>
   );
 }
@@ -109,11 +102,7 @@ interface UsersTableHeaderProps {
   onSort: (column: SortableUserColumn) => void;
 }
 
-export function UsersTableHeader({
-  sortColumn,
-  sortDirection,
-  onSort,
-}: UsersTableHeaderProps) {
+export function UsersTableHeader({ sortColumn, sortDirection, onSort }: UsersTableHeaderProps) {
   return (
     <TableHeader>
       <TableRow className="flex hover:bg-transparent">
@@ -142,9 +131,7 @@ export function UsersTableHeader({
                   sortField={column.sortField}
                 />
               ) : (
-                <span className="font-medium text-muted-foreground">
-                  {column.label}
-                </span>
+                <span className="font-medium text-muted-foreground">{column.label}</span>
               )}
             </TableHead>
           );

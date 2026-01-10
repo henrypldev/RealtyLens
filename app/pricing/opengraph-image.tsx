@@ -259,6 +259,6 @@ export default async function Image() {
           style: "normal",
         },
       ],
-    }
+    },
   );
 }

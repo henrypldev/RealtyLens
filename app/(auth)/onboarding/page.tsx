@@ -23,11 +23,7 @@ export default async function OnboardingPage() {
   }
 
   // Get user with workspace
-  const currentUser = await db
-    .select()
-    .from(user)
-    .where(eq(user.id, session.user.id))
-    .limit(1);
+  const currentUser = await db.select().from(user).where(eq(user.id, session.user.id)).limit(1);
 
   if (!(currentUser.length && currentUser[0].workspaceId)) {
     // This shouldn't happen, but handle gracefully

@@ -17,10 +17,7 @@ import {
 import type { AdminUserRow, UserRole, UserStatus } from "@/lib/types/admin";
 
 // Role badge variants
-const roleVariantMap: Record<
-  UserRole,
-  "role-owner" | "role-admin" | "role-member"
-> = {
+const roleVariantMap: Record<UserRole, "role-owner" | "role-admin" | "role-member"> = {
   owner: "role-owner",
   admin: "role-admin",
   member: "role-member",
@@ -33,14 +30,12 @@ const roleLabelMap: Record<UserRole, string> = {
 };
 
 // Status badge variants
-const statusVariantMap: Record<
-  UserStatus,
-  "status-active" | "status-pending" | "status-inactive"
-> = {
-  active: "status-active",
-  pending: "status-pending",
-  inactive: "status-inactive",
-};
+const statusVariantMap: Record<UserStatus, "status-active" | "status-pending" | "status-inactive"> =
+  {
+    active: "status-active",
+    pending: "status-pending",
+    inactive: "status-inactive",
+  };
 
 const statusLabelMap: Record<UserStatus, string> = {
   active: "Active",
@@ -50,15 +45,7 @@ const statusLabelMap: Record<UserStatus, string> = {
 
 // Memoized cell components
 const UserCell = memo(
-  ({
-    name,
-    email,
-    image,
-  }: {
-    name: string;
-    email: string;
-    image: string | null;
-  }) => {
+  ({ name, email, image }: { name: string; email: string; image: string | null }) => {
     const initials = name
       .split(" ")
       .map((n) => n[0])
@@ -70,19 +57,15 @@ const UserCell = memo(
       <div className="flex min-w-0 items-center gap-2.5">
         <Avatar className="h-8 w-8 shrink-0">
           {image && <AvatarImage alt={name} src={image} />}
-          <AvatarFallback className="font-medium text-[10px]">
-            {initials}
-          </AvatarFallback>
+          <AvatarFallback className="font-medium text-[10px]">{initials}</AvatarFallback>
         </Avatar>
         <div className="flex min-w-0 flex-col">
           <span className="truncate font-medium">{name}</span>
-          <span className="truncate text-muted-foreground text-xs">
-            {email}
-          </span>
+          <span className="truncate text-muted-foreground text-xs">{email}</span>
         </div>
       </div>
     );
-  }
+  },
 );
 UserCell.displayName = "UserCell";
 
@@ -106,41 +89,39 @@ const ImagesCell = memo(({ count }: { count: number }) => (
 ));
 ImagesCell.displayName = "ImagesCell";
 
-const DateCell = memo(
-  ({ date, relative }: { date: Date | null; relative?: boolean }) => {
-    if (!date) {
-      return <span className="text-muted-foreground text-sm">Never</span>;
+const DateCell = memo(({ date, relative }: { date: Date | null; relative?: boolean }) => {
+  if (!date) {
+    return <span className="text-muted-foreground text-sm">Never</span>;
+  }
+
+  if (relative) {
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60_000);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    let formatted: string;
+    if (diffMins < 1) formatted = "just now";
+    else if (diffMins < 60) formatted = `${diffMins}m ago`;
+    else if (diffHours < 24) formatted = `${diffHours}h ago`;
+    else if (diffDays < 7) formatted = `${diffDays}d ago`;
+    else {
+      formatted = new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric",
+      }).format(date);
     }
-
-    if (relative) {
-      const now = new Date();
-      const diffMs = now.getTime() - date.getTime();
-      const diffMins = Math.floor(diffMs / 60_000);
-      const diffHours = Math.floor(diffMins / 60);
-      const diffDays = Math.floor(diffHours / 24);
-
-      let formatted: string;
-      if (diffMins < 1) formatted = "just now";
-      else if (diffMins < 60) formatted = `${diffMins}m ago`;
-      else if (diffHours < 24) formatted = `${diffHours}h ago`;
-      else if (diffDays < 7) formatted = `${diffDays}d ago`;
-      else {
-        formatted = new Intl.DateTimeFormat("en-US", {
-          month: "short",
-          day: "numeric",
-        }).format(date);
-      }
-      return <span className="text-muted-foreground text-sm">{formatted}</span>;
-    }
-
-    const formatted = new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    }).format(date);
     return <span className="text-muted-foreground text-sm">{formatted}</span>;
   }
-);
+
+  const formatted = new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(date);
+  return <span className="text-muted-foreground text-sm">{formatted}</span>;
+});
 DateCell.displayName = "DateCell";
 
 const ActionsCell = memo(
@@ -208,7 +189,7 @@ const ActionsCell = memo(
         </DropdownMenu>
       </div>
     );
-  }
+  },
 );
 ActionsCell.displayName = "ActionsCell";
 
@@ -219,7 +200,7 @@ export function createUserColumns(
     email: string;
     workspaceId: string;
     workspaceName: string;
-  }) => void
+  }) => void,
 ): ColumnDef<AdminUserRow>[] {
   return [
     {
@@ -229,11 +210,7 @@ export function createUserColumns(
       size: 240,
       minSize: 200,
       cell: ({ row }) => (
-        <UserCell
-          email={row.original.email}
-          image={row.original.image}
-          name={row.original.name}
-        />
+        <UserCell email={row.original.email} image={row.original.image} name={row.original.name} />
       ),
     },
     {

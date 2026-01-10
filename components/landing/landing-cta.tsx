@@ -5,11 +5,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { useSession } from "@/lib/auth-client";
 
-const benefits = [
-  "No credit card required",
-  "Free trial included",
-  "Cancel anytime",
-];
+const benefits = ["No credit card required", "Free trial included", "Cancel anytime"];
 
 function CtaAuthButton() {
   const { data: session, isPending } = useSession();
@@ -81,8 +77,7 @@ export function LandingCta() {
             opacity: 0.85,
           }}
         >
-          Join top real estate professionals. Create professional photos in
-          seconds, not hours.
+          Join top real estate professionals. Create professional photos in seconds, not hours.
         </p>
 
         {/* CTA Button */}

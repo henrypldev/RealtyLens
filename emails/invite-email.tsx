@@ -8,11 +8,7 @@ interface InviteEmailProps {
   inviteLink: string;
 }
 
-export function InviteEmail({
-  inviterName,
-  workspaceName,
-  inviteLink,
-}: InviteEmailProps) {
+export function InviteEmail({ inviterName, workspaceName, inviteLink }: InviteEmailProps) {
   return (
     <EmailLayout
       preview={`${inviterName} invited you to join ${workspaceName} on ${siteConfig.name}`}
@@ -20,8 +16,8 @@ export function InviteEmail({
       <Heading style={heading}>You&apos;ve been invited!</Heading>
 
       <Text style={paragraph}>
-        <strong>{inviterName}</strong> has invited you to join{" "}
-        <strong>{workspaceName}</strong> on Proppi.
+        <strong>{inviterName}</strong> has invited you to join <strong>{workspaceName}</strong> on
+        Proppi.
       </Text>
 
       <Section style={inviteBox}>
@@ -31,9 +27,8 @@ export function InviteEmail({
       </Section>
 
       <Text style={paragraph}>
-        Proppi is an AI-powered real estate photo editor that helps teams create
-        stunning property listings with virtual staging, lighting enhancements,
-        and more.
+        Proppi is an AI-powered real estate photo editor that helps teams create stunning property
+        listings with virtual staging, lighting enhancements, and more.
       </Text>
 
       <Section style={buttonContainer}>
@@ -43,8 +38,8 @@ export function InviteEmail({
       </Section>
 
       <Text style={note}>
-        This invitation link will expire in 7 days. If you weren&apos;t
-        expecting this invitation, you can safely ignore this email.
+        This invitation link will expire in 7 days. If you weren&apos;t expecting this invitation,
+        you can safely ignore this email.
       </Text>
 
       <Text style={signature}>

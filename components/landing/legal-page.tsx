@@ -8,17 +8,9 @@ interface LegalPageProps {
   children: React.ReactNode;
 }
 
-export function LegalPage({
-  title,
-  subtitle,
-  lastUpdated,
-  children,
-}: LegalPageProps) {
+export function LegalPage({ title, subtitle, lastUpdated, children }: LegalPageProps) {
   return (
-    <div
-      className="min-h-screen"
-      style={{ backgroundColor: "var(--landing-bg)" }}
-    >
+    <div className="min-h-screen" style={{ backgroundColor: "var(--landing-bg)" }}>
       <LandingNav />
 
       <main>
@@ -31,16 +23,10 @@ export function LegalPage({
             >
               {title}
             </h1>
-            <p
-              className="mt-4 text-lg"
-              style={{ color: "var(--landing-text-muted)" }}
-            >
+            <p className="mt-4 text-lg" style={{ color: "var(--landing-text-muted)" }}>
               {subtitle}
             </p>
-            <p
-              className="mt-2 text-sm"
-              style={{ color: "var(--landing-text-muted)" }}
-            >
+            <p className="mt-2 text-sm" style={{ color: "var(--landing-text-muted)" }}>
               Last updated: {lastUpdated}
             </p>
           </div>
@@ -78,19 +64,10 @@ export function LegalPage({
   );
 }
 
-export function LegalSection({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
+export function LegalSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="mt-8 first:mt-0">
-      <h2
-        className="font-semibold text-xl"
-        style={{ color: "var(--landing-text)" }}
-      >
+      <h2 className="font-semibold text-xl" style={{ color: "var(--landing-text)" }}>
         {title}
       </h2>
       <div

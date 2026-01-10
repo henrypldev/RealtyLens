@@ -119,7 +119,7 @@ export function getCategoryBySlug(slug: string): HelpCategory | undefined {
 
 export async function getHelpArticle(
   categorySlug: string,
-  articleSlug: string
+  articleSlug: string,
 ): Promise<HelpArticle | null> {
   const fullPath = path.join(HELP_DIRECTORY, categorySlug, `${articleSlug}.md`);
 
@@ -159,7 +159,7 @@ export function getAllHelpArticlePaths(): { category: string; slug: string }[] {
 export function getRelatedArticles(
   currentSlug: string,
   categorySlug: string,
-  limit = 3
+  limit = 3,
 ): HelpArticleMeta[] {
   return getArticlesByCategory(categorySlug)
     .filter((article) => article.slug !== currentSlug)
@@ -172,9 +172,7 @@ export function searchHelpArticles(query: string): HelpArticleMeta[] {
   const searchLower = query.toLowerCase();
   return getAllHelpArticles().filter((article) => {
     const matchesTitle = article.title.toLowerCase().includes(searchLower);
-    const matchesDescription = article.description
-      .toLowerCase()
-      .includes(searchLower);
+    const matchesDescription = article.description.toLowerCase().includes(searchLower);
     return matchesTitle || matchesDescription;
   });
 }

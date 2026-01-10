@@ -46,11 +46,7 @@ export async function verifySystemAdmin() {
     return { error: "Unauthorized", user: null };
   }
 
-  const [currentUser] = await db
-    .select()
-    .from(user)
-    .where(eq(user.id, session.user.id))
-    .limit(1);
+  const [currentUser] = await db.select().from(user).where(eq(user.id, session.user.id)).limit(1);
 
   if (!currentUser?.isSystemAdmin) {
     return { error: "Forbidden: System admin access required", user: null };

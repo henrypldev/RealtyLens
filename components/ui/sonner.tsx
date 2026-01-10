@@ -17,35 +17,12 @@ const Toaster = ({ ...props }: ToasterProps) => {
     <Sonner
       className="toaster group"
       icons={{
-        success: (
-          <IconCircleCheck
-            className="size-4"
-            style={{ color: "var(--accent-green)" }}
-          />
-        ),
-        info: (
-          <IconInfoCircle
-            className="size-4"
-            style={{ color: "var(--accent-teal)" }}
-          />
-        ),
-        warning: (
-          <IconAlertTriangle
-            className="size-4"
-            style={{ color: "var(--accent-amber)" }}
-          />
-        ),
-        error: (
-          <IconAlertOctagon
-            className="size-4"
-            style={{ color: "var(--accent-red)" }}
-          />
-        ),
+        success: <IconCircleCheck className="size-4" style={{ color: "var(--accent-green)" }} />,
+        info: <IconInfoCircle className="size-4" style={{ color: "var(--accent-teal)" }} />,
+        warning: <IconAlertTriangle className="size-4" style={{ color: "var(--accent-amber)" }} />,
+        error: <IconAlertOctagon className="size-4" style={{ color: "var(--accent-red)" }} />,
         loading: (
-          <IconLoader
-            className="size-4 animate-spin"
-            style={{ color: "var(--accent-teal)" }}
-          />
+          <IconLoader className="size-4 animate-spin" style={{ color: "var(--accent-teal)" }} />
         ),
       }}
       style={
@@ -54,25 +31,17 @@ const Toaster = ({ ...props }: ToasterProps) => {
           "--normal-text": "var(--popover-foreground)",
           "--normal-border": "var(--border)",
           "--border-radius": "var(--radius)",
-          "--success-bg":
-            "color-mix(in oklch, var(--accent-green) 15%, var(--popover))",
-          "--success-border":
-            "color-mix(in oklch, var(--accent-green) 30%, var(--border))",
+          "--success-bg": "color-mix(in oklch, var(--accent-green) 15%, var(--popover))",
+          "--success-border": "color-mix(in oklch, var(--accent-green) 30%, var(--border))",
           "--success-text": "var(--popover-foreground)",
-          "--error-bg":
-            "color-mix(in oklch, var(--accent-red) 15%, var(--popover))",
-          "--error-border":
-            "color-mix(in oklch, var(--accent-red) 30%, var(--border))",
+          "--error-bg": "color-mix(in oklch, var(--accent-red) 15%, var(--popover))",
+          "--error-border": "color-mix(in oklch, var(--accent-red) 30%, var(--border))",
           "--error-text": "var(--popover-foreground)",
-          "--warning-bg":
-            "color-mix(in oklch, var(--accent-amber) 15%, var(--popover))",
-          "--warning-border":
-            "color-mix(in oklch, var(--accent-amber) 30%, var(--border))",
+          "--warning-bg": "color-mix(in oklch, var(--accent-amber) 15%, var(--popover))",
+          "--warning-border": "color-mix(in oklch, var(--accent-amber) 30%, var(--border))",
           "--warning-text": "var(--popover-foreground)",
-          "--info-bg":
-            "color-mix(in oklch, var(--accent-teal) 15%, var(--popover))",
-          "--info-border":
-            "color-mix(in oklch, var(--accent-teal) 30%, var(--border))",
+          "--info-bg": "color-mix(in oklch, var(--accent-teal) 15%, var(--popover))",
+          "--info-border": "color-mix(in oklch, var(--accent-teal) 30%, var(--border))",
           "--info-text": "var(--popover-foreground)",
         } as React.CSSProperties
       }

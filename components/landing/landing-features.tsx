@@ -25,14 +25,12 @@ const features = [
   {
     icon: IconClockHour4,
     title: "Results in Seconds",
-    description:
-      "No waiting around. Get your enhanced photos back in seconds, not hours or days.",
+    description: "No waiting around. Get your enhanced photos back in seconds, not hours or days.",
   },
   {
     icon: IconPhoto,
     title: "Batch Processing",
-    description:
-      "Upload multiple photos at once and process entire property shoots in one go.",
+    description: "Upload multiple photos at once and process entire property shoots in one go.",
   },
   {
     icon: IconDeviceDesktop,
@@ -76,8 +74,8 @@ export function LandingFeatures() {
             className="mt-4 text-lg leading-relaxed"
             style={{ color: "var(--landing-text-muted)" }}
           >
-            Powerful features designed specifically for real estate
-            professionals who want to save time and impress clients.
+            Powerful features designed specifically for real estate professionals who want to save
+            time and impress clients.
           </p>
         </div>
 
@@ -101,25 +99,16 @@ export function LandingFeatures() {
                   opacity: 0.1,
                 }}
               >
-                <feature.icon
-                  className="size-6"
-                  style={{ color: "var(--landing-accent)" }}
-                />
+                <feature.icon className="size-6" style={{ color: "var(--landing-accent)" }} />
               </div>
 
               {/* Actual icon overlay for proper color */}
               <div className="absolute top-6 left-6 flex size-12 items-center justify-center rounded-xl md:top-8 md:left-8">
-                <feature.icon
-                  className="size-6"
-                  style={{ color: "var(--landing-accent)" }}
-                />
+                <feature.icon className="size-6" style={{ color: "var(--landing-accent)" }} />
               </div>
 
               {/* Content */}
-              <h3
-                className="font-semibold text-lg"
-                style={{ color: "var(--landing-text)" }}
-              >
+              <h3 className="font-semibold text-lg" style={{ color: "var(--landing-text)" }}>
                 {feature.title}
               </h3>
               <p

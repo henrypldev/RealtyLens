@@ -64,7 +64,7 @@ export function DashboardHeader({ userLabel }: DashboardHeaderProps) {
                     className={cn(
                       "h-8 gap-2 transition-all",
                       isActive && "font-medium",
-                      item.disabled && "cursor-not-allowed opacity-60"
+                      item.disabled && "cursor-not-allowed opacity-60",
                     )}
                     disabled={item.disabled}
                     key={item.href}

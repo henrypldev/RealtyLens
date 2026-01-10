@@ -7,10 +7,7 @@ interface HelpArticleCardProps {
   showCategory?: boolean;
 }
 
-export function HelpArticleCard({
-  article,
-  showCategory = false,
-}: HelpArticleCardProps) {
+export function HelpArticleCard({ article, showCategory = false }: HelpArticleCardProps) {
   return (
     <Link
       className="group flex items-center justify-between rounded-xl p-4 transition-all duration-200 hover:scale-[1.01]"
@@ -29,16 +26,10 @@ export function HelpArticleCard({
             {article.category.replace("-", " ")}
           </p>
         )}
-        <h3
-          className="truncate font-medium"
-          style={{ color: "var(--landing-text)" }}
-        >
+        <h3 className="truncate font-medium" style={{ color: "var(--landing-text)" }}>
           {article.title}
         </h3>
-        <p
-          className="mt-1 truncate text-sm"
-          style={{ color: "var(--landing-text-muted)" }}
-        >
+        <p className="mt-1 truncate text-sm" style={{ color: "var(--landing-text-muted)" }}>
           {article.description}
         </p>
       </div>

@@ -16,9 +16,7 @@ export async function generateStaticParams() {
 // Return 404 for slugs not generated at build time
 export const dynamicParams = false;
 
-export async function generateMetadata({
-  params,
-}: BlogPostProps): Promise<Metadata> {
+export async function generateMetadata({ params }: BlogPostProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
 

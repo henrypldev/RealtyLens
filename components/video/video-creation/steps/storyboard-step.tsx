@@ -32,17 +32,14 @@ interface StoryboardStepProps {
       | "endImageGenerationId"
     >,
     slotIndex: number,
-    framesToSet?: "start" | "end" | "both"
+    framesToSet?: "start" | "end" | "both",
   ) => void;
   onUpdateSlotImage: (
     slotIndex: number,
     type: "start" | "end",
-    image: { id: string; url: string; imageGenerationId?: string | null }
+    image: { id: string; url: string; imageGenerationId?: string | null },
   ) => void;
-  onUpdateTransitionType: (
-    slotIndex: number,
-    transitionType: "cut" | "seamless"
-  ) => void;
+  onUpdateTransitionType: (slotIndex: number, transitionType: "cut" | "seamless") => void;
   onRemoveImage: (id: string) => void;
 }
 
@@ -56,26 +53,14 @@ export function StoryboardStep({
 }: StoryboardStepProps) {
   const template = getVideoTemplateById(selectedTemplateId);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
-  const [activeSlotIndex, setActiveSlotIndex] = React.useState<number | null>(
-    null
-  );
-  const [activeFrameType, setActiveFrameType] = React.useState<
-    "start" | "end" | "both"
-  >("both");
-  const [uploadingSlotIndex, setUploadingSlotIndex] = React.useState<
-    number | null
-  >(null);
+  const [activeSlotIndex, setActiveSlotIndex] = React.useState<number | null>(null);
+  const [activeFrameType, setActiveFrameType] = React.useState<"start" | "end" | "both">("both");
+  const [uploadingSlotIndex, setUploadingSlotIndex] = React.useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = React.useState<number | null>(null);
-  const [dragOverFrame, setDragOverFrame] = React.useState<
-    "start" | "end" | "both"
-  >("both");
+  const [dragOverFrame, setDragOverFrame] = React.useState<"start" | "end" | "both">("both");
 
   const uploadFile = React.useCallback(
-    async (
-      file: File,
-      index: number,
-      frameType: "start" | "end" | "both" = "both"
-    ) => {
+    async (file: File, index: number, frameType: "start" | "end" | "both" = "both") => {
       if (!template) return;
 
       setUploadingSlotIndex(index);
@@ -96,13 +81,11 @@ export function StoryboardStep({
                 roomType: slot?.roomType || "other",
                 roomLabel: slot?.label || "",
               },
-              index
+              index,
             );
           } else {
             // Check if slot is empty
-            const existingImage = images.find(
-              (img) => img.sequenceOrder === index + 1
-            );
+            const existingImage = images.find((img) => img.sequenceOrder === index + 1);
             if (existingImage) {
               // Slot has image, update the specific frame
               onUpdateSlotImage(index, frameType, {
@@ -120,7 +103,7 @@ export function StoryboardStep({
                   roomLabel: slot?.label || "",
                 },
                 index,
-                frameType
+                frameType,
               );
             }
           }
@@ -134,13 +117,10 @@ export function StoryboardStep({
         setUploadingSlotIndex(null);
       }
     },
-    [template, images, onAddImageToSlot, onUpdateSlotImage]
+    [template, images, onAddImageToSlot, onUpdateSlotImage],
   );
 
-  const handleAddClick = (
-    index: number,
-    frameType: "start" | "end" | "both" = "both"
-  ) => {
+  const handleAddClick = (index: number, frameType: "start" | "end" | "both" = "both") => {
     setActiveSlotIndex(index);
     setActiveFrameType(frameType);
     // Small timeout to ensure state is set before click (safeguard)
@@ -165,7 +145,7 @@ export function StoryboardStep({
   const handleDragOver = (
     e: React.DragEvent,
     index: number,
-    frameType: "start" | "end" | "both" = "both"
+    frameType: "start" | "end" | "both" = "both",
   ) => {
     e.preventDefault();
     e.stopPropagation();
@@ -183,7 +163,7 @@ export function StoryboardStep({
   const handleDrop = async (
     e: React.DragEvent,
     index: number,
-    frameType: "start" | "end" | "both" = "both"
+    frameType: "start" | "end" | "both" = "both",
   ) => {
     e.preventDefault();
     e.stopPropagation();
@@ -226,15 +206,13 @@ export function StoryboardStep({
                   "font-bold text-lg",
                   images.length === template.slots.length
                     ? "text-(--accent-green)"
-                    : "text-foreground"
+                    : "text-foreground",
                 )}
               >
                 {images.length}
               </span>
               <span className="text-muted-foreground">/</span>
-              <span className="text-muted-foreground">
-                {template.slots.length} shots
-              </span>
+              <span className="text-muted-foreground">{template.slots.length} shots</span>
             </div>
           </div>
 
@@ -270,9 +248,7 @@ export function StoryboardStep({
         {template.slots.map((slot, index) => {
           // Find image for this slot (sequenceOrder is 1-based)
           const image = images.find((img) => img.sequenceOrder === index + 1);
-          const nextImage = images.find(
-            (img) => img.sequenceOrder === index + 2
-          );
+          const nextImage = images.find((img) => img.sequenceOrder === index + 2);
           const isUploading = uploadingSlotIndex === index;
 
           return (
@@ -284,7 +260,7 @@ export function StoryboardStep({
                     "pointer-events-none absolute top-0 -right-22 bottom-10 z-40 hidden w-20 flex-col items-center justify-center md:flex",
                     (index + 1) % 4 === 0 && "xl:hidden", // End of row at 4 cols
                     (index + 1) % 3 === 0 && "lg:hidden xl:flex", // End of row at 3 cols
-                    (index + 1) % 2 === 0 && "md:hidden lg:flex" // End of row at 2 cols
+                    (index + 1) % 2 === 0 && "md:hidden lg:flex", // End of row at 2 cols
                   )}
                 >
                   <div className="group/match pointer-events-auto mb-2 flex items-center -space-x-2.5">
@@ -331,16 +307,12 @@ export function StoryboardStep({
                           "flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 font-bold text-[9px] uppercase tracking-wider transition-all",
                           (image.transitionType || "seamless") === "seamless"
                             ? "border-(--accent-teal)/30 bg-(--accent-teal)/10 text-(--accent-teal) shadow-sm"
-                            : "border-muted-foreground/20 bg-background/80 text-muted-foreground hover:border-muted-foreground/40"
+                            : "border-muted-foreground/20 bg-background/80 text-muted-foreground hover:border-muted-foreground/40",
                         )}
                         onClick={(e) => {
                           e.stopPropagation();
-                          const currentType =
-                            image.transitionType || "seamless";
-                          onUpdateTransitionType(
-                            index,
-                            currentType === "cut" ? "seamless" : "cut"
-                          );
+                          const currentType = image.transitionType || "seamless";
+                          onUpdateTransitionType(index, currentType === "cut" ? "seamless" : "cut");
                         }}
                         title={
                           (image.transitionType || "seamless") === "seamless"
@@ -371,9 +343,7 @@ export function StoryboardStep({
                   <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-muted/80 font-bold text-muted-foreground text-xs ring-1 ring-black/5">
                     {index + 1}
                   </div>
-                  <span className="font-bold text-sm tracking-tight">
-                    {slot.label}
-                  </span>
+                  <span className="font-bold text-sm tracking-tight">{slot.label}</span>
                 </div>
                 {image && (
                   <div className="flex items-center gap-1.5 rounded-full border border-(--accent-green)/20 bg-(--accent-green)/10 px-2 py-1">
@@ -394,7 +364,7 @@ export function StoryboardStep({
                   dragOverIndex === index &&
                     dragOverFrame === "both" &&
                     "scale-[1.02] border-(--accent-teal) bg-(--accent-teal)/5 ring-(--accent-teal)/20 ring-2",
-                  isUploading && "cursor-wait border-(--accent-teal)"
+                  isUploading && "cursor-wait border-(--accent-teal)",
                 )}
                 onDragLeave={handleDragLeave}
               >
@@ -404,12 +374,10 @@ export function StoryboardStep({
                   <div
                     className={cn(
                       "group/start relative flex-1 cursor-pointer border-white/10 border-r transition-colors",
-                      !image && "hover:bg-foreground/5"
+                      !image && "hover:bg-foreground/5",
                     )}
                     onClick={() =>
-                      image
-                        ? handleAddClick(index, "start")
-                        : handleAddClick(index, "both")
+                      image ? handleAddClick(index, "start") : handleAddClick(index, "both")
                     }
                     onDragOver={(e) => handleDragOver(e, index, "start")}
                     onDrop={(e) => handleDrop(e, index, "start")}
@@ -481,9 +449,7 @@ export function StoryboardStep({
                     {dragOverIndex === index && dragOverFrame === "start" && (
                       <div className="fade-in absolute inset-0 z-20 flex animate-in flex-col items-center justify-center bg-(--accent-teal)/80 duration-200">
                         <IconPlus className="h-8 w-8 animate-bounce text-white" />
-                        <span className="mt-2 font-bold text-white text-xs">
-                          Drop image
-                        </span>
+                        <span className="mt-2 font-bold text-white text-xs">Drop image</span>
                       </div>
                     )}
                   </div>
@@ -497,12 +463,10 @@ export function StoryboardStep({
                   <div
                     className={cn(
                       "group/end relative flex-1 cursor-pointer transition-colors",
-                      !image && "hover:bg-foreground/5"
+                      !image && "hover:bg-foreground/5",
                     )}
                     onClick={() =>
-                      image
-                        ? handleAddClick(index, "end")
-                        : handleAddClick(index, "both")
+                      image ? handleAddClick(index, "end") : handleAddClick(index, "both")
                     }
                     onDragOver={(e) => handleDragOver(e, index, "end")}
                     onDrop={(e) => handleDrop(e, index, "end")}
@@ -555,8 +519,7 @@ export function StoryboardStep({
                                 onUpdateSlotImage(index, "end", {
                                   id: image.startImageId,
                                   url: image.startImageUrl,
-                                  imageGenerationId:
-                                    image.startImageGenerationId,
+                                  imageGenerationId: image.startImageGenerationId,
                                 });
                               }}
                             >
@@ -575,9 +538,7 @@ export function StoryboardStep({
                     {dragOverIndex === index && dragOverFrame === "end" && (
                       <div className="fade-in absolute inset-0 z-20 flex animate-in flex-col items-center justify-center bg-(--accent-teal)/80 duration-200">
                         <IconPlus className="h-8 w-8 animate-bounce text-white" />
-                        <span className="mt-2 font-bold text-white text-xs">
-                          Drop image
-                        </span>
+                        <span className="mt-2 font-bold text-white text-xs">Drop image</span>
                       </div>
                     )}
                   </div>
@@ -586,9 +547,7 @@ export function StoryboardStep({
                   {isUploading && (
                     <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-background/50 backdrop-blur-sm">
                       <IconLoader2 className="h-8 w-8 animate-spin text-(--accent-teal)" />
-                      <span className="mt-2 font-medium text-foreground text-xs">
-                        Uploading...
-                      </span>
+                      <span className="mt-2 font-medium text-foreground text-xs">Uploading...</span>
                     </div>
                   )}
                 </div>

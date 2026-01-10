@@ -30,21 +30,13 @@ interface UsersDataTableProps {
   initialMeta: AdminUsersMeta;
 }
 
-export function UsersDataTable({
-  initialData,
-  initialMeta,
-}: UsersDataTableProps) {
+export function UsersDataTable({ initialData, initialMeta }: UsersDataTableProps) {
   const parentRef = useRef<HTMLDivElement>(null);
   const { startImpersonation } = useImpersonation();
 
   // Get filters from URL state
-  const {
-    userFilters,
-    hasActiveFilters,
-    sortColumn,
-    sortDirection,
-    toggleSort,
-  } = useAdminUserFilters();
+  const { userFilters, hasActiveFilters, sortColumn, sortDirection, toggleSort } =
+    useAdminUserFilters();
 
   // Defer search to debounce filtering
   const deferredFilters = useDeferredValue(userFilters);
@@ -64,7 +56,7 @@ export function UsersDataTable({
       createUserColumns((user) => {
         startImpersonation(user);
       }),
-    [startImpersonation]
+    [startImpersonation],
   );
 
   // Reset pagination when filters change
@@ -90,7 +82,7 @@ export function UsersDataTable({
           status: deferredFilters.status || undefined,
           workspaceId: deferredFilters.workspaceId || undefined,
         },
-        sortColumn && sortDirection ? [sortColumn, sortDirection] : undefined
+        sortColumn && sortDirection ? [sortColumn, sortDirection] : undefined,
       );
 
       if (result.success) {
@@ -120,7 +112,7 @@ export function UsersDataTable({
         status: deferredFilters.status || undefined,
         workspaceId: deferredFilters.workspaceId || undefined,
       },
-      sortColumn && sortDirection ? [sortColumn, sortDirection] : undefined
+      sortColumn && sortDirection ? [sortColumn, sortDirection] : undefined,
     );
 
     if (result.success) {
@@ -131,14 +123,7 @@ export function UsersDataTable({
     }
 
     setIsFetchingNextPage(false);
-  }, [
-    cursor,
-    hasNextPage,
-    isFetchingNextPage,
-    deferredFilters,
-    sortColumn,
-    sortDirection,
-  ]);
+  }, [cursor, hasNextPage, isFetchingNextPage, deferredFilters, sortColumn, sortDirection]);
 
   // Set up TanStack Table
   const table = useReactTable({
@@ -228,14 +213,10 @@ export function UsersDataTable({
           <div
             className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl"
             style={{
-              backgroundColor:
-                "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
+              backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
             }}
           >
-            <IconUserOff
-              className="h-6 w-6"
-              style={{ color: "var(--accent-teal)" }}
-            />
+            <IconUserOff className="h-6 w-6" style={{ color: "var(--accent-teal)" }} />
           </div>
           <h3 className="font-semibold text-lg">No users yet</h3>
           <p className="mt-1 text-muted-foreground text-sm">
@@ -289,10 +270,7 @@ export function UsersDataTable({
           style={{ height: "calc(100vh - 400px)", minHeight: "300px" }}
         >
           <Table>
-            <TableBody
-              className="relative block"
-              style={{ height: rowVirtualizer.getTotalSize() }}
-            >
+            <TableBody className="relative block" style={{ height: rowVirtualizer.getTotalSize() }}>
               {virtualItems.length > 0 ? (
                 virtualItems.map((virtualRow) => {
                   const row = rows[virtualRow.index];
@@ -309,10 +287,7 @@ export function UsersDataTable({
                 })
               ) : (
                 <TableRow>
-                  <TableCell
-                    className="h-24 text-center"
-                    colSpan={columns.length}
-                  >
+                  <TableCell className="h-24 text-center" colSpan={columns.length}>
                     No results.
                   </TableCell>
                 </TableRow>
@@ -324,19 +299,14 @@ export function UsersDataTable({
           {isFetchingNextPage && (
             <div className="flex items-center justify-center py-4">
               <IconLoader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-              <span className="ml-2 text-muted-foreground text-sm">
-                Loading more...
-              </span>
+              <span className="ml-2 text-muted-foreground text-sm">Loading more...</span>
             </div>
           )}
         </div>
 
         {/* Footer with count */}
         <div className="border-t px-4 py-3 text-muted-foreground text-sm">
-          <span
-            className="font-mono font-semibold"
-            style={{ color: "var(--accent-teal)" }}
-          >
+          <span className="font-mono font-semibold" style={{ color: "var(--accent-teal)" }}>
             {tableData.length}
           </span>{" "}
           of {filteredTotal} users

@@ -22,8 +22,7 @@ export function ProjectsDataTable({ projects }: ProjectsDataTableProps) {
   const parentRef = useRef<HTMLDivElement>(null);
 
   // Get filters from URL state
-  const { filters, hasActiveFilters, sortColumn, sortDirection, toggleSort } =
-    useProjectFilters();
+  const { filters, hasActiveFilters, sortColumn, sortDirection, toggleSort } = useProjectFilters();
 
   // Defer search to debounce filtering
   const deferredSearch = useDeferredValue(filters.q);
@@ -36,9 +35,7 @@ export function ProjectsDataTable({ projects }: ProjectsDataTableProps) {
     // Apply search filter
     if (deferredSearch) {
       const searchLower = deferredSearch.toLowerCase();
-      result = result.filter((project) =>
-        project.name.toLowerCase().includes(searchLower)
-      );
+      result = result.filter((project) => project.name.toLowerCase().includes(searchLower));
     }
 
     // Apply status filter
@@ -136,10 +133,7 @@ export function ProjectsDataTable({ projects }: ProjectsDataTableProps) {
           style={{ height: "calc(100vh - 400px)", minHeight: "300px" }}
         >
           <Table>
-            <TableBody
-              className="relative block"
-              style={{ height: rowVirtualizer.getTotalSize() }}
-            >
+            <TableBody className="relative block" style={{ height: rowVirtualizer.getTotalSize() }}>
               {virtualItems.length > 0 ? (
                 virtualItems.map((virtualRow) => {
                   const row = rows[virtualRow.index];
@@ -156,10 +150,7 @@ export function ProjectsDataTable({ projects }: ProjectsDataTableProps) {
                 })
               ) : (
                 <TableRow>
-                  <TableCell
-                    className="h-24 text-center"
-                    colSpan={columns.length}
-                  >
+                  <TableCell className="h-24 text-center" colSpan={columns.length}>
                     No results.
                   </TableCell>
                 </TableRow>

@@ -142,23 +142,11 @@ export interface AdminUserDetail {
 // Constants
 // ============================================================================
 
-export const ALL_WORKSPACE_STATUSES: WorkspaceStatus[] = [
-  "active",
-  "suspended",
-  "trial",
-];
+export const ALL_WORKSPACE_STATUSES: WorkspaceStatus[] = ["active", "suspended", "trial"];
 
-export const ALL_WORKSPACE_PLANS: WorkspacePlan[] = [
-  "free",
-  "pro",
-  "enterprise",
-];
+export const ALL_WORKSPACE_PLANS: WorkspacePlan[] = ["free", "pro", "enterprise"];
 
 export const COST_PER_IMAGE = 0.039; // USD per image
 
 export const ALL_USER_ROLES: UserRole[] = ["owner", "admin", "member"];
-export const ALL_USER_STATUSES: UserStatus[] = [
-  "active",
-  "pending",
-  "inactive",
-];
+export const ALL_USER_STATUSES: UserStatus[] = ["active", "pending", "inactive"];

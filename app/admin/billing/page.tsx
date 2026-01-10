@@ -2,22 +2,12 @@ import { IconFileInvoice } from "@tabler/icons-react";
 import { BillingStatsBar } from "@/components/admin/billing/billing-stats-bar";
 import { BillingTabs } from "@/components/admin/billing/billing-tabs";
 import { requireSystemAdmin } from "@/lib/admin-auth";
-import {
-  getBillingStats,
-  getInvoiceHistory,
-  getUninvoicedLineItems,
-} from "@/lib/db/queries";
+import { getBillingStats, getInvoiceHistory } from "@/lib/db/queries";
 
 export default async function AdminBillingPage() {
-  // Ensure user is system admin
   await requireSystemAdmin();
 
-  // Fetch billing data in parallel
-  const [stats, uninvoicedItems, invoices] = await Promise.all([
-    getBillingStats(),
-    getUninvoicedLineItems(),
-    getInvoiceHistory(),
-  ]);
+  const [stats, invoices] = await Promise.all([getBillingStats(), getInvoiceHistory()]);
 
   // Transform stats for the stats bar component (convert ore to NOK)
   const formattedStats = {
@@ -58,7 +48,7 @@ export default async function AdminBillingPage() {
 
       {/* Tabs: Uninvoiced / History */}
       <div className="stagger-2 animate-fade-in-up">
-        <BillingTabs invoices={invoices} uninvoicedItems={uninvoicedItems} />
+        <BillingTabs invoices={invoices} />
       </div>
     </div>
   );

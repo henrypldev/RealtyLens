@@ -14,10 +14,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  updateWorkspaceSettings,
-  type WorkspaceActionResult,
-} from "@/lib/actions";
+import { updateWorkspaceSettings, type WorkspaceActionResult } from "@/lib/actions";
 import type { Workspace } from "@/lib/db/schema";
 import { cn } from "@/lib/utils";
 
@@ -43,7 +40,7 @@ export function WorkspaceForm({ workspace }: WorkspaceFormProps) {
       const result = await updateWorkspaceSettings(formData);
       return result;
     },
-    null
+    null,
   );
 
   // Show toast when state changes (only once per state change)
@@ -73,10 +70,7 @@ export function WorkspaceForm({ workspace }: WorkspaceFormProps) {
             }}
           >
             {!workspace.logo && (
-              <IconBuilding
-                className="h-8 w-8"
-                style={{ color: "var(--accent-teal)" }}
-              />
+              <IconBuilding className="h-8 w-8" style={{ color: "var(--accent-teal)" }} />
             )}
           </div>
           <div className="space-y-1">

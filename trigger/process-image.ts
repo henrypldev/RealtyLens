@@ -5,24 +5,14 @@ import {
   updateProjectCounts,
 } from "@/lib/db/queries";
 import { fal, NANO_BANANA_PRO_EDIT, type NanoBananaProOutput } from "@/lib/fal";
-import {
-  getExtensionFromContentType,
-  getImagePath,
-  uploadImage,
-} from "@/lib/supabase";
+import { getExtensionFromContentType, getImagePath, uploadImage } from "@/lib/supabase";
 
 export interface ProcessImagePayload {
   imageId: string;
 }
 
 export interface ProcessImageStatus {
-  step:
-    | "fetching"
-    | "uploading"
-    | "processing"
-    | "saving"
-    | "completed"
-    | "failed";
+  step: "fetching" | "uploading" | "processing" | "saving" | "completed" | "failed";
   label: string;
   progress?: number;
 }
@@ -82,14 +72,12 @@ export const processImageTask = task({
 
       const imageResponse = await fetch(image.originalImageUrl);
       if (!imageResponse.ok) {
-        throw new Error(
-          `Failed to fetch original image: ${imageResponse.status}`
-        );
+        throw new Error(`Failed to fetch original image: ${imageResponse.status}`);
       }
 
       const imageBlob = await imageResponse.blob();
       const falImageUrl = await fal.storage.upload(
-        new File([imageBlob], "input.jpg", { type: imageBlob.type })
+        new File([imageBlob], "input.jpg", { type: imageBlob.type }),
       );
 
       logger.info("Uploaded to Fal.ai storage", { falImageUrl });
@@ -148,7 +136,7 @@ export const processImageTask = task({
         image.workspaceId,
         image.projectId,
         `${imageId}.${extension}`,
-        "result"
+        "result",
       );
 
       logger.info("Uploading to Supabase", { resultPath });
@@ -156,7 +144,7 @@ export const processImageTask = task({
       const storedResultUrl = await uploadImage(
         new Uint8Array(resultImageBuffer),
         resultPath,
-        contentType
+        contentType,
       );
 
       // Update image record with result
@@ -200,8 +188,7 @@ export const processImageTask = task({
       // Update status to failed
       await updateImageGeneration(imageId, {
         status: "failed",
-        errorMessage:
-          error instanceof Error ? error.message : "Processing failed",
+        errorMessage: error instanceof Error ? error.message : "Processing failed",
       });
 
       // Get image to update project counts

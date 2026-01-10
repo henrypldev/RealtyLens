@@ -10,16 +10,12 @@ interface StyleStepProps {
   onSelectTemplate: (template: StyleTemplate) => void;
 }
 
-export function StyleStep({
-  selectedTemplate,
-  onSelectTemplate,
-}: StyleStepProps) {
+export function StyleStep({ selectedTemplate, onSelectTemplate }: StyleStepProps) {
   return (
     <div className="space-y-4">
       <div>
         <p className="text-muted-foreground text-sm">
-          Choose a style to apply to your photos. Each style uses AI to
-          transform your images.
+          Choose a style to apply to your photos. Each style uses AI to transform your images.
         </p>
       </div>
 
@@ -36,7 +32,7 @@ export function StyleStep({
                   ? "cursor-not-allowed opacity-60 ring-transparent"
                   : isSelected
                     ? "shadow-lg ring-[var(--accent-teal)]"
-                    : "ring-transparent hover:ring-foreground/10"
+                    : "ring-transparent hover:ring-foreground/10",
               )}
               disabled={isComingSoon}
               key={template.id}
@@ -50,11 +46,7 @@ export function StyleStep({
                   alt={template.name}
                   className={cn(
                     "object-cover transition-transform duration-300",
-                    isComingSoon
-                      ? "grayscale"
-                      : isSelected
-                        ? "scale-105"
-                        : "group-hover:scale-105"
+                    isComingSoon ? "grayscale" : isSelected ? "scale-105" : "group-hover:scale-105",
                   )}
                   fill
                   sizes="(max-width: 640px) 50vw, 33vw"
@@ -94,14 +86,12 @@ export function StyleStep({
                 <h3
                   className={cn(
                     "font-semibold leading-tight",
-                    isComingSoon ? "text-muted-foreground" : "text-foreground"
+                    isComingSoon ? "text-muted-foreground" : "text-foreground",
                   )}
                 >
                   {template.name}
                 </h3>
-                <p className="line-clamp-2 text-muted-foreground text-xs">
-                  {template.description}
-                </p>
+                <p className="line-clamp-2 text-muted-foreground text-xs">{template.description}</p>
               </div>
 
               {/* Selected border indicator */}

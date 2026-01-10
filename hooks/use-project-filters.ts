@@ -4,18 +4,9 @@ import { parseAsString, parseAsStringLiteral, useQueryStates } from "nuqs";
 import type { ProjectStatus } from "@/lib/db/schema";
 
 export type SortDirection = "asc" | "desc";
-export type ProjectSortableColumn =
-  | "name"
-  | "status"
-  | "createdAt"
-  | "updatedAt";
+export type ProjectSortableColumn = "name" | "status" | "createdAt" | "updatedAt";
 
-const ALL_PROJECT_STATUSES = [
-  "pending",
-  "processing",
-  "completed",
-  "failed",
-] as const;
+const ALL_PROJECT_STATUSES = ["pending", "processing", "completed", "failed"] as const;
 
 // Parsers for URL state
 const projectFiltersParsers = {

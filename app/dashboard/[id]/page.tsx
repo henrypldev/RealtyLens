@@ -12,10 +12,7 @@ interface PageProps {
   searchParams: Promise<{ payment?: string }>;
 }
 
-export default async function ProjectDetailPage({
-  params,
-  searchParams,
-}: PageProps) {
+export default async function ProjectDetailPage({ params, searchParams }: PageProps) {
   const { id } = await params;
   const { payment: paymentParam } = await searchParams;
 
@@ -39,10 +36,7 @@ export default async function ProjectDetailPage({
   const projectData = await getProjectById(id);
 
   // Check if project exists and belongs to user's workspace
-  if (
-    !projectData ||
-    projectData.project.workspaceId !== userData.workspace.id
-  ) {
+  if (!projectData || projectData.project.workspaceId !== userData.workspace.id) {
     return (
       <div className="flex min-h-[400px] flex-col items-center justify-center gap-4 px-4 text-center">
         <IconPhoto className="h-16 w-16 text-muted-foreground/50" />

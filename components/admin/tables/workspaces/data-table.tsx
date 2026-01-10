@@ -36,22 +36,14 @@ interface WorkspacesDataTableProps {
   initialMeta: AdminWorkspacesMeta;
 }
 
-export function WorkspacesDataTable({
-  initialData,
-  initialMeta,
-}: WorkspacesDataTableProps) {
+export function WorkspacesDataTable({ initialData, initialMeta }: WorkspacesDataTableProps) {
   const parentRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { startImpersonation } = useImpersonation();
 
   // Get filters from URL state
-  const {
-    workspaceFilters,
-    hasActiveFilters,
-    sortColumn,
-    sortDirection,
-    toggleSort,
-  } = useAdminWorkspaceFilters();
+  const { workspaceFilters, hasActiveFilters, sortColumn, sortDirection, toggleSort } =
+    useAdminWorkspaceFilters();
 
   // Defer search to debounce filtering
   const deferredFilters = useDeferredValue(workspaceFilters);
@@ -68,15 +60,13 @@ export function WorkspacesDataTable({
   // Handlers for workspace actions
   const handleSuspend = useCallback(
     async (workspaceId: string, workspaceName: string) => {
-      const reason = window.prompt(
-        `Enter reason for suspending "${workspaceName}" (optional):`
-      );
+      const reason = window.prompt(`Enter reason for suspending "${workspaceName}" (optional):`);
       if (reason === null) return; // User cancelled
 
       const result = await updateWorkspaceStatusAction(
         workspaceId,
         "suspended",
-        reason || undefined
+        reason || undefined,
       );
 
       if (result.success) {
@@ -86,7 +76,7 @@ export function WorkspacesDataTable({
         toast.error(result.error);
       }
     },
-    [router]
+    [router],
   );
 
   const handleActivate = useCallback(
@@ -100,13 +90,13 @@ export function WorkspacesDataTable({
         toast.error(result.error);
       }
     },
-    [router]
+    [router],
   );
 
   const handleDelete = useCallback(
     async (workspaceId: string, workspaceName: string) => {
       const confirmed = window.confirm(
-        `Are you sure you want to delete "${workspaceName}"?\n\nThis will permanently delete all data including users, projects, and images. This action cannot be undone.`
+        `Are you sure you want to delete "${workspaceName}"?\n\nThis will permanently delete all data including users, projects, and images. This action cannot be undone.`,
       );
       if (!confirmed) return;
 
@@ -119,7 +109,7 @@ export function WorkspacesDataTable({
         toast.error(result.error);
       }
     },
-    [router]
+    [router],
   );
 
   // Create columns with handlers
@@ -131,7 +121,7 @@ export function WorkspacesDataTable({
         onActivate: handleActivate,
         onDelete: handleDelete,
       }),
-    [startImpersonation, handleSuspend, handleActivate, handleDelete]
+    [startImpersonation, handleSuspend, handleActivate, handleDelete],
   );
 
   // Reset pagination when filters change
@@ -155,7 +145,7 @@ export function WorkspacesDataTable({
           status: deferredFilters.status || undefined,
           plan: deferredFilters.plan || undefined,
         },
-        sortColumn && sortDirection ? [sortColumn, sortDirection] : undefined
+        sortColumn && sortDirection ? [sortColumn, sortDirection] : undefined,
       );
 
       if (result.success) {
@@ -184,7 +174,7 @@ export function WorkspacesDataTable({
         status: deferredFilters.status || undefined,
         plan: deferredFilters.plan || undefined,
       },
-      sortColumn && sortDirection ? [sortColumn, sortDirection] : undefined
+      sortColumn && sortDirection ? [sortColumn, sortDirection] : undefined,
     );
 
     if (result.success) {
@@ -195,14 +185,7 @@ export function WorkspacesDataTable({
     }
 
     setIsFetchingNextPage(false);
-  }, [
-    cursor,
-    hasNextPage,
-    isFetchingNextPage,
-    deferredFilters,
-    sortColumn,
-    sortDirection,
-  ]);
+  }, [cursor, hasNextPage, isFetchingNextPage, deferredFilters, sortColumn, sortDirection]);
 
   // Set up TanStack Table
   const table = useReactTable({
@@ -295,14 +278,10 @@ export function WorkspacesDataTable({
           <div
             className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl"
             style={{
-              backgroundColor:
-                "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
+              backgroundColor: "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
             }}
           >
-            <IconBuildingOff
-              className="h-6 w-6"
-              style={{ color: "var(--accent-violet)" }}
-            />
+            <IconBuildingOff className="h-6 w-6" style={{ color: "var(--accent-violet)" }} />
           </div>
           <h3 className="font-semibold text-lg">No workspaces yet</h3>
           <p className="mt-1 text-muted-foreground text-sm">
@@ -356,10 +335,7 @@ export function WorkspacesDataTable({
           style={{ height: "calc(100vh - 400px)", minHeight: "300px" }}
         >
           <Table>
-            <TableBody
-              className="relative block"
-              style={{ height: rowVirtualizer.getTotalSize() }}
-            >
+            <TableBody className="relative block" style={{ height: rowVirtualizer.getTotalSize() }}>
               {virtualItems.length > 0 ? (
                 virtualItems.map((virtualRow) => {
                   const row = rows[virtualRow.index];
@@ -376,10 +352,7 @@ export function WorkspacesDataTable({
                 })
               ) : (
                 <TableRow>
-                  <TableCell
-                    className="h-24 text-center"
-                    colSpan={columns.length}
-                  >
+                  <TableCell className="h-24 text-center" colSpan={columns.length}>
                     No results.
                   </TableCell>
                 </TableRow>
@@ -391,19 +364,14 @@ export function WorkspacesDataTable({
           {isFetchingNextPage && (
             <div className="flex items-center justify-center py-4">
               <IconLoader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-              <span className="ml-2 text-muted-foreground text-sm">
-                Loading more...
-              </span>
+              <span className="ml-2 text-muted-foreground text-sm">Loading more...</span>
             </div>
           )}
         </div>
 
         {/* Footer with count */}
         <div className="border-t px-4 py-3 text-muted-foreground text-sm">
-          <span
-            className="font-mono font-semibold"
-            style={{ color: "var(--accent-violet)" }}
-          >
+          <span className="font-mono font-semibold" style={{ color: "var(--accent-violet)" }}>
             {tableData.length}
           </span>{" "}
           of {filteredTotal} workspaces

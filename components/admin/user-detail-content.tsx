@@ -34,10 +34,7 @@ interface UserDetailContentProps {
 }
 
 // Status badge variants
-const statusVariantMap: Record<
-  string,
-  "status-active" | "status-pending" | "status-inactive"
-> = {
+const statusVariantMap: Record<string, "status-active" | "status-pending" | "status-inactive"> = {
   active: "status-active",
   pending: "status-pending",
   inactive: "status-inactive",
@@ -50,10 +47,7 @@ const statusLabelMap: Record<string, string> = {
 };
 
 // Role badge variants
-const roleVariantMap: Record<
-  string,
-  "role-owner" | "role-admin" | "role-member"
-> = {
+const roleVariantMap: Record<string, "role-owner" | "role-admin" | "role-member"> = {
   owner: "role-owner",
   admin: "role-admin",
   member: "role-member",
@@ -76,10 +70,7 @@ const workspaceStatusVariantMap: Record<
 };
 
 // Plan badge variants
-const planVariantMap: Record<
-  WorkspacePlan,
-  "plan-free" | "plan-pro" | "plan-enterprise"
-> = {
+const planVariantMap: Record<WorkspacePlan, "plan-free" | "plan-pro" | "plan-enterprise"> = {
   free: "plan-free",
   pro: "plan-pro",
   enterprise: "plan-enterprise",
@@ -133,9 +124,7 @@ function StatItem({
           >
             {value}
           </p>
-          {subValue && (
-            <span className="text-muted-foreground text-xs">{subValue}</span>
-          )}
+          {subValue && <span className="text-muted-foreground text-xs">{subValue}</span>}
         </div>
       </div>
     </div>
@@ -156,10 +145,7 @@ function Section({
 }) {
   return (
     <div
-      className={cn(
-        "animate-fade-in-up rounded-xl bg-card ring-1 ring-foreground/5",
-        className
-      )}
+      className={cn("animate-fade-in-up rounded-xl bg-card ring-1 ring-foreground/5", className)}
     >
       <div className="flex items-center justify-between border-border border-b px-4 py-3">
         <h3 className="font-semibold">{title}</h3>
@@ -192,15 +178,7 @@ function InfoRow({
 }
 
 // Progress bar component
-function ProgressBar({
-  current,
-  total,
-  color,
-}: {
-  current: number;
-  total: number;
-  color: string;
-}) {
+function ProgressBar({ current, total, color }: { current: number; total: number; color: string }) {
   const percentage = total > 0 ? (current / total) * 100 : 0;
   return (
     <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
@@ -240,8 +218,7 @@ export function UserDetailContent({ user: data }: UserDetailContentProps) {
             <AvatarFallback
               className="font-bold text-lg"
               style={{
-                backgroundColor:
-                  "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
+                backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
                 color: "var(--accent-teal)",
               }}
             >
@@ -254,23 +231,15 @@ export function UserDetailContent({ user: data }: UserDetailContentProps) {
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Badge variant={statusVariantMap[user.status]}>
-            {statusLabelMap[user.status]}
-          </Badge>
-          <Badge variant={roleVariantMap[user.role]}>
-            {roleLabelMap[user.role]}
-          </Badge>
+          <Badge variant={statusVariantMap[user.status]}>{statusLabelMap[user.status]}</Badge>
+          <Badge variant={roleVariantMap[user.role]}>{roleLabelMap[user.role]}</Badge>
           {user.isSystemAdmin && (
             <Badge className="gap-1" variant="default">
               <IconShieldCheck className="h-3 w-3" />
               System Admin
             </Badge>
           )}
-          <Button
-            onClick={() => setEditDialogOpen(true)}
-            size="sm"
-            variant="outline"
-          >
+          <Button onClick={() => setEditDialogOpen(true)} size="sm" variant="outline">
             <IconEdit className="mr-2 h-4 w-4" />
             Edit
           </Button>
@@ -391,8 +360,7 @@ export function UserDetailContent({ user: data }: UserDetailContentProps) {
                   <div
                     className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-bold text-sm"
                     style={{
-                      backgroundColor:
-                        "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
+                      backgroundColor: "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
                       color: "var(--accent-violet)",
                     }}
                   >
@@ -400,18 +368,14 @@ export function UserDetailContent({ user: data }: UserDetailContentProps) {
                   </div>
                   <div>
                     <p className="font-medium">{workspace.name}</p>
-                    <p className="font-mono text-muted-foreground text-sm">
-                      /{workspace.slug}
-                    </p>
+                    <p className="font-mono text-muted-foreground text-sm">/{workspace.slug}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge variant={workspaceStatusVariantMap[workspace.status]}>
                     {workspace.status}
                   </Badge>
-                  <Badge variant={planVariantMap[workspace.plan]}>
-                    {workspace.plan}
-                  </Badge>
+                  <Badge variant={planVariantMap[workspace.plan]}>{workspace.plan}</Badge>
                   <IconExternalLink className="h-4 w-4 text-muted-foreground" />
                 </div>
               </div>
@@ -421,9 +385,7 @@ export function UserDetailContent({ user: data }: UserDetailContentProps) {
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-muted">
                 <IconBuilding className="h-6 w-6 text-muted-foreground" />
               </div>
-              <p className="text-muted-foreground text-sm">
-                No workspace assigned
-              </p>
+              <p className="text-muted-foreground text-sm">No workspace assigned</p>
             </div>
           )}
         </Section>
@@ -462,9 +424,7 @@ export function UserDetailContent({ user: data }: UserDetailContentProps) {
                 <div className="flex items-center gap-2">
                   <ProgressBar
                     color={
-                      project.status === "completed"
-                        ? "var(--accent-green)"
-                        : "var(--accent-teal)"
+                      project.status === "completed" ? "var(--accent-green)" : "var(--accent-teal)"
                     }
                     current={project.completedCount}
                     total={project.imageCount}
@@ -476,9 +436,7 @@ export function UserDetailContent({ user: data }: UserDetailContentProps) {
               </Link>
             ))}
             {recentProjects.length === 0 && (
-              <p className="py-4 text-center text-muted-foreground text-sm">
-                No projects yet
-              </p>
+              <p className="py-4 text-center text-muted-foreground text-sm">No projects yet</p>
             )}
           </div>
         </Section>
@@ -503,8 +461,7 @@ export function UserDetailContent({ user: data }: UserDetailContentProps) {
                     variant={
                       video.status === "completed"
                         ? "status-completed"
-                        : video.status === "generating" ||
-                            video.status === "compiling"
+                        : video.status === "generating" || video.status === "compiling"
                           ? "status-active"
                           : video.status === "failed"
                             ? "destructive"
@@ -533,9 +490,7 @@ export function UserDetailContent({ user: data }: UserDetailContentProps) {
               </Link>
             ))}
             {recentVideos.length === 0 && (
-              <p className="py-4 text-center text-muted-foreground text-sm">
-                No videos yet
-              </p>
+              <p className="py-4 text-center text-muted-foreground text-sm">No videos yet</p>
             )}
           </div>
         </Section>

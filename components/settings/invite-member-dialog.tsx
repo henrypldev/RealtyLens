@@ -51,10 +51,7 @@ const roleOptions: {
   },
 ];
 
-export function InviteMemberDialog({
-  open,
-  onOpenChange,
-}: InviteMemberDialogProps) {
+export function InviteMemberDialog({ open, onOpenChange }: InviteMemberDialogProps) {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState<UserRole>("member");
   const [isPending, startTransition] = useTransition();
@@ -114,14 +111,10 @@ export function InviteMemberDialog({
               <div
                 className="flex h-8 w-8 items-center justify-center rounded-lg"
                 style={{
-                  backgroundColor:
-                    "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
+                  backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
                 }}
               >
-                <IconUserPlus
-                  className="h-4 w-4"
-                  style={{ color: "var(--accent-teal)" }}
-                />
+                <IconUserPlus className="h-4 w-4" style={{ color: "var(--accent-teal)" }} />
               </div>
               Invite Team Member
             </DialogTitle>
@@ -142,20 +135,14 @@ export function InviteMemberDialog({
                 <div
                   className="flex h-16 w-16 items-center justify-center rounded-full"
                   style={{
-                    backgroundColor:
-                      "color-mix(in oklch, var(--accent-green) 15%, transparent)",
+                    backgroundColor: "color-mix(in oklch, var(--accent-green) 15%, transparent)",
                   }}
                 >
-                  <IconCheck
-                    className="h-8 w-8"
-                    style={{ color: "var(--accent-green)" }}
-                  />
+                  <IconCheck className="h-8 w-8" style={{ color: "var(--accent-green)" }} />
                 </div>
                 <div>
                   <p className="font-semibold text-lg">Invitation Created!</p>
-                  <p className="text-muted-foreground text-sm">
-                    Share this link with {email}
-                  </p>
+                  <p className="text-muted-foreground text-sm">Share this link with {email}</p>
                 </div>
               </div>
 
@@ -173,9 +160,7 @@ export function InviteMemberDialog({
                     className="shrink-0 gap-2"
                     onClick={handleCopyLink}
                     style={{
-                      backgroundColor: copied
-                        ? "var(--accent-green)"
-                        : "var(--accent-teal)",
+                      backgroundColor: copied ? "var(--accent-green)" : "var(--accent-teal)",
                     }}
                     type="button"
                   >
@@ -192,9 +177,7 @@ export function InviteMemberDialog({
                     )}
                   </Button>
                 </div>
-                <p className="text-muted-foreground text-xs">
-                  This link expires in 7 days
-                </p>
+                <p className="text-muted-foreground text-xs">This link expires in 7 days</p>
               </div>
             </div>
           ) : (
@@ -229,7 +212,7 @@ export function InviteMemberDialog({
                         "flex items-start gap-3 rounded-xl p-4 text-left ring-2 transition-all duration-200",
                         role === option.value
                           ? "bg-[var(--accent-teal)]/5 ring-[var(--accent-teal)]"
-                          : "ring-foreground/5 hover:bg-muted/30 hover:ring-foreground/10"
+                          : "ring-foreground/5 hover:bg-muted/30 hover:ring-foreground/10",
                       )}
                       disabled={isPending}
                       key={option.value}
@@ -241,16 +224,14 @@ export function InviteMemberDialog({
                           "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors",
                           role === option.value
                             ? "bg-[var(--accent-teal)]/15 text-[var(--accent-teal)]"
-                            : "bg-muted text-muted-foreground"
+                            : "bg-muted text-muted-foreground",
                         )}
                       >
                         {option.icon}
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
-                          <p className="font-medium text-foreground">
-                            {option.label}
-                          </p>
+                          <p className="font-medium text-foreground">{option.label}</p>
                           {role === option.value && (
                             <IconCheck
                               className="h-4 w-4"
@@ -258,9 +239,7 @@ export function InviteMemberDialog({
                             />
                           )}
                         </div>
-                        <p className="text-muted-foreground text-sm">
-                          {option.description}
-                        </p>
+                        <p className="text-muted-foreground text-sm">{option.description}</p>
                       </div>
                     </button>
                   ))}
@@ -274,11 +253,7 @@ export function InviteMemberDialog({
         <div className="flex items-center justify-end gap-3 border-t bg-muted/30 px-6 py-4">
           {inviteUrl ? (
             <>
-              <Button
-                onClick={handleCreateAnother}
-                type="button"
-                variant="outline"
-              >
+              <Button onClick={handleCreateAnother} type="button" variant="outline">
                 Invite Another
               </Button>
               <Button
@@ -291,12 +266,7 @@ export function InviteMemberDialog({
             </>
           ) : (
             <>
-              <Button
-                disabled={isPending}
-                onClick={handleClose}
-                type="button"
-                variant="outline"
-              >
+              <Button disabled={isPending} onClick={handleClose} type="button" variant="outline">
                 Cancel
               </Button>
               <Button

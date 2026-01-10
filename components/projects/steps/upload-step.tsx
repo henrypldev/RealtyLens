@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  IconGripVertical,
-  IconPhoto,
-  IconUpload,
-  IconX,
-} from "@tabler/icons-react";
+import { IconGripVertical, IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
 import * as React from "react";
 import { useCallback } from "react";
 import { Button } from "@/components/ui/button";
@@ -18,11 +13,7 @@ interface UploadStepProps {
   onRemoveImage: (id: string) => void;
 }
 
-export function UploadStep({
-  images,
-  onAddImages,
-  onRemoveImage,
-}: UploadStepProps) {
+export function UploadStep({ images, onAddImages, onRemoveImage }: UploadStepProps) {
   const [isDragging, setIsDragging] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -42,13 +33,13 @@ export function UploadStep({
       setIsDragging(false);
 
       const files = Array.from(e.dataTransfer.files).filter((file) =>
-        file.type.startsWith("image/")
+        file.type.startsWith("image/"),
       );
       if (files.length > 0) {
         onAddImages(files);
       }
     },
-    [onAddImages]
+    [onAddImages],
   );
 
   const handleFileChange = useCallback(
@@ -60,7 +51,7 @@ export function UploadStep({
       // Reset input so same file can be selected again
       e.target.value = "";
     },
-    [onAddImages]
+    [onAddImages],
   );
 
   const handleClick = useCallback(() => {
@@ -75,7 +66,7 @@ export function UploadStep({
           "relative flex min-h-[200px] cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed p-8 transition-all duration-200",
           isDragging
             ? "border-[var(--accent-teal)] bg-[var(--accent-teal)]/5"
-            : "border-foreground/10 bg-muted/30 hover:border-foreground/20 hover:bg-muted/50"
+            : "border-foreground/10 bg-muted/30 hover:border-foreground/20 hover:bg-muted/50",
         )}
         onClick={handleClick}
         onDragLeave={handleDragLeave}
@@ -94,7 +85,7 @@ export function UploadStep({
         <div
           className={cn(
             "flex h-16 w-16 items-center justify-center rounded-2xl transition-all duration-200",
-            isDragging ? "scale-110" : ""
+            isDragging ? "scale-110" : "",
           )}
           style={{
             backgroundColor: isDragging
@@ -103,10 +94,7 @@ export function UploadStep({
           }}
         >
           <IconUpload
-            className={cn(
-              "h-8 w-8 transition-colors",
-              isDragging ? "text-white" : ""
-            )}
+            className={cn("h-8 w-8 transition-colors", isDragging ? "text-white" : "")}
             style={{ color: isDragging ? undefined : "var(--accent-teal)" }}
           />
         </div>
@@ -128,12 +116,7 @@ export function UploadStep({
             <p className="font-medium text-foreground text-sm">
               {images.length} image{images.length !== 1 ? "s" : ""} selected
             </p>
-            <Button
-              className="gap-1.5 text-xs"
-              onClick={handleClick}
-              size="sm"
-              variant="ghost"
-            >
+            <Button className="gap-1.5 text-xs" onClick={handleClick} size="sm" variant="ghost">
               <IconPhoto className="h-3.5 w-3.5" />
               Add more
             </Button>

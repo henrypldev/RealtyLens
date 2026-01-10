@@ -154,9 +154,7 @@ function generateMockUsers(): AdminUser[] {
       workspaceSlug: workspace.slug,
       role: "owner",
       status: "active",
-      imagesGenerated: Math.floor(
-        workspace.imagesGenerated * (0.3 + random() * 0.3)
-      ),
+      imagesGenerated: Math.floor(workspace.imagesGenerated * (0.3 + random() * 0.3)),
       lastActiveAt: workspace.lastActivityAt,
       joinedAt: workspace.createdAt,
     });
@@ -179,11 +177,7 @@ function generateMockUsers(): AdminUser[] {
       // Images generated for this user
       const userImages =
         status === "active"
-          ? Math.floor(
-              random() *
-                (workspace.imagesGenerated / workspace.memberCount) *
-                1.5
-            )
+          ? Math.floor(random() * (workspace.imagesGenerated / workspace.memberCount) * 1.5)
           : 0;
 
       // Joined after workspace was created
@@ -193,9 +187,7 @@ function generateMockUsers(): AdminUser[] {
 
       // Last active
       const lastActiveDaysAgo =
-        status === "active"
-          ? Math.floor(random() * 7)
-          : Math.floor(random() * 60) + 30;
+        status === "active" ? Math.floor(random() * 7) : Math.floor(random() * 60) + 30;
       const lastActiveAt = new Date();
       lastActiveAt.setDate(lastActiveAt.getDate() - lastActiveDaysAgo);
 
@@ -287,10 +279,7 @@ function filterUsers(users: AdminUser[], filters: UserFilters): AdminUser[] {
   });
 }
 
-function sortUsers(
-  users: AdminUser[],
-  sort?: [SortableUserColumn, SortDirection]
-): AdminUser[] {
+function sortUsers(users: AdminUser[], sort?: [SortableUserColumn, SortDirection]): AdminUser[] {
   if (!sort) return users;
 
   const [column, direction] = sort;
@@ -332,7 +321,7 @@ function sortUsers(
 export function getUsersPage(
   cursor: string | null = null,
   limit = 20,
-  filters: UserFilters = {}
+  filters: UserFilters = {},
 ): GetUsersResponse {
   const filteredUsers = filterUsers(mockUsers, filters);
   const sortedUsers = sortUsers(filteredUsers, filters.sort);
@@ -367,8 +356,4 @@ export function getUsersByWorkspace(workspaceId: string): AdminUser[] {
 
 // Export constants for filters
 export const ALL_USER_ROLES: UserRole[] = ["owner", "admin", "member"];
-export const ALL_USER_STATUSES: UserStatus[] = [
-  "active",
-  "pending",
-  "inactive",
-];
+export const ALL_USER_STATUSES: UserStatus[] = ["active", "pending", "inactive"];

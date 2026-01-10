@@ -22,9 +22,7 @@ export default function Help() {
   // Calculate article count per category
   const articleCountByCategory: Record<string, number> = {};
   for (const category of helpCategories) {
-    articleCountByCategory[category.slug] = getArticlesByCategory(
-      category.slug
-    ).length;
+    articleCountByCategory[category.slug] = getArticlesByCategory(category.slug).length;
   }
 
   return (

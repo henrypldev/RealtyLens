@@ -1,11 +1,6 @@
 import { logger, metadata, task } from "@trigger.dev/sdk/v3";
 import { getVideoClipById, updateVideoClip } from "@/lib/db/queries";
-import {
-  fal,
-  KLING_VIDEO_PRO,
-  type KlingVideoInput,
-  type KlingVideoOutput,
-} from "@/lib/fal";
+import { fal, KLING_VIDEO_PRO, type KlingVideoInput, type KlingVideoOutput } from "@/lib/fal";
 import { getVideoPath, uploadVideo } from "@/lib/supabase";
 import { DEFAULT_NEGATIVE_PROMPT } from "@/lib/video/motion-prompts";
 
@@ -19,13 +14,7 @@ export interface GenerateTransitionClipPayload {
 }
 
 export interface TransitionClipStatus {
-  step:
-    | "fetching"
-    | "uploading"
-    | "generating"
-    | "saving"
-    | "completed"
-    | "failed";
+  step: "fetching" | "uploading" | "generating" | "saving" | "completed" | "failed";
   label: string;
   progress?: number;
 }
@@ -40,14 +29,7 @@ export const generateTransitionClipTask = task({
     factor: 2,
   },
   run: async (payload: GenerateTransitionClipPayload) => {
-    const {
-      clipId,
-      fromImageUrl,
-      toImageUrl,
-      videoProjectId,
-      workspaceId,
-      aspectRatio,
-    } = payload;
+    const { clipId, fromImageUrl, toImageUrl, videoProjectId, workspaceId, aspectRatio } = payload;
 
     try {
       // Step 1: Fetch clip record
@@ -82,7 +64,7 @@ export const generateTransitionClipTask = task({
       }
       const fromBlob = await fromResponse.blob();
       const falFromUrl = await fal.storage.upload(
-        new File([fromBlob], "from.jpg", { type: fromBlob.type })
+        new File([fromBlob], "from.jpg", { type: fromBlob.type }),
       );
 
       // Fetch and upload to image (start of next clip)
@@ -92,7 +74,7 @@ export const generateTransitionClipTask = task({
       }
       const toBlob = await toResponse.blob();
       const falToUrl = await fal.storage.upload(
-        new File([toBlob], "to.jpg", { type: toBlob.type })
+        new File([toBlob], "to.jpg", { type: toBlob.type }),
       );
 
       logger.info("Uploaded transition images to Fal.ai storage", {
@@ -171,18 +153,14 @@ export const generateTransitionClipTask = task({
 
       const resultVideoBuffer = await resultVideoResponse.arrayBuffer();
 
-      const videoPath = getVideoPath(
-        workspaceId,
-        videoProjectId,
-        `transition_${clipId}.mp4`
-      );
+      const videoPath = getVideoPath(workspaceId, videoProjectId, `transition_${clipId}.mp4`);
 
       logger.info("Uploading transition to Supabase", { videoPath });
 
       const storedVideoUrl = await uploadVideo(
         new Uint8Array(resultVideoBuffer),
         videoPath,
-        "video/mp4"
+        "video/mp4",
       );
 
       // Update clip record with transition URL

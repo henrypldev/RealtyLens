@@ -19,14 +19,7 @@ type StatItemProps = {
   delay: number;
 };
 
-function StatItem({
-  icon,
-  label,
-  value,
-  subValue,
-  accentColor,
-  delay,
-}: StatItemProps) {
+function StatItem({ icon, label, value, subValue, accentColor, delay }: StatItemProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -59,9 +52,7 @@ function StatItem({
           >
             {value}
           </p>
-          {subValue && (
-            <span className="text-muted-foreground text-xs">{subValue}</span>
-          )}
+          {subValue && <span className="text-muted-foreground text-xs">{subValue}</span>}
         </div>
       </div>
     </div>

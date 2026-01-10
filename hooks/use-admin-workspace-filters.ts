@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  parseAsArrayOf,
-  parseAsString,
-  parseAsStringLiteral,
-  useQueryStates,
-} from "nuqs";
+import { parseAsArrayOf, parseAsString, parseAsStringLiteral, useQueryStates } from "nuqs";
 import type { WorkspacePlan, WorkspaceStatus } from "@/lib/db/schema";
 import {
   ALL_WORKSPACE_PLANS,
@@ -39,10 +34,7 @@ export function useAdminWorkspaceFilters() {
     plan: filters.plan as WorkspacePlan | null,
     sort:
       sortColumn && sortDirection
-        ? ([sortColumn, sortDirection] as [
-            SortableWorkspaceColumn,
-            SortDirection,
-          ])
+        ? ([sortColumn, sortDirection] as [SortableWorkspaceColumn, SortDirection])
         : undefined,
   };
 

@@ -5,11 +5,7 @@ import {
   updateVideoProject,
   updateVideoProjectCounts,
 } from "@/lib/db/queries";
-import {
-  calculateVideoCost,
-  costToCents,
-  VIDEO_DEFAULTS,
-} from "@/lib/video/video-constants";
+import { calculateVideoCost, costToCents, VIDEO_DEFAULTS } from "@/lib/video/video-constants";
 import { compileVideoTask } from "./compile-video";
 import { generateTransitionClipTask } from "./generate-transition-clip";
 import { generateVideoClipTask } from "./generate-video-clip";
@@ -69,8 +65,8 @@ export const generateVideoTask = task({
           calculateVideoCost(
             clips.length,
             VIDEO_DEFAULTS.CLIP_DURATION,
-            videoProject.generateNativeAudio
-          )
+            videoProject.generateNativeAudio,
+          ),
         ),
       });
 
@@ -94,11 +90,10 @@ export const generateVideoTask = task({
             payload: {
               clipId: clip.id,
               tailImageUrl: clip.endImageUrl || clip.sourceImageUrl,
-              targetRoomLabel:
-                clip.roomLabel || clip.roomType.replace(/-/g, " "),
+              targetRoomLabel: clip.roomLabel || clip.roomType.replace(/-/g, " "),
             },
           };
-        })
+        }),
       );
 
       // Check results
@@ -149,31 +144,25 @@ export const generateVideoTask = task({
         // Reload clips to get updated clip URLs
         const updatedClips = await getVideoClips(videoProjectId);
 
-        const transitionResults =
-          await generateTransitionClipTask.batchTriggerAndWait(
-            clipsWithTransitions.map((clip, index) => {
-              const clipIndex = clips.findIndex((c) => c.id === clip.id);
-              const nextClip = clips[clipIndex + 1];
+        const transitionResults = await generateTransitionClipTask.batchTriggerAndWait(
+          clipsWithTransitions.map((clip, index) => {
+            const clipIndex = clips.findIndex((c) => c.id === clip.id);
+            const nextClip = clips[clipIndex + 1];
 
-              return {
-                payload: {
-                  clipId: clip.id,
-                  fromImageUrl: clip.endImageUrl || clip.sourceImageUrl,
-                  toImageUrl: nextClip.sourceImageUrl,
-                  videoProjectId,
-                  workspaceId: videoProject.workspaceId,
-                  aspectRatio: videoProject.aspectRatio as
-                    | "16:9"
-                    | "9:16"
-                    | "1:1",
-                },
-              };
-            })
-          );
-
-        const successfulTransitions = transitionResults.runs.filter(
-          (r) => r.ok
+            return {
+              payload: {
+                clipId: clip.id,
+                fromImageUrl: clip.endImageUrl || clip.sourceImageUrl,
+                toImageUrl: nextClip.sourceImageUrl,
+                videoProjectId,
+                workspaceId: videoProject.workspaceId,
+                aspectRatio: videoProject.aspectRatio as "16:9" | "9:16" | "1:1",
+              },
+            };
+          }),
         );
+
+        const successfulTransitions = transitionResults.runs.filter((r) => r.ok);
         const failedTransitions = transitionResults.runs.filter((r) => !r.ok);
 
         logger.info("Transition generation completed", {
@@ -222,8 +211,8 @@ export const generateVideoTask = task({
         calculateVideoCost(
           successfulClips.length,
           VIDEO_DEFAULTS.CLIP_DURATION,
-          videoProject.generateNativeAudio
-        )
+          videoProject.generateNativeAudio,
+        ),
       );
 
       // Update final status
@@ -253,8 +242,7 @@ export const generateVideoTask = task({
         actualCost,
       };
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Unknown error";
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
 
       logger.error("Video generation failed", {
         videoProjectId,
@@ -277,8 +265,7 @@ export const generateVideoTask = task({
       } catch (dbError) {
         logger.error("Failed to update project status in database", {
           videoProjectId,
-          error:
-            dbError instanceof Error ? dbError.message : "Unknown DB error",
+          error: dbError instanceof Error ? dbError.message : "Unknown DB error",
         });
       }
 

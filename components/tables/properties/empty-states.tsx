@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  IconBuilding,
-  IconPhotoPlus,
-  IconSearch,
-  IconSparkles,
-} from "@tabler/icons-react";
+import { IconBuilding, IconPhotoPlus, IconSearch, IconSparkles } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 
 export function EmptyState() {
@@ -15,18 +10,8 @@ export function EmptyState() {
       <div className="absolute inset-0 opacity-[0.03]">
         <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <pattern
-              height="32"
-              id="grid"
-              patternUnits="userSpaceOnUse"
-              width="32"
-            >
-              <path
-                d="M 32 0 L 0 0 0 32"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1"
-              />
+            <pattern height="32" id="grid" patternUnits="userSpaceOnUse" width="32">
+              <path d="M 32 0 L 0 0 0 32" fill="none" stroke="currentColor" strokeWidth="1" />
             </pattern>
           </defs>
           <rect fill="url(#grid)" height="100%" width="100%" />
@@ -44,10 +29,7 @@ export function EmptyState() {
           </div>
           {/* Floating sparkle */}
           <div className="absolute -top-2 -right-2 flex h-8 w-8 animate-pulse-subtle items-center justify-center rounded-full bg-background shadow-md ring-1 ring-foreground/10">
-            <IconSparkles
-              className="h-4 w-4"
-              style={{ color: "var(--accent-amber)" }}
-            />
+            <IconSparkles className="h-4 w-4" style={{ color: "var(--accent-amber)" }} />
           </div>
         </div>
 
@@ -55,8 +37,8 @@ export function EmptyState() {
           No properties yet
         </h3>
         <p className="stagger-2 mb-8 max-w-md animate-fade-in-up text-center text-muted-foreground">
-          Transform your real estate photos with AI-powered enhancements. Upload
-          your first photo to get started.
+          Transform your real estate photos with AI-powered enhancements. Upload your first photo to
+          get started.
         </p>
 
         <Button
@@ -96,8 +78,8 @@ export function NoResults() {
           No results found
         </h3>
         <p className="stagger-2 max-w-sm animate-fade-in-up text-center text-muted-foreground text-sm">
-          We couldn&apos;t find any properties matching your search criteria.
-          Try adjusting your filters or search terms.
+          We couldn&apos;t find any properties matching your search criteria. Try adjusting your
+          filters or search terms.
         </p>
       </div>
     </div>

@@ -42,10 +42,7 @@ const statusLabelMap: Record<WorkspaceStatus, string> = {
 };
 
 // Plan badge variants
-const planVariantMap: Record<
-  WorkspacePlan,
-  "plan-free" | "plan-pro" | "plan-enterprise"
-> = {
+const planVariantMap: Record<WorkspacePlan, "plan-free" | "plan-pro" | "plan-enterprise"> = {
   free: "plan-free",
   pro: "plan-pro",
   enterprise: "plan-enterprise",
@@ -61,27 +58,15 @@ const planLabelMap: Record<WorkspacePlan, string> = {
 const WorkspaceCell = memo(({ name, slug }: { name: string; slug: string }) => (
   <div className="flex min-w-0 flex-col">
     <span className="truncate font-medium">{name}</span>
-    <span className="truncate font-mono text-muted-foreground text-xs">
-      /{slug}
-    </span>
+    <span className="truncate font-mono text-muted-foreground text-xs">/{slug}</span>
   </div>
 ));
 WorkspaceCell.displayName = "WorkspaceCell";
 
 const OwnerCell = memo(
-  ({
-    name,
-    email,
-    image,
-  }: {
-    name: string | null;
-    email: string | null;
-    image: string | null;
-  }) => {
+  ({ name, email, image }: { name: string | null; email: string | null; image: string | null }) => {
     if (!(name && email)) {
-      return (
-        <span className="text-muted-foreground text-sm italic">No owner</span>
-      );
+      return <span className="text-muted-foreground text-sm italic">No owner</span>;
     }
 
     const initials = name
@@ -95,19 +80,15 @@ const OwnerCell = memo(
       <div className="flex min-w-0 items-center gap-2.5">
         <Avatar className="h-7 w-7 shrink-0">
           {image && <AvatarImage alt={name} src={image} />}
-          <AvatarFallback className="font-medium text-[10px]">
-            {initials}
-          </AvatarFallback>
+          <AvatarFallback className="font-medium text-[10px]">{initials}</AvatarFallback>
         </Avatar>
         <div className="flex min-w-0 flex-col">
           <span className="truncate font-medium text-sm">{name}</span>
-          <span className="truncate text-muted-foreground text-xs">
-            {email}
-          </span>
+          <span className="truncate text-muted-foreground text-xs">{email}</span>
         </div>
       </div>
     );
-  }
+  },
 );
 OwnerCell.displayName = "OwnerCell";
 
@@ -139,10 +120,7 @@ const PlanCell = memo(({ plan }: { plan: WorkspacePlan }) => (
 PlanCell.displayName = "PlanCell";
 
 const SpendCell = memo(({ amount }: { amount: number }) => (
-  <span
-    className="font-medium font-mono text-sm"
-    style={{ color: "var(--accent-amber)" }}
-  >
+  <span className="font-medium font-mono text-sm" style={{ color: "var(--accent-amber)" }}>
     ${amount.toFixed(2)}
   </span>
 ));
@@ -250,7 +228,7 @@ const ActionsCell = memo(
         </DropdownMenu>
       </div>
     );
-  }
+  },
 );
 ActionsCell.displayName = "ActionsCell";
 
@@ -273,9 +251,7 @@ export function createWorkspaceColumns(options?: {
       header: "Workspace",
       size: 220,
       minSize: 180,
-      cell: ({ row }) => (
-        <WorkspaceCell name={row.original.name} slug={row.original.slug} />
-      ),
+      cell: ({ row }) => <WorkspaceCell name={row.original.name} slug={row.original.slug} />,
     },
     {
       id: "owner",

@@ -19,8 +19,7 @@ export async function completeOnboarding(formData: FormData) {
 
   const name = formData.get("name") as string;
   const workspaceName = formData.get("workspaceName") as string;
-  const organizationNumber =
-    (formData.get("organizationNumber") as string) || null;
+  const organizationNumber = (formData.get("organizationNumber") as string) || null;
   const contactEmail = (formData.get("contactEmail") as string) || null;
   const contactPerson = (formData.get("contactPerson") as string) || null;
 
@@ -30,11 +29,7 @@ export async function completeOnboarding(formData: FormData) {
   }
 
   // Get user's workspace
-  const currentUser = await db
-    .select()
-    .from(user)
-    .where(eq(user.id, session.user.id))
-    .limit(1);
+  const currentUser = await db.select().from(user).where(eq(user.id, session.user.id)).limit(1);
 
   if (!currentUser[0]?.workspaceId) {
     throw new Error("Workspace not found");

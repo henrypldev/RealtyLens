@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  IconChevronDown,
-  IconGripVertical,
-  IconWand,
-} from "@tabler/icons-react";
+import { IconChevronDown, IconGripVertical, IconWand } from "@tabler/icons-react";
 import Image from "next/image";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
@@ -16,10 +12,7 @@ import { VIDEO_ROOM_TYPES } from "@/lib/video/room-sequence";
 
 interface AssignRoomsStepProps {
   images: VideoImageItem[];
-  onUpdateImage: (
-    id: string,
-    updates: Partial<Omit<VideoImageItem, "id" | "url">>
-  ) => void;
+  onUpdateImage: (id: string, updates: Partial<Omit<VideoImageItem, "id" | "url">>) => void;
   onReorderImages: (fromIndex: number, toIndex: number) => void;
   onAutoArrange: () => void;
 }
@@ -45,11 +38,7 @@ export function AssignRoomsStep({
   };
 
   const handleDragEnd = () => {
-    if (
-      draggedIndex !== null &&
-      dragOverIndex !== null &&
-      draggedIndex !== dragOverIndex
-    ) {
+    if (draggedIndex !== null && dragOverIndex !== null && draggedIndex !== dragOverIndex) {
       onReorderImages(draggedIndex, dragOverIndex);
     }
     setDraggedIndex(null);
@@ -61,15 +50,9 @@ export function AssignRoomsStep({
       {/* Actions Bar */}
       <div className="flex items-center justify-between">
         <div className="text-muted-foreground text-sm">
-          <span className="font-medium text-foreground">{images.length}</span>{" "}
-          clips in sequence
+          <span className="font-medium text-foreground">{images.length}</span> clips in sequence
         </div>
-        <Button
-          className="gap-2"
-          onClick={onAutoArrange}
-          size="sm"
-          variant="outline"
-        >
+        <Button className="gap-2" onClick={onAutoArrange} size="sm" variant="outline">
           <IconWand className="h-4 w-4" />
           Auto-arrange by room type
         </Button>
@@ -83,9 +66,8 @@ export function AssignRoomsStep({
               "group flex items-center gap-4 rounded-xl border bg-card p-3 transition-all duration-200",
               "hover:border-(--accent-teal)/30 hover:shadow-md",
               draggedIndex === index && "scale-[0.98] opacity-50",
-              dragOverIndex === index &&
-                "border-(--accent-teal) bg-(--accent-teal)/5",
-              "animate-fade-in-up"
+              dragOverIndex === index && "border-(--accent-teal) bg-(--accent-teal)/5",
+              "animate-fade-in-up",
             )}
             draggable
             key={image.id}
@@ -121,7 +103,7 @@ export function AssignRoomsStep({
                 <select
                   className={cn(
                     "w-full appearance-none rounded-lg border bg-background px-3 py-2 pr-10 text-sm",
-                    "focus:border-(--accent-teal) focus:outline-none focus:ring-(--accent-teal)/20 focus:ring-2"
+                    "focus:border-(--accent-teal) focus:outline-none focus:ring-(--accent-teal)/20 focus:ring-2",
                   )}
                   onChange={(e) =>
                     onUpdateImage(image.id, {
@@ -142,9 +124,7 @@ export function AssignRoomsStep({
               {/* Custom Label */}
               <Input
                 className="max-w-[200px] text-sm"
-                onChange={(e) =>
-                  onUpdateImage(image.id, { roomLabel: e.target.value })
-                }
+                onChange={(e) => onUpdateImage(image.id, { roomLabel: e.target.value })}
                 placeholder="Custom label (optional)"
                 value={image.roomLabel}
               />
@@ -163,9 +143,7 @@ export function AssignRoomsStep({
         <h4 className="mb-3 font-medium text-sm">Sequence Preview</h4>
         <div className="flex flex-wrap gap-2">
           {images.map((image, index) => {
-            const roomConfig = VIDEO_ROOM_TYPES.find(
-              (r) => r.id === image.roomType
-            );
+            const roomConfig = VIDEO_ROOM_TYPES.find((r) => r.id === image.roomType);
             return (
               <div
                 className="flex items-center gap-1.5 rounded-full bg-background px-3 py-1.5 font-medium text-xs shadow-sm"
@@ -173,16 +151,13 @@ export function AssignRoomsStep({
               >
                 <span className="text-muted-foreground">{index + 1}.</span>
                 <span>{image.roomLabel || roomConfig?.label || "Unknown"}</span>
-                {index < images.length - 1 && (
-                  <span className="ml-1 text-muted-foreground">→</span>
-                )}
+                {index < images.length - 1 && <span className="ml-1 text-muted-foreground">→</span>}
               </div>
             );
           })}
         </div>
         <p className="mt-3 text-muted-foreground text-xs">
-          Total duration: {images.length * 5} seconds ({images.length} clips × 5
-          sec)
+          Total duration: {images.length * 5} seconds ({images.length} clips × 5 sec)
         </p>
       </div>
     </div>

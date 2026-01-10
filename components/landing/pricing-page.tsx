@@ -85,9 +85,7 @@ function PricingCard({
         boxShadow: popular
           ? "0 20px 40px -12px var(--landing-shadow)"
           : "0 4px 24px -4px var(--landing-shadow)",
-        border: popular
-          ? "2px solid var(--landing-accent)"
-          : "1px solid var(--landing-border)",
+        border: popular ? "2px solid var(--landing-accent)" : "1px solid var(--landing-border)",
       }}
     >
       {popular && (
@@ -106,42 +104,29 @@ function PricingCard({
       <div
         className="relative mb-6 inline-flex size-14 items-center justify-center rounded-xl"
         style={{
-          backgroundColor: popular
-            ? "var(--landing-accent)"
-            : "var(--landing-bg-alt)",
+          backgroundColor: popular ? "var(--landing-accent)" : "var(--landing-bg-alt)",
           border: popular ? "none" : "1px solid var(--landing-border)",
         }}
       >
         <Icon
           className="size-7"
           style={{
-            color: popular
-              ? "var(--landing-accent-foreground)"
-              : "var(--landing-accent)",
+            color: popular ? "var(--landing-accent-foreground)" : "var(--landing-accent)",
           }}
         />
       </div>
 
       {/* Title */}
-      <h3
-        className="font-semibold text-xl"
-        style={{ color: "var(--landing-text)" }}
-      >
+      <h3 className="font-semibold text-xl" style={{ color: "var(--landing-text)" }}>
         {title}
       </h3>
 
       {/* Price */}
       <div className="mt-4 flex items-baseline gap-2">
-        <span
-          className="font-bold text-4xl tabular-nums"
-          style={{ color: "var(--landing-text)" }}
-        >
+        <span className="font-bold text-4xl tabular-nums" style={{ color: "var(--landing-text)" }}>
           {price}
         </span>
-        <span
-          className="text-sm"
-          style={{ color: "var(--landing-text-muted)" }}
-        >
+        <span className="text-sm" style={{ color: "var(--landing-text-muted)" }}>
           {per}
         </span>
       </div>
@@ -154,10 +139,7 @@ function PricingCard({
               className="mt-0.5 size-5 shrink-0"
               style={{ color: "var(--landing-accent)" }}
             />
-            <span
-              className="text-sm"
-              style={{ color: "var(--landing-text-muted)" }}
-            >
+            <span className="text-sm" style={{ color: "var(--landing-text-muted)" }}>
               {feature}
             </span>
           </li>
@@ -169,12 +151,8 @@ function PricingCard({
         className="mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-full font-medium text-base transition-all duration-200 hover:scale-[1.02]"
         href="/sign-in"
         style={{
-          backgroundColor: popular
-            ? "var(--landing-accent)"
-            : "var(--landing-bg-alt)",
-          color: popular
-            ? "var(--landing-accent-foreground)"
-            : "var(--landing-text)",
+          backgroundColor: popular ? "var(--landing-accent)" : "var(--landing-bg-alt)",
+          color: popular ? "var(--landing-accent-foreground)" : "var(--landing-text)",
           border: popular ? "none" : "1px solid var(--landing-border-strong)",
         }}
       >
@@ -205,15 +183,9 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
           {question}
         </span>
         {isOpen ? (
-          <IconMinus
-            className="size-5 shrink-0"
-            style={{ color: "var(--landing-text-muted)" }}
-          />
+          <IconMinus className="size-5 shrink-0" style={{ color: "var(--landing-text-muted)" }} />
         ) : (
-          <IconPlus
-            className="size-5 shrink-0"
-            style={{ color: "var(--landing-text-muted)" }}
-          />
+          <IconPlus className="size-5 shrink-0" style={{ color: "var(--landing-text-muted)" }} />
         )}
       </button>
       {isOpen && (
@@ -230,10 +202,7 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
 
 export function PricingPage() {
   return (
-    <div
-      className="min-h-screen"
-      style={{ backgroundColor: "var(--landing-bg)" }}
-    >
+    <div className="min-h-screen" style={{ backgroundColor: "var(--landing-bg)" }}>
       <LandingNav />
 
       <main>
@@ -285,10 +254,7 @@ export function PricingPage() {
         </section>
 
         {/* FAQ Section */}
-        <section
-          className="px-6 py-24"
-          style={{ backgroundColor: "var(--landing-bg-alt)" }}
-        >
+        <section className="px-6 py-24" style={{ backgroundColor: "var(--landing-bg-alt)" }}>
           <div className="mx-auto max-w-3xl">
             <div className="text-center">
               <p
@@ -307,11 +273,7 @@ export function PricingPage() {
 
             <div className="mt-12 space-y-4">
               {faqs.map((faq) => (
-                <FaqItem
-                  answer={faq.answer}
-                  key={faq.question}
-                  question={faq.question}
-                />
+                <FaqItem answer={faq.answer} key={faq.question} question={faq.question} />
               ))}
             </div>
           </div>
@@ -337,8 +299,7 @@ export function PricingPage() {
               className="mx-auto mt-4 max-w-lg text-lg leading-relaxed"
               style={{ color: "var(--landing-text-muted)" }}
             >
-              Transform your property photos today. No credit card required to
-              try.
+              Transform your property photos today. No credit card required to try.
             </p>
             <div className="mt-8">
               <Link

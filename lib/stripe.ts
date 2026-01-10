@@ -8,8 +8,7 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 // Stripe configuration constants
 export const STRIPE_CONFIG = {
   // Product and Price IDs (created via Stripe MCP)
-  PRICE_PROJECT_USD:
-    process.env.STRIPE_PRICE_PROJECT_USD || "price_1SneD7KOzkjqB2nyMT5KWVAb",
+  PRICE_PROJECT_USD: process.env.STRIPE_PRICE_PROJECT_USD || "price_1SneD7KOzkjqB2nyMT5KWVAb",
 
   // Pricing (in cents)
   PROJECT_PRICE_USD_CENTS: 9900, // $99 USD

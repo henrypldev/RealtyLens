@@ -15,11 +15,7 @@ import {
   updateVideoClip,
   updateVideoProject,
 } from "@/lib/db/queries";
-import type {
-  NewVideoClip,
-  VideoAspectRatio,
-  VideoRoomType,
-} from "@/lib/db/schema";
+import type { NewVideoClip, VideoAspectRatio, VideoRoomType } from "@/lib/db/schema";
 import {
   deleteVideoProjectFiles,
   getExtensionFromContentType,
@@ -27,11 +23,7 @@ import {
   uploadVideoSourceImage,
 } from "@/lib/supabase";
 import { getMotionPrompt } from "@/lib/video/motion-prompts";
-import {
-  calculateVideoCost,
-  costToCents,
-  VIDEO_DEFAULTS,
-} from "@/lib/video/video-constants";
+import { calculateVideoCost, costToCents, VIDEO_DEFAULTS } from "@/lib/video/video-constants";
 import type { generateVideoTask } from "@/trigger/video-orchestrator";
 
 // ============================================================================
@@ -89,8 +81,8 @@ export async function createVideoProject(input: CreateVideoInput) {
     calculateVideoCost(
       input.clips.length,
       VIDEO_DEFAULTS.CLIP_DURATION,
-      input.generateNativeAudio ?? VIDEO_DEFAULTS.GENERATE_NATIVE_AUDIO
-    )
+      input.generateNativeAudio ?? VIDEO_DEFAULTS.GENERATE_NATIVE_AUDIO,
+    ),
   );
 
   // Create video project
@@ -101,8 +93,7 @@ export async function createVideoProject(input: CreateVideoInput) {
     aspectRatio: input.aspectRatio ?? VIDEO_DEFAULTS.ASPECT_RATIO,
     musicTrackId: input.musicTrackId ?? null,
     musicVolume: input.musicVolume ?? VIDEO_DEFAULTS.MUSIC_VOLUME,
-    generateNativeAudio:
-      input.generateNativeAudio ?? VIDEO_DEFAULTS.GENERATE_NATIVE_AUDIO,
+    generateNativeAudio: input.generateNativeAudio ?? VIDEO_DEFAULTS.GENERATE_NATIVE_AUDIO,
     status: "draft",
     clipCount: input.clips.length,
     completedClipCount: 0,
@@ -119,8 +110,8 @@ export async function createVideoProject(input: CreateVideoInput) {
   });
 
   // Create clips
-  const clipsData: Omit<NewVideoClip, "id" | "createdAt" | "updatedAt">[] =
-    input.clips.map((clip) => ({
+  const clipsData: Omit<NewVideoClip, "id" | "createdAt" | "updatedAt">[] = input.clips.map(
+    (clip) => ({
       videoProjectId: videoProject.id,
       sourceImageUrl: clip.sourceImageUrl,
       imageGenerationId: clip.imageGenerationId ?? null,
@@ -133,7 +124,8 @@ export async function createVideoProject(input: CreateVideoInput) {
       transitionType: clip.transitionType ?? "seamless",
       durationSeconds: clip.durationSeconds ?? VIDEO_DEFAULTS.CLIP_DURATION,
       status: "pending",
-    }));
+    }),
+  );
 
   await createVideoClips(clipsData);
 
@@ -144,9 +136,7 @@ export async function createVideoProject(input: CreateVideoInput) {
 
 export async function triggerVideoGeneration(videoProjectId: string) {
   if (process.env.DEBUG_VIDEO === "1") {
-    console.log(
-      `[triggerVideoGeneration] Starting trigger for project: ${videoProjectId}`
-    );
+    console.log(`[triggerVideoGeneration] Starting trigger for project: ${videoProjectId}`);
   }
 
   const session = await auth.api.getSession({ headers: await headers() });
@@ -160,22 +150,17 @@ export async function triggerVideoGeneration(videoProjectId: string) {
   const projectData = await getVideoProjectById(videoProjectId);
   if (!projectData) {
     if (process.env.DEBUG_VIDEO === "1") {
-      console.error(
-        `[triggerVideoGeneration] Video project not found: ${videoProjectId}`
-      );
+      console.error(`[triggerVideoGeneration] Video project not found: ${videoProjectId}`);
     }
     throw new Error("Video project not found");
   }
 
   // Verify ownership
   const userData = await getUserWithWorkspace(session.user.id);
-  if (
-    !userData ||
-    projectData.videoProject.workspaceId !== userData.workspace.id
-  ) {
+  if (!userData || projectData.videoProject.workspaceId !== userData.workspace.id) {
     if (process.env.DEBUG_VIDEO === "1") {
       console.error(
-        `[triggerVideoGeneration] Unauthorized: User does not own workspace ${projectData.videoProject.workspaceId}`
+        `[triggerVideoGeneration] Unauthorized: User does not own workspace ${projectData.videoProject.workspaceId}`,
       );
     }
     throw new Error("Unauthorized");
@@ -188,14 +173,12 @@ export async function triggerVideoGeneration(videoProjectId: string) {
         console.log("[triggerVideoGeneration] TRIGGER_SECRET_KEY is present");
       } else {
         console.error(
-          "[triggerVideoGeneration] TRIGGER_SECRET_KEY is not set in environment variables"
+          "[triggerVideoGeneration] TRIGGER_SECRET_KEY is not set in environment variables",
         );
       }
 
       // Trigger the video generation task using the recommended tasks.trigger method
-      console.log(
-        "[triggerVideoGeneration] Calling tasks.trigger for generate-video..."
-      );
+      console.log("[triggerVideoGeneration] Calling tasks.trigger for generate-video...");
     }
 
     const handle = await tasks.trigger<typeof generateVideoTask>(
@@ -205,22 +188,20 @@ export async function triggerVideoGeneration(videoProjectId: string) {
       },
       {
         queue: "video-generation",
-      }
+      },
     );
 
     if (!handle?.id) {
       if (process.env.DEBUG_VIDEO === "1") {
         console.error(
-          "[triggerVideoGeneration] Trigger failed: No run ID returned from Trigger.dev"
+          "[triggerVideoGeneration] Trigger failed: No run ID returned from Trigger.dev",
         );
       }
       throw new Error("Failed to start video generation: No run ID returned");
     }
 
     if (process.env.DEBUG_VIDEO === "1") {
-      console.log(
-        `[triggerVideoGeneration] Trigger successful! Run ID: ${handle.id}`
-      );
+      console.log(`[triggerVideoGeneration] Trigger successful! Run ID: ${handle.id}`);
 
       // Generate public access token for real-time updates
       console.log("[triggerVideoGeneration] Creating public access token...");
@@ -241,44 +222,33 @@ export async function triggerVideoGeneration(videoProjectId: string) {
 
     if (process.env.DEBUG_VIDEO === "1") {
       console.log(
-        `[triggerVideoGeneration] Project ${videoProjectId} updated with run ID and access token`
+        `[triggerVideoGeneration] Project ${videoProjectId} updated with run ID and access token`,
       );
     }
 
     // Create invoice line item for video generation billing
     try {
-      const { createVideoInvoiceLineItemAction } = await import(
-        "@/lib/actions/billing"
-      );
+      const { createVideoInvoiceLineItemAction } = await import("@/lib/actions/billing");
       await createVideoInvoiceLineItemAction(
         projectData.videoProject.workspaceId,
         videoProjectId,
-        projectData.videoProject.name
+        projectData.videoProject.name,
       );
     } catch (billingError) {
       // Log but don't fail the video generation if billing fails
-      console.error(
-        "[triggerVideoGeneration] Failed to create invoice line item:",
-        billingError
-      );
+      console.error("[triggerVideoGeneration] Failed to create invoice line item:", billingError);
     }
 
     revalidatePath(`/video/${videoProjectId}`);
 
     return { success: true, runId: handle.id };
   } catch (error) {
-    console.error(
-      "[triggerVideoGeneration] Error triggering video generation:",
-      error
-    );
+    console.error("[triggerVideoGeneration] Error triggering video generation:", error);
 
     // Update project status to failed if triggering failed
     await updateVideoProject(videoProjectId, {
       status: "failed",
-      errorMessage:
-        error instanceof Error
-          ? error.message
-          : "Failed to trigger video generation",
+      errorMessage: error instanceof Error ? error.message : "Failed to trigger video generation",
     });
 
     throw error;
@@ -293,7 +263,7 @@ export async function updateVideoSettings(
     musicTrackId?: string | null;
     musicVolume?: number;
     generateNativeAudio?: boolean;
-  }
+  },
 ) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user?.id) {
@@ -307,10 +277,7 @@ export async function updateVideoSettings(
 
   // Verify ownership
   const userData = await getUserWithWorkspace(session.user.id);
-  if (
-    !userData ||
-    projectData.videoProject.workspaceId !== userData.workspace.id
-  ) {
+  if (!userData || projectData.videoProject.workspaceId !== userData.workspace.id) {
     throw new Error("Unauthorized");
   }
 
@@ -332,8 +299,7 @@ export async function updateClip(input: UpdateClipInput) {
 
   if (input.roomType) {
     updateData.roomType = input.roomType;
-    updateData.motionPrompt =
-      input.motionPrompt ?? getMotionPrompt(input.roomType);
+    updateData.motionPrompt = input.motionPrompt ?? getMotionPrompt(input.roomType);
   }
 
   if (input.roomLabel !== undefined) {
@@ -363,7 +329,7 @@ export async function updateClip(input: UpdateClipInput) {
 
 export async function reorderClips(
   videoProjectId: string,
-  clipOrders: Array<{ id: string; sequenceOrder: number }>
+  clipOrders: Array<{ id: string; sequenceOrder: number }>,
 ) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user?.id) {
@@ -377,10 +343,7 @@ export async function reorderClips(
 
   // Verify ownership
   const userData = await getUserWithWorkspace(session.user.id);
-  if (
-    !userData ||
-    projectData.videoProject.workspaceId !== userData.workspace.id
-  ) {
+  if (!userData || projectData.videoProject.workspaceId !== userData.workspace.id) {
     throw new Error("Unauthorized");
   }
 
@@ -404,19 +367,13 @@ export async function deleteVideoProject(videoProjectId: string) {
 
   // Verify ownership
   const userData = await getUserWithWorkspace(session.user.id);
-  if (
-    !userData ||
-    projectData.videoProject.workspaceId !== userData.workspace.id
-  ) {
+  if (!userData || projectData.videoProject.workspaceId !== userData.workspace.id) {
     throw new Error("Unauthorized");
   }
 
   // Delete files from storage
   try {
-    await deleteVideoProjectFiles(
-      projectData.videoProject.workspaceId,
-      videoProjectId
-    );
+    await deleteVideoProjectFiles(projectData.videoProject.workspaceId, videoProjectId);
   } catch (error) {
     console.error("Failed to delete video files:", error);
     // Continue with database deletion even if file deletion fails
@@ -441,9 +398,7 @@ export async function retryFailedClip(clipId: string) {
   }
 
   // Import here to avoid circular dependency
-  const { generateVideoClipTask } = await import(
-    "@/trigger/generate-video-clip"
-  );
+  const { generateVideoClipTask } = await import("@/trigger/generate-video-clip");
 
   // Reset clip status and trigger regeneration
   await updateVideoClip(clipId, {
@@ -475,10 +430,7 @@ export async function getVideoProjectWithClips(videoProjectId: string) {
 
   // Verify ownership
   const userData = await getUserWithWorkspace(session.user.id);
-  if (
-    !userData ||
-    projectData.videoProject.workspaceId !== userData.workspace.id
-  ) {
+  if (!userData || projectData.videoProject.workspaceId !== userData.workspace.id) {
     return null;
   }
 
@@ -517,10 +469,7 @@ export async function uploadVideoSourceImageAction(formData: FormData) {
   // Generate unique ID for the image
   const imageId = crypto.randomUUID();
   const extension = getExtensionFromContentType(file.type);
-  const path = getVideoSourceImagePath(
-    userData.workspace.id,
-    `${imageId}.${extension}`
-  );
+  const path = getVideoSourceImagePath(userData.workspace.id, `${imageId}.${extension}`);
 
   // Convert file to buffer
   const arrayBuffer = await file.arrayBuffer();

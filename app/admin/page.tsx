@@ -20,9 +20,7 @@ export default function AdminOverviewPage() {
             <IconShieldCheck className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h1 className="font-bold text-2xl tracking-tight">
-              Platform Administration
-            </h1>
+            <h1 className="font-bold text-2xl tracking-tight">Platform Administration</h1>
             <p className="text-muted-foreground text-sm">
               Monitor and manage all workspaces, users, and platform activity
             </p>
@@ -49,9 +47,7 @@ export default function AdminOverviewPage() {
       <div className="stagger-2 animate-fade-in-up">
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="font-semibold text-base">
-              Recent Activity
-            </CardTitle>
+            <CardTitle className="font-semibold text-base">Recent Activity</CardTitle>
           </CardHeader>
           <CardContent className="pt-0">
             <RecentActivityList activities={recentActivity} />

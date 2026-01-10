@@ -4,13 +4,7 @@ import { IconLoader } from "@tabler/icons-react";
 import { useActionState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { completeOnboarding } from "@/lib/actions";
@@ -56,12 +50,11 @@ export function OnboardingForm({
         return null;
       } catch (error) {
         return {
-          error:
-            error instanceof Error ? error.message : "Something went wrong",
+          error: error instanceof Error ? error.message : "Something went wrong",
         };
       }
     },
-    null
+    null,
   );
 
   // Show toast on error
@@ -73,9 +66,7 @@ export function OnboardingForm({
     <Card>
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">Complete your profile</CardTitle>
-        <CardDescription>
-          Tell us a bit more about you and your company
-        </CardDescription>
+        <CardDescription>Tell us a bit more about you and your company</CardDescription>
       </CardHeader>
       <CardContent>
         <form action={formAction} className="space-y-4">
@@ -105,8 +96,7 @@ export function OnboardingForm({
 
           <div className="space-y-2">
             <Label htmlFor="organizationNumber">
-              Organization number{" "}
-              <span className="text-muted-foreground">(optional)</span>
+              Organization number <span className="text-muted-foreground">(optional)</span>
             </Label>
             <Input
               disabled={isPending}
@@ -123,8 +113,7 @@ export function OnboardingForm({
 
           <div className="space-y-2">
             <Label htmlFor="contactEmail">
-              Contact email{" "}
-              <span className="text-muted-foreground">(optional)</span>
+              Contact email <span className="text-muted-foreground">(optional)</span>
             </Label>
             <Input
               defaultValue={initialEmail}
@@ -138,8 +127,7 @@ export function OnboardingForm({
 
           <div className="space-y-2">
             <Label htmlFor="contactPerson">
-              Contact person{" "}
-              <span className="text-muted-foreground">(optional)</span>
+              Contact person <span className="text-muted-foreground">(optional)</span>
             </Label>
             <Input
               defaultValue={initialName}

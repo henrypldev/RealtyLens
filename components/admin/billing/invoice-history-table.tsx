@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  IconBuilding,
-  IconCheck,
-  IconExternalLink,
-  IconFileInvoice,
-  IconLoader2,
-} from "@tabler/icons-react";
+import { IconBuilding, IconCheck, IconFileInvoice, IconLoader2 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -20,12 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { markInvoiceAsPaidAction } from "@/lib/actions/billing";
 import type { InvoiceHistoryRow } from "@/lib/db/queries";
 
@@ -136,14 +125,10 @@ export function InvoiceHistoryTable({ invoices }: InvoiceHistoryTableProps) {
         <div
           className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl"
           style={{
-            backgroundColor:
-              "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
+            backgroundColor: "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
           }}
         >
-          <IconFileInvoice
-            className="h-6 w-6"
-            style={{ color: "var(--accent-violet)" }}
-          />
+          <IconFileInvoice className="h-6 w-6" style={{ color: "var(--accent-violet)" }} />
         </div>
         <h3 className="font-semibold text-lg">Ingen fakturaer enna</h3>
         <p className="mt-1 text-muted-foreground text-sm">
@@ -172,16 +157,13 @@ export function InvoiceHistoryTable({ invoices }: InvoiceHistoryTableProps) {
           </TableHeader>
           <TableBody>
             {invoices.map((invoice) => {
-              const canMarkAsPaid =
-                invoice.status === "sent" && invoice.fikenInvoiceId;
+              const canMarkAsPaid = invoice.status === "sent";
 
               return (
                 <TableRow key={invoice.id}>
                   <TableCell>
                     <div className="font-medium font-mono">
-                      {invoice.fikenInvoiceNumber
-                        ? `#${invoice.fikenInvoiceNumber}`
-                        : "-"}
+                      {invoice.fikenInvoiceNumber ? `#${invoice.fikenInvoiceNumber}` : "-"}
                     </div>
                   </TableCell>
                   <TableCell>
@@ -199,9 +181,7 @@ export function InvoiceHistoryTable({ invoices }: InvoiceHistoryTableProps) {
                         />
                       </div>
                       <div>
-                        <div className="font-medium text-sm">
-                          {invoice.workspaceName}
-                        </div>
+                        <div className="font-medium text-sm">{invoice.workspaceName}</div>
                         <div className="text-muted-foreground text-xs">
                           {invoice.workspaceOrgNumber
                             ? `Org: ${invoice.workspaceOrgNumber}`
@@ -211,14 +191,10 @@ export function InvoiceHistoryTable({ invoices }: InvoiceHistoryTableProps) {
                     </div>
                   </TableCell>
                   <TableCell className="text-center">
-                    <span className="tabular-nums">
-                      {invoice.lineItemCount}
-                    </span>
+                    <span className="tabular-nums">{invoice.lineItemCount}</span>
                   </TableCell>
                   <TableCell className="text-right">
-                    <span className="font-mono">
-                      {formatNOK(invoice.totalAmountOre)}
-                    </span>
+                    <span className="font-mono">{formatNOK(invoice.totalAmountOre)}</span>
                   </TableCell>
                   <TableCell className="text-right">
                     <span
@@ -273,27 +249,6 @@ export function InvoiceHistoryTable({ invoices }: InvoiceHistoryTableProps) {
                           <TooltipContent>Marker som betalt</TooltipContent>
                         </Tooltip>
                       )}
-                      {invoice.fikenInvoiceId && (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button
-                              asChild
-                              className="h-8"
-                              size="sm"
-                              variant="ghost"
-                            >
-                              <a
-                                href={`https://fiken.no/foretak/fiken-demo-mulig-hytte-as2/handel/salg/${invoice.fikenInvoiceId}`}
-                                rel="noopener noreferrer"
-                                target="_blank"
-                              >
-                                <IconExternalLink className="h-4 w-4" />
-                              </a>
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>Apne i Fiken</TooltipContent>
-                        </Tooltip>
-                      )}
                     </div>
                   </TableCell>
                 </TableRow>
@@ -304,10 +259,7 @@ export function InvoiceHistoryTable({ invoices }: InvoiceHistoryTableProps) {
 
         {/* Footer */}
         <div className="border-t px-4 py-3 text-muted-foreground text-sm">
-          <span
-            className="font-mono font-semibold"
-            style={{ color: "var(--accent-violet)" }}
-          >
+          <span className="font-mono font-semibold" style={{ color: "var(--accent-violet)" }}>
             {invoices.length}
           </span>{" "}
           fakturaer totalt

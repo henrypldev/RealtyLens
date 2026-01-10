@@ -1,16 +1,11 @@
-import {
-  and,
-  count,
-  desc,
-  eq,
-  gt,
-  inArray,
-  max,
-  or,
-  sql,
-  sum,
-} from "drizzle-orm";
-import { BILLING_DEFAULTS } from "@/lib/fiken-client";
+import { and, count, desc, eq, gt, inArray, max, or, sql, sum } from "drizzle-orm";
+
+const BILLING_DEFAULTS = {
+  IMAGE_PROJECT_PRICE_ORE: 100_000,
+  VIDEO_PROJECT_PRICE_ORE: 100_000,
+  VAT_RATE: 0.25,
+} as const;
+
 import type {
   AdminWorkspaceFilters,
   AdminWorkspaceRow,
@@ -60,26 +55,18 @@ import {
 // ============================================================================
 
 export async function getUserById(userId: string): Promise<User | null> {
-  const result = await db
-    .select()
-    .from(user)
-    .where(eq(user.id, userId))
-    .limit(1);
+  const result = await db.select().from(user).where(eq(user.id, userId)).limit(1);
   return result[0] || null;
 }
 
 export async function getUserByEmail(email: string): Promise<User | null> {
-  const result = await db
-    .select()
-    .from(user)
-    .where(eq(user.email, email))
-    .limit(1);
+  const result = await db.select().from(user).where(eq(user.email, email)).limit(1);
   return result[0] || null;
 }
 
 export async function updateUser(
   userId: string,
-  data: Partial<Omit<User, "id" | "createdAt">>
+  data: Partial<Omit<User, "id" | "createdAt">>,
 ): Promise<User | null> {
   const result = await db
     .update(user)
@@ -93,31 +80,19 @@ export async function updateUser(
 // Workspace Queries
 // ============================================================================
 
-export async function getWorkspaceById(
-  workspaceId: string
-): Promise<Workspace | null> {
-  const result = await db
-    .select()
-    .from(workspace)
-    .where(eq(workspace.id, workspaceId))
-    .limit(1);
+export async function getWorkspaceById(workspaceId: string): Promise<Workspace | null> {
+  const result = await db.select().from(workspace).where(eq(workspace.id, workspaceId)).limit(1);
   return result[0] || null;
 }
 
-export async function getWorkspaceBySlug(
-  slug: string
-): Promise<Workspace | null> {
-  const result = await db
-    .select()
-    .from(workspace)
-    .where(eq(workspace.slug, slug))
-    .limit(1);
+export async function getWorkspaceBySlug(slug: string): Promise<Workspace | null> {
+  const result = await db.select().from(workspace).where(eq(workspace.slug, slug)).limit(1);
   return result[0] || null;
 }
 
 export async function updateWorkspace(
   workspaceId: string,
-  data: Partial<Omit<Workspace, "id" | "createdAt">>
+  data: Partial<Omit<Workspace, "id" | "createdAt">>,
 ): Promise<Workspace | null> {
   const result = await db
     .update(workspace)
@@ -127,9 +102,7 @@ export async function updateWorkspace(
   return result[0] || null;
 }
 
-export async function getWorkspaceMembers(
-  workspaceId: string
-): Promise<User[]> {
+export async function getWorkspaceMembers(workspaceId: string): Promise<User[]> {
   return db
     .select()
     .from(user)
@@ -143,7 +116,7 @@ export async function getWorkspaceMembers(
 
 export async function getImageGenerations(
   workspaceId: string,
-  options?: { limit?: number; offset?: number }
+  options?: { limit?: number; offset?: number },
 ): Promise<ImageGeneration[]> {
   const query = db
     .select()
@@ -162,14 +135,8 @@ export async function getImageGenerations(
   return query;
 }
 
-export async function getImageGenerationById(
-  id: string
-): Promise<ImageGeneration | null> {
-  const result = await db
-    .select()
-    .from(imageGeneration)
-    .where(eq(imageGeneration.id, id))
-    .limit(1);
+export async function getImageGenerationById(id: string): Promise<ImageGeneration | null> {
+  const result = await db.select().from(imageGeneration).where(eq(imageGeneration.id, id)).limit(1);
   return result[0] || null;
 }
 
@@ -188,31 +155,20 @@ export async function getImageGenerationStats(workspaceId: string): Promise<{
     .select({ count: count() })
     .from(imageGeneration)
     .where(
-      and(
-        eq(imageGeneration.workspaceId, workspaceId),
-        eq(imageGeneration.status, "completed")
-      )
+      and(eq(imageGeneration.workspaceId, workspaceId), eq(imageGeneration.status, "completed")),
     );
 
   const [processingResult] = await db
     .select({ count: count() })
     .from(imageGeneration)
     .where(
-      and(
-        eq(imageGeneration.workspaceId, workspaceId),
-        eq(imageGeneration.status, "processing")
-      )
+      and(eq(imageGeneration.workspaceId, workspaceId), eq(imageGeneration.status, "processing")),
     );
 
   const [failedResult] = await db
     .select({ count: count() })
     .from(imageGeneration)
-    .where(
-      and(
-        eq(imageGeneration.workspaceId, workspaceId),
-        eq(imageGeneration.status, "failed")
-      )
-    );
+    .where(and(eq(imageGeneration.workspaceId, workspaceId), eq(imageGeneration.status, "failed")));
 
   return {
     total: totalResult?.count || 0,
@@ -223,7 +179,7 @@ export async function getImageGenerationStats(workspaceId: string): Promise<{
 }
 
 export async function createImageGeneration(
-  data: Omit<ImageGeneration, "id" | "createdAt" | "updatedAt">
+  data: Omit<ImageGeneration, "id" | "createdAt" | "updatedAt">,
 ): Promise<ImageGeneration> {
   const id = crypto.randomUUID();
   const [result] = await db
@@ -238,7 +194,7 @@ export async function createImageGeneration(
 
 export async function updateImageGeneration(
   id: string,
-  data: Partial<Omit<ImageGeneration, "id" | "createdAt">>
+  data: Partial<Omit<ImageGeneration, "id" | "createdAt">>,
 ): Promise<ImageGeneration | null> {
   const result = await db
     .update(imageGeneration)
@@ -278,18 +234,15 @@ export async function getUserWithWorkspace(userId: string): Promise<{
 
 export async function getProjects(
   workspaceId: string,
-  options?: { limit?: number; offset?: number; status?: ProjectStatus }
+  options?: { limit?: number; offset?: number; status?: ProjectStatus },
 ): Promise<Project[]> {
   let query = db
     .select()
     .from(project)
     .where(
       options?.status
-        ? and(
-            eq(project.workspaceId, workspaceId),
-            eq(project.status, options.status)
-          )
-        : eq(project.workspaceId, workspaceId)
+        ? and(eq(project.workspaceId, workspaceId), eq(project.status, options.status))
+        : eq(project.workspaceId, workspaceId),
     )
     .orderBy(desc(project.createdAt));
 
@@ -308,11 +261,7 @@ export async function getProjectById(id: string): Promise<{
   project: Project;
   images: ImageGeneration[];
 } | null> {
-  const projectResult = await db
-    .select()
-    .from(project)
-    .where(eq(project.id, id))
-    .limit(1);
+  const projectResult = await db.select().from(project).where(eq(project.id, id)).limit(1);
 
   if (!projectResult[0]) {
     return null;
@@ -344,19 +293,12 @@ export async function getProjectStats(workspaceId: string): Promise<{
   const [completedResult] = await db
     .select({ count: count() })
     .from(project)
-    .where(
-      and(eq(project.workspaceId, workspaceId), eq(project.status, "completed"))
-    );
+    .where(and(eq(project.workspaceId, workspaceId), eq(project.status, "completed")));
 
   const [processingResult] = await db
     .select({ count: count() })
     .from(project)
-    .where(
-      and(
-        eq(project.workspaceId, workspaceId),
-        eq(project.status, "processing")
-      )
-    );
+    .where(and(eq(project.workspaceId, workspaceId), eq(project.status, "processing")));
 
   const [imagesResult] = await db
     .select({ total: sum(project.imageCount) })
@@ -372,7 +314,7 @@ export async function getProjectStats(workspaceId: string): Promise<{
 }
 
 export async function createProject(
-  data: Omit<Project, "id" | "createdAt" | "updatedAt">
+  data: Omit<Project, "id" | "createdAt" | "updatedAt">,
 ): Promise<Project> {
   const id = crypto.randomUUID();
   const [result] = await db
@@ -387,7 +329,7 @@ export async function createProject(
 
 export async function updateProject(
   id: string,
-  data: Partial<Omit<Project, "id" | "createdAt">>
+  data: Partial<Omit<Project, "id" | "createdAt">>,
 ): Promise<Project | null> {
   const result = await db
     .update(project)
@@ -425,12 +367,7 @@ export async function updateProjectCounts(projectId: string): Promise<void> {
   const [completedResult] = await db
     .select({ count: count() })
     .from(imageGeneration)
-    .where(
-      and(
-        eq(imageGeneration.projectId, projectId),
-        eq(imageGeneration.status, "completed")
-      )
-    );
+    .where(and(eq(imageGeneration.projectId, projectId), eq(imageGeneration.status, "completed")));
 
   const imageCount = totalResult?.count || 0;
   const completedCount = completedResult?.count || 0;
@@ -448,10 +385,7 @@ export async function updateProjectCounts(projectId: string): Promise<void> {
       .select({ count: count() })
       .from(imageGeneration)
       .where(
-        and(
-          eq(imageGeneration.projectId, projectId),
-          eq(imageGeneration.status, "processing")
-        )
+        and(eq(imageGeneration.projectId, projectId), eq(imageGeneration.status, "processing")),
       );
 
     if ((processingResult?.count || 0) > 0) {
@@ -462,12 +396,7 @@ export async function updateProjectCounts(projectId: string): Promise<void> {
     const [failedResult] = await db
       .select({ count: count() })
       .from(imageGeneration)
-      .where(
-        and(
-          eq(imageGeneration.projectId, projectId),
-          eq(imageGeneration.status, "failed")
-        )
-      );
+      .where(and(eq(imageGeneration.projectId, projectId), eq(imageGeneration.status, "failed")));
 
     if ((failedResult?.count || 0) > 0 && completedCount === 0) {
       status = "failed";
@@ -507,18 +436,13 @@ export async function updateProjectCounts(projectId: string): Promise<void> {
       }
     } catch (error) {
       // Log but don't fail the project update if billing fails
-      console.error(
-        "[updateProjectCounts] Failed to create invoice line item:",
-        error
-      );
+      console.error("[updateProjectCounts] Failed to create invoice line item:", error);
     }
   }
 }
 
 // Get images for a project
-export async function getProjectImages(
-  projectId: string
-): Promise<ImageGeneration[]> {
+export async function getProjectImages(projectId: string): Promise<ImageGeneration[]> {
   return db
     .select()
     .from(imageGeneration)
@@ -527,9 +451,7 @@ export async function getProjectImages(
 }
 
 // Get all versions of an image (including the original)
-export async function getImageVersions(
-  imageId: string
-): Promise<ImageGeneration[]> {
+export async function getImageVersions(imageId: string): Promise<ImageGeneration[]> {
   // First get the image to find its root
   const image = await getImageGenerationById(imageId);
   if (!image) return [];
@@ -540,7 +462,7 @@ export async function getImageVersions(
   // Get all versions: the root + all images with parentId = rootId
   const versions = await db.select().from(imageGeneration).where(
     // Either the root image itself OR any image with this parentId
-    eq(imageGeneration.id, rootId)
+    eq(imageGeneration.id, rootId),
   );
 
   const children = await db
@@ -550,25 +472,21 @@ export async function getImageVersions(
 
   // Combine and sort by version
   const allVersions = [...versions, ...children].sort(
-    (a, b) => (a.version || 1) - (b.version || 1)
+    (a, b) => (a.version || 1) - (b.version || 1),
   );
 
   return allVersions;
 }
 
 // Get the latest version of an image
-export async function getLatestImageVersion(
-  imageId: string
-): Promise<ImageGeneration | null> {
+export async function getLatestImageVersion(imageId: string): Promise<ImageGeneration | null> {
   const versions = await getImageVersions(imageId);
   if (versions.length === 0) return null;
   return versions[versions.length - 1];
 }
 
 // Get the highest version number for a root image
-export async function getLatestVersionNumber(
-  rootImageId: string
-): Promise<number> {
+export async function getLatestVersionNumber(rootImageId: string): Promise<number> {
   // Get max version from: the root image itself OR any image with this parentId
   const [rootResult] = await db
     .select({ version: imageGeneration.version })
@@ -590,7 +508,7 @@ export async function getLatestVersionNumber(
 // Delete all versions after a specific version number
 export async function deleteVersionsAfter(
   rootImageId: string,
-  afterVersion: number
+  afterVersion: number,
 ): Promise<number> {
   // Delete images where:
   // - parentId = rootImageId AND version > afterVersion
@@ -599,12 +517,9 @@ export async function deleteVersionsAfter(
     .delete(imageGeneration)
     .where(
       and(
-        or(
-          eq(imageGeneration.parentId, rootImageId),
-          eq(imageGeneration.id, rootImageId)
-        ),
-        gt(imageGeneration.version, afterVersion)
-      )
+        or(eq(imageGeneration.parentId, rootImageId), eq(imageGeneration.id, rootImageId)),
+        gt(imageGeneration.version, afterVersion),
+      ),
     )
     .returning();
 
@@ -613,7 +528,7 @@ export async function deleteVersionsAfter(
 
 // Get project images grouped by root (for version display)
 export async function getProjectImagesGrouped(
-  projectId: string
+  projectId: string,
 ): Promise<Map<string, ImageGeneration[]>> {
   const images = await getProjectImages(projectId);
 
@@ -637,9 +552,7 @@ export async function getProjectImagesGrouped(
 }
 
 // Get only the latest version of each image in a project (for bulk download)
-export async function getLatestVersionImages(
-  projectId: string
-): Promise<ImageGeneration[]> {
+export async function getLatestVersionImages(projectId: string): Promise<ImageGeneration[]> {
   const grouped = await getProjectImagesGrouped(projectId);
   const latestVersions: ImageGeneration[] = [];
 
@@ -653,7 +566,7 @@ export async function getLatestVersionImages(
 
   // Sort by creation date (oldest first for consistent ordering)
   return latestVersions.sort(
-    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
   );
 }
 
@@ -663,18 +576,15 @@ export async function getLatestVersionImages(
 
 export async function getVideoProjects(
   workspaceId: string,
-  options?: { limit?: number; offset?: number; status?: VideoProjectStatus }
+  options?: { limit?: number; offset?: number; status?: VideoProjectStatus },
 ): Promise<VideoProject[]> {
   let query = db
     .select()
     .from(videoProject)
     .where(
       options?.status
-        ? and(
-            eq(videoProject.workspaceId, workspaceId),
-            eq(videoProject.status, options.status)
-          )
-        : eq(videoProject.workspaceId, workspaceId)
+        ? and(eq(videoProject.workspaceId, workspaceId), eq(videoProject.status, options.status))
+        : eq(videoProject.workspaceId, workspaceId),
     )
     .orderBy(desc(videoProject.createdAt));
 
@@ -699,25 +609,17 @@ export async function getVideoProjectById(id: string): Promise<{
   }
 
   try {
-    const result = await db
-      .select()
-      .from(videoProject)
-      .where(eq(videoProject.id, id))
-      .limit(1);
+    const result = await db.select().from(videoProject).where(eq(videoProject.id, id)).limit(1);
 
     if (!result[0]) {
       if (process.env.DEBUG_VIDEO === "1") {
-        console.warn(
-          `[db:queries] getVideoProjectById: No project found with ID: ${id}`
-        );
+        console.warn(`[db:queries] getVideoProjectById: No project found with ID: ${id}`);
       }
       return null;
     }
 
     if (process.env.DEBUG_VIDEO === "1") {
-      console.log(
-        `[db:queries] getVideoProjectById: Found project "${result[0].name}"`
-      );
+      console.log(`[db:queries] getVideoProjectById: Found project "${result[0].name}"`);
     }
 
     const clips = await db
@@ -728,7 +630,7 @@ export async function getVideoProjectById(id: string): Promise<{
 
     if (process.env.DEBUG_VIDEO === "1") {
       console.log(
-        `[db:queries] getVideoProjectById: Found ${clips.length} clips for project ${id}`
+        `[db:queries] getVideoProjectById: Found ${clips.length} clips for project ${id}`,
       );
     }
 
@@ -742,7 +644,7 @@ export async function getVideoProjectById(id: string): Promise<{
       music = musicResult[0] || null;
       if (process.env.DEBUG_VIDEO === "1") {
         console.log(
-          `[db:queries] getVideoProjectById: Music track ${result[0].musicTrackId} found: ${!!music}`
+          `[db:queries] getVideoProjectById: Music track ${result[0].musicTrackId} found: ${!!music}`,
         );
       }
     }
@@ -753,16 +655,13 @@ export async function getVideoProjectById(id: string): Promise<{
       musicTrack: music,
     };
   } catch (error) {
-    console.error(
-      `[db:queries] getVideoProjectById error for ID ${id}:`,
-      error
-    );
+    console.error(`[db:queries] getVideoProjectById error for ID ${id}:`, error);
     throw error;
   }
 }
 
 export async function createVideoProject(
-  data: Omit<VideoProject, "id" | "createdAt" | "updatedAt">
+  data: Omit<VideoProject, "id" | "createdAt" | "updatedAt">,
 ): Promise<VideoProject> {
   const id = crypto.randomUUID();
   const [result] = await db
@@ -777,7 +676,7 @@ export async function createVideoProject(
 
 export async function updateVideoProject(
   id: string,
-  data: Partial<Omit<VideoProject, "id" | "createdAt">>
+  data: Partial<Omit<VideoProject, "id" | "createdAt">>,
 ): Promise<VideoProject | null> {
   if (process.env.DEBUG_VIDEO === "1") {
     console.log(`[db:queries] updateVideoProject starting for ID: ${id}`, {
@@ -794,9 +693,7 @@ export async function updateVideoProject(
 
     if (!result[0]) {
       if (process.env.DEBUG_VIDEO === "1") {
-        console.warn(
-          `[db:queries] updateVideoProject: No project found to update with ID: ${id}`
-        );
+        console.warn(`[db:queries] updateVideoProject: No project found to update with ID: ${id}`);
       }
       return null;
     }
@@ -815,9 +712,7 @@ export async function deleteVideoProject(id: string): Promise<void> {
   await db.delete(videoProject).where(eq(videoProject.id, id));
 }
 
-export async function updateVideoProjectCounts(
-  videoProjectId: string
-): Promise<void> {
+export async function updateVideoProjectCounts(videoProjectId: string): Promise<void> {
   // Count total clips
   const [totalResult] = await db
     .select({ count: count() })
@@ -828,12 +723,7 @@ export async function updateVideoProjectCounts(
   const [completedResult] = await db
     .select({ count: count() })
     .from(videoClip)
-    .where(
-      and(
-        eq(videoClip.videoProjectId, videoProjectId),
-        eq(videoClip.status, "completed")
-      )
-    );
+    .where(and(eq(videoClip.videoProjectId, videoProjectId), eq(videoClip.status, "completed")));
 
   const clipCount = totalResult?.count || 0;
   const completedClipCount = completedResult?.count || 0;
@@ -854,17 +744,11 @@ export async function updateVideoProjectCounts(
 // ============================================================================
 
 export async function getVideoClipById(id: string): Promise<VideoClip | null> {
-  const result = await db
-    .select()
-    .from(videoClip)
-    .where(eq(videoClip.id, id))
-    .limit(1);
+  const result = await db.select().from(videoClip).where(eq(videoClip.id, id)).limit(1);
   return result[0] || null;
 }
 
-export async function getVideoClips(
-  videoProjectId: string
-): Promise<VideoClip[]> {
+export async function getVideoClips(videoProjectId: string): Promise<VideoClip[]> {
   return db
     .select()
     .from(videoClip)
@@ -873,7 +757,7 @@ export async function getVideoClips(
 }
 
 export async function createVideoClip(
-  data: Omit<VideoClip, "id" | "createdAt" | "updatedAt">
+  data: Omit<VideoClip, "id" | "createdAt" | "updatedAt">,
 ): Promise<VideoClip> {
   const id = crypto.randomUUID();
   const [result] = await db
@@ -887,7 +771,7 @@ export async function createVideoClip(
 }
 
 export async function createVideoClips(
-  clips: Array<Omit<NewVideoClip, "id" | "createdAt" | "updatedAt">>
+  clips: Array<Omit<NewVideoClip, "id" | "createdAt" | "updatedAt">>,
 ): Promise<VideoClip[]> {
   const clipsWithIds = clips.map((clip) => ({
     ...clip,
@@ -902,7 +786,7 @@ export async function createVideoClips(
 
 export async function updateVideoClip(
   id: string,
-  data: Partial<Omit<VideoClip, "id" | "createdAt">>
+  data: Partial<Omit<VideoClip, "id" | "createdAt">>,
 ): Promise<VideoClip | null> {
   const result = await db
     .update(videoClip)
@@ -917,7 +801,7 @@ export async function deleteVideoClip(id: string): Promise<void> {
 }
 
 export async function updateClipSequenceOrders(
-  clips: Array<{ id: string; sequenceOrder: number }>
+  clips: Array<{ id: string; sequenceOrder: number }>,
 ): Promise<void> {
   for (const clip of clips) {
     await db
@@ -938,9 +822,7 @@ export async function getMusicTracks(options?: {
   let query = db.select().from(musicTrack);
 
   if (options?.category) {
-    query = query.where(
-      eq(musicTrack.category, options.category)
-    ) as typeof query;
+    query = query.where(eq(musicTrack.category, options.category)) as typeof query;
   }
 
   if (options?.activeOnly !== false) {
@@ -950,19 +832,13 @@ export async function getMusicTracks(options?: {
   return query.orderBy(musicTrack.name);
 }
 
-export async function getMusicTrackById(
-  id: string
-): Promise<MusicTrack | null> {
-  const result = await db
-    .select()
-    .from(musicTrack)
-    .where(eq(musicTrack.id, id))
-    .limit(1);
+export async function getMusicTrackById(id: string): Promise<MusicTrack | null> {
+  const result = await db.select().from(musicTrack).where(eq(musicTrack.id, id)).limit(1);
   return result[0] || null;
 }
 
 export async function createMusicTrack(
-  data: Omit<MusicTrack, "id" | "createdAt">
+  data: Omit<MusicTrack, "id" | "createdAt">,
 ): Promise<MusicTrack> {
   const id = crypto.randomUUID();
   const [result] = await db
@@ -993,12 +869,7 @@ export async function getVideoProjectStats(workspaceId: string): Promise<{
   const [completedResult] = await db
     .select({ count: count() })
     .from(videoProject)
-    .where(
-      and(
-        eq(videoProject.workspaceId, workspaceId),
-        eq(videoProject.status, "completed")
-      )
-    );
+    .where(and(eq(videoProject.workspaceId, workspaceId), eq(videoProject.status, "completed")));
 
   const [processingResult] = await db
     .select({ count: count() })
@@ -1006,11 +877,8 @@ export async function getVideoProjectStats(workspaceId: string): Promise<{
     .where(
       and(
         eq(videoProject.workspaceId, workspaceId),
-        or(
-          eq(videoProject.status, "generating"),
-          eq(videoProject.status, "compiling")
-        )
-      )
+        or(eq(videoProject.status, "generating"), eq(videoProject.status, "compiling")),
+      ),
     );
 
   const [costResult] = await db
@@ -1188,8 +1056,7 @@ export async function getAdminWorkspaces(options: {
     imagesGenerated: Number(row.images_generated) || 0,
     videosGenerated: Number(row.videos_generated) || 0,
     videosCompleted: Number(row.videos_completed) || 0,
-    totalSpend:
-      Math.round(Number(row.images_generated) * COST_PER_IMAGE * 100) / 100,
+    totalSpend: Math.round(Number(row.images_generated) * COST_PER_IMAGE * 100) / 100,
     totalVideoSpend: (Number(row.video_cost_cents) || 0) / 100,
     ownerId: row.owner_id,
     ownerName: row.owner_name,
@@ -1210,7 +1077,7 @@ export async function getAdminWorkspaces(options: {
 }
 
 export async function getAdminWorkspaceById(
-  workspaceId: string
+  workspaceId: string,
 ): Promise<AdminWorkspaceRow | null> {
   // Use a direct query for single workspace
   const workspaceData = await db
@@ -1381,7 +1248,7 @@ export interface AdminWorkspaceDetail {
 }
 
 export async function getAdminWorkspaceDetail(
-  workspaceId: string
+  workspaceId: string,
 ): Promise<AdminWorkspaceDetail | null> {
   // Get workspace
   const workspaceData = await db
@@ -1423,9 +1290,7 @@ export async function getAdminWorkspaceDetail(
   const [videoStats] = await db
     .select({
       total: count(),
-      completed: sum(
-        sql`CASE WHEN ${videoProject.status} = 'completed' THEN 1 ELSE 0 END`
-      ),
+      completed: sum(sql`CASE WHEN ${videoProject.status} = 'completed' THEN 1 ELSE 0 END`),
       totalCost: sum(videoProject.actualCost),
     })
     .from(videoProject)
@@ -1662,17 +1527,13 @@ export async function getAdminUsers(options: {
 // ============================================================================
 
 export async function getAdminUserDetail(
-  userId: string
+  userId: string,
 ): Promise<import("@/lib/types/admin").AdminUserDetail | null> {
   type UserRole = import("@/lib/types/admin").UserRole;
   type UserStatus = import("@/lib/types/admin").UserStatus;
 
   // Get user
-  const userData = await db
-    .select()
-    .from(user)
-    .where(eq(user.id, userId))
-    .limit(1);
+  const userData = await db.select().from(user).where(eq(user.id, userId)).limit(1);
 
   if (!userData[0]) {
     return null;
@@ -1750,8 +1611,7 @@ export async function getAdminUserDetail(
 
   // Calculate stats
   const imagesGenerated = Number(imageStats?.total) || 0;
-  const totalImageSpend =
-    Math.round(imagesGenerated * COST_PER_IMAGE * 100) / 100;
+  const totalImageSpend = Math.round(imagesGenerated * COST_PER_IMAGE * 100) / 100;
   const totalVideoSpend = (Number(videoStats?.totalCost) || 0) / 100;
 
   // Derive status
@@ -1782,8 +1642,7 @@ export async function getAdminUserDetail(
           id: workspaceData.id,
           name: workspaceData.name,
           slug: workspaceData.slug,
-          status:
-            workspaceData.status as import("@/lib/db/schema").WorkspaceStatus,
+          status: workspaceData.status as import("@/lib/db/schema").WorkspaceStatus,
           plan: workspaceData.plan as import("@/lib/db/schema").WorkspacePlan,
         }
       : null,
@@ -1815,10 +1674,8 @@ export async function getWorkspacePricing(workspaceId: string): Promise<{
 
   const pricing = result[0];
   return {
-    imageProjectPriceOre:
-      pricing?.imageProjectPriceOre ?? BILLING_DEFAULTS.IMAGE_PROJECT_PRICE_ORE,
-    videoProjectPriceOre:
-      pricing?.videoProjectPriceOre ?? BILLING_DEFAULTS.VIDEO_PROJECT_PRICE_ORE,
+    imageProjectPriceOre: pricing?.imageProjectPriceOre ?? BILLING_DEFAULTS.IMAGE_PROJECT_PRICE_ORE,
+    videoProjectPriceOre: pricing?.videoProjectPriceOre ?? BILLING_DEFAULTS.VIDEO_PROJECT_PRICE_ORE,
     fikenContactId: pricing?.fikenContactId ?? null,
   };
 }
@@ -1829,7 +1686,7 @@ export async function upsertWorkspacePricing(
     imageProjectPriceOre: number | null;
     videoProjectPriceOre: number | null;
     fikenContactId: number | null;
-  }>
+  }>,
 ): Promise<WorkspacePricing> {
   const existing = await db
     .select()
@@ -1939,7 +1796,7 @@ export async function createInvoiceLineItem(data: {
 export async function updateInvoiceLineItemStatus(
   lineItemIds: string[],
   status: LineItemStatus,
-  invoiceId?: string
+  invoiceId?: string,
 ): Promise<void> {
   await db
     .update(invoiceLineItem)
@@ -1951,9 +1808,7 @@ export async function updateInvoiceLineItemStatus(
     .where(inArray(invoiceLineItem.id, lineItemIds));
 }
 
-export async function getLineItemsByInvoiceId(
-  invoiceId: string
-): Promise<InvoiceLineItem[]> {
+export async function getLineItemsByInvoiceId(invoiceId: string): Promise<InvoiceLineItem[]> {
   return db
     .select()
     .from(invoiceLineItem)
@@ -2025,8 +1880,8 @@ export async function getInvoiceHistory(filters?: {
     .where(
       inArray(
         invoiceLineItem.invoiceId,
-        invoices.map((i) => i.id)
-      )
+        invoices.map((i) => i.id),
+      ),
     )
     .groupBy(invoiceLineItem.invoiceId);
 
@@ -2036,21 +1891,13 @@ export async function getInvoiceHistory(filters?: {
     ...inv,
     workspaceName: inv.workspaceName ?? "Unknown",
     status: inv.status as InvoiceStatus,
-    totalAmountWithVatOre: Math.round(
-      inv.totalAmountOre * (1 + BILLING_DEFAULTS.VAT_RATE)
-    ),
+    totalAmountWithVatOre: Math.round(inv.totalAmountOre * (1 + BILLING_DEFAULTS.VAT_RATE)),
     lineItemCount: countMap.get(inv.id) ?? 0,
   }));
 }
 
-export async function getInvoiceById(
-  invoiceId: string
-): Promise<Invoice | null> {
-  const result = await db
-    .select()
-    .from(invoice)
-    .where(eq(invoice.id, invoiceId))
-    .limit(1);
+export async function getInvoiceById(invoiceId: string): Promise<Invoice | null> {
+  const result = await db.select().from(invoice).where(eq(invoice.id, invoiceId)).limit(1);
   return result[0] ?? null;
 }
 
@@ -2083,7 +1930,7 @@ export async function updateInvoice(
     dueDate: Date;
     paidAt: Date;
     notes: string;
-  }>
+  }>,
 ): Promise<Invoice | null> {
   const [updated] = await db
     .update(invoice)
@@ -2141,8 +1988,8 @@ export async function getBillingStats(): Promise<BillingStats> {
     .where(
       and(
         gt(invoice.createdAt, startOfMonth),
-        or(eq(invoice.status, "sent"), eq(invoice.status, "paid"))
-      )
+        or(eq(invoice.status, "sent"), eq(invoice.status, "paid")),
+      ),
     );
 
   // Total invoiced (sent + paid)
@@ -2210,8 +2057,8 @@ export async function getRevenueStats(): Promise<RevenueStats> {
     .where(
       and(
         gt(invoice.createdAt, startOfMonth),
-        or(eq(invoice.status, "sent"), eq(invoice.status, "paid"))
-      )
+        or(eq(invoice.status, "sent"), eq(invoice.status, "paid")),
+      ),
     );
 
   // Last 30 days revenue
@@ -2223,8 +2070,8 @@ export async function getRevenueStats(): Promise<RevenueStats> {
     .where(
       and(
         gt(invoice.createdAt, thirtyDaysAgo),
-        or(eq(invoice.status, "sent"), eq(invoice.status, "paid"))
-      )
+        or(eq(invoice.status, "sent"), eq(invoice.status, "paid")),
+      ),
     );
 
   // This year revenue
@@ -2236,8 +2083,8 @@ export async function getRevenueStats(): Promise<RevenueStats> {
     .where(
       and(
         gt(invoice.createdAt, startOfYear),
-        or(eq(invoice.status, "sent"), eq(invoice.status, "paid"))
-      )
+        or(eq(invoice.status, "sent"), eq(invoice.status, "paid")),
+      ),
     );
 
   // Paid revenue only
@@ -2274,9 +2121,7 @@ export interface AffiliateRelationshipRow {
   createdAt: Date;
 }
 
-export async function getAffiliateRelationships(): Promise<
-  AffiliateRelationshipRow[]
-> {
+export async function getAffiliateRelationships(): Promise<AffiliateRelationshipRow[]> {
   const results = await db
     .select({
       id: affiliateRelationship.id,
@@ -2300,7 +2145,7 @@ export async function getAffiliateRelationships(): Promise<
 }
 
 export async function getAffiliateRelationshipByReferred(
-  referredWorkspaceId: string
+  referredWorkspaceId: string,
 ): Promise<AffiliateRelationship | null> {
   const result = await db
     .select()
@@ -2308,8 +2153,8 @@ export async function getAffiliateRelationshipByReferred(
     .where(
       and(
         eq(affiliateRelationship.referredWorkspaceId, referredWorkspaceId),
-        eq(affiliateRelationship.isActive, true)
-      )
+        eq(affiliateRelationship.isActive, true),
+      ),
     )
     .limit(1);
   return result[0] ?? null;
@@ -2341,7 +2186,7 @@ export async function updateAffiliateRelationship(
     commissionPercent: number;
     isActive: boolean;
     notes: string | null;
-  }>
+  }>,
 ): Promise<AffiliateRelationship | null> {
   const [updated] = await db
     .update(affiliateRelationship)
@@ -2351,12 +2196,8 @@ export async function updateAffiliateRelationship(
   return updated ?? null;
 }
 
-export async function deleteAffiliateRelationship(
-  relationshipId: string
-): Promise<void> {
-  await db
-    .delete(affiliateRelationship)
-    .where(eq(affiliateRelationship.id, relationshipId));
+export async function deleteAffiliateRelationship(relationshipId: string): Promise<void> {
+  await db.delete(affiliateRelationship).where(eq(affiliateRelationship.id, relationshipId));
 }
 
 // ============================================================================
@@ -2386,9 +2227,7 @@ export async function getAffiliateEarnings(filters?: {
   const conditions: ReturnType<typeof eq>[] = [];
 
   if (filters?.affiliateWorkspaceId) {
-    conditions.push(
-      eq(affiliateEarning.affiliateWorkspaceId, filters.affiliateWorkspaceId)
-    );
+    conditions.push(eq(affiliateEarning.affiliateWorkspaceId, filters.affiliateWorkspaceId));
   }
   if (filters?.status) {
     conditions.push(eq(affiliateEarning.status, filters.status));
@@ -2430,9 +2269,7 @@ export async function createAffiliateEarning(data: {
   invoiceAmountOre: number;
   commissionPercent: number;
 }): Promise<AffiliateEarning> {
-  const earningAmountOre = Math.round(
-    (data.invoiceAmountOre * data.commissionPercent) / 100
-  );
+  const earningAmountOre = Math.round((data.invoiceAmountOre * data.commissionPercent) / 100);
 
   const [earning] = await db
     .insert(affiliateEarning)
@@ -2450,9 +2287,40 @@ export async function createAffiliateEarning(data: {
   return earning;
 }
 
+export async function createAffiliateEarningFromPolarOrder(data: {
+  workspaceId: string;
+  polarOrderId: string;
+  orderAmountCents: number;
+}): Promise<AffiliateEarning | null> {
+  const relationship = await getAffiliateRelationshipByReferred(data.workspaceId);
+
+  if (!relationship) {
+    return null;
+  }
+
+  const earningAmountOre = Math.round(
+    (data.orderAmountCents * relationship.commissionPercent) / 100,
+  );
+
+  const [earning] = await db
+    .insert(affiliateEarning)
+    .values({
+      id: crypto.randomUUID(),
+      affiliateWorkspaceId: relationship.affiliateWorkspaceId,
+      affiliateRelationshipId: relationship.id,
+      polarOrderId: data.polarOrderId,
+      orderAmountCents: data.orderAmountCents,
+      commissionPercent: relationship.commissionPercent,
+      earningAmountOre,
+      status: "pending",
+    })
+    .returning();
+  return earning;
+}
+
 export async function markEarningsAsPaidOut(
   earningIds: string[],
-  reference: string
+  reference: string,
 ): Promise<void> {
   await db
     .update(affiliateEarning)

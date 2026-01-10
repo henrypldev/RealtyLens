@@ -15,10 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import type { MusicTrack, VideoAspectRatio } from "@/lib/db/schema";
 import { cn } from "@/lib/utils";
-import {
-  MUSIC_CATEGORIES,
-  VIDEO_ASPECT_RATIOS,
-} from "@/lib/video/video-constants";
+import { MUSIC_CATEGORIES, VIDEO_ASPECT_RATIOS } from "@/lib/video/video-constants";
 
 interface SelectMusicStepProps {
   selectedTrack: MusicTrack | null;
@@ -150,21 +147,16 @@ export function SelectMusicStep({
           <div className="flex-1">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-semibold text-lg">
-                  AI Native Audio Generation
-                </h3>
+                <h3 className="font-semibold text-lg">AI Native Audio Generation</h3>
                 <p className="text-muted-foreground text-sm">
-                  Our AI can generate cinematic audio and speech directly with
-                  the video.
+                  Our AI can generate cinematic audio and speech directly with the video.
                 </p>
               </div>
               <Checkbox
                 checked={generateNativeAudio}
                 className="h-6 w-6 border-2"
                 id="native-audio"
-                onCheckedChange={(checked) =>
-                  onGenerateNativeAudioChange(!!checked)
-                }
+                onCheckedChange={(checked) => onGenerateNativeAudioChange(!!checked)}
               />
             </div>
 
@@ -177,8 +169,7 @@ export function SelectMusicStep({
                 <div className="text-muted-foreground text-xs leading-relaxed">
                   <p>• Synchronized environmental sounds and atmosphere</p>
                   <p>
-                    • Native speech synthesis (lowercase for speech, UPPERCASE
-                    for proper nouns)
+                    • Native speech synthesis (lowercase for speech, UPPERCASE for proper nouns)
                   </p>
                   <p>• Professional audio-visual coherence</p>
                 </div>
@@ -201,7 +192,7 @@ export function SelectMusicStep({
                 "flex flex-col items-center gap-2 rounded-xl border-2 p-4 transition-all duration-200",
                 aspectRatio === ratio.id
                   ? "border-(--accent-teal) bg-(--accent-teal)/5"
-                  : "border-transparent bg-muted/50 hover:bg-muted"
+                  : "border-transparent bg-muted/50 hover:bg-muted",
               )}
               key={ratio.id}
               onClick={() => onAspectRatioChange(ratio.id as VideoAspectRatio)}
@@ -213,24 +204,18 @@ export function SelectMusicStep({
                   "rounded border-2 transition-colors",
                   aspectRatio === ratio.id
                     ? "border-(--accent-teal)"
-                    : "border-muted-foreground/30"
+                    : "border-muted-foreground/30",
                 )}
                 style={{
-                  width:
-                    ratio.id === "16:9" ? 48 : ratio.id === "9:16" ? 27 : 36,
-                  height:
-                    ratio.id === "16:9" ? 27 : ratio.id === "9:16" ? 48 : 36,
+                  width: ratio.id === "16:9" ? 48 : ratio.id === "9:16" ? 27 : 36,
+                  height: ratio.id === "16:9" ? 27 : ratio.id === "9:16" ? 48 : 36,
                 }}
               />
               <div className="text-center">
                 <div className="font-medium text-sm">{ratio.label}</div>
-                <div className="text-muted-foreground text-xs">
-                  {ratio.description}
-                </div>
+                <div className="text-muted-foreground text-xs">{ratio.description}</div>
               </div>
-              {aspectRatio === ratio.id && (
-                <IconCheck className="h-4 w-4 text-(--accent-teal)" />
-              )}
+              {aspectRatio === ratio.id && <IconCheck className="h-4 w-4 text-(--accent-teal)" />}
             </button>
           ))}
         </div>
@@ -251,7 +236,7 @@ export function SelectMusicStep({
               "rounded-full px-4 py-1.5 font-medium text-sm transition-colors",
               activeCategory === "all"
                 ? "bg-(--accent-teal) text-white"
-                : "bg-muted text-muted-foreground hover:text-foreground"
+                : "bg-muted text-muted-foreground hover:text-foreground",
             )}
             onClick={() => setActiveCategory("all")}
             type="button"
@@ -264,7 +249,7 @@ export function SelectMusicStep({
                 "rounded-full px-4 py-1.5 font-medium text-sm transition-colors",
                 activeCategory === cat.id
                   ? "bg-(--accent-teal) text-white"
-                  : "bg-muted text-muted-foreground hover:text-foreground"
+                  : "bg-muted text-muted-foreground hover:text-foreground",
               )}
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
@@ -281,7 +266,7 @@ export function SelectMusicStep({
             "mb-4 flex w-full items-center gap-3 rounded-xl border-2 p-4 transition-all duration-200",
             selectedTrack === null
               ? "border-(--accent-teal) bg-(--accent-teal)/5"
-              : "border-transparent bg-muted/50 hover:bg-muted"
+              : "border-transparent bg-muted/50 hover:bg-muted",
           )}
           onClick={() => onSelectTrack(null)}
           type="button"
@@ -291,13 +276,9 @@ export function SelectMusicStep({
           </div>
           <div className="flex-1 text-left">
             <div className="font-medium">No Music</div>
-            <div className="text-muted-foreground text-sm">
-              Video will have no background audio
-            </div>
+            <div className="text-muted-foreground text-sm">Video will have no background audio</div>
           </div>
-          {selectedTrack === null && (
-            <IconCheck className="h-5 w-5 text-(--accent-teal)" />
-          )}
+          {selectedTrack === null && <IconCheck className="h-5 w-5 text-(--accent-teal)" />}
         </button>
 
         {/* Track List */}
@@ -308,7 +289,7 @@ export function SelectMusicStep({
                 "flex w-full cursor-pointer items-center gap-3 rounded-xl border-2 p-4 transition-all duration-200",
                 selectedTrack?.id === track.id
                   ? "border-(--accent-teal) bg-(--accent-teal)/5"
-                  : "border-transparent bg-muted/50 hover:bg-muted"
+                  : "border-transparent bg-muted/50 hover:bg-muted",
               )}
               key={track.id}
               onClick={() => onSelectTrack(track)}
@@ -341,8 +322,7 @@ export function SelectMusicStep({
               <div className="flex-1 text-left">
                 <div className="font-medium">{track.name}</div>
                 <div className="text-muted-foreground text-sm">
-                  {track.artist} • {formatDuration(track.durationSeconds)} •{" "}
-                  {track.bpm} BPM
+                  {track.artist} • {formatDuration(track.durationSeconds)} • {track.bpm} BPM
                 </div>
               </div>
 
@@ -374,9 +354,7 @@ export function SelectMusicStep({
                 value={[volume]}
               />
             </div>
-            <span className="w-12 text-right font-medium text-sm">
-              {volume}%
-            </span>
+            <span className="w-12 text-right font-medium text-sm">{volume}%</span>
           </div>
           <p className="mt-2 text-muted-foreground text-xs">
             Adjust the background music volume relative to the video

@@ -31,7 +31,7 @@ export function ConfirmStep({
           {images.slice(0, 3).map((image, index) => (
             <div
               className={cn(
-                "absolute inset-0 overflow-hidden rounded-xl shadow-lg ring-1 ring-white/10 transition-transform duration-300"
+                "absolute inset-0 overflow-hidden rounded-xl shadow-lg ring-1 ring-white/10 transition-transform duration-300",
               )}
               key={image.id}
               style={{
@@ -40,11 +40,7 @@ export function ConfirmStep({
               }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                alt={image.name}
-                className="h-full w-full object-cover"
-                src={image.preview}
-              />
+              <img alt={image.name} className="h-full w-full object-cover" src={image.preview} />
             </div>
           ))}
 
@@ -86,9 +82,7 @@ export function ConfirmStep({
                 />
               </div>
               <div className="min-w-0">
-                <p className="font-medium text-foreground">
-                  {selectedTemplate.name}
-                </p>
+                <p className="font-medium text-foreground">{selectedTemplate.name}</p>
                 <p className="line-clamp-1 text-muted-foreground text-xs">
                   {selectedTemplate.description}
                 </p>
@@ -100,12 +94,8 @@ export function ConfirmStep({
         {/* Summary info */}
         <div className="rounded-lg bg-muted/50 p-4 ring-1 ring-foreground/5">
           <p className="text-muted-foreground text-sm">
-            {images.length} image{images.length !== 1 ? "s" : ""} will be
-            transformed using the{" "}
-            <span className="font-medium text-foreground">
-              {selectedTemplate?.name}
-            </span>{" "}
-            style.
+            {images.length} image{images.length !== 1 ? "s" : ""} will be transformed using the{" "}
+            <span className="font-medium text-foreground">{selectedTemplate?.name}</span> style.
           </p>
         </div>
       </div>

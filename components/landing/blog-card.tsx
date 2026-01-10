@@ -112,15 +112,9 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
       }}
     >
       {/* Image placeholder */}
-      <div
-        className="relative aspect-[16/10]"
-        style={{ backgroundColor: "var(--landing-bg-alt)" }}
-      >
+      <div className="relative aspect-[16/10]" style={{ backgroundColor: "var(--landing-bg-alt)" }}>
         <div className="absolute inset-0 flex items-center justify-center">
-          <div
-            className="font-bold text-4xl opacity-10"
-            style={{ color: "var(--landing-accent)" }}
-          >
+          <div className="font-bold text-4xl opacity-10" style={{ color: "var(--landing-accent)" }}>
             AI
           </div>
         </div>

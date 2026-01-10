@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  IconDotsVertical,
-  IconEye,
-  IconPencil,
-  IconTrash,
-} from "@tabler/icons-react";
+import { IconDotsVertical, IconEye, IconPencil, IconTrash } from "@tabler/icons-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -36,22 +31,14 @@ const statusLabelMap: Record<PropertyStatus, string> = {
 
 // Memoized cell components for performance
 const AddressCell = memo(
-  ({
-    address,
-    city,
-    state,
-  }: {
-    address: string;
-    city: string;
-    state: string;
-  }) => (
+  ({ address, city, state }: { address: string; city: string; state: string }) => (
     <div className="flex min-w-0 flex-col">
       <span className="truncate font-medium">{address}</span>
       <span className="truncate text-muted-foreground text-xs">
         {city}, {state}
       </span>
     </div>
-  )
+  ),
 );
 AddressCell.displayName = "AddressCell";
 
@@ -149,9 +136,7 @@ export const columns: ColumnDef<Property>[] = [
     header: "Edits",
     size: 80,
     minSize: 60,
-    cell: ({ row }) => (
-      <span className="font-mono text-sm">{row.original.editCount}</span>
-    ),
+    cell: ({ row }) => <span className="font-mono text-sm">{row.original.editCount}</span>,
   },
   {
     id: "actions",

@@ -47,9 +47,7 @@ export function UsersTableToolbar() {
 
   // Get workspaces for dropdown
   const workspaces = useMemo(() => getAllWorkspaces(), []);
-  const selectedWorkspace = workspaces.find(
-    (w) => w.id === filters.workspaceId
-  );
+  const selectedWorkspace = workspaces.find((w) => w.id === filters.workspaceId);
 
   return (
     <div className="space-y-3">
@@ -70,9 +68,7 @@ export function UsersTableToolbar() {
         <div className="flex flex-wrap items-center gap-2">
           {/* Workspace filter */}
           <Select
-            onValueChange={(value) =>
-              setWorkspace(value === "all" ? null : value)
-            }
+            onValueChange={(value) => setWorkspace(value === "all" ? null : value)}
             value={filters.workspaceId || "all"}
           >
             <SelectTrigger className="w-full border-foreground/10 bg-background/80 sm:w-[180px]">
@@ -90,9 +86,7 @@ export function UsersTableToolbar() {
 
           {/* Role filter */}
           <Select
-            onValueChange={(value) =>
-              setRole(value === "all" ? null : (value as UserRole))
-            }
+            onValueChange={(value) => setRole(value === "all" ? null : (value as UserRole))}
             value={filters.role || "all"}
           >
             <SelectTrigger className="w-full border-foreground/10 bg-background/80 sm:w-[120px]">
@@ -110,9 +104,7 @@ export function UsersTableToolbar() {
 
           {/* Status filter */}
           <Select
-            onValueChange={(value) =>
-              setStatus(value === "all" ? null : (value as UserStatus))
-            }
+            onValueChange={(value) => setStatus(value === "all" ? null : (value as UserStatus))}
             value={filters.status || "all"}
           >
             <SelectTrigger className="w-full border-foreground/10 bg-background/80 sm:w-[120px]">
@@ -150,10 +142,7 @@ export function UsersTableToolbar() {
             Active filters:
           </span>
           {filters.q && (
-            <Badge
-              className="animate-scale-in gap-1.5 pr-1.5"
-              variant="secondary"
-            >
+            <Badge className="animate-scale-in gap-1.5 pr-1.5" variant="secondary">
               <span className="text-muted-foreground">Search:</span> {filters.q}
               <button
                 className="ml-0.5 rounded-full p-0.5 transition-colors hover:bg-foreground/10"
@@ -165,12 +154,8 @@ export function UsersTableToolbar() {
           )}
 
           {filters.workspaceId && selectedWorkspace && (
-            <Badge
-              className="animate-scale-in gap-1.5 pr-1.5"
-              variant="secondary"
-            >
-              <span className="text-muted-foreground">Workspace:</span>{" "}
-              {selectedWorkspace.name}
+            <Badge className="animate-scale-in gap-1.5 pr-1.5" variant="secondary">
+              <span className="text-muted-foreground">Workspace:</span> {selectedWorkspace.name}
               <button
                 className="ml-0.5 rounded-full p-0.5 transition-colors hover:bg-foreground/10"
                 onClick={() => clearFilter("workspaceId")}
@@ -181,12 +166,8 @@ export function UsersTableToolbar() {
           )}
 
           {filters.role && (
-            <Badge
-              className="animate-scale-in gap-1.5 pr-1.5"
-              variant="secondary"
-            >
-              <span className="text-muted-foreground">Role:</span>{" "}
-              {roleLabels[filters.role]}
+            <Badge className="animate-scale-in gap-1.5 pr-1.5" variant="secondary">
+              <span className="text-muted-foreground">Role:</span> {roleLabels[filters.role]}
               <button
                 className="ml-0.5 rounded-full p-0.5 transition-colors hover:bg-foreground/10"
                 onClick={() => clearFilter("role")}
@@ -197,12 +178,8 @@ export function UsersTableToolbar() {
           )}
 
           {filters.status && (
-            <Badge
-              className="animate-scale-in gap-1.5 pr-1.5"
-              variant="secondary"
-            >
-              <span className="text-muted-foreground">Status:</span>{" "}
-              {statusLabels[filters.status]}
+            <Badge className="animate-scale-in gap-1.5 pr-1.5" variant="secondary">
+              <span className="text-muted-foreground">Status:</span> {statusLabels[filters.status]}
               <button
                 className="ml-0.5 rounded-full p-0.5 transition-colors hover:bg-foreground/10"
                 onClick={() => clearFilter("status")}

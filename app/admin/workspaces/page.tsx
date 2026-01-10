@@ -51,10 +51,7 @@ export default async function AdminWorkspacesPage({
       {/* Data Table */}
       <div className="stagger-1 animate-fade-in-up">
         <Suspense>
-          <WorkspacesDataTable
-            initialData={initialData.data}
-            initialMeta={initialData.meta}
-          />
+          <WorkspacesDataTable initialData={initialData.data} initialMeta={initialData.meta} />
         </Suspense>
       </div>
     </div>

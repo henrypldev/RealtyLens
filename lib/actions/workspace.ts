@@ -12,9 +12,7 @@ export type WorkspaceActionResult = {
   error?: string;
 };
 
-export async function updateWorkspaceSettings(
-  formData: FormData
-): Promise<WorkspaceActionResult> {
+export async function updateWorkspaceSettings(formData: FormData): Promise<WorkspaceActionResult> {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -24,11 +22,7 @@ export async function updateWorkspaceSettings(
   }
 
   // Get current user to find workspace and check permissions
-  const currentUser = await db
-    .select()
-    .from(user)
-    .where(eq(user.id, session.user.id))
-    .limit(1);
+  const currentUser = await db.select().from(user).where(eq(user.id, session.user.id)).limit(1);
 
   if (!currentUser[0]?.workspaceId) {
     return { success: false, error: "Workspace not found" };
@@ -40,8 +34,7 @@ export async function updateWorkspaceSettings(
   }
 
   const name = formData.get("name") as string;
-  const organizationNumber =
-    (formData.get("organizationNumber") as string) || null;
+  const organizationNumber = (formData.get("organizationNumber") as string) || null;
   const contactEmail = (formData.get("contactEmail") as string) || null;
   const contactPerson = (formData.get("contactPerson") as string) || null;
 

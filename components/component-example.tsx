@@ -134,9 +134,7 @@ export function ComponentExample() {
           Transform your real estate photos with AI-powered enhancements
         </p>
         <div className="flex justify-center gap-3 pt-2">
-          <Suspense
-            fallback={<div className="skeleton h-11 w-32 rounded-md" />}
-          >
+          <Suspense fallback={<div className="skeleton h-11 w-32 rounded-md" />}>
             <AuthButtons />
           </Suspense>
         </div>
@@ -163,9 +161,8 @@ function CardExample() {
         <CardHeader>
           <CardTitle>Observability Plus is replacing Monitoring</CardTitle>
           <CardDescription>
-            Switch to the improved way to explore your data, with natural
-            language. Monitoring will no longer be available on the Pro plan in
-            November, 2025
+            Switch to the improved way to explore your data, with natural language. Monitoring will
+            no longer be available on the Pro plan in November, 2025
           </CardDescription>
         </CardHeader>
         <CardFooter>
@@ -183,8 +180,7 @@ function CardExample() {
                 </AlertDialogMedia>
                 <AlertDialogTitle>Allow accessory to connect?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Do you want to allow the USB accessory to connect to this
-                  device?
+                  Do you want to allow the USB accessory to connect to this device?
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -202,13 +198,7 @@ function CardExample() {
   );
 }
 
-const frameworks = [
-  "Next.js",
-  "SvelteKit",
-  "Nuxt.js",
-  "Remix",
-  "Astro",
-] as const;
+const frameworks = ["Next.js", "SvelteKit", "Nuxt.js", "Remix", "Astro"] as const;
 
 function FormExample() {
   const [notifications, setNotifications] = React.useState({
@@ -339,10 +329,7 @@ function FormExample() {
                       <DropdownMenuSubContent>
                         <DropdownMenuGroup>
                           <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-                          <DropdownMenuRadioGroup
-                            onValueChange={setTheme}
-                            value={theme}
-                          >
+                          <DropdownMenuRadioGroup onValueChange={setTheme} value={theme}>
                             <DropdownMenuRadioItem value="light">
                               <IconSun />
                               Light
@@ -398,9 +385,7 @@ function FormExample() {
                             <DropdownMenuPortal>
                               <DropdownMenuSubContent>
                                 <DropdownMenuGroup>
-                                  <DropdownMenuLabel>
-                                    Notification Types
-                                  </DropdownMenuLabel>
+                                  <DropdownMenuLabel>Notification Types</DropdownMenuLabel>
                                   <DropdownMenuCheckboxItem
                                     checked={notifications.push}
                                     onCheckedChange={(checked) =>
@@ -470,11 +455,7 @@ function FormExample() {
               <div className="grid grid-cols-2 gap-4">
                 <Field>
                   <FieldLabel htmlFor="small-form-name">Name</FieldLabel>
-                  <Input
-                    id="small-form-name"
-                    placeholder="Enter your name"
-                    required
-                  />
+                  <Input id="small-form-name" placeholder="Enter your name" required />
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="small-form-role">Role</FieldLabel>
@@ -494,9 +475,7 @@ function FormExample() {
                 </Field>
               </div>
               <Field>
-                <FieldLabel htmlFor="small-form-framework">
-                  Framework
-                </FieldLabel>
+                <FieldLabel htmlFor="small-form-framework">Framework</FieldLabel>
                 <Combobox items={frameworks}>
                   <ComboboxInput
                     id="small-form-framework"
@@ -517,10 +496,7 @@ function FormExample() {
               </Field>
               <Field>
                 <FieldLabel htmlFor="small-form-comments">Comments</FieldLabel>
-                <Textarea
-                  id="small-form-comments"
-                  placeholder="Add any additional comments"
-                />
+                <Textarea id="small-form-comments" placeholder="Add any additional comments" />
               </Field>
               <Field orientation="horizontal">
                 <Button type="submit">Submit</Button>

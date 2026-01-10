@@ -1,21 +1,9 @@
 import { logger, metadata, task } from "@trigger.dev/sdk/v3";
-import {
-  getVideoClipById,
-  updateVideoClip,
-  updateVideoProjectCounts,
-} from "@/lib/db/queries";
+import { getVideoClipById, updateVideoClip, updateVideoProjectCounts } from "@/lib/db/queries";
 import type { VideoRoomType } from "@/lib/db/schema";
-import {
-  fal,
-  KLING_VIDEO_PRO,
-  type KlingVideoInput,
-  type KlingVideoOutput,
-} from "@/lib/fal";
+import { fal, KLING_VIDEO_PRO, type KlingVideoInput, type KlingVideoOutput } from "@/lib/fal";
 import { getVideoPath, uploadVideo } from "@/lib/supabase";
-import {
-  DEFAULT_NEGATIVE_PROMPT,
-  getMotionPrompt,
-} from "@/lib/video/motion-prompts";
+import { DEFAULT_NEGATIVE_PROMPT, getMotionPrompt } from "@/lib/video/motion-prompts";
 
 export interface GenerateVideoClipPayload {
   clipId: string;
@@ -24,13 +12,7 @@ export interface GenerateVideoClipPayload {
 }
 
 export interface VideoClipStatus {
-  step:
-    | "fetching"
-    | "uploading"
-    | "generating"
-    | "saving"
-    | "completed"
-    | "failed";
+  step: "fetching" | "uploading" | "generating" | "saving" | "completed" | "failed";
   label: string;
   progress?: number;
 }
@@ -103,14 +85,12 @@ export const generateVideoClipTask = task({
       // Fetch source image
       const imageResponse = await fetch(clip.sourceImageUrl);
       if (!imageResponse.ok) {
-        throw new Error(
-          `Failed to fetch source image: ${imageResponse.status}`
-        );
+        throw new Error(`Failed to fetch source image: ${imageResponse.status}`);
       }
 
       const imageBlob = await imageResponse.blob();
       const falImageUrl = await fal.storage.upload(
-        new File([imageBlob], "source.jpg", { type: imageBlob.type })
+        new File([imageBlob], "source.jpg", { type: imageBlob.type }),
       );
 
       logger.info("Uploaded source image to Fal.ai storage", { falImageUrl });
@@ -125,28 +105,22 @@ export const generateVideoClipTask = task({
         if (tailResponse.ok) {
           const tailBlob = await tailResponse.blob();
           falTailImageUrl = await fal.storage.upload(
-            new File([tailBlob], "tail.jpg", { type: tailBlob.type })
+            new File([tailBlob], "tail.jpg", { type: tailBlob.type }),
           );
           logger.info("Uploaded tail image to Fal.ai storage", {
             falTailImageUrl,
           });
         } else {
-          logger.warn(
-            "Failed to fetch tail image, falling back to source image",
-            {
-              status: tailResponse.status,
-            }
-          );
+          logger.warn("Failed to fetch tail image, falling back to source image", {
+            status: tailResponse.status,
+          });
         }
       }
 
       // Step 3: Generate motion prompt
       let motionPrompt =
         clip.motionPrompt ||
-        getMotionPrompt(
-          clip.roomType as VideoRoomType,
-          payload.targetRoomLabel
-        );
+        getMotionPrompt(clip.roomType as VideoRoomType, payload.targetRoomLabel);
 
       // Step 3.5: Handle native audio generation
       const generateAudio = videoProjectData.videoProject.generateNativeAudio;
@@ -189,10 +163,7 @@ export const generateVideoClipTask = task({
         tail_image_url: falTailImageUrl, // Use provided tail image or same as source
         prompt: motionPrompt,
         duration: (clip.durationSeconds?.toString() || "5") as "5" | "10",
-        aspect_ratio: videoProjectData.videoProject.aspectRatio as
-          | "16:9"
-          | "9:16"
-          | "1:1",
+        aspect_ratio: videoProjectData.videoProject.aspectRatio as "16:9" | "9:16" | "1:1",
         generate_audio: generateAudio,
         negative_prompt: DEFAULT_NEGATIVE_PROMPT,
       };
@@ -242,7 +213,7 @@ export const generateVideoClipTask = task({
       const videoPath = getVideoPath(
         videoProjectData.videoProject.workspaceId,
         clip.videoProjectId,
-        `${clipId}.mp4`
+        `${clipId}.mp4`,
       );
 
       logger.info("Uploading to Supabase", { videoPath });
@@ -250,7 +221,7 @@ export const generateVideoClipTask = task({
       const storedVideoUrl = await uploadVideo(
         new Uint8Array(resultVideoBuffer),
         videoPath,
-        "video/mp4"
+        "video/mp4",
       );
 
       // Update clip record with result
@@ -294,8 +265,7 @@ export const generateVideoClipTask = task({
       // Update status to failed
       await updateVideoClip(clipId, {
         status: "failed",
-        errorMessage:
-          error instanceof Error ? error.message : "Generation failed",
+        errorMessage: error instanceof Error ? error.message : "Generation failed",
       });
 
       // Update project counts

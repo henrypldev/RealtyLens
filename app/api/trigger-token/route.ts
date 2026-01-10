@@ -17,10 +17,7 @@ export async function POST(request: NextRequest) {
     const { runIds } = await request.json();
 
     if (!(runIds && Array.isArray(runIds)) || runIds.length === 0) {
-      return NextResponse.json(
-        { error: "runIds array is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "runIds array is required" }, { status: 400 });
     }
 
     // Create a public access token with read access to specific runs
@@ -36,9 +33,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ token: publicToken });
   } catch (error) {
     console.error("Failed to create trigger token:", error);
-    return NextResponse.json(
-      { error: "Failed to create token" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to create token" }, { status: 500 });
   }
 }

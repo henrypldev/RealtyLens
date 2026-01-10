@@ -9,17 +9,14 @@ function normalizeBaseUrl(url: string): string {
 
 export function getMetadataBaseUrl(): string {
   // Prefer explicit overrides so the same build can be deployed to multiple domains.
-  const explicit =
-    process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL;
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL;
   if (explicit) {
     return normalizeBaseUrl(explicit);
   }
 
   // Use Vercel preview URLs when available.
-  const vercelEnv =
-    process.env.NEXT_PUBLIC_VERCEL_ENV || process.env.VERCEL_ENV;
-  const vercelUrl =
-    process.env.NEXT_PUBLIC_VERCEL_URL || process.env.VERCEL_URL;
+  const vercelEnv = process.env.NEXT_PUBLIC_VERCEL_ENV || process.env.VERCEL_ENV;
+  const vercelUrl = process.env.NEXT_PUBLIC_VERCEL_URL || process.env.VERCEL_URL;
   if (vercelEnv === "preview" && vercelUrl) {
     return `https://${vercelUrl}`;
   }

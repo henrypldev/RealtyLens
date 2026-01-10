@@ -1,9 +1,4 @@
-import {
-  IconCreditCard,
-  IconRocket,
-  IconUser,
-  IconWand,
-} from "@tabler/icons-react";
+import { IconCreditCard, IconRocket, IconUser, IconWand } from "@tabler/icons-react";
 import Link from "next/link";
 import type { HelpCategory } from "@/lib/help";
 
@@ -19,10 +14,7 @@ interface HelpCategoryCardProps {
   articleCount: number;
 }
 
-export function HelpCategoryCard({
-  category,
-  articleCount,
-}: HelpCategoryCardProps) {
+export function HelpCategoryCard({ category, articleCount }: HelpCategoryCardProps) {
   const Icon = iconMap[category.icon as keyof typeof iconMap] || IconRocket;
 
   return (
@@ -44,10 +36,7 @@ export function HelpCategoryCard({
       >
         <Icon className="size-6" style={{ color: "var(--landing-accent)" }} />
       </div>
-      <h3
-        className="font-semibold text-lg"
-        style={{ color: "var(--landing-text)" }}
-      >
+      <h3 className="font-semibold text-lg" style={{ color: "var(--landing-text)" }}>
         {category.title}
       </h3>
       <p
@@ -56,10 +45,7 @@ export function HelpCategoryCard({
       >
         {category.description}
       </p>
-      <p
-        className="mt-3 font-medium text-xs"
-        style={{ color: "var(--landing-accent)" }}
-      >
+      <p className="mt-3 font-medium text-xs" style={{ color: "var(--landing-accent)" }}>
         {articleCount} {articleCount === 1 ? "article" : "articles"}
       </p>
     </Link>

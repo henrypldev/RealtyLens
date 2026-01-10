@@ -99,13 +99,7 @@ export function useProjectCreation() {
       default:
         return false;
     }
-  }, [
-    state.step,
-    state.images.length,
-    state.roomType,
-    state.selectedTemplate,
-    state.projectName,
-  ]);
+  }, [state.step, state.images.length, state.roomType, state.selectedTemplate, state.projectName]);
 
   const goToNextStep = useCallback(() => {
     if (!canProceed()) return;

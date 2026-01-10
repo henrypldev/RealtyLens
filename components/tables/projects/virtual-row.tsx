@@ -13,11 +13,7 @@ interface VirtualRowProps<TData> {
   rowHeight: number;
 }
 
-function VirtualRowInner<TData>({
-  row,
-  virtualStart,
-  rowHeight,
-}: VirtualRowProps<TData>) {
+function VirtualRowInner<TData>({ row, virtualStart, rowHeight }: VirtualRowProps<TData>) {
   const cells = row.getVisibleCells();
 
   return (
@@ -26,7 +22,7 @@ function VirtualRowInner<TData>({
         "group cursor-pointer select-text",
         "hover:bg-muted/50",
         "flex items-center border-0",
-        "absolute top-0 left-0 w-full"
+        "absolute top-0 left-0 w-full",
       )}
       data-index={row.index}
       style={
@@ -54,7 +50,7 @@ function VirtualRowInner<TData>({
           <TableCell
             className={cn(
               "flex h-full items-center border-border border-b px-4",
-              cell.column.id === "actions" && "justify-center"
+              cell.column.id === "actions" && "justify-center",
             )}
             key={cell.id}
             style={cellStyle}
@@ -72,7 +68,7 @@ function VirtualRowInner<TData>({
 // Custom comparison for memo - re-render when row data or position changes
 function arePropsEqual<TData>(
   prevProps: VirtualRowProps<TData>,
-  nextProps: VirtualRowProps<TData>
+  nextProps: VirtualRowProps<TData>,
 ): boolean {
   return (
     prevProps.row.id === nextProps.row.id &&
@@ -84,5 +80,5 @@ function arePropsEqual<TData>(
 
 // Export memoized component with generics
 export const VirtualRow = memo(VirtualRowInner, arePropsEqual) as <TData>(
-  props: VirtualRowProps<TData>
+  props: VirtualRowProps<TData>,
 ) => React.ReactNode;

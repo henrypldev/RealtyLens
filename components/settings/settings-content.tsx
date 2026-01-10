@@ -25,11 +25,7 @@ interface SettingsContentProps {
   currentUserId: string;
 }
 
-export function SettingsContent({
-  workspace,
-  members,
-  currentUserId,
-}: SettingsContentProps) {
+export function SettingsContent({ workspace, members, currentUserId }: SettingsContentProps) {
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
   const [isBillingPending, startBillingTransition] = useTransition();
 
@@ -60,9 +56,7 @@ export function SettingsContent({
           </div>
           <div>
             <h1 className="font-bold text-2xl tracking-tight">Settings</h1>
-            <p className="text-muted-foreground text-sm">
-              Manage your workspace and team
-            </p>
+            <p className="text-muted-foreground text-sm">Manage your workspace and team</p>
           </div>
         </div>
       </div>
@@ -73,20 +67,14 @@ export function SettingsContent({
           <div
             className="flex h-8 w-8 items-center justify-center rounded-lg"
             style={{
-              backgroundColor:
-                "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
+              backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
             }}
           >
-            <IconBuilding
-              className="h-4 w-4"
-              style={{ color: "var(--accent-teal)" }}
-            />
+            <IconBuilding className="h-4 w-4" style={{ color: "var(--accent-teal)" }} />
           </div>
           <div>
             <h2 className="font-semibold text-lg">Workspace</h2>
-            <p className="text-muted-foreground text-sm">
-              Your organization details and branding
-            </p>
+            <p className="text-muted-foreground text-sm">Your organization details and branding</p>
           </div>
         </div>
 
@@ -101,14 +89,10 @@ export function SettingsContent({
           <div
             className="flex h-8 w-8 items-center justify-center rounded-lg"
             style={{
-              backgroundColor:
-                "color-mix(in oklch, var(--accent-amber) 15%, transparent)",
+              backgroundColor: "color-mix(in oklch, var(--accent-amber) 15%, transparent)",
             }}
           >
-            <IconCreditCard
-              className="h-4 w-4"
-              style={{ color: "var(--accent-amber)" }}
-            />
+            <IconCreditCard className="h-4 w-4" style={{ color: "var(--accent-amber)" }} />
           </div>
           <div>
             <h2 className="font-semibold text-lg">Billing</h2>
@@ -123,8 +107,7 @@ export function SettingsContent({
             <div className="space-y-1">
               <p className="font-medium">Payment Settings</p>
               <p className="text-muted-foreground text-sm">
-                Update payment methods, view payment history, and download
-                invoices
+                Update payment methods, view payment history, and download invoices
               </p>
             </div>
             <Button
@@ -151,14 +134,10 @@ export function SettingsContent({
             <div
               className="flex h-8 w-8 items-center justify-center rounded-lg"
               style={{
-                backgroundColor:
-                  "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
+                backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
               }}
             >
-              <IconUsers
-                className="h-4 w-4"
-                style={{ color: "var(--accent-teal)" }}
-              />
+              <IconUsers className="h-4 w-4" style={{ color: "var(--accent-teal)" }} />
             </div>
             <div>
               <h2 className="font-semibold text-lg">Team Members</h2>
@@ -191,10 +170,7 @@ export function SettingsContent({
       </section>
 
       {/* Invite Dialog */}
-      <InviteMemberDialog
-        onOpenChange={setInviteDialogOpen}
-        open={inviteDialogOpen}
-      />
+      <InviteMemberDialog onOpenChange={setInviteDialogOpen} open={inviteDialogOpen} />
     </div>
   );
 }

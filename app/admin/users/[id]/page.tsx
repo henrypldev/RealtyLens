@@ -10,9 +10,7 @@ interface AdminUserDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default async function AdminUserDetailPage({
-  params,
-}: AdminUserDetailPageProps) {
+export default async function AdminUserDetailPage({ params }: AdminUserDetailPageProps) {
   await requireSystemAdmin();
   const { id } = await params;
 

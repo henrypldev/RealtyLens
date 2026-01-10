@@ -33,9 +33,7 @@ export function ImageProcessingStatus({
     onComplete?.();
   }, [router, onComplete]);
 
-  const { run, error } = useRealtimeRun<
-    typeof processImageTask | typeof inpaintImageTask
-  >(runId, {
+  const { run, error } = useRealtimeRun<typeof processImageTask | typeof inpaintImageTask>(runId, {
     accessToken,
     onComplete: handleComplete,
   });
@@ -48,11 +46,7 @@ export function ImageProcessingStatus({
   }
 
   if (!run) {
-    return (
-      <span className="animate-pulse text-muted-foreground text-xs">
-        Connecting\u2026
-      </span>
-    );
+    return <span className="animate-pulse text-muted-foreground text-xs">Connecting\u2026</span>;
   }
 
   // Show different states based on run status
@@ -60,11 +54,7 @@ export function ImageProcessingStatus({
     return <span className="text-green-500 text-xs">Complete</span>;
   }
 
-  if (
-    run.status === "FAILED" ||
-    run.status === "CRASHED" ||
-    run.status === "SYSTEM_FAILURE"
-  ) {
+  if (run.status === "FAILED" || run.status === "CRASHED" || run.status === "SYSTEM_FAILURE") {
     return <span className="text-red-500 text-xs">Failed</span>;
   }
 
@@ -93,7 +83,7 @@ function getDefaultLabel(status: string): string {
 export function useProcessingRuns(
   runIds: string[],
   accessToken: string | null,
-  onComplete?: () => void
+  onComplete?: () => void,
 ) {
   const router = useRouter();
 

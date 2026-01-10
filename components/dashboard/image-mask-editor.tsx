@@ -54,18 +54,12 @@ interface ImageMaskEditorProps {
   onClose: () => void;
 }
 
-export function ImageMaskEditor({
-  image,
-  latestVersion,
-  onClose,
-}: ImageMaskEditorProps) {
+export function ImageMaskEditor({ image, latestVersion, onClose }: ImageMaskEditorProps) {
   const router = useRouter();
   const { inpaint, isProcessing, error } = useInpaint();
 
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
-  const fabricRef = React.useRef<InstanceType<
-    typeof import("fabric").Canvas
-  > | null>(null);
+  const fabricRef = React.useRef<InstanceType<typeof import("fabric").Canvas> | null>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
 
   type EditMode = "remove" | "add";
@@ -137,8 +131,7 @@ export function ImageMaskEditor({
 
   // Step 2: Initialize Fabric.js after canvas is rendered
   React.useEffect(() => {
-    if (!(imageLoaded && canvasRef.current) || imageDimensions.width === 0)
-      return;
+    if (!(imageLoaded && canvasRef.current) || imageDimensions.width === 0) return;
 
     // Dynamic import to avoid SSR issues
     const initFabric = async () => {
@@ -273,16 +266,13 @@ export function ImageMaskEditor({
   }, []);
 
   // Track cursor position for brush preview
-  const handleCanvasMouseMove = React.useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      setCursorPosition({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      });
-    },
-    []
-  );
+  const handleCanvasMouseMove = React.useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setCursorPosition({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  }, []);
 
   const handleCanvasMouseLeave = React.useCallback(() => {
     setCursorPosition(null);
@@ -294,15 +284,9 @@ export function ImageMaskEditor({
       maskDataUrl: string,
       prompt: string,
       editMode: EditMode,
-      replaceNewerVersions: boolean
+      replaceNewerVersions: boolean,
     ) => {
-      const result = await inpaint(
-        image.id,
-        maskDataUrl,
-        prompt,
-        editMode,
-        replaceNewerVersions
-      );
+      const result = await inpaint(image.id, maskDataUrl, prompt, editMode, replaceNewerVersions);
 
       if (result.success) {
         // The task is now running in the background
@@ -311,7 +295,7 @@ export function ImageMaskEditor({
         onClose();
       }
     },
-    [image.id, inpaint, router, onClose]
+    [image.id, inpaint, router, onClose],
   );
 
   // Handle confirmed replace
@@ -323,7 +307,7 @@ export function ImageMaskEditor({
       pendingSubmitData.maskDataUrl,
       pendingSubmitData.prompt,
       pendingSubmitData.mode,
-      true // replaceNewerVersions
+      true, // replaceNewerVersions
     );
     setPendingSubmitData(null);
   }, [pendingSubmitData, executeInpaint]);
@@ -428,7 +412,7 @@ export function ImageMaskEditor({
             <Button
               className={cn(
                 "gap-1.5 text-white hover:bg-white/20 hover:text-white",
-                mode === "remove" && "bg-red-500/30"
+                mode === "remove" && "bg-red-500/30",
               )}
               onClick={() => setMode("remove")}
               size="sm"
@@ -440,7 +424,7 @@ export function ImageMaskEditor({
             <Button
               className={cn(
                 "gap-1.5 text-white hover:bg-white/20 hover:text-white",
-                mode === "add" && "bg-green-500/30"
+                mode === "add" && "bg-green-500/30",
               )}
               onClick={() => setMode("add")}
               size="sm"
@@ -462,9 +446,7 @@ export function ImageMaskEditor({
               step={5}
               value={[brushSize]}
             />
-            <span className="w-8 text-sm text-white/70 tabular-nums">
-              {brushSize}
-            </span>
+            <span className="w-8 text-sm text-white/70 tabular-nums">{brushSize}</span>
           </div>
 
           {/* Undo button */}
@@ -549,12 +531,9 @@ export function ImageMaskEditor({
                   height: brushSize,
                   left: cursorPosition.x - brushSize / 2,
                   top: cursorPosition.y - brushSize / 2,
-                  borderColor:
-                    mode === "remove" ? "rgb(239, 68, 68)" : "rgb(34, 197, 94)",
+                  borderColor: mode === "remove" ? "rgb(239, 68, 68)" : "rgb(34, 197, 94)",
                   backgroundColor:
-                    mode === "remove"
-                      ? "rgba(239, 68, 68, 0.2)"
-                      : "rgba(34, 197, 94, 0.2)",
+                    mode === "remove" ? "rgba(239, 68, 68, 0.2)" : "rgba(34, 197, 94, 0.2)",
                 }}
               />
             )}
@@ -571,19 +550,11 @@ export function ImageMaskEditor({
               <div
                 className="absolute z-10 w-64 rounded-lg border border-white/20 bg-black/90 p-3 shadow-xl backdrop-blur-sm"
                 style={{
-                  left: Math.max(
-                    0,
-                    Math.min(maskBounds.x, imageDimensions.width - 256)
-                  ),
-                  top: Math.min(
-                    maskBounds.y + 12,
-                    imageDimensions.height - 160
-                  ),
+                  left: Math.max(0, Math.min(maskBounds.x, imageDimensions.width - 256)),
+                  top: Math.min(maskBounds.y + 12, imageDimensions.height - 160),
                 }}
               >
-                <p className="mb-2 font-medium text-white/70 text-xs">
-                  Quick add:
-                </p>
+                <p className="mb-2 font-medium text-white/70 text-xs">Quick add:</p>
                 <div className="mb-3 flex flex-wrap gap-1.5">
                   {OBJECT_SUGGESTIONS.map((suggestion) => (
                     <button
@@ -591,7 +562,7 @@ export function ImageMaskEditor({
                         "rounded-full px-2.5 py-1 font-medium text-xs transition-colors",
                         objectToAdd === suggestion
                           ? "bg-green-500 text-white"
-                          : "bg-white/10 text-white/80 hover:bg-white/20"
+                          : "bg-white/10 text-white/80 hover:bg-white/20",
                       )}
                       key={suggestion}
                       onClick={() => setObjectToAdd(suggestion)}
@@ -638,14 +609,10 @@ export function ImageMaskEditor({
         <div className="mx-auto flex max-w-2xl items-center justify-center gap-3">
           {mode === "remove" ? (
             <>
-              <p className="text-white/70">
-                Draw on the object you want to remove
-              </p>
+              <p className="text-white/70">Draw on the object you want to remove</p>
               <Button
                 className="min-w-[120px] gap-2 bg-red-500 hover:bg-red-600"
-                disabled={
-                  isProcessing || !isCanvasReady || canvasHistory.length === 0
-                }
+                disabled={isProcessing || !isCanvasReady || canvasHistory.length === 0}
                 onClick={handleSubmit}
               >
                 {isProcessing ? (
@@ -670,9 +637,7 @@ export function ImageMaskEditor({
           )}
         </div>
 
-        {error && (
-          <p className="mt-2 text-center text-red-400 text-sm">{error}</p>
-        )}
+        {error && <p className="mt-2 text-center text-red-400 text-sm">{error}</p>}
 
         <p className="mt-2 text-center text-white/50 text-xs">
           {mode === "remove"
@@ -695,9 +660,7 @@ export function ImageMaskEditor({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setPendingSubmitData(null)}>
-              Cancel
-            </AlertDialogCancel>
+            <AlertDialogCancel onClick={() => setPendingSubmitData(null)}>Cancel</AlertDialogCancel>
             <AlertDialogAction
               className="bg-red-500 hover:bg-red-600"
               onClick={handleConfirmReplace}

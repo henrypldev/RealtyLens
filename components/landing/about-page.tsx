@@ -1,9 +1,4 @@
-import {
-  IconHeart,
-  IconRocket,
-  IconSparkles,
-  IconTarget,
-} from "@tabler/icons-react";
+import { IconHeart, IconRocket, IconSparkles, IconTarget } from "@tabler/icons-react";
 import { LandingFooter } from "./landing-footer";
 import { LandingNav } from "./landing-nav";
 
@@ -17,8 +12,7 @@ const values = [
   {
     icon: IconRocket,
     title: "Speed Matters",
-    description:
-      "Real estate moves fast. Our AI delivers results in seconds, not hours or days.",
+    description: "Real estate moves fast. Our AI delivers results in seconds, not hours or days.",
   },
   {
     icon: IconHeart,
@@ -29,17 +23,13 @@ const values = [
   {
     icon: IconTarget,
     title: "Simple Pricing",
-    description:
-      "No subscriptions, no hidden fees. Pay only for what you use, when you use it.",
+    description: "No subscriptions, no hidden fees. Pay only for what you use, when you use it.",
   },
 ];
 
 export function AboutPage() {
   return (
-    <div
-      className="min-h-screen"
-      style={{ backgroundColor: "var(--landing-bg)" }}
-    >
+    <div className="min-h-screen" style={{ backgroundColor: "var(--landing-bg)" }}>
       <LandingNav />
 
       <main>
@@ -64,10 +54,9 @@ export function AboutPage() {
               className="mt-6 text-lg leading-relaxed md:text-xl"
               style={{ color: "var(--landing-text-muted)" }}
             >
-              Proppi is an AI-powered photo enhancement platform built
-              specifically for real estate professionals. We help agents,
-              photographers, and property managers create stunning visuals that
-              sell properties faster.
+              Proppi is an AI-powered photo enhancement platform built specifically for real estate
+              professionals. We help agents, photographers, and property managers create stunning
+              visuals that sell properties faster.
             </p>
           </div>
         </section>
@@ -93,38 +82,31 @@ export function AboutPage() {
               style={{ color: "var(--landing-text-muted)" }}
             >
               <p>
-                We started Proppi because we saw a gap in the market. Real
-                estate professionals needed high-quality photo enhancement, but
-                existing solutions were either too expensive, too slow, or
-                required technical expertise.
+                We started Proppi because we saw a gap in the market. Real estate professionals
+                needed high-quality photo enhancement, but existing solutions were either too
+                expensive, too slow, or required technical expertise.
               </p>
               <p>
-                Professional photography services can cost hundreds of dollars
-                per property and take days to deliver. DIY editing tools require
-                hours of learning and manual work. Neither option works when you
-                have multiple listings and tight deadlines.
+                Professional photography services can cost hundreds of dollars per property and take
+                days to deliver. DIY editing tools require hours of learning and manual work.
+                Neither option works when you have multiple listings and tight deadlines.
               </p>
               <p>
-                Proppi bridges this gap. Our AI understands real estate
-                photography. It knows how to brighten rooms, enhance curb
-                appeal, and make properties look their absolute best. All
-                automatically, in seconds.
+                Proppi bridges this gap. Our AI understands real estate photography. It knows how to
+                brighten rooms, enhance curb appeal, and make properties look their absolute best.
+                All automatically, in seconds.
               </p>
               <p>
-                Today, we&apos;ve processed over 50,000 images for real estate
-                professionals across Norway. Our users report up to 85% higher
-                engagement on their listings. And we&apos;re just getting
-                started.
+                Today, we&apos;ve processed over 50,000 images for real estate professionals across
+                Norway. Our users report up to 85% higher engagement on their listings. And
+                we&apos;re just getting started.
               </p>
             </div>
           </div>
         </section>
 
         {/* Values Section */}
-        <section
-          className="px-6 py-24"
-          style={{ backgroundColor: "var(--landing-bg-alt)" }}
-        >
+        <section className="px-6 py-24" style={{ backgroundColor: "var(--landing-bg-alt)" }}>
           <div className="mx-auto max-w-5xl">
             <div className="text-center">
               <p
@@ -158,15 +140,9 @@ export function AboutPage() {
                       border: "1px solid var(--landing-border)",
                     }}
                   >
-                    <value.icon
-                      className="size-6"
-                      style={{ color: "var(--landing-accent)" }}
-                    />
+                    <value.icon className="size-6" style={{ color: "var(--landing-accent)" }} />
                   </div>
-                  <h3
-                    className="font-semibold text-lg"
-                    style={{ color: "var(--landing-text)" }}
-                  >
+                  <h3 className="font-semibold text-lg" style={{ color: "var(--landing-text)" }}>
                     {value.title}
                   </h3>
                   <p
@@ -200,10 +176,9 @@ export function AboutPage() {
               className="mt-6 text-lg leading-relaxed"
               style={{ color: "var(--landing-text-muted)" }}
             >
-              Our mission is to democratize professional-quality real estate
-              photography. We believe every property deserves to be presented at
-              its best, regardless of budget or technical expertise. By
-              harnessing the power of AI, we make this possible for everyone.
+              Our mission is to democratize professional-quality real estate photography. We believe
+              every property deserves to be presented at its best, regardless of budget or technical
+              expertise. By harnessing the power of AI, we make this possible for everyone.
             </p>
           </div>
         </section>
@@ -228,8 +203,8 @@ export function AboutPage() {
               className="mx-auto mt-4 max-w-lg text-lg leading-relaxed"
               style={{ color: "var(--landing-text-muted)" }}
             >
-              We&apos;d love to hear from you. Whether you have questions about
-              our service or just want to say hello, get in touch.
+              We&apos;d love to hear from you. Whether you have questions about our service or just
+              want to say hello, get in touch.
             </p>
             <div className="mt-8">
               <a

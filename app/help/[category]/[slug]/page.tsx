@@ -23,9 +23,7 @@ export function generateStaticParams() {
 
 export const dynamicParams = false;
 
-export async function generateMetadata({
-  params,
-}: HelpArticlePageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: HelpArticlePageProps): Promise<Metadata> {
   const { category: categorySlug, slug } = await params;
   const article = await getHelpArticle(categorySlug, slug);
 
@@ -56,10 +54,6 @@ export default async function HelpArticle({ params }: HelpArticlePageProps) {
   const relatedArticles = getRelatedArticles(slug, categorySlug, 3);
 
   return (
-    <HelpArticlePage
-      article={article}
-      category={category}
-      relatedArticles={relatedArticles}
-    />
+    <HelpArticlePage article={article} category={category} relatedArticles={relatedArticles} />
   );
 }

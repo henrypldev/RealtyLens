@@ -1,9 +1,4 @@
-import {
-  IconArrowLeft,
-  IconCalendar,
-  IconClock,
-  IconUser,
-} from "@tabler/icons-react";
+import { IconArrowLeft, IconCalendar, IconClock, IconUser } from "@tabler/icons-react";
 import Link from "next/link";
 import type { BlogPost, BlogPostMeta } from "@/lib/blog";
 import { BlogCard } from "./blog-card";
@@ -23,10 +18,7 @@ export function BlogPostPage({ post, relatedPosts }: BlogPostPageProps) {
   });
 
   return (
-    <div
-      className="min-h-screen"
-      style={{ backgroundColor: "var(--landing-bg)" }}
-    >
+    <div className="min-h-screen" style={{ backgroundColor: "var(--landing-bg)" }}>
       <LandingNav />
 
       <main>
@@ -166,18 +158,15 @@ export function BlogPostPage({ post, relatedPosts }: BlogPostPageProps) {
                     .join("")}
                 </div>
                 <div>
-                  <p
-                    className="font-semibold"
-                    style={{ color: "var(--landing-text)" }}
-                  >
+                  <p className="font-semibold" style={{ color: "var(--landing-text)" }}>
                     {post.author}
                   </p>
                   <p
                     className="mt-1 text-sm leading-relaxed"
                     style={{ color: "var(--landing-text-muted)" }}
                   >
-                    Helping real estate professionals create stunning property
-                    listings with AI-powered photo enhancement.
+                    Helping real estate professionals create stunning property listings with
+                    AI-powered photo enhancement.
                   </p>
                 </div>
               </div>
@@ -187,10 +176,7 @@ export function BlogPostPage({ post, relatedPosts }: BlogPostPageProps) {
 
         {/* Related Posts */}
         {relatedPosts.length > 0 && (
-          <section
-            className="px-6 py-16"
-            style={{ backgroundColor: "var(--landing-bg-alt)" }}
-          >
+          <section className="px-6 py-16" style={{ backgroundColor: "var(--landing-bg-alt)" }}>
             <div className="mx-auto max-w-5xl">
               <h2
                 className="mb-8 text-center font-bold text-2xl tracking-tight sm:text-3xl"
@@ -227,8 +213,8 @@ export function BlogPostPage({ post, relatedPosts }: BlogPostPageProps) {
               className="mx-auto mt-4 max-w-lg text-lg leading-relaxed"
               style={{ color: "var(--landing-text-muted)" }}
             >
-              Join thousands of real estate professionals who use Proppi to
-              create stunning property photos.
+              Join thousands of real estate professionals who use Proppi to create stunning property
+              photos.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link

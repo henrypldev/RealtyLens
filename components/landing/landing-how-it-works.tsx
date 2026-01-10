@@ -54,8 +54,8 @@ export function LandingHowItWorks() {
             className="mt-4 text-lg leading-relaxed"
             style={{ color: "var(--landing-text-muted)" }}
           >
-            No complicated software or design experience required. Just upload,
-            select, and download.
+            No complicated software or design experience required. Just upload, select, and
+            download.
           </p>
         </div>
 
@@ -80,10 +80,7 @@ export function LandingHowItWorks() {
                       border: "1px solid var(--landing-border)",
                     }}
                   >
-                    <step.icon
-                      className="size-12"
-                      style={{ color: "var(--landing-accent)" }}
-                    />
+                    <step.icon className="size-12" style={{ color: "var(--landing-accent)" }} />
                   </div>
 
                   {/* Step number badge */}
@@ -99,10 +96,7 @@ export function LandingHowItWorks() {
                 </div>
 
                 {/* Content */}
-                <h3
-                  className="font-semibold text-xl"
-                  style={{ color: "var(--landing-text)" }}
-                >
+                <h3 className="font-semibold text-xl" style={{ color: "var(--landing-text)" }}>
                   {step.title}
                 </h3>
                 <p
@@ -143,10 +137,7 @@ export function LandingHowItWorks() {
                 style={{ backgroundColor: "var(--landing-bg-alt)" }}
               >
                 <div className="flex h-full items-center justify-center">
-                  <p
-                    className="text-sm"
-                    style={{ color: "var(--landing-text-muted)" }}
-                  >
+                  <p className="text-sm" style={{ color: "var(--landing-text-muted)" }}>
                     Original Photo
                   </p>
                 </div>
@@ -175,10 +166,7 @@ export function LandingHowItWorks() {
                 }}
               >
                 <div className="flex h-full items-center justify-center">
-                  <p
-                    className="text-sm"
-                    style={{ color: "var(--landing-text-muted)" }}
-                  >
+                  <p className="text-sm" style={{ color: "var(--landing-text-muted)" }}>
                     Enhanced Photo
                   </p>
                 </div>

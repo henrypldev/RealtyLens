@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  parseAsArrayOf,
-  parseAsString,
-  parseAsStringLiteral,
-  useQueryStates,
-} from "nuqs";
+import { parseAsArrayOf, parseAsString, parseAsStringLiteral, useQueryStates } from "nuqs";
 import {
   ALL_USER_ROLES,
   ALL_USER_STATUSES,
@@ -47,12 +42,7 @@ export function useAdminUserFilters() {
   };
 
   // Helper to check if any filters are active
-  const hasActiveFilters = !!(
-    filters.q ||
-    filters.workspaceId ||
-    filters.role ||
-    filters.status
-  );
+  const hasActiveFilters = !!(filters.q || filters.workspaceId || filters.role || filters.status);
 
   // Update search
   const setSearch = (value: string | null) => {

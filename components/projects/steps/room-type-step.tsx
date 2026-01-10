@@ -28,16 +28,12 @@ interface RoomTypeStepProps {
   onSelectRoomType: (roomType: string) => void;
 }
 
-export function RoomTypeStep({
-  selectedRoomType,
-  onSelectRoomType,
-}: RoomTypeStepProps) {
+export function RoomTypeStep({ selectedRoomType, onSelectRoomType }: RoomTypeStepProps) {
   return (
     <div className="space-y-4">
       <div>
         <p className="text-muted-foreground text-sm">
-          Select the room type to help the AI better understand and transform
-          your space.
+          Select the room type to help the AI better understand and transform your space.
         </p>
       </div>
 
@@ -52,7 +48,7 @@ export function RoomTypeStep({
                 "group relative flex animate-fade-in-up flex-col items-center gap-3 rounded-xl p-5 text-center ring-2 transition-all duration-200",
                 isSelected
                   ? "bg-[var(--accent-teal)]/10 shadow-lg ring-[var(--accent-teal)]"
-                  : "bg-muted/30 ring-transparent hover:bg-muted/50 hover:ring-foreground/10"
+                  : "bg-muted/30 ring-transparent hover:bg-muted/50 hover:ring-foreground/10",
               )}
               key={roomType.id}
               onClick={() => onSelectRoomType(roomType.id)}
@@ -65,7 +61,7 @@ export function RoomTypeStep({
                   "flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-200",
                   isSelected
                     ? "bg-[var(--accent-teal)] text-white"
-                    : "bg-muted text-muted-foreground group-hover:text-foreground"
+                    : "bg-muted text-muted-foreground group-hover:text-foreground",
                 )}
               >
                 {IconComponent && <IconComponent className="h-6 w-6" />}
@@ -76,14 +72,12 @@ export function RoomTypeStep({
                 <h3
                   className={cn(
                     "font-semibold leading-tight",
-                    isSelected ? "text-foreground" : "text-foreground"
+                    isSelected ? "text-foreground" : "text-foreground",
                   )}
                 >
                   {roomType.label}
                 </h3>
-                <p className="text-muted-foreground text-xs">
-                  {roomType.description}
-                </p>
+                <p className="text-muted-foreground text-xs">{roomType.description}</p>
               </div>
 
               {/* Selected checkmark */}

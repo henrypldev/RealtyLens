@@ -4,7 +4,7 @@ import type { Database } from "@/lib/types/database";
 // Server-side client with secret key (for uploads)
 export const supabaseAdmin = createClient<Database>(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SECRET_KEY!
+  process.env.SUPABASE_SECRET_KEY!,
 );
 
 // Storage bucket name
@@ -15,7 +15,7 @@ export function getImagePath(
   workspaceId: string,
   projectId: string,
   imageId: string,
-  type: "original" | "result"
+  type: "original" | "result",
 ): string {
   return `${workspaceId}/${projectId}/${type}/${imageId}`;
 }
@@ -24,31 +24,25 @@ export function getImagePath(
 export async function uploadImage(
   file: Buffer | Uint8Array,
   path: string,
-  contentType: string
+  contentType: string,
 ): Promise<string> {
-  const { data, error } = await supabaseAdmin.storage
-    .from(STORAGE_BUCKET)
-    .upload(path, file, {
-      contentType,
-      upsert: true,
-    });
+  const { data, error } = await supabaseAdmin.storage.from(STORAGE_BUCKET).upload(path, file, {
+    contentType,
+    upsert: true,
+  });
 
   if (error) {
     throw new Error(`Failed to upload image: ${error.message}`);
   }
 
-  const { data: urlData } = supabaseAdmin.storage
-    .from(STORAGE_BUCKET)
-    .getPublicUrl(data.path);
+  const { data: urlData } = supabaseAdmin.storage.from(STORAGE_BUCKET).getPublicUrl(data.path);
 
   return urlData.publicUrl;
 }
 
 // Delete image from Supabase Storage
 export async function deleteImage(path: string): Promise<void> {
-  const { error } = await supabaseAdmin.storage
-    .from(STORAGE_BUCKET)
-    .remove([path]);
+  const { error } = await supabaseAdmin.storage.from(STORAGE_BUCKET).remove([path]);
 
   if (error) {
     throw new Error(`Failed to delete image: ${error.message}`);
@@ -56,10 +50,7 @@ export async function deleteImage(path: string): Promise<void> {
 }
 
 // Delete all images for a project
-export async function deleteProjectImages(
-  workspaceId: string,
-  projectId: string
-): Promise<void> {
+export async function deleteProjectImages(workspaceId: string, projectId: string): Promise<void> {
   const folderPath = `${workspaceId}/${projectId}`;
 
   // List all files in the project folder
@@ -79,9 +70,7 @@ export async function deleteProjectImages(
 
   // Delete all files in the folder
   const filePaths = files.map((file) => `${folderPath}/${file.name}`);
-  const { error: deleteError } = await supabaseAdmin.storage
-    .from(STORAGE_BUCKET)
-    .remove(filePaths);
+  const { error: deleteError } = await supabaseAdmin.storage.from(STORAGE_BUCKET).remove(filePaths);
 
   if (deleteError) {
     throw new Error(`Failed to delete project images: ${deleteError.message}`);
@@ -123,9 +112,7 @@ export async function createSignedUploadUrl(path: string): Promise<{
 
 // Upload to a signed URL (used by client after getting signed URL)
 export function getPublicUrl(path: string): string {
-  const { data } = supabaseAdmin.storage
-    .from(STORAGE_BUCKET)
-    .getPublicUrl(path);
+  const { data } = supabaseAdmin.storage.from(STORAGE_BUCKET).getPublicUrl(path);
 
   return data.publicUrl;
 }
@@ -135,10 +122,7 @@ export function getPublicUrl(path: string): string {
 // ============================================================================
 
 // Path helper for video source images
-export function getVideoSourceImagePath(
-  workspaceId: string,
-  imageId: string
-): string {
+export function getVideoSourceImagePath(workspaceId: string, imageId: string): string {
   return `${workspaceId}/video-sources/${imageId}`;
 }
 
@@ -146,22 +130,18 @@ export function getVideoSourceImagePath(
 export async function uploadVideoSourceImage(
   file: Buffer | Uint8Array,
   path: string,
-  contentType: string
+  contentType: string,
 ): Promise<string> {
-  const { data, error } = await supabaseAdmin.storage
-    .from(STORAGE_BUCKET)
-    .upload(path, file, {
-      contentType,
-      upsert: true,
-    });
+  const { data, error } = await supabaseAdmin.storage.from(STORAGE_BUCKET).upload(path, file, {
+    contentType,
+    upsert: true,
+  });
 
   if (error) {
     throw new Error(`Failed to upload video source image: ${error.message}`);
   }
 
-  const { data: urlData } = supabaseAdmin.storage
-    .from(STORAGE_BUCKET)
-    .getPublicUrl(data.path);
+  const { data: urlData } = supabaseAdmin.storage.from(STORAGE_BUCKET).getPublicUrl(data.path);
 
   return urlData.publicUrl;
 }
@@ -170,7 +150,7 @@ export async function uploadVideoSourceImage(
 export function getVideoPath(
   workspaceId: string,
   videoProjectId: string,
-  filename: string
+  filename: string,
 ): string {
   return `${workspaceId}/videos/${videoProjectId}/${filename}`;
 }
@@ -179,31 +159,25 @@ export function getVideoPath(
 export async function uploadVideo(
   file: Buffer | Uint8Array,
   path: string,
-  contentType: string
+  contentType: string,
 ): Promise<string> {
-  const { data, error } = await supabaseAdmin.storage
-    .from(STORAGE_BUCKET)
-    .upload(path, file, {
-      contentType,
-      upsert: true,
-    });
+  const { data, error } = await supabaseAdmin.storage.from(STORAGE_BUCKET).upload(path, file, {
+    contentType,
+    upsert: true,
+  });
 
   if (error) {
     throw new Error(`Failed to upload video: ${error.message}`);
   }
 
-  const { data: urlData } = supabaseAdmin.storage
-    .from(STORAGE_BUCKET)
-    .getPublicUrl(data.path);
+  const { data: urlData } = supabaseAdmin.storage.from(STORAGE_BUCKET).getPublicUrl(data.path);
 
   return urlData.publicUrl;
 }
 
 // Delete video from Supabase Storage
 export async function deleteVideo(path: string): Promise<void> {
-  const { error } = await supabaseAdmin.storage
-    .from(STORAGE_BUCKET)
-    .remove([path]);
+  const { error } = await supabaseAdmin.storage.from(STORAGE_BUCKET).remove([path]);
 
   if (error) {
     throw new Error(`Failed to delete video: ${error.message}`);
@@ -213,7 +187,7 @@ export async function deleteVideo(path: string): Promise<void> {
 // Delete all videos for a video project
 export async function deleteVideoProjectFiles(
   workspaceId: string,
-  videoProjectId: string
+  videoProjectId: string,
 ): Promise<void> {
   const folderPath = `${workspaceId}/videos/${videoProjectId}`;
 
@@ -234,9 +208,7 @@ export async function deleteVideoProjectFiles(
 
   // Delete all files in the folder
   const filePaths = files.map((file) => `${folderPath}/${file.name}`);
-  const { error: deleteError } = await supabaseAdmin.storage
-    .from(STORAGE_BUCKET)
-    .remove(filePaths);
+  const { error: deleteError } = await supabaseAdmin.storage.from(STORAGE_BUCKET).remove(filePaths);
 
   if (deleteError) {
     throw new Error(`Failed to delete video files: ${deleteError.message}`);

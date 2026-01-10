@@ -25,9 +25,7 @@ export type ActionResult<T> =
     };
 
 // CREATE - Create new project
-export async function createProjectAction(
-  formData: FormData
-): Promise<ActionResult<Project>> {
+export async function createProjectAction(formData: FormData): Promise<ActionResult<Project>> {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -37,11 +35,7 @@ export async function createProjectAction(
   }
 
   // Get user's workspace
-  const currentUser = await db
-    .select()
-    .from(user)
-    .where(eq(user.id, session.user.id))
-    .limit(1);
+  const currentUser = await db.select().from(user).where(eq(user.id, session.user.id)).limit(1);
 
   if (!currentUser[0]?.workspaceId) {
     return { success: false, error: "Workspace not found" };
@@ -79,7 +73,7 @@ export async function createProjectAction(
 // UPDATE - Update project name
 export async function updateProjectAction(
   projectId: string,
-  formData: FormData
+  formData: FormData,
 ): Promise<ActionResult<Project>> {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -90,11 +84,7 @@ export async function updateProjectAction(
   }
 
   // Get user's workspace
-  const currentUser = await db
-    .select()
-    .from(user)
-    .where(eq(user.id, session.user.id))
-    .limit(1);
+  const currentUser = await db.select().from(user).where(eq(user.id, session.user.id)).limit(1);
 
   if (!currentUser[0]?.workspaceId) {
     return { success: false, error: "Workspace not found" };
@@ -102,10 +92,7 @@ export async function updateProjectAction(
 
   // Check project belongs to user's workspace
   const projectData = await getProjectById(projectId);
-  if (
-    !projectData ||
-    projectData.project.workspaceId !== currentUser[0].workspaceId
-  ) {
+  if (!projectData || projectData.project.workspaceId !== currentUser[0].workspaceId) {
     return { success: false, error: "Project not found" };
   }
 
@@ -132,9 +119,7 @@ export async function updateProjectAction(
 }
 
 // DELETE - Delete project and all associated images
-export async function deleteProjectAction(
-  projectId: string
-): Promise<ActionResult<void>> {
+export async function deleteProjectAction(projectId: string): Promise<ActionResult<void>> {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -144,11 +129,7 @@ export async function deleteProjectAction(
   }
 
   // Get user's workspace
-  const currentUser = await db
-    .select()
-    .from(user)
-    .where(eq(user.id, session.user.id))
-    .limit(1);
+  const currentUser = await db.select().from(user).where(eq(user.id, session.user.id)).limit(1);
 
   if (!currentUser[0]?.workspaceId) {
     return { success: false, error: "Workspace not found" };
@@ -156,10 +137,7 @@ export async function deleteProjectAction(
 
   // Check project belongs to user's workspace
   const projectData = await getProjectById(projectId);
-  if (
-    !projectData ||
-    projectData.project.workspaceId !== currentUser[0].workspaceId
-  ) {
+  if (!projectData || projectData.project.workspaceId !== currentUser[0].workspaceId) {
     return { success: false, error: "Project not found" };
   }
 

@@ -14,18 +14,13 @@ import {
   markEarningsAsPaidOut,
   updateAffiliateRelationship,
 } from "@/lib/db/queries";
-import type {
-  AffiliateEarningStatus,
-  AffiliateRelationship,
-} from "@/lib/db/schema";
+import type { AffiliateEarningStatus, AffiliateRelationship } from "@/lib/db/schema";
 
 // ============================================================================
 // Types
 // ============================================================================
 
-export type ActionResult<T> =
-  | { success: true; data: T }
-  | { success: false; error: string };
+export type ActionResult<T> = { success: true; data: T } | { success: false; error: string };
 
 // ============================================================================
 // Affiliate Relationship Actions
@@ -100,7 +95,7 @@ export async function updateAffiliateRelationshipAction(
     commissionPercent?: number;
     isActive?: boolean;
     notes?: string | null;
-  }
+  },
 ): Promise<ActionResult<AffiliateRelationship>> {
   const adminCheck = await verifySystemAdmin();
   if (adminCheck.error) {
@@ -135,7 +130,7 @@ export async function updateAffiliateRelationshipAction(
  * Delete an affiliate relationship (admin only)
  */
 export async function deleteAffiliateRelationshipAction(
-  relationshipId: string
+  relationshipId: string,
 ): Promise<ActionResult<void>> {
   const adminCheck = await verifySystemAdmin();
   if (adminCheck.error) {
@@ -216,9 +211,7 @@ export async function markEarningsAsPaidOutAction(params: {
 /**
  * Get affiliate stats (admin only)
  */
-export async function getAffiliateStatsAction(): Promise<
-  ActionResult<AffiliateStats>
-> {
+export async function getAffiliateStatsAction(): Promise<ActionResult<AffiliateStats>> {
   const adminCheck = await verifySystemAdmin();
   if (adminCheck.error) {
     return { success: false, error: adminCheck.error };

@@ -3,10 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useMemo, useTransition } from "react";
 import { toast } from "sonner";
-import {
-  impersonateUserAction,
-  stopImpersonatingAction,
-} from "@/lib/actions/admin";
+import { impersonateUserAction, stopImpersonatingAction } from "@/lib/actions/admin";
 import { useSession } from "@/lib/auth-client";
 
 interface TargetUser {
@@ -24,9 +21,7 @@ export function useImpersonation() {
   // Check if we're currently impersonating someone
   // better-auth stores the admin's userId in session.impersonatedBy
   const isImpersonating = Boolean(
-    session?.session &&
-      "impersonatedBy" in session.session &&
-      session.session.impersonatedBy
+    session?.session && "impersonatedBy" in session.session && session.session.impersonatedBy,
   );
 
   // Get target user info from the current session (the user being impersonated)
@@ -35,9 +30,7 @@ export function useImpersonation() {
   const sessionUserEmail = session?.user?.email;
 
   const targetUser = useMemo<TargetUser | null>(() => {
-    if (
-      !(isImpersonating && sessionUserId && sessionUserName && sessionUserEmail)
-    ) {
+    if (!(isImpersonating && sessionUserId && sessionUserName && sessionUserEmail)) {
       return null;
     }
     return {

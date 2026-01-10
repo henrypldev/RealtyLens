@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  IconLoader2,
-  IconPhoto,
-  IconSparkles,
-  IconUpload,
-  IconX,
-} from "@tabler/icons-react";
+import { IconLoader2, IconPhoto, IconSparkles, IconUpload, IconX } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useCallback, useState } from "react";
@@ -89,13 +83,11 @@ export function AddImagesDialog({
 
       setImages((prev) => [...prev, ...newImages]);
     },
-    [images.length, maxImages]
+    [images.length, maxImages],
   );
 
   const updateImageRoomType = useCallback((id: string, roomType: string) => {
-    setImages((prev) =>
-      prev.map((img) => (img.id === id ? { ...img, roomType } : img))
-    );
+    setImages((prev) => prev.map((img) => (img.id === id ? { ...img, roomType } : img)));
   }, []);
 
   const removeImage = useCallback((id: string) => {
@@ -124,13 +116,13 @@ export function AddImagesDialog({
       setIsDragging(false);
 
       const files = Array.from(e.dataTransfer.files).filter((file) =>
-        file.type.startsWith("image/")
+        file.type.startsWith("image/"),
       );
       if (files.length > 0) {
         addImages(files);
       }
     },
-    [addImages]
+    [addImages],
   );
 
   const handleFileChange = useCallback(
@@ -141,7 +133,7 @@ export function AddImagesDialog({
       }
       e.target.value = "";
     },
-    [addImages]
+    [addImages],
   );
 
   const handleClick = useCallback(() => {
@@ -156,11 +148,7 @@ export function AddImagesDialog({
     try {
       const files = images.map((img) => img.file);
       const roomTypes = images.map((img) => img.roomType);
-      const uploadSuccess = await imageUpload.uploadImages(
-        projectId,
-        files,
-        roomTypes
-      );
+      const uploadSuccess = await imageUpload.uploadImages(projectId, files, roomTypes);
 
       if (uploadSuccess) {
         handleReset();
@@ -178,17 +166,13 @@ export function AddImagesDialog({
 
   return (
     <Dialog onOpenChange={handleClose} open={open}>
-      <DialogContent
-        className="flex max-h-[80vh] flex-col gap-0 overflow-hidden p-0"
-        size="lg"
-      >
+      <DialogContent className="flex max-h-[80vh] flex-col gap-0 overflow-hidden p-0" size="lg">
         {/* Header */}
         <div className="border-b px-6 py-4">
           <DialogHeader>
             <DialogTitle>Add More Images</DialogTitle>
             <DialogDescription>
-              Add images to &ldquo;{projectName}&rdquo; ({currentImageCount}/10
-              images used)
+              Add images to &ldquo;{projectName}&rdquo; ({currentImageCount}/10 images used)
             </DialogDescription>
           </DialogHeader>
         </div>
@@ -210,7 +194,7 @@ export function AddImagesDialog({
                   "relative flex min-h-[160px] cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-6 transition-all duration-200",
                   isDragging
                     ? "border-[var(--accent-teal)] bg-[var(--accent-teal)]/5"
-                    : "border-foreground/10 bg-muted/30 hover:border-foreground/20 hover:bg-muted/50"
+                    : "border-foreground/10 bg-muted/30 hover:border-foreground/20 hover:bg-muted/50",
                 )}
                 onClick={handleClick}
                 onDragLeave={handleDragLeave}
@@ -229,7 +213,7 @@ export function AddImagesDialog({
                 <div
                   className={cn(
                     "flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-200",
-                    isDragging ? "scale-110" : ""
+                    isDragging ? "scale-110" : "",
                   )}
                   style={{
                     backgroundColor: isDragging
@@ -238,10 +222,7 @@ export function AddImagesDialog({
                   }}
                 >
                   <IconUpload
-                    className={cn(
-                      "h-6 w-6 transition-colors",
-                      isDragging ? "text-white" : ""
-                    )}
+                    className={cn("h-6 w-6 transition-colors", isDragging ? "text-white" : "")}
                     style={{
                       color: isDragging ? undefined : "var(--accent-teal)",
                     }}
@@ -250,9 +231,7 @@ export function AddImagesDialog({
 
                 <div className="text-center">
                   <p className="font-medium text-foreground">
-                    {isDragging
-                      ? "Drop your images here"
-                      : "Drag & drop images"}
+                    {isDragging ? "Drop your images here" : "Drag & drop images"}
                   </p>
                   <p className="mt-0.5 text-muted-foreground text-xs">
                     or click to browse • Up to {maxImages} more image
@@ -266,8 +245,7 @@ export function AddImagesDialog({
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <p className="font-medium text-foreground text-sm">
-                      {images.length} image{images.length !== 1 ? "s" : ""}{" "}
-                      selected
+                      {images.length} image{images.length !== 1 ? "s" : ""} selected
                     </p>
                     {canAddMore && (
                       <Button
@@ -315,9 +293,7 @@ export function AddImagesDialog({
                         {/* Room type dropdown */}
                         <div className="p-2">
                           <Select
-                            onValueChange={(value) =>
-                              updateImageRoomType(image.id, value)
-                            }
+                            onValueChange={(value) => updateImageRoomType(image.id, value)}
                             value={image.roomType || ""}
                           >
                             <SelectTrigger className="h-8 text-xs">
@@ -325,11 +301,7 @@ export function AddImagesDialog({
                             </SelectTrigger>
                             <SelectContent>
                               {ROOM_TYPES.map((room) => (
-                                <SelectItem
-                                  className="text-xs"
-                                  key={room.id}
-                                  value={room.id}
-                                >
+                                <SelectItem className="text-xs" key={room.id} value={room.id}>
                                   {room.label}
                                 </SelectItem>
                               ))}
@@ -347,11 +319,7 @@ export function AddImagesDialog({
 
         {/* Footer */}
         <div className="flex items-center justify-end gap-3 border-t bg-muted/30 px-6 py-4">
-          <Button
-            disabled={isSubmitting}
-            onClick={handleClose}
-            variant="outline"
-          >
+          <Button disabled={isSubmitting} onClick={handleClose} variant="outline">
             Cancel
           </Button>
           <Button

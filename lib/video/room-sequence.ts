@@ -243,14 +243,12 @@ export function reindexSequenceOrders<T extends ClipWithRoom>(clips: T[]): T[] {
       ({
         ...clip,
         sequenceOrder: index + 1,
-      }) as T
+      }) as T,
   );
 }
 
 // Get room type from common image project room types
-export function mapProjectRoomType(
-  projectRoomType: string | null
-): VideoRoomType {
+export function mapProjectRoomType(projectRoomType: string | null): VideoRoomType {
   const mapping: Record<string, VideoRoomType> = {
     "living-room": "living-room",
     bedroom: "bedroom",

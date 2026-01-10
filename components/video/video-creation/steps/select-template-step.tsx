@@ -1,19 +1,11 @@
 "use client";
 
-import {
-  IconClock,
-  IconLayout,
-  IconPlayerPlay,
-  IconPlus,
-} from "@tabler/icons-react";
+import { IconClock, IconLayout, IconPlayerPlay, IconPlus } from "@tabler/icons-react";
 import Image from "next/image";
 import * as React from "react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import {
-  VIDEO_TEMPLATES,
-  type VideoTemplate,
-} from "@/lib/video/video-templates";
+import { VIDEO_TEMPLATES, type VideoTemplate } from "@/lib/video/video-templates";
 
 interface SelectTemplateStepProps {
   selectedTemplateId: string | null;
@@ -26,17 +18,14 @@ export function SelectTemplateStep({
   onSelectTemplate,
   onSelectCustom,
 }: SelectTemplateStepProps) {
-  const [hoveredTemplateId, setHoveredTemplateId] = React.useState<
-    string | null
-  >(null);
+  const [hoveredTemplateId, setHoveredTemplateId] = React.useState<string | null>(null);
 
   return (
     <div className="space-y-6">
       <div className="mx-auto mb-8 max-w-2xl text-center">
         <h2 className="font-bold text-2xl tracking-tight">Choose a Style</h2>
         <p className="mt-2 text-muted-foreground">
-          Start with a professionally curated template or build your video from
-          scratch.
+          Start with a professionally curated template or build your video from scratch.
         </p>
       </div>
 
@@ -60,7 +49,7 @@ export function SelectTemplateStep({
             "hover:border-(--accent-teal) hover:bg-(--accent-teal)/5",
             selectedTemplateId === null
               ? "border-muted-foreground/20" // We don't really have a "selected" state for custom in this view as it navigates away immediately usually, but good to have styles
-              : "border-muted-foreground/20"
+              : "border-muted-foreground/20",
           )}
           onClick={onSelectCustom}
         >
@@ -109,7 +98,7 @@ function TemplateCard({
         "group relative cursor-pointer overflow-hidden rounded-xl border-2 bg-card text-card-foreground shadow-sm transition-all duration-300",
         isSelected
           ? "border-(--accent-teal) ring-(--accent-teal)/20 ring-2"
-          : "border-transparent hover:-translate-y-1 hover:border-(--accent-teal)/50 hover:shadow-lg"
+          : "border-transparent hover:-translate-y-1 hover:border-(--accent-teal)/50 hover:shadow-lg",
       )}
       onClick={onSelect}
       onMouseEnter={() => onHover(template.id)}
@@ -122,7 +111,7 @@ function TemplateCard({
           alt={template.name}
           className={cn(
             "absolute inset-0 h-full w-full object-cover transition-opacity duration-500",
-            isHovered && template.previewVideoUrl ? "opacity-0" : "opacity-100"
+            isHovered && template.previewVideoUrl ? "opacity-0" : "opacity-100",
           )}
           fill
           src={template.thumbnailUrl}
@@ -135,7 +124,7 @@ function TemplateCard({
             <video
               className={cn(
                 "absolute inset-0 h-full w-full object-cover transition-opacity duration-500",
-                isHovered ? "opacity-100" : "opacity-0"
+                isHovered ? "opacity-100" : "opacity-0",
               )}
               loop
               muted
@@ -152,7 +141,7 @@ function TemplateCard({
         <div
           className={cn(
             "absolute inset-0 flex items-center justify-center transition-all duration-300",
-            isHovered ? "scale-110 opacity-0" : "scale-100 opacity-100"
+            isHovered ? "scale-110 opacity-0" : "scale-100 opacity-100",
           )}
         >
           <div className="rounded-full bg-white/20 p-3 backdrop-blur-sm">
@@ -184,17 +173,12 @@ function TemplateCard({
         <h3 className="font-semibold text-lg transition-colors group-hover:text-(--accent-teal)">
           {template.name}
         </h3>
-        <p className="mt-2 line-clamp-2 text-muted-foreground text-sm">
-          {template.description}
-        </p>
+        <p className="mt-2 line-clamp-2 text-muted-foreground text-sm">{template.description}</p>
 
         {/* Slot Preview */}
         <div className="mt-4 flex items-center gap-1.5 overflow-hidden opacity-70 transition-opacity group-hover:opacity-100">
           {template.slots.slice(0, 5).map((slot, i) => (
-            <div
-              className="h-1.5 flex-1 rounded-full bg-muted-foreground/30"
-              key={i}
-            />
+            <div className="h-1.5 flex-1 rounded-full bg-muted-foreground/30" key={i} />
           ))}
           {template.slots.length > 5 && (
             <span className="ml-1 text-[10px] text-muted-foreground">

@@ -86,10 +86,7 @@ function formatRelativeDate(date: Date): string {
 
 // Memoized cell components
 const NameCell = memo(({ name, id }: { name: string; id: string }) => (
-  <Link
-    className="truncate font-medium text-foreground hover:underline"
-    href={`/dashboard/${id}`}
-  >
+  <Link className="truncate font-medium text-foreground hover:underline" href={`/dashboard/${id}`}>
     {name}
   </Link>
 ));
@@ -116,21 +113,13 @@ StatusCell.displayName = "StatusCell";
 const StyleCell = memo(({ styleTemplateId }: { styleTemplateId: string }) => {
   const template = getTemplateById(styleTemplateId);
   return (
-    <span className="truncate text-muted-foreground text-sm">
-      {template?.name || "Unknown"}
-    </span>
+    <span className="truncate text-muted-foreground text-sm">{template?.name || "Unknown"}</span>
   );
 });
 StyleCell.displayName = "StyleCell";
 
 const ProgressCell = memo(
-  ({
-    completedCount,
-    imageCount,
-  }: {
-    completedCount: number;
-    imageCount: number;
-  }) => {
+  ({ completedCount, imageCount }: { completedCount: number; imageCount: number }) => {
     const percentage = imageCount > 0 ? (completedCount / imageCount) * 100 : 0;
     return (
       <div className="flex items-center gap-2">
@@ -148,24 +137,20 @@ const ProgressCell = memo(
         </span>
       </div>
     );
-  }
+  },
 );
 ProgressCell.displayName = "ProgressCell";
 
 const RoomTypeCell = memo(({ roomType }: { roomType: string | null }) => {
   if (!roomType) return <span className="text-muted-foreground/50">—</span>;
   const label =
-    roomTypeLabels[roomType as RoomType] ||
-    getRoomTypeById(roomType)?.label ||
-    roomType;
+    roomTypeLabels[roomType as RoomType] || getRoomTypeById(roomType)?.label || roomType;
   return <Badge variant="tag">{label}</Badge>;
 });
 RoomTypeCell.displayName = "RoomTypeCell";
 
 const DateCell = memo(({ date }: { date: Date }) => (
-  <span className="text-muted-foreground text-sm">
-    {formatRelativeDate(date)}
-  </span>
+  <span className="text-muted-foreground text-sm">{formatRelativeDate(date)}</span>
 ));
 DateCell.displayName = "DateCell";
 
@@ -206,9 +191,7 @@ export const columns: ColumnDef<Project>[] = [
     header: "Name",
     size: 200,
     minSize: 150,
-    cell: ({ row }) => (
-      <NameCell id={row.original.id} name={row.original.name} />
-    ),
+    cell: ({ row }) => <NameCell id={row.original.id} name={row.original.name} />,
   },
   {
     id: "status",
@@ -216,9 +199,7 @@ export const columns: ColumnDef<Project>[] = [
     header: "Status",
     size: 130,
     minSize: 110,
-    cell: ({ row }) => (
-      <StatusCell status={row.original.status as ProjectStatus} />
-    ),
+    cell: ({ row }) => <StatusCell status={row.original.status as ProjectStatus} />,
   },
   {
     id: "style",
@@ -226,9 +207,7 @@ export const columns: ColumnDef<Project>[] = [
     header: "Style",
     size: 140,
     minSize: 100,
-    cell: ({ row }) => (
-      <StyleCell styleTemplateId={row.original.styleTemplateId} />
-    ),
+    cell: ({ row }) => <StyleCell styleTemplateId={row.original.styleTemplateId} />,
   },
   {
     id: "progress",
