@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { siteConfig } from "@/lib/siteconfig";
 import { cn } from "@/lib/utils";
 import { SignOutButton } from "./sign-out-button";
 
@@ -43,7 +44,7 @@ export function DashboardHeader({ userLabel }: DashboardHeaderProps) {
               className="truncate font-semibold text-foreground tracking-tight transition-colors hover:text-foreground/80"
               href="/"
             >
-              Proppi
+              {siteConfig.name}
             </Link>
 
             <Separator className="h-6" orientation="vertical" />

@@ -3,12 +3,12 @@ import { loadOutfitFont } from "@/lib/og-fonts";
 import { OG_COLORS, OG_FONTS, OG_SIZE } from "@/lib/og-styles";
 
 export const runtime = "edge";
-export const alt = "About Proppi - AI-Powered Real Estate Photo Editor";
+export const alt = "About RealtyLens - AI-Powered Real Estate Photo Editor";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 
 export default async function Image() {
-  const title = "About Proppi";
+  const title = "About RealtyLens";
   const description = "Learn about our mission to transform real estate photography with AI";
 
   const [fontBold, fontRegular] = await Promise.all([
@@ -192,7 +192,7 @@ export default async function Image() {
             color: OG_COLORS.accent,
           }}
         >
-          Proppi
+          RealtyLens
         </div>
         <div
           style={{

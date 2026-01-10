@@ -1,5 +1,6 @@
-import { IconBrandLinkedin, IconBrandX } from "@tabler/icons-react";
+import { IconBrandGithub, IconBrandLinkedin, IconBrandX } from "@tabler/icons-react";
 import Link from "next/link";
+import { siteConfig } from "@/lib/siteconfig";
 
 const footerLinks = {
   product: [
@@ -16,6 +17,7 @@ const footerLinks = {
   legal: [
     { label: "Privacy", href: "/privacy" },
     { label: "Terms", href: "/terms" },
+    { label: "Source Code", href: siteConfig.sourceCode, external: true },
   ],
 };
 
@@ -39,7 +41,7 @@ export function LandingFooter() {
               href="/"
               style={{ color: "var(--landing-text)" }}
             >
-              Proppi
+              {siteConfig.name}
             </Link>
             <p
               className="mt-4 max-w-xs text-sm leading-relaxed"
@@ -128,13 +130,26 @@ export function LandingFooter() {
             <ul className="mt-4 space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.label}>
-                  <Link
-                    className="text-sm transition-colors hover:opacity-70"
-                    href={link.href}
-                    style={{ color: "var(--landing-text-muted)" }}
-                  >
-                    {link.label}
-                  </Link>
+                  {link.external ? (
+                    <a
+                      className="inline-flex items-center gap-1 text-sm transition-colors hover:opacity-70"
+                      href={link.href}
+                      rel="noopener noreferrer"
+                      style={{ color: "var(--landing-text-muted)" }}
+                      target="_blank"
+                    >
+                      <IconBrandGithub className="size-4" />
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      className="text-sm transition-colors hover:opacity-70"
+                      href={link.href}
+                      style={{ color: "var(--landing-text-muted)" }}
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -147,10 +162,7 @@ export function LandingFooter() {
           style={{ borderColor: "var(--landing-border)" }}
         >
           <p className="text-sm" style={{ color: "var(--landing-text-muted)" }}>
-            &copy; {currentYear} Proppi. All rights reserved.
-          </p>
-          <p className="text-sm" style={{ color: "var(--landing-text-muted)" }}>
-            Made with care in Norway
+            &copy; {currentYear} {siteConfig.name}. All rights reserved.
           </p>
         </div>
       </div>

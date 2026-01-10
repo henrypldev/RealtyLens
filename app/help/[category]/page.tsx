@@ -22,13 +22,13 @@ export async function generateMetadata({ params }: HelpCategoryProps): Promise<M
 
   if (!category) {
     return constructMetadata({
-      title: "Category Not Found | Proppi Help",
+      title: "Category Not Found | RealtyLens Help",
       noIndex: true,
     });
   }
 
   return constructMetadata({
-    title: `${category.title} | Proppi Help`,
+    title: `${category.title} | RealtyLens Help`,
     description: category.description,
     canonical: `/help/${categorySlug}`,
   });

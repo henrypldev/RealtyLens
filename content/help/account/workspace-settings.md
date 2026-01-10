@@ -1,11 +1,11 @@
 ---
 title: "Workspace Settings"
-description: "Configure your Proppi workspace including branding, preferences, and defaults."
+description: "Configure your RealtyLens workspace including branding, preferences, and defaults."
 order: 1
 popular: false
 ---
 
-Your workspace is your team's home in Proppi. Customize it to match your brand and workflow preferences.
+Your workspace is your team's home in RealtyLens. Customize it to match your brand and workflow preferences.
 
 ## Accessing Workspace Settings
 
@@ -17,7 +17,7 @@ Your workspace is your team's home in Proppi. Customize it to match your brand a
 
 ### Workspace Name
 
-Your workspace name appears throughout Proppi. Choose something recognizable like your agency or company name.
+Your workspace name appears throughout RealtyLens. Choose something recognizable like your agency or company name.
 
 ### Workspace URL
 
@@ -59,7 +59,7 @@ Enable to automatically start processing after upload. Disable for manual contro
 
 <div class="callout-tip">
 
-**Recommended:** Keep auto-processing disabled until you're familiar with Proppi. This gives you time to preview templates before using credits.
+**Recommended:** Keep auto-processing disabled until you're familiar with RealtyLens. This gives you time to preview templates before using credits.
 
 </div>
 
@@ -94,7 +94,7 @@ Download all your workspace data including projects, settings, and billing histo
 
 ## Integrations
 
-Connect Proppi with other tools:
+Connect RealtyLens with other tools:
 - Zapier integration
 - Webhook notifications
 - API access (Business plan)

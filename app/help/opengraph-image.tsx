@@ -3,13 +3,13 @@ import { loadOutfitFont } from "@/lib/og-fonts";
 import { OG_COLORS, OG_FONTS, OG_SIZE } from "@/lib/og-styles";
 
 export const runtime = "edge";
-export const alt = "Help Center - Proppi";
+export const alt = "Help Center - RealtyLens";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 
 export default async function Image() {
   const title = "Help Center";
-  const description = "Guides, tutorials, and answers to help you get the most out of Proppi";
+  const description = "Guides, tutorials, and answers to help you get the most out of RealtyLens";
 
   const [fontBold, fontRegular] = await Promise.all([
     loadOutfitFont(title, 700),
@@ -219,7 +219,7 @@ export default async function Image() {
             color: OG_COLORS.accent,
           }}
         >
-          Proppi
+          RealtyLens
         </div>
         <div
           style={{

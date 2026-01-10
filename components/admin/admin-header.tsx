@@ -13,6 +13,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { siteConfig } from "@/lib/siteconfig";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -68,7 +69,7 @@ export function AdminHeader() {
                 className="truncate font-semibold text-zinc-100 tracking-tight transition-colors hover:text-white"
                 href="/admin"
               >
-                Proppi
+                {siteConfig.name}
               </Link>
               <Badge
                 className="h-5 rounded-md border-0 px-1.5 font-bold text-[10px] uppercase tracking-widest"
@@ -122,7 +123,7 @@ export function AdminHeader() {
           {/* Right side: Admin info + Sign out */}
           <div className="flex items-center gap-3">
             <span className="hidden max-w-[200px] truncate text-sm text-zinc-400 md:block">
-              admin@proppi.tech
+              admin@realtylens.io
             </span>
             <Button
               asChild

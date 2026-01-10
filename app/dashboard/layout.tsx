@@ -7,7 +7,7 @@ import { constructMetadata } from "@/lib/constructMetadata";
 import { getUserWithWorkspace } from "@/lib/db/queries";
 
 export const metadata = constructMetadata({
-  title: "Dashboard | Proppi",
+  title: "Dashboard | RealtyLens",
   description: "Manage your property photos and AI edits",
   noIndex: true,
 });

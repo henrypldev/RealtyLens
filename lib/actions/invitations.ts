@@ -85,7 +85,7 @@ export async function createWorkspaceWithInviteAction(
     // Send invite email if requested
     if (sendEmail) {
       try {
-        await sendInviteEmail(email, "Proppi Admin", newWorkspace.name, inviteLink);
+        await sendInviteEmail(email, "RealtyLens Admin", newWorkspace.name, inviteLink);
       } catch (emailError) {
         console.error("[invitations:createWorkspaceWithInvite] Email failed:", emailError);
         // Don't fail the action if email fails - user can copy the link
@@ -159,7 +159,7 @@ export async function resendInvitationAction(
     const inviteLink = `${process.env.NEXT_PUBLIC_APP_URL}/invite/${newToken}`;
     await sendInviteEmail(
       existingInvite.invitation.email,
-      "Proppi Admin",
+      "RealtyLens Admin",
       existingInvite.workspaceName,
       inviteLink,
     );

@@ -2,8 +2,8 @@ import { LegalPage, LegalSection } from "@/components/landing/legal-page";
 import { constructMetadata } from "@/lib/constructMetadata";
 
 export const metadata = constructMetadata({
-  title: "Terms of Service - Proppi",
-  description: "Terms and conditions for using Proppi services.",
+  title: "Terms of Service - RealtyLens",
+  description: "Terms and conditions for using RealtyLens services.",
   canonical: "/terms",
   noIndex: true,
 });
@@ -17,7 +17,7 @@ export default function TermsPage() {
     >
       <LegalSection title="1. Acceptance of Terms">
         <p>
-          By accessing or using Proppi (&quot;the Service&quot;), you agree to be bound by these
+          By accessing or using RealtyLens (&quot;the Service&quot;), you agree to be bound by these
           Terms of Service. If you disagree with any part of these terms, you may not access the
           Service.
         </p>
@@ -26,9 +26,9 @@ export default function TermsPage() {
 
       <LegalSection title="2. Description of Service">
         <p>
-          Proppi provides AI-powered photo enhancement and video creation services for real estate
-          professionals. Our service allows you to upload property images, apply AI enhancements,
-          and generate professional marketing materials.
+          RealtyLens provides AI-powered photo enhancement and video creation services for real
+          estate professionals. Our service allows you to upload property images, apply AI
+          enhancements, and generate professional marketing materials.
         </p>
       </LegalSection>
 
@@ -46,7 +46,7 @@ export default function TermsPage() {
       </LegalSection>
 
       <LegalSection title="4. Payment and Pricing">
-        <p>Proppi operates on a pay-per-use model. Current pricing is as follows:</p>
+        <p>RealtyLens operates on a pay-per-use model. Current pricing is as follows:</p>
         <ul className="ml-4 list-disc space-y-2">
           <li>
             <strong>Photo Enhancement:</strong> 1000&nbsp;NOK per property (up to 20 images)
@@ -94,7 +94,7 @@ export default function TermsPage() {
       <LegalSection title="7. Intellectual Property">
         <p>
           The Service, including its original content, features, and functionality, is owned by
-          Proppi and is protected by international copyright, trademark, and other intellectual
+          RealtyLens and is protected by international copyright, trademark, and other intellectual
           property laws.
         </p>
         <p>
@@ -117,7 +117,7 @@ export default function TermsPage() {
 
       <LegalSection title="9. Limitation of Liability">
         <p>
-          To the maximum extent permitted by law, Proppi shall not be liable for any indirect,
+          To the maximum extent permitted by law, RealtyLens shall not be liable for any indirect,
           incidental, special, consequential, or punitive damages, including loss of profits, data,
           or other intangible losses, resulting from:
         </p>
@@ -180,7 +180,7 @@ export default function TermsPage() {
       <LegalSection title="14. Contact Us">
         <p>If you have any questions about these Terms, please contact us at:</p>
         <p className="mt-2">
-          <strong>Proppi</strong>
+          <strong>RealtyLens</strong>
           <br />
           Email:{" "}
           <a className="underline" href="mailto:legal@proppi.tech">

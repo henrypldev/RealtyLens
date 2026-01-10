@@ -2,7 +2,7 @@ import { LegalPage, LegalSection } from "@/components/landing/legal-page";
 import { constructMetadata } from "@/lib/constructMetadata";
 
 export const metadata = constructMetadata({
-  title: "Privacy Policy - Proppi",
+  title: "Privacy Policy - RealtyLens",
   description: "How we collect, use, and protect your personal information.",
   canonical: "/privacy",
   noIndex: true,
@@ -17,12 +17,12 @@ export default function PrivacyPage() {
     >
       <LegalSection title="1. Introduction">
         <p>
-          Proppi (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) is committed to protecting
+          RealtyLens (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) is committed to protecting
           your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard
           your information when you use our AI-powered real estate photo enhancement service.
         </p>
         <p>
-          By using Proppi, you agree to the collection and use of information in accordance with
+          By using RealtyLens, you agree to the collection and use of information in accordance with
           this policy. If you do not agree with our policies, please do not use our service.
         </p>
       </LegalSection>
@@ -155,7 +155,7 @@ export default function PrivacyPage() {
           us at:
         </p>
         <p className="mt-2">
-          <strong>Proppi</strong>
+          <strong>RealtyLens</strong>
           <br />
           Email:{" "}
           <a className="underline" href="mailto:privacy@proppi.tech">

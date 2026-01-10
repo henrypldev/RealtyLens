@@ -3,7 +3,7 @@ import { getPostBySlug } from "@/lib/blog";
 import { loadOutfitFont } from "@/lib/og-fonts";
 import { OG_COLORS, OG_FONTS, OG_SIZE } from "@/lib/og-styles";
 
-export const alt = "Proppi Blog";
+export const alt = "RealtyLens Blog";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 
@@ -15,7 +15,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const category = post?.category || "Article";
 
   // Combine all text for font loading
-  const allText = `${title}${category}Proppi Blog proppi.tech`;
+  const allText = `${title}${category}RealtyLens Blog proppi.tech`;
   const [fontBold, fontRegular] = await Promise.all([
     loadOutfitFont(allText, 700),
     loadOutfitFont(allText, 400),
@@ -177,7 +177,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
               color: OG_COLORS.accent,
             }}
           >
-            Proppi
+            RealtyLens
           </div>
           <div
             style={{

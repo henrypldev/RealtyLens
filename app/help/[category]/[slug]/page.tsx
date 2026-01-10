@@ -29,13 +29,13 @@ export async function generateMetadata({ params }: HelpArticlePageProps): Promis
 
   if (!article) {
     return constructMetadata({
-      title: "Article Not Found | Proppi Help",
+      title: "Article Not Found | RealtyLens Help",
       noIndex: true,
     });
   }
 
   return constructMetadata({
-    title: `${article.title} | Proppi Help`,
+    title: `${article.title} | RealtyLens Help`,
     description: article.description,
     canonical: `/help/${categorySlug}/${slug}`,
   });

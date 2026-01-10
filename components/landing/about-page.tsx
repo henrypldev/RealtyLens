@@ -54,9 +54,9 @@ export function AboutPage() {
               className="mt-6 text-lg leading-relaxed md:text-xl"
               style={{ color: "var(--landing-text-muted)" }}
             >
-              Proppi is an AI-powered photo enhancement platform built specifically for real estate
-              professionals. We help agents, photographers, and property managers create stunning
-              visuals that sell properties faster.
+              RealtyLens is an AI-powered photo enhancement platform built specifically for real
+              estate professionals. We help agents, photographers, and property managers create
+              stunning visuals that sell properties faster.
             </p>
           </div>
         </section>
@@ -82,7 +82,7 @@ export function AboutPage() {
               style={{ color: "var(--landing-text-muted)" }}
             >
               <p>
-                We started Proppi because we saw a gap in the market. Real estate professionals
+                We started RealtyLens because we saw a gap in the market. Real estate professionals
                 needed high-quality photo enhancement, but existing solutions were either too
                 expensive, too slow, or required technical expertise.
               </p>
@@ -92,9 +92,9 @@ export function AboutPage() {
                 Neither option works when you have multiple listings and tight deadlines.
               </p>
               <p>
-                Proppi bridges this gap. Our AI understands real estate photography. It knows how to
-                brighten rooms, enhance curb appeal, and make properties look their absolute best.
-                All automatically, in seconds.
+                RealtyLens bridges this gap. Our AI understands real estate photography. It knows
+                how to brighten rooms, enhance curb appeal, and make properties look their absolute
+                best. All automatically, in seconds.
               </p>
               <p>
                 Today, we&apos;ve processed over 50,000 images for real estate professionals across

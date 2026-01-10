@@ -4,6 +4,7 @@ import { IconArrowRight } from "@tabler/icons-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { useSession } from "@/lib/auth-client";
+import { siteConfig } from "@/lib/siteconfig";
 
 function AuthButton() {
   const { data: session, isPending } = useSession();
@@ -64,7 +65,7 @@ export function LandingNav() {
           href="/"
           style={{ color: "var(--landing-text)" }}
         >
-          Proppi
+          {siteConfig.name}
         </Link>
 
         {/* Navigation Links */}

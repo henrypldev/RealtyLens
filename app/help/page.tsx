@@ -9,9 +9,9 @@ import {
 } from "@/lib/help";
 
 export const metadata = constructMetadata({
-  title: "Help Center | Proppi",
+  title: "Help Center | RealtyLens",
   description:
-    "Get help with Proppi. Browse our knowledge base for guides, tutorials, and answers to frequently asked questions.",
+    "Get help with RealtyLens. Browse our knowledge base for guides, tutorials, and answers to frequently asked questions.",
   canonical: "/help",
 });
 

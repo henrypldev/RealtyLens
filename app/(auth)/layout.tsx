@@ -2,8 +2,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { constructMetadata } from "@/lib/constructMetadata";
 
 export const metadata = constructMetadata({
-  title: "Sign In | Proppi",
-  description: "Sign in to your Proppi account",
+  title: "Sign In | RealtyLens",
+  description: "Sign in to your RealtyLens account",
   noIndex: true,
 });
 

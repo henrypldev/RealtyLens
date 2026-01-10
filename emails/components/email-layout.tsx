@@ -1,5 +1,6 @@
 import { Body, Container, Head, Hr, Html, Preview, Section, Text } from "@react-email/components";
 import type * as React from "react";
+import { siteConfig } from "../../lib/siteconfig";
 
 interface EmailLayoutProps {
   preview: string;
@@ -15,7 +16,7 @@ export function EmailLayout({ preview, children }: EmailLayoutProps) {
         <Container style={container}>
           {/* Header */}
           <Section style={header}>
-            <Text style={logo}>Proppi</Text>
+            <Text style={logo}>{siteConfig.name}</Text>
           </Section>
 
           {/* Content */}
@@ -24,9 +25,9 @@ export function EmailLayout({ preview, children }: EmailLayoutProps) {
           {/* Footer */}
           <Hr style={hr} />
           <Section style={footer}>
-            <Text style={footerText}>Proppi - AI-powered real estate photo editor</Text>
+            <Text style={footerText}>{siteConfig.name} - AI-powered real estate photo editor</Text>
             <Text style={footerText}>
-              © {new Date().getFullYear()} Proppi. All rights reserved.
+              © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
             </Text>
           </Section>
         </Container>

@@ -6,7 +6,7 @@ import { constructMetadata } from "@/lib/constructMetadata";
 import { getUserWithWorkspace } from "@/lib/db/queries";
 
 export const metadata = constructMetadata({
-  title: "Videos | Proppi",
+  title: "Videos | RealtyLens",
   description: "Create and manage property tour videos",
   noIndex: true,
 });

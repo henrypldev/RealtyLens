@@ -16,8 +16,8 @@ export function InviteEmail({ inviterName, workspaceName, inviteLink }: InviteEm
       <Heading style={heading}>You&apos;ve been invited!</Heading>
 
       <Text style={paragraph}>
-        <strong>{inviterName}</strong> has invited you to join <strong>{workspaceName}</strong> on
-        Proppi.
+        <strong>{inviterName}</strong> has invited you to join <strong>{workspaceName}</strong> on{" "}
+        {siteConfig.name}.
       </Text>
 
       <Section style={inviteBox}>
@@ -27,8 +27,8 @@ export function InviteEmail({ inviterName, workspaceName, inviteLink }: InviteEm
       </Section>
 
       <Text style={paragraph}>
-        Proppi is an AI-powered real estate photo editor that helps teams create stunning property
-        listings with virtual staging, lighting enhancements, and more.
+        {siteConfig.name} is an AI-powered real estate photo editor that helps teams create stunning
+        property listings with virtual staging, lighting enhancements, and more.
       </Text>
 
       <Section style={buttonContainer}>
@@ -45,7 +45,7 @@ export function InviteEmail({ inviterName, workspaceName, inviteLink }: InviteEm
       <Text style={signature}>
         Best,
         <br />
-        The Proppi Team
+        The {siteConfig.name} Team
       </Text>
     </EmailLayout>
   );

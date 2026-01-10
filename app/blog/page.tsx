@@ -4,7 +4,7 @@ import { getAllCategories, getAllPosts } from "@/lib/blog";
 import { constructMetadata } from "@/lib/constructMetadata";
 
 export const metadata = constructMetadata({
-  title: "Blog | Proppi",
+  title: "Blog | RealtyLens",
   description:
     "Tips, guides, and industry insights to help you create stunning property listings. Learn from experts and elevate your real estate photography.",
   canonical: "/blog",
