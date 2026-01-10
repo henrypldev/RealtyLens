@@ -89,13 +89,13 @@ git clone https://github.com/codehagen/proppi.git
 cd proppi
 
 # 2. Install dependencies
-pnpm install
+bun install
 
 # 3. Copy environment variables
 cp .env.example .env.local
 
 # 4. Set up the database
-pnpm db:push
+bun db:push
 
 # 5. Set up Trigger.dev (Background Jobs)
 # Get your TRIGGER_SECRET_KEY from https://cloud.trigger.dev
@@ -103,10 +103,10 @@ pnpm db:push
 
 # 6. Start development servers (run in separate terminals)
 # Terminal 1: Next.js dev server
-pnpm dev
+bun dev
 
 # Terminal 2: Trigger.dev dev server (for background jobs)
-pnpm trigger
+bun trigger
 ```
 
 ### Manual Setup
@@ -114,7 +114,7 @@ pnpm trigger
 ```bash
 git clone https://github.com/codehagen/proppi.git
 cd proppi
-pnpm install
+bun install
 ```
 
 Copy the example environment file:
@@ -133,24 +133,24 @@ Update `.env.local` with your credentials:
 Push the database schema:
 
 ```bash
-pnpm db:push
+bun db:push
 ```
 
 ### Useful Commands
 
 | Command            | Description                                        |
 | ------------------ | -------------------------------------------------- |
-| `pnpm dev`         | Start Next.js development server                   |
-| `pnpm trigger`     | Start Trigger.dev development server (background jobs) |
-| `pnpm build`       | Production build                                   |
-| `pnpm start`       | Start production server                            |
-| `pnpm lint`        | Run ESLint                                         |
-| `pnpm db:push`     | Push schema changes to database                    |
-| `pnpm db:generate` | Generate Drizzle migrations                        |
-| `pnpm db:studio`   | Open Drizzle Studio                                |
-| `pnpm email`       | Preview email templates                            |
+| `bun dev`         | Start Next.js development server                   |
+| `bun trigger`     | Start Trigger.dev development server (background jobs) |
+| `bun build`       | Production build                                   |
+| `bun start`       | Start production server                            |
+| `bun lint`        | Run ESLint                                         |
+| `bun db:push`     | Push schema changes to database                    |
+| `bun db:generate` | Generate Drizzle migrations                        |
+| `bun db:studio`   | Open Drizzle Studio                                |
+| `bun email`       | Preview email templates                            |
 
-> **Important**: For local development, you need to run both `pnpm dev` (Next.js) and `pnpm trigger` (Trigger.dev) in separate terminals. The Trigger.dev server handles background task processing.
+> **Important**: For local development, you need to run both `bun dev` (Next.js) and `bun trigger` (Trigger.dev) in separate terminals. The Trigger.dev server handles background task processing.
 
 ## Tech Stack
 
@@ -277,7 +277,7 @@ TRIGGER_SECRET_KEY=tr_dev_xxxxxxxxxx
 > **Note**: For local development with Trigger.dev, you need to:
 > 1. Get your DEV secret key from the [API Keys page](https://cloud.trigger.dev) in your Trigger.dev project dashboard
 > 2. Add it to your `.env.local` file as `TRIGGER_SECRET_KEY`
-> 3. Run `pnpm trigger` in a separate terminal to start the Trigger.dev development server
+> 3. Run `bun trigger` in a separate terminal to start the Trigger.dev development server
 
 ## Contributing
 

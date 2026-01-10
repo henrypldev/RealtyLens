@@ -2,7 +2,11 @@
   "mcpServers": {
     "supabase": {
       "type": "http",
-      "url": "https://mcp.supabase.com/mcp?project_ref=oziwtkhamfwozvysbdfr"
+      "url": "https://mcp.supabase.com/mcp?project_ref=ywwlfigulanbvrutsgpf"
+    },
+    "trigger": {
+      "args": ["trigger.dev@4.3.2", "mcp"],
+      "command": "npx"
     }
   }
 }
