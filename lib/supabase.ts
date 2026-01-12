@@ -1,11 +1,32 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/types/database";
 
-// Server-side client with secret key (for uploads)
-export const supabaseAdmin = createClient<Database>(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SECRET_KEY!,
-);
+let _supabaseAdmin: SupabaseClient<Database> | null = null;
+
+function getSupabaseAdmin(): SupabaseClient<Database> {
+  if (!_supabaseAdmin) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SECRET_KEY;
+
+    if (!supabaseUrl) {
+      throw new Error(
+        "supabaseUrl is required. Set NEXT_PUBLIC_SUPABASE_URL environment variable.",
+      );
+    }
+    if (!supabaseKey) {
+      throw new Error("supabaseKey is required. Set SUPABASE_SECRET_KEY environment variable.");
+    }
+
+    _supabaseAdmin = createClient<Database>(supabaseUrl, supabaseKey);
+  }
+  return _supabaseAdmin;
+}
+
+export const supabaseAdmin = {
+  get storage() {
+    return getSupabaseAdmin().storage;
+  },
+};
 
 // Storage bucket name
 export const STORAGE_BUCKET = "aistudio-bucket";
