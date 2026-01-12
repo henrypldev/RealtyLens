@@ -1,11 +1,10 @@
 "use client";
 
-import { IconArrowRight, IconCheck } from "@tabler/icons-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { useSession } from "@/lib/auth-client";
-
-const benefits = ["No credit card required", "Free trial included", "Cancel anytime"];
+import { Button } from "../ui/button";
 
 function CtaAuthButton() {
   const { data: session, isPending } = useSession();
@@ -23,92 +22,53 @@ function CtaAuthButton() {
   const text = session ? "Go to Dashboard" : "Get Started Free";
 
   return (
-    <Link
-      className="inline-flex h-14 items-center gap-2.5 rounded-full px-8 font-semibold text-lg transition-all duration-200 hover:scale-[1.03] active:scale-[0.98]"
-      href={href}
-      style={{
-        backgroundColor: "var(--landing-card)",
-        color: "var(--landing-text)",
-        boxShadow: "0 8px 32px -8px var(--landing-shadow)",
-      }}
-    >
-      {text}
-      <IconArrowRight className="size-5" />
-    </Link>
+    <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+      <Button
+        size="lg"
+        className="w-full sm:w-auto min-h-12 bg-primary-foreground text-primary hover:bg-primary-foreground/90 px-8"
+        asChild
+      >
+        <Link href={href}>
+          {text}
+
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Link>
+      </Button>
+    </div>
   );
 }
 
 export function LandingCta() {
   return (
-    <section
-      className="relative overflow-hidden px-6 py-24 md:py-32"
-      id="pricing"
-      style={{ backgroundColor: "var(--landing-accent)" }}
-    >
-      {/* Decorative circles */}
-      <div
-        className="pointer-events-none absolute -top-24 -left-24 size-64 rounded-full"
-        style={{
-          backgroundColor: "var(--landing-accent-foreground)",
-          opacity: 0.05,
-        }}
-      />
-      <div
-        className="pointer-events-none absolute -right-32 -bottom-32 size-96 rounded-full"
-        style={{
-          backgroundColor: "var(--landing-accent-foreground)",
-          opacity: 0.05,
-        }}
-      />
-
-      <div className="relative mx-auto max-w-3xl text-center">
-        <h2
-          className="font-bold text-3xl tracking-tight sm:text-4xl md:text-5xl"
-          style={{ color: "var(--landing-accent-foreground)" }}
-        >
-          Start Creating Stunning
-          <br />
-          Listings Today
-        </h2>
-        <p
-          className="mx-auto mt-4 max-w-xl text-lg leading-relaxed"
-          style={{
-            color: "var(--landing-accent-foreground)",
-            opacity: 0.85,
-          }}
-        >
-          Join top real estate professionals. Create professional photos in seconds, not hours.
-        </p>
-
-        {/* CTA Button */}
-        <div className="mt-10">
-          <Suspense
-            fallback={
-              <div
-                className="mx-auto h-14 w-48 animate-pulse rounded-full"
-                style={{ backgroundColor: "var(--landing-border)" }}
-              />
-            }
-          >
-            <CtaAuthButton />
-          </Suspense>
-        </div>
-
-        {/* Benefits */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
-          {benefits.map((benefit) => (
-            <div
-              className="flex items-center gap-2 text-sm"
-              key={benefit}
-              style={{
-                color: "var(--landing-accent-foreground)",
-                opacity: 0.9,
-              }}
+    <section className="py-20 md:py-28">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="relative overflow-hidden rounded-3xl bg-primary px-6 py-16 sm:px-12 sm:py-20 lg:py-24">
+          <div className="relative z-10 mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary-foreground text-balance">
+              Start Creating Stunning Listings Today
+            </h2>
+            <p className="mt-6 text-lg text-primary-foreground/80">
+              Join thousands of real estate professionals. Create professional photos in seconds,
+              not hours.
+            </p>
+            <Suspense
+              fallback={
+                <div
+                  className="mx-auto h-14 w-48 animate-pulse rounded-full"
+                  style={{ backgroundColor: "var(--landing-border)" }}
+                />
+              }
             >
-              <IconCheck className="size-4" />
-              {benefit}
-            </div>
-          ))}
+              <CtaAuthButton />
+            </Suspense>
+            <p className="mt-4 text-sm text-primary-foreground/70">
+              No credit card required • Free trial included • Cancel anytime
+            </p>
+          </div>
+
+          {/* Background decorative elements */}
+          <div className="absolute top-0 right-0 -translate-y-1/4 translate-x-1/4 w-96 h-96 rounded-full bg-primary-foreground/10 blur-3xl" />
+          <div className="absolute bottom-0 left-0 translate-y-1/4 -translate-x-1/4 w-96 h-96 rounded-full bg-primary-foreground/10 blur-3xl" />
         </div>
       </div>
     </section>

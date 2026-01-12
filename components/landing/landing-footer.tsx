@@ -1,4 +1,5 @@
-import { IconBrandGithub, IconBrandLinkedin, IconBrandX } from "@tabler/icons-react";
+import { IconBrandGithub } from "@tabler/icons-react";
+import { Camera } from "lucide-react";
 import Link from "next/link";
 import { siteConfig } from "@/lib/siteconfig";
 
@@ -9,9 +10,9 @@ const footerLinks = {
     { label: "Pricing", href: "#pricing" },
   ],
   company: [
-    { label: "About", href: "/about" },
-    { label: "Blog", href: "/blog" },
-    { label: "Help Center", href: "/help" },
+    // { label: "About", href: "/about" },
+    // { label: "Blog", href: "/blog" },
+    // { label: "Help Center", href: "/help" },
     { label: "Contact", href: "/contact" },
   ],
   legal: [
@@ -25,75 +26,29 @@ export function LandingFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer
-      className="px-6 py-16"
-      style={{
-        backgroundColor: "var(--landing-bg-alt)",
-        borderTop: "1px solid var(--landing-border)",
-      }}
-    >
-      <div className="mx-auto max-w-6xl">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-5">
-          {/* Brand */}
-          <div className="lg:col-span-2">
-            <Link
-              className="font-semibold tracking-tight"
-              href="/"
-              style={{ color: "var(--landing-text)" }}
-            >
-              {siteConfig.name}
-            </Link>
-            <p
-              className="mt-4 max-w-xs text-sm leading-relaxed"
-              style={{ color: "var(--landing-text-muted)" }}
-            >
-              Transform your real estate photos with AI-powered enhancements. Professional results
-              in seconds.
-            </p>
-
-            {/* Social Links */}
-            <div className="mt-6 flex gap-3">
-              <a
-                aria-label="Follow us on X (Twitter)"
-                className="flex size-10 items-center justify-center rounded-full transition-colors hover:opacity-70"
-                href="https://twitter.com"
-                rel="noopener noreferrer"
-                style={{
-                  backgroundColor: "var(--landing-bg)",
-                  border: "1px solid var(--landing-border)",
-                }}
-                target="_blank"
-              >
-                <IconBrandX className="size-4" style={{ color: "var(--landing-text)" }} />
-              </a>
-              <a
-                aria-label="Follow us on LinkedIn"
-                className="flex size-10 items-center justify-center rounded-full transition-colors hover:opacity-70"
-                href="https://linkedin.com"
-                rel="noopener noreferrer"
-                style={{
-                  backgroundColor: "var(--landing-bg)",
-                  border: "1px solid var(--landing-border)",
-                }}
-                target="_blank"
-              >
-                <IconBrandLinkedin className="size-4" style={{ color: "var(--landing-text)" }} />
-              </a>
+    <footer className="border-t border-border bg-card">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="col-span-2 md:col-span-1">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
+                <Camera className="h-5 w-5 text-primary-foreground" />
+              </div>
+              <span className="text-xl font-semibold text-foreground">RealtyLens</span>
             </div>
+            <p className="text-sm text-muted-foreground">
+              AI-powered photo enhancement for real estate professionals.
+            </p>
           </div>
 
-          {/* Product Links */}
           <div>
-            <h3 className="font-semibold text-sm" style={{ color: "var(--landing-text)" }}>
-              Product
-            </h3>
-            <ul className="mt-4 space-y-3">
-              {footerLinks.product.map((link) => (
-                <li key={link.label}>
+            <h4 className="font-semibold text-foreground mb-4">Product</h4>
+            <ul className="space-y-3">
+              {footerLinks.product.map((link, index) => (
+                <li key={index.toString()}>
                   <Link
-                    className="text-sm transition-colors hover:opacity-70"
                     href={link.href}
-                    style={{ color: "var(--landing-text-muted)" }}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -102,18 +57,14 @@ export function LandingFooter() {
             </ul>
           </div>
 
-          {/* Company Links */}
           <div>
-            <h3 className="font-semibold text-sm" style={{ color: "var(--landing-text)" }}>
-              Company
-            </h3>
-            <ul className="mt-4 space-y-3">
-              {footerLinks.company.map((link) => (
-                <li key={link.label}>
+            <h4 className="font-semibold text-foreground mb-4">Company</h4>
+            <ul className="space-y-3">
+              {footerLinks.company.map((link, index) => (
+                <li key={index.toString()}>
                   <Link
-                    className="text-sm transition-colors hover:opacity-70"
                     href={link.href}
-                    style={{ color: "var(--landing-text-muted)" }}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -122,13 +73,10 @@ export function LandingFooter() {
             </ul>
           </div>
 
-          {/* Legal Links */}
           <div>
-            <h3 className="font-semibold text-sm" style={{ color: "var(--landing-text)" }}>
-              Legal
-            </h3>
-            <ul className="mt-4 space-y-3">
-              {footerLinks.legal.map((link) => (
+            <h4 className="font-semibold text-foreground mb-4">Legal</h4>
+            <ul className="space-y-3">
+              {footerLinks.legal.map((link, index) => (
                 <li key={link.label}>
                   {link.external ? (
                     <a
@@ -156,14 +104,30 @@ export function LandingFooter() {
           </div>
         </div>
 
-        {/* Bottom */}
-        <div
-          className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 sm:flex-row"
-          style={{ borderColor: "var(--landing-border)" }}
-        >
-          <p className="text-sm" style={{ color: "var(--landing-text-muted)" }}>
-            &copy; {currentYear} {siteConfig.name}. All rights reserved.
+        <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-muted-foreground">
+            &copy; {currentYear} RealtyLens. All rights reserved.
           </p>
+          <div className="flex items-center gap-6">
+            <Link
+              href="#"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Twitter
+            </Link>
+            <Link
+              href="#"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              LinkedIn
+            </Link>
+            <Link
+              href="#"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Instagram
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

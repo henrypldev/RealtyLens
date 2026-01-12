@@ -1,15 +1,16 @@
-import { Geist_Mono, Outfit } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { constructMetadata } from "@/lib/constructMetadata";
 import "./globals.css";
+import { Geist, Geist_Mono } from "next/font/google";
 
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+// const outfit = Outfit({
+//   subsets: ["latin"],
+//   variable: "--font-sans",
+// });
+const _geist = Geist({ variable: "--font-sans", subsets: ["latin"] });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+  variable: "--font-mono",
   subsets: ["latin"],
 });
 
@@ -21,9 +22,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className={outfit.variable} lang="en">
+    <html lang="en">
       <body
-        className={`${outfit.variable} ${geistMono.variable} antialiased`}
+        className={`${_geist.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning={true}
       >
         <NuqsAdapter>{children}</NuqsAdapter>
