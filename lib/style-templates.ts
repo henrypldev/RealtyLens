@@ -64,7 +64,7 @@ export function getRoomTypeById(id: string): RoomTypeOption | undefined {
 // Generate a prompt with room type context and architectural preservation
 export function generatePrompt(template: StyleTemplate, roomType: string | null): string {
   const preserveStructure =
-    "Do not move, remove, or modify windows, walls, doors, or any architectural elements. Keep the room layout exactly as shown.";
+    "Do not move, remove, or modify windows, walls, doors, floors, or any architectural elements. Keep the room layout, wall paints, floor material and color exactly as shown.";
 
   let prompt = template.prompt;
 

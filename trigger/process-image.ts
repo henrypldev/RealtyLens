@@ -185,16 +185,21 @@ export const processImageTask = task({
         progress: 0,
       } satisfies ProcessImageStatus);
 
-      // Update status to failed
-      await updateImageGeneration(imageId, {
-        status: "failed",
-        errorMessage: error instanceof Error ? error.message : "Processing failed",
-      });
+      try {
+        await updateImageGeneration(imageId, {
+          status: "failed",
+          errorMessage: error instanceof Error ? error.message : "Processing failed",
+        });
 
-      // Get image to update project counts
-      const image = await getImageGenerationById(imageId);
-      if (image) {
-        await updateProjectCounts(image.projectId);
+        const image = await getImageGenerationById(imageId);
+        if (image) {
+          await updateProjectCounts(image.projectId);
+        }
+      } catch (dbError) {
+        logger.error("Failed to update error status in database", {
+          imageId,
+          dbError: dbError instanceof Error ? dbError.message : "Unknown DB error",
+        });
       }
 
       throw error;

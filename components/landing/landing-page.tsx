@@ -1,5 +1,6 @@
 "use client";
 
+import { BeforeAfterSection } from "./landing-before-after";
 import { LandingCta } from "./landing-cta";
 import { LandingFeatures } from "./landing-features";
 import { LandingFooter } from "./landing-footer";
@@ -15,6 +16,8 @@ export function LandingPage() {
         <LandingHero />
         <LandingFeatures />
         <LandingHowItWorks />
+        <BeforeAfterSection />
+
         <LandingCta />
       </main>
       <LandingFooter />
