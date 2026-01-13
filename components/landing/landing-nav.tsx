@@ -1,7 +1,8 @@
 'use client'
 
 import { IconArrowRight } from '@tabler/icons-react'
-import { Camera, Menu, X } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense, useState } from 'react'
 import { useSession } from '@/lib/auth-client'
@@ -44,12 +45,23 @@ export function LandingNav() {
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-              <Camera className="h-5 w-5 text-primary-foreground" />
-            </div>
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src="/logo.png"
+              alt={siteConfig.name}
+              width={36}
+              height={36}
+              className="block dark:hidden"
+            />
+            <Image
+              src="/logo-dark-theme.png"
+              alt={siteConfig.name}
+              width={36}
+              height={36}
+              className="hidden dark:block"
+            />
             <span className="text-xl font-semibold text-foreground">{siteConfig.name}</span>
-          </div>
+          </Link>
 
           <nav className="hidden md:flex items-center gap-8">
             <Link

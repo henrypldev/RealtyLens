@@ -26,6 +26,7 @@ function CtaAuthButton() {
       <Button
         size="lg"
         className="w-full sm:w-auto min-h-12 bg-primary-foreground text-primary hover:bg-primary-foreground/90 px-8"
+        nativeButton={false}
         render={
           <Link href={href}>
             {text}

@@ -1,4 +1,14 @@
-import { Body, Container, Head, Hr, Html, Preview, Section, Text } from '@react-email/components'
+import {
+  Body,
+  Container,
+  Head,
+  Hr,
+  Html,
+  Img,
+  Preview,
+  Section,
+  Text,
+} from '@react-email/components'
 import type * as React from 'react'
 import { siteConfig } from '../../lib/siteconfig'
 
@@ -16,6 +26,13 @@ export function EmailLayout({ preview, children }: EmailLayoutProps) {
         <Container style={container}>
           {/* Header */}
           <Section style={header}>
+            <Img
+              src={`${siteConfig.url}/logo.png`}
+              width="48"
+              height="48"
+              alt={siteConfig.name}
+              style={logoImage}
+            />
             <Text style={logo}>{siteConfig.name}</Text>
           </Section>
 
@@ -53,6 +70,12 @@ const container = {
 
 const header = {
   padding: '32px 48px 24px',
+  textAlign: 'center' as const,
+}
+
+const logoImage = {
+  margin: '0 auto 12px',
+  display: 'block',
 }
 
 const logo = {

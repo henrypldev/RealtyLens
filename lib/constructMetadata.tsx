@@ -133,20 +133,7 @@ export function constructMetadata({
       images: [image],
       creator: siteConfig.twitterHandle,
     },
-    icons: [
-      {
-        rel: 'icon',
-        type: 'image/x-icon',
-        url: '/favicon.ico',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        rel: 'icon',
-        type: 'image/png',
-        url: '/favicon-dark.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-    ],
+    icons,
     metadataBase: new URL(metadataBaseUrl),
     ...(noIndex && {
       robots: {

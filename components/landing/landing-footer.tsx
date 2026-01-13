@@ -1,5 +1,5 @@
 import { IconBrandGithub } from '@tabler/icons-react'
-import { Camera } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { siteConfig } from '@/lib/siteconfig'
 
@@ -30,12 +30,23 @@ export function LandingFooter() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className="col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-                <Camera className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-semibold text-foreground">RealtyLens</span>
-            </div>
+            <Link href="/" className="flex items-center gap-2 mb-4">
+              <Image
+                src="/logo.png"
+                alt={siteConfig.name}
+                width={36}
+                height={36}
+                className="block dark:hidden"
+              />
+              <Image
+                src="/logo-dark-theme.png"
+                alt={siteConfig.name}
+                width={36}
+                height={36}
+                className="hidden dark:block"
+              />
+              <span className="text-xl font-semibold text-foreground">{siteConfig.name}</span>
+            </Link>
             <p className="text-sm text-muted-foreground">
               AI-powered photo enhancement for real estate professionals.
             </p>
