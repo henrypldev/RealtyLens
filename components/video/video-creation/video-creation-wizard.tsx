@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   IconArrowLeft,
@@ -12,106 +12,105 @@ import {
   IconPhoto,
   IconSparkles,
   IconTemplate,
-} from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
-import * as React from "react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { useVideoCreation, type VideoCreationStep } from "@/hooks/use-video-creation";
-import { createVideoProject, triggerVideoGeneration } from "@/lib/actions/video";
-import { cn } from "@/lib/utils";
-import { AssignRoomsStep } from "./steps/assign-rooms-step";
-import { ReviewStep } from "./steps/review-step";
-import { SelectImagesStep } from "./steps/select-images-step";
-import { SelectMusicStep } from "./steps/select-music-step";
-import { SelectTemplateStep } from "./steps/select-template-step";
-import { StoryboardStep } from "./steps/storyboard-step";
+} from '@tabler/icons-react'
+import { useRouter } from 'next/navigation'
+import * as React from 'react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
+import { useVideoCreation, type VideoCreationStep } from '@/hooks/use-video-creation'
+import { createVideoProject, triggerVideoGeneration } from '@/lib/actions/video'
+import { cn } from '@/lib/utils'
+import { AssignRoomsStep } from './steps/assign-rooms-step'
+import { ReviewStep } from './steps/review-step'
+import { SelectImagesStep } from './steps/select-images-step'
+import { SelectMusicStep } from './steps/select-music-step'
+import { SelectTemplateStep } from './steps/select-template-step'
+import { StoryboardStep } from './steps/storyboard-step'
 
 // Steps for the "Custom" flow
 const CUSTOM_STEPS: {
-  id: VideoCreationStep;
-  label: string;
-  icon: React.ReactNode;
+  id: VideoCreationStep
+  label: string
+  icon: React.ReactNode
 }[] = [
   {
-    id: "select-template",
-    label: "Style",
+    id: 'select-template',
+    label: 'Style',
     icon: <IconTemplate className="h-4 w-4" />,
   },
   {
-    id: "select-images",
-    label: "Images",
+    id: 'select-images',
+    label: 'Images',
     icon: <IconPhoto className="h-4 w-4" />,
   },
   {
-    id: "assign-rooms",
-    label: "Rooms",
+    id: 'assign-rooms',
+    label: 'Rooms',
     icon: <IconHome className="h-4 w-4" />,
   },
   {
-    id: "select-music",
-    label: "Music",
+    id: 'select-music',
+    label: 'Music',
     icon: <IconMusic className="h-4 w-4" />,
   },
-  { id: "review", label: "Review", icon: <IconCheck className="h-4 w-4" /> },
-];
+  { id: 'review', label: 'Review', icon: <IconCheck className="h-4 w-4" /> },
+]
 
 // Steps for the "Template" flow
 const TEMPLATE_STEPS: {
-  id: VideoCreationStep;
-  label: string;
-  icon: React.ReactNode;
+  id: VideoCreationStep
+  label: string
+  icon: React.ReactNode
 }[] = [
   {
-    id: "select-template",
-    label: "Style",
+    id: 'select-template',
+    label: 'Style',
     icon: <IconTemplate className="h-4 w-4" />,
   },
   {
-    id: "storyboard",
-    label: "Storyboard",
+    id: 'storyboard',
+    label: 'Storyboard',
     icon: <IconLayoutDashboard className="h-4 w-4" />,
   },
   {
-    id: "select-music",
-    label: "Music",
+    id: 'select-music',
+    label: 'Music',
     icon: <IconMusic className="h-4 w-4" />,
   },
-  { id: "review", label: "Review", icon: <IconCheck className="h-4 w-4" /> },
-];
+  { id: 'review', label: 'Review', icon: <IconCheck className="h-4 w-4" /> },
+]
 
 function StepIndicator({
   steps,
   currentStep,
 }: {
-  steps: typeof CUSTOM_STEPS;
-  currentStep: VideoCreationStep;
+  steps: typeof CUSTOM_STEPS
+  currentStep: VideoCreationStep
 }) {
-  const currentIndex = steps.findIndex((s) => s.id === currentStep);
+  const currentIndex = steps.findIndex((s) => s.id === currentStep)
 
   return (
     <div className="flex items-center justify-center gap-1 sm:gap-2">
       {steps.map((step, index) => {
-        const isActive = step.id === currentStep;
-        const isCompleted = index < currentIndex;
+        const isActive = step.id === currentStep
+        const isCompleted = index < currentIndex
 
         return (
           <React.Fragment key={step.id}>
             <div
               className={cn(
-                "flex items-center gap-1.5 rounded-full px-2.5 py-2 font-medium text-sm transition-all duration-300 sm:gap-2 sm:px-4",
-                isActive &&
-                  "bg-(--accent-teal)/15 text-(--accent-teal) shadow-(--accent-teal)/10 shadow-sm",
-                isCompleted && "text-(--accent-teal)",
-                !(isActive || isCompleted) && "text-muted-foreground",
+                'flex items-center gap-1.5 rounded-full px-2.5 py-2 font-medium text-sm transition-all duration-300 sm:gap-2 sm:px-4',
+                isActive && 'bg-primary/15 text-primary shadow-primary/10 shadow-sm',
+                isCompleted && 'text-primary',
+                !(isActive || isCompleted) && 'text-muted-foreground',
               )}
             >
               <span
                 className={cn(
-                  "flex h-7 w-7 items-center justify-center rounded-full font-semibold text-xs transition-all duration-300",
-                  isActive && "bg-(--accent-teal) text-white shadow-(--accent-teal)/30 shadow-lg",
-                  isCompleted && "bg-(--accent-teal) text-white",
-                  !(isActive || isCompleted) && "bg-muted text-muted-foreground",
+                  'flex h-7 w-7 items-center justify-center rounded-full font-semibold text-xs transition-all duration-300',
+                  isActive && 'bg-primary text-white shadow-primary/30 shadow-lg',
+                  isCompleted && 'bg-primary text-white',
+                  !(isActive || isCompleted) && 'bg-muted text-muted-foreground',
                 )}
               >
                 {isCompleted ? <IconCheck className="h-3.5 w-3.5" /> : step.icon}
@@ -122,58 +121,56 @@ function StepIndicator({
             {index < steps.length - 1 && (
               <div
                 className={cn(
-                  "h-px w-6 transition-all duration-300 sm:w-10",
-                  index < currentIndex
-                    ? "bg-linear-to-r from-(--accent-teal) to-(--accent-teal)/50"
-                    : "bg-border",
+                  'h-px w-6 transition-all duration-300 sm:w-10',
+                  index < currentIndex ? 'bg-linear-to-r from-primary to-primary/50' : 'bg-border',
                 )}
               />
             )}
           </React.Fragment>
-        );
+        )
       })}
     </div>
-  );
+  )
 }
 
 const stepTitles: Record<VideoCreationStep, { title: string; description: string }> = {
-  "select-template": {
-    title: "Choose a Style",
-    description: "Start with a template or build from scratch",
+  'select-template': {
+    title: 'Choose a Style',
+    description: 'Start with a template or build from scratch',
   },
   storyboard: {
-    title: "Build Your Story",
-    description: "Add photos to the storyboard slots",
+    title: 'Build Your Story',
+    description: 'Add photos to the storyboard slots',
   },
-  "select-images": {
-    title: "Select Images",
-    description: "Choose the images for your property video",
+  'select-images': {
+    title: 'Select Images',
+    description: 'Choose the images for your property video',
   },
-  "assign-rooms": {
-    title: "Assign Rooms",
-    description: "Label each image with its room type and arrange the sequence",
+  'assign-rooms': {
+    title: 'Assign Rooms',
+    description: 'Label each image with its room type and arrange the sequence',
   },
-  "select-music": {
-    title: "Background Music",
-    description: "Add the perfect soundtrack to your property tour",
+  'select-music': {
+    title: 'Background Music',
+    description: 'Add the perfect soundtrack to your property tour',
   },
   review: {
-    title: "Review & Generate",
-    description: "Finalize your video settings and start generation",
+    title: 'Review & Generate',
+    description: 'Finalize your video settings and start generation',
   },
-};
+}
 
 export function VideoCreationWizard() {
-  const router = useRouter();
-  const creation = useVideoCreation();
+  const router = useRouter()
+  const creation = useVideoCreation()
 
   const handleSubmit = React.useCallback(async () => {
-    if (!creation.canProceed()) return;
+    if (!creation.canProceed()) return
 
-    creation.setIsSubmitting(true);
+    creation.setIsSubmitting(true)
 
     try {
-      console.log("[VideoCreationWizard] Starting video project creation...");
+      console.log('[VideoCreationWizard] Starting video project creation...')
       // Create the video project
       const result = await createVideoProject({
         name: creation.projectName,
@@ -189,67 +186,67 @@ export function VideoCreationWizard() {
           roomType: img.roomType,
           roomLabel: img.roomLabel || null,
           sequenceOrder: img.sequenceOrder,
-          transitionType: img.transitionType || "seamless",
+          transitionType: img.transitionType || 'seamless',
         })),
-      });
+      })
 
       if (!result.success) {
-        console.error("[VideoCreationWizard] Project creation failed:", result);
-        throw new Error("Failed to create video project");
+        console.error('[VideoCreationWizard] Project creation failed:', result)
+        throw new Error('Failed to create video project')
       }
 
       console.log(
         `[VideoCreationWizard] Project created successfully: ${result.videoProjectId}. Triggering generation...`,
-      );
+      )
 
       // Trigger video generation
       try {
-        await triggerVideoGeneration(result.videoProjectId);
+        await triggerVideoGeneration(result.videoProjectId)
       } catch (triggerError) {
         console.error(
-          "[VideoCreationWizard] Trigger failed, but project was created:",
+          '[VideoCreationWizard] Trigger failed, but project was created:',
           triggerError,
-        );
+        )
         // We still redirect because the project exists, but we show a different message
-        toast.warning("Video project created, but generation failed to start automatically.", {
-          description: "You can try to restart the generation from the video details page.",
+        toast.warning('Video project created, but generation failed to start automatically.', {
+          description: 'You can try to restart the generation from the video details page.',
           duration: 10_000,
-        });
-        router.push(`/video/${result.videoProjectId}`);
-        return;
+        })
+        router.push(`/video/${result.videoProjectId}`)
+        return
       }
 
-      console.log("[VideoCreationWizard] Video generation triggered successfully");
+      console.log('[VideoCreationWizard] Video generation triggered successfully')
 
-      toast.success("Video generation started!", {
+      toast.success('Video generation started!', {
         description: "We'll notify you when your video is ready.",
-      });
+      })
 
       // Redirect to video detail page
-      router.push(`/video/${result.videoProjectId}`);
+      router.push(`/video/${result.videoProjectId}`)
     } catch (error) {
-      console.error("[VideoCreationWizard] General error in handleSubmit:", error);
-      toast.error("Failed to create video", {
-        description: error instanceof Error ? error.message : "Please try again.",
-      });
-      creation.setIsSubmitting(false);
+      console.error('[VideoCreationWizard] General error in handleSubmit:', error)
+      toast.error('Failed to create video', {
+        description: error instanceof Error ? error.message : 'Please try again.',
+      })
+      creation.setIsSubmitting(false)
     }
-  }, [creation, router]);
+  }, [creation, router])
 
-  const currentStepInfo = stepTitles[creation.step];
+  const currentStepInfo = stepTitles[creation.step]
 
   // Determine which steps to show based on mode
-  const steps = creation.selectedTemplateId ? TEMPLATE_STEPS : CUSTOM_STEPS;
+  const steps = creation.selectedTemplateId ? TEMPLATE_STEPS : CUSTOM_STEPS
 
   const handleTemplateSelect = (templateId: string) => {
-    creation.setTemplateId(templateId);
-    creation.setStep("storyboard");
-  };
+    creation.setTemplateId(templateId)
+    creation.setStep('storyboard')
+  }
 
   const handleCustomSelect = () => {
-    creation.setTemplateId(null);
-    creation.setStep("select-images");
-  };
+    creation.setTemplateId(null)
+    creation.setStep('select-images')
+  }
 
   return (
     <div className="flex min-h-[calc(100vh-4rem)] flex-col">
@@ -260,14 +257,14 @@ export function VideoCreationWizard() {
           className="absolute inset-0 opacity-[0.02]"
           style={{
             backgroundImage:
-              "repeating-linear-gradient(90deg, transparent, transparent 20px, currentColor 20px, currentColor 22px)",
+              'repeating-linear-gradient(90deg, transparent, transparent 20px, currentColor 20px, currentColor 22px)',
           }}
         />
 
         <div className="relative mx-auto max-w-5xl px-4 py-8 sm:px-6">
           {/* Logo/Title */}
           <div className="mb-6 flex items-center justify-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-linear-to-br from-(--accent-teal) to-(--accent-teal)/70 shadow-(--accent-teal)/20 shadow-lg">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-linear-to-br from-primary to-primary/70 shadow-primary/20 shadow-lg">
               <IconMovie className="h-6 w-6 text-white" />
             </div>
             <div>
@@ -291,12 +288,12 @@ export function VideoCreationWizard() {
       <div className="flex-1 overflow-y-auto">
         <div
           className={cn(
-            "mx-auto px-4 py-8 transition-all duration-500 sm:px-6",
-            creation.step === "storyboard" ? "max-w-full lg:px-12" : "max-w-5xl",
+            'mx-auto px-4 py-8 transition-all duration-500 sm:px-6',
+            creation.step === 'storyboard' ? 'max-w-full lg:px-12' : 'max-w-5xl',
           )}
         >
           <div className="animate-fade-in-up">
-            {creation.step === "select-template" && (
+            {creation.step === 'select-template' && (
               <SelectTemplateStep
                 onSelectCustom={handleCustomSelect}
                 onSelectTemplate={handleTemplateSelect}
@@ -304,7 +301,7 @@ export function VideoCreationWizard() {
               />
             )}
 
-            {creation.step === "storyboard" && creation.selectedTemplateId && (
+            {creation.step === 'storyboard' && creation.selectedTemplateId && (
               <StoryboardStep
                 images={creation.images}
                 onAddImageToSlot={creation.addImageToSlot}
@@ -315,14 +312,14 @@ export function VideoCreationWizard() {
               />
             )}
 
-            {creation.step === "select-images" && (
+            {creation.step === 'select-images' && (
               <SelectImagesStep
                 images={creation.images}
                 onAddImages={creation.addImages}
                 onRemoveImage={creation.removeImage}
               />
             )}
-            {creation.step === "assign-rooms" && (
+            {creation.step === 'assign-rooms' && (
               <AssignRoomsStep
                 images={creation.images}
                 onAutoArrange={creation.autoArrangeByRoomType}
@@ -330,7 +327,7 @@ export function VideoCreationWizard() {
                 onUpdateImage={creation.updateImage}
               />
             )}
-            {creation.step === "select-music" && (
+            {creation.step === 'select-music' && (
               <SelectMusicStep
                 aspectRatio={creation.aspectRatio}
                 generateNativeAudio={creation.generateNativeAudio}
@@ -342,7 +339,7 @@ export function VideoCreationWizard() {
                 volume={creation.musicVolume}
               />
             )}
-            {creation.step === "review" && (
+            {creation.step === 'review' && (
               <ReviewStep
                 aspectRatio={creation.aspectRatio}
                 images={creation.images}
@@ -360,7 +357,7 @@ export function VideoCreationWizard() {
         <div className="mx-auto max-w-5xl px-4 py-4 sm:px-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              {creation.step !== "select-template" && (
+              {creation.step !== 'select-template' && (
                 <Button
                   className="gap-2"
                   disabled={creation.isSubmitting}
@@ -376,15 +373,15 @@ export function VideoCreationWizard() {
             <div className="flex items-center gap-3">
               <Button
                 disabled={creation.isSubmitting}
-                onClick={() => router.push("/video")}
+                onClick={() => router.push('/video')}
                 variant="outline"
               >
                 Cancel
               </Button>
 
-              {creation.step === "review" ? (
+              {creation.step === 'review' ? (
                 <Button
-                  className="min-w-[160px] gap-2 bg-(--accent-teal) shadow-(--accent-teal)/20 shadow-lg"
+                  className="min-w-[160px] gap-2 bg-primary shadow-primary/20 shadow-lg"
                   disabled={!creation.canProceed() || creation.isSubmitting}
                   onClick={handleSubmit}
                 >
@@ -401,9 +398,9 @@ export function VideoCreationWizard() {
                   )}
                 </Button>
               ) : (
-                creation.step !== "select-template" && (
+                creation.step !== 'select-template' && (
                   <Button
-                    className="gap-2 bg-(--accent-teal) shadow-(--accent-teal)/20 shadow-lg"
+                    className="gap-2 bg-primary shadow-primary/20 shadow-lg"
                     disabled={!creation.canProceed()}
                     onClick={creation.goToNextStep}
                   >
@@ -417,5 +414,5 @@ export function VideoCreationWizard() {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,16 +1,16 @@
-"use client";
+'use client'
 
-import { IconClock, IconLayout, IconPlayerPlay, IconPlus } from "@tabler/icons-react";
-import Image from "next/image";
-import * as React from "react";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
-import { VIDEO_TEMPLATES, type VideoTemplate } from "@/lib/video/video-templates";
+import { IconClock, IconLayout, IconPlayerPlay, IconPlus } from '@tabler/icons-react'
+import Image from 'next/image'
+import * as React from 'react'
+import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
+import { VIDEO_TEMPLATES, type VideoTemplate } from '@/lib/video/video-templates'
 
 interface SelectTemplateStepProps {
-  selectedTemplateId: string | null;
-  onSelectTemplate: (templateId: string) => void;
-  onSelectCustom: () => void;
+  selectedTemplateId: string | null
+  onSelectTemplate: (templateId: string) => void
+  onSelectCustom: () => void
 }
 
 export function SelectTemplateStep({
@@ -18,7 +18,7 @@ export function SelectTemplateStep({
   onSelectTemplate,
   onSelectCustom,
 }: SelectTemplateStepProps) {
-  const [hoveredTemplateId, setHoveredTemplateId] = React.useState<string | null>(null);
+  const [hoveredTemplateId, setHoveredTemplateId] = React.useState<string | null>(null)
 
   return (
     <div className="space-y-6">
@@ -45,15 +45,15 @@ export function SelectTemplateStep({
         {/* Custom Option */}
         <button
           className={cn(
-            "group relative flex flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed p-8 transition-all duration-300",
-            "hover:border-(--accent-teal) hover:bg-(--accent-teal)/5",
+            'group relative flex flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed p-8 transition-all duration-300',
+            'hover:border-primary hover:bg-primary/5',
             selectedTemplateId === null
-              ? "border-muted-foreground/20" // We don't really have a "selected" state for custom in this view as it navigates away immediately usually, but good to have styles
-              : "border-muted-foreground/20",
+              ? 'border-muted-foreground/20' // We don't really have a "selected" state for custom in this view as it navigates away immediately usually, but good to have styles
+              : 'border-muted-foreground/20',
           )}
           onClick={onSelectCustom}
         >
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted transition-colors group-hover:bg-(--accent-teal)/10 group-hover:text-(--accent-teal)">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted transition-colors group-hover:bg-primary/10 group-hover:text-primary">
             <IconPlus className="h-8 w-8" />
           </div>
           <div className="text-center">
@@ -65,7 +65,7 @@ export function SelectTemplateStep({
         </button>
       </div>
     </div>
-  );
+  )
 }
 
 function TemplateCard({
@@ -75,30 +75,30 @@ function TemplateCard({
   onHover,
   onSelect,
 }: {
-  template: VideoTemplate;
-  isSelected: boolean;
-  isHovered: boolean;
-  onHover: (id: string | null) => void;
-  onSelect: () => void;
+  template: VideoTemplate
+  isSelected: boolean
+  isHovered: boolean
+  onHover: (id: string | null) => void
+  onSelect: () => void
 }) {
-  const videoRef = React.useRef<HTMLVideoElement>(null);
+  const videoRef = React.useRef<HTMLVideoElement>(null)
 
   React.useEffect(() => {
     if (isHovered && template.previewVideoUrl && videoRef.current) {
-      videoRef.current.play().catch(() => {});
+      videoRef.current.play().catch(() => {})
     } else if (!isHovered && videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
+      videoRef.current.pause()
+      videoRef.current.currentTime = 0
     }
-  }, [isHovered, template.previewVideoUrl]);
+  }, [isHovered, template.previewVideoUrl])
 
   return (
     <div
       className={cn(
-        "group relative cursor-pointer overflow-hidden rounded-xl border-2 bg-card text-card-foreground shadow-sm transition-all duration-300",
+        'group relative cursor-pointer overflow-hidden rounded-xl border-2 bg-card text-card-foreground shadow-sm transition-all duration-300',
         isSelected
-          ? "border-(--accent-teal) ring-(--accent-teal)/20 ring-2"
-          : "border-transparent hover:-translate-y-1 hover:border-(--accent-teal)/50 hover:shadow-lg",
+          ? 'border-primary ring-primary/20 ring-2'
+          : 'border-transparent hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg',
       )}
       onClick={onSelect}
       onMouseEnter={() => onHover(template.id)}
@@ -110,8 +110,8 @@ function TemplateCard({
         <Image
           alt={template.name}
           className={cn(
-            "absolute inset-0 h-full w-full object-cover transition-opacity duration-500",
-            isHovered && template.previewVideoUrl ? "opacity-0" : "opacity-100",
+            'absolute inset-0 h-full w-full object-cover transition-opacity duration-500',
+            isHovered && template.previewVideoUrl ? 'opacity-0' : 'opacity-100',
           )}
           fill
           src={template.thumbnailUrl}
@@ -119,12 +119,12 @@ function TemplateCard({
 
         {/* Video Preview */}
         {template.previewVideoUrl &&
-          (template.previewVideoUrl.endsWith(".mp4") ||
-            template.previewVideoUrl.includes("cdn.coverr.co")) && (
+          (template.previewVideoUrl.endsWith('.mp4') ||
+            template.previewVideoUrl.includes('cdn.coverr.co')) && (
             <video
               className={cn(
-                "absolute inset-0 h-full w-full object-cover transition-opacity duration-500",
-                isHovered ? "opacity-100" : "opacity-0",
+                'absolute inset-0 h-full w-full object-cover transition-opacity duration-500',
+                isHovered ? 'opacity-100' : 'opacity-0',
               )}
               loop
               muted
@@ -140,8 +140,8 @@ function TemplateCard({
         {/* Play Icon (visible when not hovering) */}
         <div
           className={cn(
-            "absolute inset-0 flex items-center justify-center transition-all duration-300",
-            isHovered ? "scale-110 opacity-0" : "scale-100 opacity-100",
+            'absolute inset-0 flex items-center justify-center transition-all duration-300',
+            isHovered ? 'scale-110 opacity-0' : 'scale-100 opacity-100',
           )}
         >
           <div className="rounded-full bg-white/20 p-3 backdrop-blur-sm">
@@ -170,7 +170,7 @@ function TemplateCard({
 
       {/* Content */}
       <div className="p-5">
-        <h3 className="font-semibold text-lg transition-colors group-hover:text-(--accent-teal)">
+        <h3 className="font-semibold text-lg transition-colors group-hover:text-primary">
           {template.name}
         </h3>
         <p className="mt-2 line-clamp-2 text-muted-foreground text-sm">{template.description}</p>
@@ -188,5 +188,5 @@ function TemplateCard({
         </div>
       </div>
     </div>
-  );
+  )
 }

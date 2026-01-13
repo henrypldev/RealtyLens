@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   IconAlertTriangle,
@@ -7,81 +7,81 @@ import {
   IconLoader2,
   IconPhoto,
   IconPhotoOff,
-} from "@tabler/icons-react";
-import Image from "next/image";
-import Link from "next/link";
-import type * as React from "react";
-import { Badge } from "@/components/ui/badge";
-import type { Project, ProjectStatus } from "@/lib/db/schema";
-import { getTemplateById } from "@/lib/style-templates";
-import { cn } from "@/lib/utils";
+} from '@tabler/icons-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import type * as React from 'react'
+import { Badge } from '@/components/ui/badge'
+import type { Project, ProjectStatus } from '@/lib/db/schema'
+import { getTemplateById } from '@/lib/style-templates'
+import { cn } from '@/lib/utils'
 
 interface ProjectCardProps {
-  project: Project;
-  className?: string;
-  style?: React.CSSProperties;
+  project: Project
+  className?: string
+  style?: React.CSSProperties
 }
 
 const statusConfig: Record<
   ProjectStatus,
   {
-    label: string;
-    variant: "status-active" | "status-pending" | "status-completed" | "status-archived";
-    icon: React.ReactNode;
+    label: string
+    variant: 'status-active' | 'status-pending' | 'status-completed' | 'status-archived'
+    icon: React.ReactNode
   }
 > = {
   completed: {
-    label: "Completed",
-    variant: "status-completed",
+    label: 'Completed',
+    variant: 'status-completed',
     icon: <IconCheck className="h-3 w-3" />,
   },
   processing: {
-    label: "Processing",
-    variant: "status-active",
+    label: 'Processing',
+    variant: 'status-active',
     icon: <IconLoader2 className="h-3 w-3 animate-spin" />,
   },
   pending: {
-    label: "Pending",
-    variant: "status-pending",
+    label: 'Pending',
+    variant: 'status-pending',
     icon: <IconClock className="h-3 w-3" />,
   },
   failed: {
-    label: "Failed",
-    variant: "status-archived",
+    label: 'Failed',
+    variant: 'status-archived',
     icon: <IconAlertTriangle className="h-3 w-3" />,
   },
-};
+}
 
 function formatRelativeDate(date: Date): string {
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
 
-  if (diffDays === 0) return "Today";
-  if (diffDays === 1) return "Yesterday";
-  if (diffDays < 7) return `${diffDays} days ago`;
-  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
-  if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
-  return `${Math.floor(diffDays / 365)} years ago`;
+  if (diffDays === 0) return 'Today'
+  if (diffDays === 1) return 'Yesterday'
+  if (diffDays < 7) return `${diffDays} days ago`
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`
+  if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`
+  return `${Math.floor(diffDays / 365)} years ago`
 }
 
 export function ProjectCard({ project, className, style }: ProjectCardProps) {
-  const template = getTemplateById(project.styleTemplateId);
-  const status = statusConfig[project.status as ProjectStatus] || statusConfig.pending;
+  const template = getTemplateById(project.styleTemplateId)
+  const status = statusConfig[project.status as ProjectStatus] || statusConfig.pending
 
   return (
     <Link
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-2xl bg-card ring-1 ring-foreground/5 transition-all duration-300",
-        "hover:-translate-y-1 hover:shadow-lg hover:ring-foreground/10",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+        'group relative flex flex-col overflow-hidden rounded-2xl bg-card ring-1 ring-foreground/5 transition-all duration-300',
+        'hover:-translate-y-1 hover:shadow-lg hover:ring-foreground/10',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
         className,
       )}
       href={`/dashboard/${project.id}`}
       style={
         {
           ...style,
-          "--focus-ring": "var(--accent-teal)",
+          '--focus-ring': 'var(--primary)',
         } as React.CSSProperties
       }
     >
@@ -113,13 +113,13 @@ export function ProjectCard({ project, className, style }: ProjectCardProps) {
         </div>
 
         {/* Progress indicator for processing */}
-        {project.status === "processing" && (
+        {project.status === 'processing' && (
           <div className="absolute right-0 bottom-0 left-0 h-1 bg-black/30">
             <div
               className="h-full transition-all duration-300"
               style={{
                 width: `${(project.completedCount / project.imageCount) * 100}%`,
-                backgroundColor: "var(--accent-teal)",
+                backgroundColor: 'var(--primary)',
               }}
             />
           </div>
@@ -142,7 +142,7 @@ export function ProjectCard({ project, className, style }: ProjectCardProps) {
 
         <div className="flex items-center justify-between gap-2">
           <p className="line-clamp-1 text-muted-foreground text-sm">
-            {template?.name || "Unknown Style"}
+            {template?.name || 'Unknown Style'}
           </p>
           <span className="shrink-0 text-muted-foreground/70 text-xs">
             {formatRelativeDate(project.createdAt)}
@@ -150,5 +150,5 @@ export function ProjectCard({ project, className, style }: ProjectCardProps) {
         </div>
       </div>
     </Link>
-  );
+  )
 }

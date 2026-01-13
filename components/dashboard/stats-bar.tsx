@@ -1,28 +1,28 @@
-"use client";
+'use client'
 
-import { IconBuilding, IconSparkles, IconTrendingUp } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { IconBuilding, IconSparkles, IconTrendingUp } from '@tabler/icons-react'
+import { useEffect, useState } from 'react'
 
 type StatItemProps = {
-  icon: React.ReactNode;
-  label: string;
-  value: string | number;
-  accentColor: string;
-  delay: number;
-};
+  icon: React.ReactNode
+  label: string
+  value: string | number
+  accentColor: string
+  delay: number
+}
 
 function StatItem({ icon, label, value, accentColor, delay }: StatItemProps) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), delay);
-    return () => clearTimeout(timer);
-  }, [delay]);
+    const timer = setTimeout(() => setIsVisible(true), delay)
+    return () => clearTimeout(timer)
+  }, [delay])
 
   return (
     <div
       className={`stats-card flex items-center gap-3 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/5 transition-all duration-500 ${
-        isVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
+        isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
       }`}
     >
       <div
@@ -42,20 +42,20 @@ function StatItem({ icon, label, value, accentColor, delay }: StatItemProps) {
         </p>
       </div>
     </div>
-  );
+  )
 }
 
 type StatsBarProps = {
-  totalProperties: number;
-  activeProperties: number;
-  totalEdits: number;
-};
+  totalProperties: number
+  activeProperties: number
+  totalEdits: number
+}
 
 export function StatsBar({ totalProperties, activeProperties, totalEdits }: StatsBarProps) {
   return (
     <div className="grid grid-cols-3 gap-3">
       <StatItem
-        accentColor="var(--accent-teal)"
+        accentColor="var(--primary)"
         delay={0}
         icon={<IconBuilding className="h-4 w-4" />}
         label="Total Properties"
@@ -69,12 +69,12 @@ export function StatsBar({ totalProperties, activeProperties, totalEdits }: Stat
         value={activeProperties.toLocaleString()}
       />
       <StatItem
-        accentColor="var(--accent-teal)"
+        accentColor="var(--primary)"
         delay={200}
         icon={<IconSparkles className="h-4 w-4" />}
         label="AI Edits"
         value={totalEdits.toLocaleString()}
       />
     </div>
-  );
+  )
 }

@@ -1,29 +1,29 @@
-import { IconUsers } from "@tabler/icons-react";
-import { Suspense } from "react";
-import { UsersDataTable } from "@/components/admin/tables/users/data-table";
-import { getAdminUsers } from "@/lib/db/queries";
-import type { SortableUserColumn, SortDirection, UserRole, UserStatus } from "@/lib/types/admin";
+import { IconUsers } from '@tabler/icons-react'
+import { Suspense } from 'react'
+import { UsersDataTable } from '@/components/admin/tables/users/data-table'
+import { getAdminUsers } from '@/lib/db/queries'
+import type { SortableUserColumn, SortDirection, UserRole, UserStatus } from '@/lib/types/admin'
 
 interface AdminUsersPageProps {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 export default async function AdminUsersPage({ searchParams }: AdminUsersPageProps) {
-  const params = await searchParams;
+  const params = await searchParams
 
   // Parse filters from URL
   const filters = {
-    search: typeof params.q === "string" ? params.q : undefined,
-    role: typeof params.role === "string" ? (params.role as UserRole) : undefined,
-    status: typeof params.status === "string" ? (params.status as UserStatus) : undefined,
-    workspaceId: typeof params.workspaceId === "string" ? params.workspaceId : undefined,
-  };
+    search: typeof params.q === 'string' ? params.q : undefined,
+    role: typeof params.role === 'string' ? (params.role as UserRole) : undefined,
+    status: typeof params.status === 'string' ? (params.status as UserStatus) : undefined,
+    workspaceId: typeof params.workspaceId === 'string' ? params.workspaceId : undefined,
+  }
 
   // Parse sort from URL
-  const sortParam = params.sort;
-  let sort: [SortableUserColumn, SortDirection] | undefined;
+  const sortParam = params.sort
+  let sort: [SortableUserColumn, SortDirection] | undefined
   if (Array.isArray(sortParam) && sortParam.length === 2) {
-    sort = [sortParam[0] as SortableUserColumn, sortParam[1] as SortDirection];
+    sort = [sortParam[0] as SortableUserColumn, sortParam[1] as SortDirection]
   }
 
   // Fetch initial data server-side
@@ -32,7 +32,7 @@ export default async function AdminUsersPage({ searchParams }: AdminUsersPagePro
     limit: 20,
     filters,
     sort,
-  });
+  })
 
   return (
     <div className="space-y-6 px-4 md:px-6 lg:px-8">
@@ -41,7 +41,7 @@ export default async function AdminUsersPage({ searchParams }: AdminUsersPagePro
         <div className="flex items-center gap-3">
           <div
             className="flex h-11 w-11 items-center justify-center rounded-xl shadow-sm ring-1 ring-white/10"
-            style={{ backgroundColor: "var(--accent-teal)" }}
+            style={{ backgroundColor: 'var(--primary)' }}
           >
             <IconUsers className="h-5 w-5 text-white" />
           </div>
@@ -61,5 +61,5 @@ export default async function AdminUsersPage({ searchParams }: AdminUsersPagePro
         </Suspense>
       </div>
     </div>
-  );
+  )
 }

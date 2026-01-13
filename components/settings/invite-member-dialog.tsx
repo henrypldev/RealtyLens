@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   IconCheck,
@@ -8,98 +8,98 @@ import {
   IconShield,
   IconUser,
   IconUserPlus,
-} from "@tabler/icons-react";
-import type * as React from "react";
-import { useState, useTransition } from "react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+} from '@tabler/icons-react'
+import type * as React from 'react'
+import { useState, useTransition } from 'react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { createWorkspaceMemberInvitation } from "@/lib/actions/invitations";
-import type { UserRole } from "@/lib/db/schema";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { createWorkspaceMemberInvitation } from '@/lib/actions/invitations'
+import type { UserRole } from '@/lib/db/schema'
+import { cn } from '@/lib/utils'
 
 interface InviteMemberDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }
 
 const roleOptions: {
-  value: UserRole;
-  label: string;
-  description: string;
-  icon: React.ReactNode;
+  value: UserRole
+  label: string
+  description: string
+  icon: React.ReactNode
 }[] = [
   {
-    value: "admin",
-    label: "Admin",
-    description: "Can manage workspace settings and invite members",
+    value: 'admin',
+    label: 'Admin',
+    description: 'Can manage workspace settings and invite members',
     icon: <IconShield className="h-5 w-5" />,
   },
   {
-    value: "member",
-    label: "Member",
-    description: "Can create and manage their own projects",
+    value: 'member',
+    label: 'Member',
+    description: 'Can create and manage their own projects',
     icon: <IconUser className="h-5 w-5" />,
   },
-];
+]
 
 export function InviteMemberDialog({ open, onOpenChange }: InviteMemberDialogProps) {
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState<UserRole>("member");
-  const [isPending, startTransition] = useTransition();
-  const [inviteUrl, setInviteUrl] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
+  const [email, setEmail] = useState('')
+  const [role, setRole] = useState<UserRole>('member')
+  const [isPending, startTransition] = useTransition()
+  const [inviteUrl, setInviteUrl] = useState<string | null>(null)
+  const [copied, setCopied] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
+    e.preventDefault()
+    if (!email) return
 
     startTransition(async () => {
-      const result = await createWorkspaceMemberInvitation(email, role);
+      const result = await createWorkspaceMemberInvitation(email, role)
       if (result.success) {
-        setInviteUrl(result.data.inviteUrl);
+        setInviteUrl(result.data.inviteUrl)
       } else {
-        toast.error(result.error);
+        toast.error(result.error)
       }
-    });
-  };
+    })
+  }
 
   const handleCopyLink = async () => {
-    if (!inviteUrl) return;
+    if (!inviteUrl) return
     try {
-      await navigator.clipboard.writeText(inviteUrl);
-      setCopied(true);
-      toast.success("Link copied to clipboard");
-      setTimeout(() => setCopied(false), 2000);
+      await navigator.clipboard.writeText(inviteUrl)
+      setCopied(true)
+      toast.success('Link copied to clipboard')
+      setTimeout(() => setCopied(false), 2000)
     } catch {
-      toast.error("Failed to copy link");
+      toast.error('Failed to copy link')
     }
-  };
+  }
 
   const handleClose = () => {
     if (!isPending) {
-      setEmail("");
-      setRole("member");
-      setInviteUrl(null);
-      setCopied(false);
-      onOpenChange(false);
+      setEmail('')
+      setRole('member')
+      setInviteUrl(null)
+      setCopied(false)
+      onOpenChange(false)
     }
-  };
+  }
 
   const handleCreateAnother = () => {
-    setEmail("");
-    setRole("member");
-    setInviteUrl(null);
-    setCopied(false);
-  };
+    setEmail('')
+    setRole('member')
+    setInviteUrl(null)
+    setCopied(false)
+  }
 
   return (
     <Dialog onOpenChange={handleClose} open={open}>
@@ -111,17 +111,17 @@ export function InviteMemberDialog({ open, onOpenChange }: InviteMemberDialogPro
               <div
                 className="flex h-8 w-8 items-center justify-center rounded-lg"
                 style={{
-                  backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
+                  backgroundColor: 'color-mix(in oklch, var(--primary) 15%, transparent)',
                 }}
               >
-                <IconUserPlus className="h-4 w-4" style={{ color: "var(--accent-teal)" }} />
+                <IconUserPlus className="h-4 w-4" style={{ color: 'var(--primary)' }} />
               </div>
               Invite Team Member
             </DialogTitle>
             <DialogDescription>
               {inviteUrl
-                ? "Share this link with your team member"
-                : "Create an invitation link to share"}
+                ? 'Share this link with your team member'
+                : 'Create an invitation link to share'}
             </DialogDescription>
           </DialogHeader>
         </div>
@@ -135,10 +135,10 @@ export function InviteMemberDialog({ open, onOpenChange }: InviteMemberDialogPro
                 <div
                   className="flex h-16 w-16 items-center justify-center rounded-full"
                   style={{
-                    backgroundColor: "color-mix(in oklch, var(--accent-green) 15%, transparent)",
+                    backgroundColor: 'color-mix(in oklch, var(--accent-green) 15%, transparent)',
                   }}
                 >
-                  <IconCheck className="h-8 w-8" style={{ color: "var(--accent-green)" }} />
+                  <IconCheck className="h-8 w-8" style={{ color: 'var(--accent-green)' }} />
                 </div>
                 <div>
                   <p className="font-semibold text-lg">Invitation Created!</p>
@@ -160,7 +160,7 @@ export function InviteMemberDialog({ open, onOpenChange }: InviteMemberDialogPro
                     className="shrink-0 gap-2"
                     onClick={handleCopyLink}
                     style={{
-                      backgroundColor: copied ? "var(--accent-green)" : "var(--accent-teal)",
+                      backgroundColor: copied ? 'var(--accent-green)' : 'var(--primary)',
                     }}
                     type="button"
                   >
@@ -209,10 +209,10 @@ export function InviteMemberDialog({ open, onOpenChange }: InviteMemberDialogPro
                   {roleOptions.map((option) => (
                     <button
                       className={cn(
-                        "flex items-start gap-3 rounded-xl p-4 text-left ring-2 transition-all duration-200",
+                        'flex items-start gap-3 rounded-xl p-4 text-left ring-2 transition-all duration-200',
                         role === option.value
-                          ? "bg-[var(--accent-teal)]/5 ring-[var(--accent-teal)]"
-                          : "ring-foreground/5 hover:bg-muted/30 hover:ring-foreground/10",
+                          ? 'bg-primary/5 ring-primary'
+                          : 'ring-foreground/5 hover:bg-muted/30 hover:ring-foreground/10',
                       )}
                       disabled={isPending}
                       key={option.value}
@@ -221,10 +221,10 @@ export function InviteMemberDialog({ open, onOpenChange }: InviteMemberDialogPro
                     >
                       <div
                         className={cn(
-                          "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors",
+                          'flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors',
                           role === option.value
-                            ? "bg-[var(--accent-teal)]/15 text-[var(--accent-teal)]"
-                            : "bg-muted text-muted-foreground",
+                            ? 'bg-primary/15 text-primary'
+                            : 'bg-muted text-muted-foreground',
                         )}
                       >
                         {option.icon}
@@ -233,10 +233,7 @@ export function InviteMemberDialog({ open, onOpenChange }: InviteMemberDialogPro
                         <div className="flex items-center gap-2">
                           <p className="font-medium text-foreground">{option.label}</p>
                           {role === option.value && (
-                            <IconCheck
-                              className="h-4 w-4"
-                              style={{ color: "var(--accent-teal)" }}
-                            />
+                            <IconCheck className="h-4 w-4" style={{ color: 'var(--primary)' }} />
                           )}
                         </div>
                         <p className="text-muted-foreground text-sm">{option.description}</p>
@@ -258,7 +255,7 @@ export function InviteMemberDialog({ open, onOpenChange }: InviteMemberDialogPro
               </Button>
               <Button
                 onClick={handleClose}
-                style={{ backgroundColor: "var(--accent-teal)" }}
+                style={{ backgroundColor: 'var(--primary)' }}
                 type="button"
               >
                 Done
@@ -273,7 +270,7 @@ export function InviteMemberDialog({ open, onOpenChange }: InviteMemberDialogPro
                 className="min-w-[120px] gap-2"
                 disabled={!email || isPending}
                 onClick={handleSubmit}
-                style={{ backgroundColor: "var(--accent-teal)" }}
+                style={{ backgroundColor: 'var(--primary)' }}
               >
                 {isPending ? (
                   <>
@@ -292,5 +289,5 @@ export function InviteMemberDialog({ open, onOpenChange }: InviteMemberDialogPro
         </div>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

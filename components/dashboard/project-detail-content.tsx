@@ -165,7 +165,7 @@ function ImageCard({
       className={cn(
         'group relative aspect-square animate-fade-in-up overflow-hidden rounded-xl bg-muted ring-1 transition-all duration-200',
         isCompleted && !isSelected && 'ring-foreground/5 hover:shadow-lg hover:ring-foreground/10',
-        isSelected && 'shadow-lg ring-2 ring-[var(--accent-teal)]',
+        isSelected && 'shadow-lg ring-2 ring-primary',
       )}
       onClick={() => {
         if (isCompleted) {
@@ -241,7 +241,7 @@ function ImageCard({
           className={cn(
             'absolute top-2 left-2 flex h-6 w-6 items-center justify-center rounded-full border-2 transition-all',
             isSelected
-              ? 'border-[var(--accent-teal)] bg-[var(--accent-teal)]'
+              ? 'border-primary bg-primary'
               : 'border-white/50 bg-black/20 opacity-0 group-hover:opacity-100',
           )}
         >
@@ -253,7 +253,7 @@ function ImageCard({
       {isCompleted && (
         <div className="absolute inset-0 flex items-center justify-center gap-3 bg-black/0 opacity-0 transition-all duration-200 group-hover:bg-black/40 group-hover:opacity-100">
           <button
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-sm transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)]"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-sm transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             onClick={(e) => {
               e.stopPropagation()
               onCompare()
@@ -263,7 +263,7 @@ function ImageCard({
             <IconArrowsMaximize className="h-5 w-5" />
           </button>
           <button
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-sm transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)]"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-sm transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             onClick={(e) => {
               e.stopPropagation()
               onEdit()
@@ -273,7 +273,7 @@ function ImageCard({
             <IconPencil className="h-5 w-5" />
           </button>
           <button
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-sm transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-teal)]"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-sm transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             onClick={(e) => {
               e.stopPropagation()
               onDownload()
@@ -1084,7 +1084,7 @@ export function ProjectDetailContent({
               <Button
                 className="gap-2"
                 onClick={handleDownload}
-                style={{ backgroundColor: 'var(--accent-teal)' }}
+                style={{ backgroundColor: 'var(--primary)' }}
               >
                 <IconDownload className="h-4 w-4" />
                 Download All
@@ -1099,10 +1099,10 @@ export function ProjectDetailContent({
             <div
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
               style={{
-                backgroundColor: 'color-mix(in oklch, var(--accent-teal) 15%, transparent)',
+                backgroundColor: 'color-mix(in oklch, var(--primary) 15%, transparent)',
               }}
             >
-              <IconPhoto className="h-4 w-4" style={{ color: 'var(--accent-teal)' }} />
+              <IconPhoto className="h-4 w-4" style={{ color: 'var(--primary)' }} />
             </div>
             <div>
               <p className="font-medium text-[11px] text-muted-foreground uppercase tracking-wider">
@@ -1110,7 +1110,7 @@ export function ProjectDetailContent({
               </p>
               <p
                 className="font-mono font-semibold text-lg tabular-nums"
-                style={{ color: 'var(--accent-teal)' }}
+                style={{ color: 'var(--primary)' }}
               >
                 {project.imageCount}
               </p>
@@ -1143,10 +1143,10 @@ export function ProjectDetailContent({
             <div
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
               style={{
-                backgroundColor: 'color-mix(in oklch, var(--accent-teal) 15%, transparent)',
+                backgroundColor: 'color-mix(in oklch, var(--primary) 15%, transparent)',
               }}
             >
-              <IconSparkles className="h-4 w-4" style={{ color: 'var(--accent-teal)' }} />
+              <IconSparkles className="h-4 w-4" style={{ color: 'var(--primary)' }} />
             </div>
             <div>
               <p className="font-medium text-[11px] text-muted-foreground uppercase tracking-wider">
@@ -1242,7 +1242,7 @@ export function ProjectDetailContent({
             <div className="flex items-center gap-2">
               <div
                 className="flex h-7 w-7 items-center justify-center rounded-full"
-                style={{ backgroundColor: 'var(--accent-teal)' }}
+                style={{ backgroundColor: 'var(--primary)' }}
               >
                 <IconCheck className="h-4 w-4 text-white" />
               </div>
@@ -1276,7 +1276,7 @@ export function ProjectDetailContent({
                 className="gap-1.5"
                 onClick={handleDownload}
                 size="sm"
-                style={{ backgroundColor: 'var(--accent-teal)' }}
+                style={{ backgroundColor: 'var(--primary)' }}
               >
                 <IconDownload className="h-4 w-4" />
                 Download

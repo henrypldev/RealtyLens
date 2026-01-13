@@ -1,19 +1,19 @@
-"use client";
+'use client'
 
-import { IconPhotoPlus, IconSparkles } from "@tabler/icons-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { IconPhotoPlus, IconSparkles } from '@tabler/icons-react'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 interface EmptyProjectsProps {
-  onCreateClick?: () => void;
-  className?: string;
+  onCreateClick?: () => void
+  className?: string
 }
 
 export function EmptyProjects({ onCreateClick, className }: EmptyProjectsProps) {
   return (
     <div
       className={cn(
-        "relative flex min-h-[500px] flex-col items-center justify-center gap-6 overflow-hidden rounded-2xl border border-foreground/10 border-dashed bg-muted/30 px-8 py-16 text-center",
+        'relative flex min-h-[500px] flex-col items-center justify-center gap-6 overflow-hidden rounded-2xl border border-foreground/10 border-dashed bg-muted/30 px-8 py-16 text-center',
         className,
       )}
     >
@@ -31,13 +31,13 @@ export function EmptyProjects({ onCreateClick, className }: EmptyProjectsProps) 
           className="flex h-28 w-28 items-center justify-center rounded-3xl shadow-lg ring-1 ring-white/10"
           style={{
             background:
-              "linear-gradient(135deg, color-mix(in oklch, var(--accent-teal) 20%, transparent) 0%, color-mix(in oklch, var(--accent-teal) 5%, transparent) 100%)",
+              'linear-gradient(135deg, color-mix(in oklch, var(--primary) 20%, transparent) 0%, color-mix(in oklch, var(--primary) 5%, transparent) 100%)',
           }}
         >
           <IconPhotoPlus
             className="h-14 w-14"
             strokeWidth={1.5}
-            style={{ color: "var(--accent-teal)" }}
+            style={{ color: 'var(--primary)' }}
           />
         </div>
         {/* Sparkle accent */}
@@ -64,7 +64,7 @@ export function EmptyProjects({ onCreateClick, className }: EmptyProjectsProps) 
           onClick={onCreateClick}
           size="lg"
           style={{
-            backgroundColor: "var(--accent-teal)",
+            backgroundColor: 'var(--primary)',
           }}
         >
           <IconPhotoPlus className="h-5 w-5" />
@@ -88,5 +88,5 @@ export function EmptyProjects({ onCreateClick, className }: EmptyProjectsProps) 
         </span>
       </div>
     </div>
-  );
+  )
 }

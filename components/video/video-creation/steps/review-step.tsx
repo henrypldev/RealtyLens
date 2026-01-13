@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   IconArrowRight,
@@ -7,21 +7,21 @@ import {
   IconMovie,
   IconMusic,
   IconPhoto,
-} from "@tabler/icons-react";
-import Image from "next/image";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import type { VideoImageItem } from "@/hooks/use-video-creation";
-import type { MusicTrack, VideoAspectRatio } from "@/lib/db/schema";
-import { cn } from "@/lib/utils";
-import { VIDEO_ROOM_TYPES } from "@/lib/video/room-sequence";
+} from '@tabler/icons-react'
+import Image from 'next/image'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import type { VideoImageItem } from '@/hooks/use-video-creation'
+import type { MusicTrack, VideoAspectRatio } from '@/lib/db/schema'
+import { cn } from '@/lib/utils'
+import { VIDEO_ROOM_TYPES } from '@/lib/video/room-sequence'
 
 interface ReviewStepProps {
-  images: VideoImageItem[];
-  projectName: string;
-  onProjectNameChange: (name: string) => void;
-  aspectRatio: VideoAspectRatio;
-  musicTrack: MusicTrack | null;
+  images: VideoImageItem[]
+  projectName: string
+  onProjectNameChange: (name: string) => void
+  aspectRatio: VideoAspectRatio
+  musicTrack: MusicTrack | null
 }
 
 export function ReviewStep({
@@ -31,7 +31,7 @@ export function ReviewStep({
   aspectRatio,
   musicTrack,
 }: ReviewStepProps) {
-  const totalDuration = images.length * 5;
+  const totalDuration = images.length * 5
 
   return (
     <div className="space-y-8">
@@ -81,22 +81,20 @@ export function ReviewStep({
         <div className="flex items-center gap-3">
           <div
             className={cn(
-              "flex h-10 w-10 items-center justify-center rounded-full",
-              musicTrack
-                ? "bg-(--accent-teal)/10 text-(--accent-teal)"
-                : "bg-muted text-muted-foreground",
+              'flex h-10 w-10 items-center justify-center rounded-full',
+              musicTrack ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground',
             )}
           >
             <IconMusic className="h-5 w-5" />
           </div>
           <div>
             <div className="font-medium">
-              {musicTrack ? musicTrack.name : "No Background Music"}
+              {musicTrack ? musicTrack.name : 'No Background Music'}
             </div>
             <div className="text-muted-foreground text-sm">
               {musicTrack
                 ? `${musicTrack.artist} • ${musicTrack.category}`
-                : "Video will have no audio"}
+                : 'Video will have no audio'}
             </div>
           </div>
         </div>
@@ -110,11 +108,11 @@ export function ReviewStep({
         </h4>
         <div className="relative">
           {/* Timeline */}
-          <div className="absolute top-8 bottom-8 left-6 w-0.5 bg-linear-to-b from-(--accent-teal) via-(--accent-teal)/50 to-transparent" />
+          <div className="absolute top-8 bottom-8 left-6 w-0.5 bg-linear-to-b from-primary via-primary/50 to-transparent" />
 
           <div className="space-y-3">
             {images.map((image, index) => {
-              const roomConfig = VIDEO_ROOM_TYPES.find((r) => r.id === image.roomType);
+              const roomConfig = VIDEO_ROOM_TYPES.find((r) => r.id === image.roomType)
               return (
                 <div
                   className="flex animate-fade-in-up items-center gap-4"
@@ -123,7 +121,7 @@ export function ReviewStep({
                 >
                   {/* Timeline Node */}
                   <div className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-(--accent-teal) font-bold text-sm text-white shadow-(--accent-teal)/20 shadow-lg">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary font-bold text-sm text-white shadow-primary/20 shadow-lg">
                       {index + 1}
                     </div>
                   </div>
@@ -175,7 +173,7 @@ export function ReviewStep({
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="truncate font-medium">
-                        {image.roomLabel || roomConfig?.label || "Unknown Room"}
+                        {image.roomLabel || roomConfig?.label || 'Unknown Room'}
                       </div>
                       <div className="text-muted-foreground text-sm">
                         {roomConfig?.label} • 5 seconds
@@ -186,11 +184,11 @@ export function ReviewStep({
                     </div>
                   </div>
                 </div>
-              );
+              )
             })}
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }

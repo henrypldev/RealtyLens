@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   IconAlertTriangle,
@@ -8,13 +8,13 @@ import {
   IconPercentage,
   IconReceipt,
   IconTrendingUp,
-} from "@tabler/icons-react";
-import { useEffect, useState, useTransition } from "react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { type FalUsageResponse, getFalUsageStats } from "@/lib/actions/admin";
-import type { RevenueStats } from "@/lib/db/queries";
+} from '@tabler/icons-react'
+import { useEffect, useState, useTransition } from 'react'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { type FalUsageResponse, getFalUsageStats } from '@/lib/actions/admin'
+import type { RevenueStats } from '@/lib/db/queries'
 
-type TimePeriod = "this-month" | "last-30-days" | "this-year";
+type TimePeriod = 'this-month' | 'last-30-days' | 'this-year'
 
 // Skeleton components that mirror final content to avoid layout shift
 function StatCardSkeleton() {
@@ -28,7 +28,7 @@ function StatCardSkeleton() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 function CostBreakdownSkeleton() {
@@ -53,74 +53,74 @@ function CostBreakdownSkeleton() {
         ))}
       </div>
     </div>
-  );
+  )
 }
 
 interface RevenueContentProps {
-  initialRevenueStats: RevenueStats;
-  initialFalUsage: FalUsageResponse | null;
-  initialError: string | null;
+  initialRevenueStats: RevenueStats
+  initialFalUsage: FalUsageResponse | null
+  initialError: string | null
 }
 
 function formatUSD(amount: number): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(amount);
+  }).format(amount)
 }
 
 function formatNOK(amountOre: number): string {
-  return new Intl.NumberFormat("nb-NO", {
-    style: "currency",
-    currency: "NOK",
+  return new Intl.NumberFormat('nb-NO', {
+    style: 'currency',
+    currency: 'NOK',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(amountOre / 100);
+  }).format(amountOre / 100)
 }
 
 function getDateRange(period: TimePeriod): {
-  startDate: string;
-  endDate: string;
+  startDate: string
+  endDate: string
 } {
-  const now = new Date();
-  const endDate = now.toISOString().split("T")[0];
+  const now = new Date()
+  const endDate = now.toISOString().split('T')[0]
 
   switch (period) {
-    case "this-month": {
-      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    case 'this-month': {
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
       return {
-        startDate: startOfMonth.toISOString().split("T")[0],
+        startDate: startOfMonth.toISOString().split('T')[0],
         endDate,
-      };
+      }
     }
-    case "last-30-days": {
-      const thirtyDaysAgo = new Date(now);
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    case 'last-30-days': {
+      const thirtyDaysAgo = new Date(now)
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
       return {
-        startDate: thirtyDaysAgo.toISOString().split("T")[0],
+        startDate: thirtyDaysAgo.toISOString().split('T')[0],
         endDate,
-      };
+      }
     }
-    case "this-year": {
-      const startOfYear = new Date(now.getFullYear(), 0, 1);
+    case 'this-year': {
+      const startOfYear = new Date(now.getFullYear(), 0, 1)
       return {
-        startDate: startOfYear.toISOString().split("T")[0],
+        startDate: startOfYear.toISOString().split('T')[0],
         endDate,
-      };
+      }
     }
   }
 }
 
 function getRevenueForPeriod(stats: RevenueStats, period: TimePeriod): number {
   switch (period) {
-    case "this-month":
-      return stats.thisMonthRevenueOre;
-    case "last-30-days":
-      return stats.last30DaysRevenueOre;
-    case "this-year":
-      return stats.thisYearRevenueOre;
+    case 'this-month':
+      return stats.thisMonthRevenueOre
+    case 'last-30-days':
+      return stats.last30DaysRevenueOre
+    case 'this-year':
+      return stats.thisYearRevenueOre
   }
 }
 
@@ -129,60 +129,60 @@ export function RevenueContent({
   initialFalUsage,
   initialError,
 }: RevenueContentProps) {
-  const [period, setPeriod] = useState<TimePeriod>("this-month");
-  const [falUsage, setFalUsage] = useState<FalUsageResponse | null>(initialFalUsage);
-  const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(initialError);
+  const [period, setPeriod] = useState<TimePeriod>('this-month')
+  const [falUsage, setFalUsage] = useState<FalUsageResponse | null>(initialFalUsage)
+  const [isPending, startTransition] = useTransition()
+  const [error, setError] = useState<string | null>(initialError)
 
   // Fetch Fal.ai usage data when period changes (skip initial mount)
   useEffect(() => {
     // Skip on initial mount since we have SSR data for "this-month"
-    if (period === "this-month" && falUsage === initialFalUsage) {
-      return;
+    if (period === 'this-month' && falUsage === initialFalUsage) {
+      return
     }
 
-    const { startDate, endDate } = getDateRange(period);
+    const { startDate, endDate } = getDateRange(period)
 
     startTransition(async () => {
-      setError(null);
-      const result = await getFalUsageStats(startDate, endDate);
+      setError(null)
+      const result = await getFalUsageStats(startDate, endDate)
 
       if (result.success) {
-        setFalUsage(result.data);
+        setFalUsage(result.data)
       } else {
-        setError(result.error);
-        setFalUsage(null);
+        setError(result.error)
+        setFalUsage(null)
       }
-    });
-  }, [period, initialFalUsage]);
+    })
+  }, [period, initialFalUsage])
 
   // Calculate metrics from time_series format
   const falCost =
     falUsage?.time_series?.reduce((total, bucket) => {
-      return total + bucket.results.reduce((sum, r) => sum + r.cost, 0);
-    }, 0) ?? 0;
+      return total + bucket.results.reduce((sum, r) => sum + r.cost, 0)
+    }, 0) ?? 0
 
-  const revenueOre = getRevenueForPeriod(initialRevenueStats, period);
-  const revenueUSD = revenueOre / 100 / 10; // Rough NOK to USD conversion (1 USD ≈ 10 NOK)
-  const profit = revenueUSD - falCost;
-  const margin = revenueUSD > 0 ? (profit / revenueUSD) * 100 : 0;
+  const revenueOre = getRevenueForPeriod(initialRevenueStats, period)
+  const revenueUSD = revenueOre / 100 / 10 // Rough NOK to USD conversion (1 USD ≈ 10 NOK)
+  const profit = revenueUSD - falCost
+  const margin = revenueUSD > 0 ? (profit / revenueUSD) * 100 : 0
 
   // Aggregate costs by date from time_series buckets
   const costByDate: Record<string, { cost: number; quantity: number; icon: typeof IconCalendar }> =
-    {};
+    {}
   if (falUsage?.time_series) {
     for (const bucket of falUsage.time_series) {
-      if (bucket.results.length === 0) continue;
-      const date = new Date(bucket.bucket).toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      });
+      if (bucket.results.length === 0) continue
+      const date = new Date(bucket.bucket).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+      })
       if (!costByDate[date]) {
-        costByDate[date] = { cost: 0, quantity: 0, icon: IconCalendar };
+        costByDate[date] = { cost: 0, quantity: 0, icon: IconCalendar }
       }
       for (const result of bucket.results) {
-        costByDate[date].cost += result.cost;
-        costByDate[date].quantity += result.quantity;
+        costByDate[date].cost += result.cost
+        costByDate[date].quantity += result.quantity
       }
     }
   }
@@ -216,16 +216,16 @@ export function RevenueContent({
               <div
                 className="flex h-10 w-10 items-center justify-center rounded-lg"
                 style={{
-                  backgroundColor: "color-mix(in oklch, var(--accent-amber) 15%, transparent)",
+                  backgroundColor: 'color-mix(in oklch, var(--accent-amber) 15%, transparent)',
                 }}
               >
-                <IconCurrencyDollar className="h-5 w-5" style={{ color: "var(--accent-amber)" }} />
+                <IconCurrencyDollar className="h-5 w-5" style={{ color: 'var(--accent-amber)' }} />
               </div>
               <div>
                 <p className="text-muted-foreground text-sm">Fal.ai Cost</p>
                 <span
                   className="font-bold text-2xl tabular-nums"
-                  style={{ color: "var(--accent-amber)" }}
+                  style={{ color: 'var(--accent-amber)' }}
                 >
                   {formatUSD(falCost)}
                 </span>
@@ -239,16 +239,16 @@ export function RevenueContent({
               <div
                 className="flex h-10 w-10 items-center justify-center rounded-lg"
                 style={{
-                  backgroundColor: "color-mix(in oklch, var(--accent-green) 15%, transparent)",
+                  backgroundColor: 'color-mix(in oklch, var(--accent-green) 15%, transparent)',
                 }}
               >
-                <IconReceipt className="h-5 w-5" style={{ color: "var(--accent-green)" }} />
+                <IconReceipt className="h-5 w-5" style={{ color: 'var(--accent-green)' }} />
               </div>
               <div>
                 <p className="text-muted-foreground text-sm">Revenue</p>
                 <span
                   className="font-bold text-2xl tabular-nums"
-                  style={{ color: "var(--accent-green)" }}
+                  style={{ color: 'var(--accent-green)' }}
                 >
                   {formatNOK(revenueOre)}
                 </span>
@@ -263,17 +263,17 @@ export function RevenueContent({
               <div
                 className="flex h-10 w-10 items-center justify-center rounded-lg"
                 style={{
-                  backgroundColor: "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
+                  backgroundColor: 'color-mix(in oklch, var(--accent-violet) 15%, transparent)',
                 }}
               >
-                <IconTrendingUp className="h-5 w-5" style={{ color: "var(--accent-violet)" }} />
+                <IconTrendingUp className="h-5 w-5" style={{ color: 'var(--accent-violet)' }} />
               </div>
               <div>
                 <p className="text-muted-foreground text-sm">Profit</p>
                 <span
                   className="font-bold text-2xl tabular-nums"
                   style={{
-                    color: profit >= 0 ? "var(--accent-violet)" : "var(--accent-red)",
+                    color: profit >= 0 ? 'var(--accent-violet)' : 'var(--accent-red)',
                   }}
                 >
                   {formatUSD(profit)}
@@ -288,17 +288,17 @@ export function RevenueContent({
               <div
                 className="flex h-10 w-10 items-center justify-center rounded-lg"
                 style={{
-                  backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
+                  backgroundColor: 'color-mix(in oklch, var(--primary) 15%, transparent)',
                 }}
               >
-                <IconPercentage className="h-5 w-5" style={{ color: "var(--accent-teal)" }} />
+                <IconPercentage className="h-5 w-5" style={{ color: 'var(--primary)' }} />
               </div>
               <div>
                 <p className="text-muted-foreground text-sm">Margin</p>
                 <span
                   className="font-bold text-2xl tabular-nums"
                   style={{
-                    color: margin >= 0 ? "var(--accent-teal)" : "var(--accent-red)",
+                    color: margin >= 0 ? 'var(--primary)' : 'var(--accent-red)',
                   }}
                 >
                   {margin.toFixed(1)}%
@@ -334,19 +334,18 @@ export function RevenueContent({
               {Object.entries(costByDate)
                 .sort(([a], [b]) => new Date(b).getTime() - new Date(a).getTime())
                 .map(([date, data]) => {
-                  const Icon = data.icon;
-                  const percentage = falCost > 0 ? (data.cost / falCost) * 100 : 0;
+                  const Icon = data.icon
+                  const percentage = falCost > 0 ? (data.cost / falCost) * 100 : 0
 
                   return (
                     <div className="flex items-center gap-4" key={date}>
                       <div
                         className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
                         style={{
-                          backgroundColor:
-                            "color-mix(in oklch, var(--accent-teal) 10%, transparent)",
+                          backgroundColor: 'color-mix(in oklch, var(--primary) 10%, transparent)',
                         }}
                       >
-                        <Icon className="h-4 w-4" style={{ color: "var(--accent-teal)" }} />
+                        <Icon className="h-4 w-4" style={{ color: 'var(--primary)' }} />
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between">
@@ -361,7 +360,7 @@ export function RevenueContent({
                               className="h-full rounded-full transition-all duration-500"
                               style={{
                                 width: `${percentage}%`,
-                                backgroundColor: "var(--accent-teal)",
+                                backgroundColor: 'var(--primary)',
                               }}
                             />
                           </div>
@@ -371,7 +370,7 @@ export function RevenueContent({
                         </div>
                       </div>
                     </div>
-                  );
+                  )
                 })}
             </div>
           ) : (
@@ -387,17 +386,17 @@ export function RevenueContent({
       <div className="stagger-4 animate-fade-in-up rounded-xl border border-dashed p-4">
         <div className="flex flex-wrap items-center justify-between gap-4 text-muted-foreground text-sm">
           <span>
-            Total invoices:{" "}
+            Total invoices:{' '}
             <strong className="text-foreground">{initialRevenueStats.invoiceCount}</strong>
           </span>
           <span>
-            Paid revenue:{" "}
+            Paid revenue:{' '}
             <strong className="text-foreground">
               {formatNOK(initialRevenueStats.paidRevenueOre)}
             </strong>
           </span>
           <span>
-            Total revenue (all time):{" "}
+            Total revenue (all time):{' '}
             <strong className="text-foreground">
               {formatNOK(initialRevenueStats.totalRevenueOre)}
             </strong>
@@ -405,5 +404,5 @@ export function RevenueContent({
         </div>
       </div>
     </div>
-  );
+  )
 }

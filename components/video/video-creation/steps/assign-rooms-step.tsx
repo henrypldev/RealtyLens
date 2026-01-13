@@ -1,20 +1,20 @@
-"use client";
+'use client'
 
-import { IconChevronDown, IconGripVertical, IconWand } from "@tabler/icons-react";
-import Image from "next/image";
-import * as React from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import type { VideoImageItem } from "@/hooks/use-video-creation";
-import type { VideoRoomType } from "@/lib/db/schema";
-import { cn } from "@/lib/utils";
-import { VIDEO_ROOM_TYPES } from "@/lib/video/room-sequence";
+import { IconChevronDown, IconGripVertical, IconWand } from '@tabler/icons-react'
+import Image from 'next/image'
+import * as React from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import type { VideoImageItem } from '@/hooks/use-video-creation'
+import type { VideoRoomType } from '@/lib/db/schema'
+import { cn } from '@/lib/utils'
+import { VIDEO_ROOM_TYPES } from '@/lib/video/room-sequence'
 
 interface AssignRoomsStepProps {
-  images: VideoImageItem[];
-  onUpdateImage: (id: string, updates: Partial<Omit<VideoImageItem, "id" | "url">>) => void;
-  onReorderImages: (fromIndex: number, toIndex: number) => void;
-  onAutoArrange: () => void;
+  images: VideoImageItem[]
+  onUpdateImage: (id: string, updates: Partial<Omit<VideoImageItem, 'id' | 'url'>>) => void
+  onReorderImages: (fromIndex: number, toIndex: number) => void
+  onAutoArrange: () => void
 }
 
 export function AssignRoomsStep({
@@ -23,27 +23,27 @@ export function AssignRoomsStep({
   onReorderImages,
   onAutoArrange,
 }: AssignRoomsStepProps) {
-  const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null);
-  const [dragOverIndex, setDragOverIndex] = React.useState<number | null>(null);
+  const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null)
+  const [dragOverIndex, setDragOverIndex] = React.useState<number | null>(null)
 
   const handleDragStart = (index: number) => {
-    setDraggedIndex(index);
-  };
+    setDraggedIndex(index)
+  }
 
   const handleDragOver = (e: React.DragEvent, index: number) => {
-    e.preventDefault();
+    e.preventDefault()
     if (draggedIndex !== null && draggedIndex !== index) {
-      setDragOverIndex(index);
+      setDragOverIndex(index)
     }
-  };
+  }
 
   const handleDragEnd = () => {
     if (draggedIndex !== null && dragOverIndex !== null && draggedIndex !== dragOverIndex) {
-      onReorderImages(draggedIndex, dragOverIndex);
+      onReorderImages(draggedIndex, dragOverIndex)
     }
-    setDraggedIndex(null);
-    setDragOverIndex(null);
-  };
+    setDraggedIndex(null)
+    setDragOverIndex(null)
+  }
 
   return (
     <div className="space-y-6">
@@ -63,11 +63,11 @@ export function AssignRoomsStep({
         {images.map((image, index) => (
           <div
             className={cn(
-              "group flex items-center gap-4 rounded-xl border bg-card p-3 transition-all duration-200",
-              "hover:border-(--accent-teal)/30 hover:shadow-md",
-              draggedIndex === index && "scale-[0.98] opacity-50",
-              dragOverIndex === index && "border-(--accent-teal) bg-(--accent-teal)/5",
-              "animate-fade-in-up",
+              'group flex items-center gap-4 rounded-xl border bg-card p-3 transition-all duration-200',
+              'hover:border-primary/30 hover:shadow-md',
+              draggedIndex === index && 'scale-[0.98] opacity-50',
+              dragOverIndex === index && 'border-primary bg-primary/5',
+              'animate-fade-in-up',
             )}
             draggable
             key={image.id}
@@ -102,8 +102,8 @@ export function AssignRoomsStep({
               <div className="relative min-w-[180px]">
                 <select
                   className={cn(
-                    "w-full appearance-none rounded-lg border bg-background px-3 py-2 pr-10 text-sm",
-                    "focus:border-(--accent-teal) focus:outline-none focus:ring-(--accent-teal)/20 focus:ring-2",
+                    'w-full appearance-none rounded-lg border bg-background px-3 py-2 pr-10 text-sm',
+                    'focus:border-primary focus:outline-none focus:ring-primary/20 focus:ring-2',
                   )}
                   onChange={(e) =>
                     onUpdateImage(image.id, {
@@ -143,17 +143,17 @@ export function AssignRoomsStep({
         <h4 className="mb-3 font-medium text-sm">Sequence Preview</h4>
         <div className="flex flex-wrap gap-2">
           {images.map((image, index) => {
-            const roomConfig = VIDEO_ROOM_TYPES.find((r) => r.id === image.roomType);
+            const roomConfig = VIDEO_ROOM_TYPES.find((r) => r.id === image.roomType)
             return (
               <div
                 className="flex items-center gap-1.5 rounded-full bg-background px-3 py-1.5 font-medium text-xs shadow-sm"
                 key={image.id}
               >
                 <span className="text-muted-foreground">{index + 1}.</span>
-                <span>{image.roomLabel || roomConfig?.label || "Unknown"}</span>
+                <span>{image.roomLabel || roomConfig?.label || 'Unknown'}</span>
                 {index < images.length - 1 && <span className="ml-1 text-muted-foreground">→</span>}
               </div>
-            );
+            )
           })}
         </div>
         <p className="mt-3 text-muted-foreground text-xs">
@@ -161,5 +161,5 @@ export function AssignRoomsStep({
         </p>
       </div>
     </div>
-  );
+  )
 }

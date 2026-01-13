@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import { IconArrowUp, IconBuilding, IconMail, IconPhoto, IconUserPlus } from "@tabler/icons-react";
-import { Badge } from "@/components/ui/badge";
-import type { RecentActivity } from "@/lib/mock/admin-stats";
+import { IconArrowUp, IconBuilding, IconMail, IconPhoto, IconUserPlus } from '@tabler/icons-react'
+import { Badge } from '@/components/ui/badge'
+import type { RecentActivity } from '@/lib/mock/admin-stats'
 
 const activityIcons = {
   user_joined: IconUserPlus,
@@ -10,39 +10,39 @@ const activityIcons = {
   image_generated: IconPhoto,
   plan_upgraded: IconArrowUp,
   user_invited: IconMail,
-};
+}
 
 const activityColors = {
-  user_joined: "var(--accent-green)",
-  workspace_created: "var(--accent-violet)",
-  image_generated: "var(--accent-teal)",
-  plan_upgraded: "var(--accent-amber)",
-  user_invited: "var(--accent-teal)",
-};
+  user_joined: 'var(--accent-green)',
+  workspace_created: 'var(--accent-violet)',
+  image_generated: 'var(--primary)',
+  plan_upgraded: 'var(--accent-amber)',
+  user_invited: 'var(--primary)',
+}
 
 function formatTimeAgo(date: Date): string {
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / 60_000);
-  const diffHours = Math.floor(diffMins / 60);
-  const diffDays = Math.floor(diffHours / 24);
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffMins = Math.floor(diffMs / 60_000)
+  const diffHours = Math.floor(diffMins / 60)
+  const diffDays = Math.floor(diffHours / 24)
 
-  if (diffMins < 1) return "just now";
-  if (diffMins < 60) return `${diffMins}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-  return `${diffDays}d ago`;
+  if (diffMins < 1) return 'just now'
+  if (diffMins < 60) return `${diffMins}m ago`
+  if (diffHours < 24) return `${diffHours}h ago`
+  return `${diffDays}d ago`
 }
 
 type RecentActivityListProps = {
-  activities: RecentActivity[];
-};
+  activities: RecentActivity[]
+}
 
 export function RecentActivityList({ activities }: RecentActivityListProps) {
   return (
     <div className="space-y-1">
       {activities.map((activity, index) => {
-        const Icon = activityIcons[activity.type];
-        const color = activityColors[activity.type];
+        const Icon = activityIcons[activity.type]
+        const color = activityColors[activity.type]
 
         return (
           <div
@@ -70,8 +70,8 @@ export function RecentActivityList({ activities }: RecentActivityListProps) {
               {formatTimeAgo(activity.timestamp)}
             </Badge>
           </div>
-        );
+        )
       })}
     </div>
-  );
+  )
 }

@@ -45,7 +45,7 @@ const roleConfig: Record<
     label: 'Owner',
     icon: <IconCrown className="h-3 w-3" />,
     variant: 'default',
-    color: 'var(--accent-teal)',
+    color: 'var(--primary)',
   },
   admin: {
     label: 'Admin',
@@ -90,10 +90,10 @@ function MemberAvatar({ member }: { member: TeamMember }) {
       style={{
         background: member.image
           ? `url(${member.image}) center/cover`
-          : 'linear-gradient(135deg, color-mix(in oklch, var(--accent-teal) 30%, transparent) 0%, color-mix(in oklch, var(--accent-teal) 10%, transparent) 100%)',
+          : 'linear-gradient(135deg, color-mix(in oklch, var(--primary) 30%, transparent) 0%, color-mix(in oklch, var(--primary) 10%, transparent) 100%)',
       }}
     >
-      {!member.image && <span style={{ color: 'var(--accent-teal)' }}>{initials}</span>}
+      {!member.image && <span style={{ color: 'var(--primary)' }}>{initials}</span>}
     </div>
   )
 }
@@ -171,7 +171,7 @@ function MemberRow({
           style={{
             backgroundColor:
               member.role === 'owner'
-                ? 'color-mix(in oklch, var(--accent-teal) 15%, transparent)'
+                ? 'color-mix(in oklch, var(--primary) 15%, transparent)'
                 : member.role === 'admin'
                   ? 'color-mix(in oklch, var(--accent-amber) 15%, transparent)'
                   : undefined,

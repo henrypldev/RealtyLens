@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   IconBuilding,
@@ -15,66 +15,66 @@ import {
   IconShieldCheck,
   IconUserCircle,
   IconX,
-} from "@tabler/icons-react";
-import { format } from "date-fns";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { EditUserDialog } from "@/components/admin/edit-user-dialog";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { useImpersonation } from "@/hooks/use-impersonation";
-import type { WorkspacePlan, WorkspaceStatus } from "@/lib/db/schema";
-import type { AdminUserDetail } from "@/lib/types/admin";
-import { cn } from "@/lib/utils";
+} from '@tabler/icons-react'
+import { format } from 'date-fns'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { EditUserDialog } from '@/components/admin/edit-user-dialog'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { useImpersonation } from '@/hooks/use-impersonation'
+import type { WorkspacePlan, WorkspaceStatus } from '@/lib/db/schema'
+import type { AdminUserDetail } from '@/lib/types/admin'
+import { cn } from '@/lib/utils'
 
 interface UserDetailContentProps {
-  user: AdminUserDetail;
+  user: AdminUserDetail
 }
 
 // Status badge variants
-const statusVariantMap: Record<string, "status-active" | "status-pending" | "status-inactive"> = {
-  active: "status-active",
-  pending: "status-pending",
-  inactive: "status-inactive",
-};
+const statusVariantMap: Record<string, 'status-active' | 'status-pending' | 'status-inactive'> = {
+  active: 'status-active',
+  pending: 'status-pending',
+  inactive: 'status-inactive',
+}
 
 const statusLabelMap: Record<string, string> = {
-  active: "Active",
-  pending: "Pending",
-  inactive: "Inactive",
-};
+  active: 'Active',
+  pending: 'Pending',
+  inactive: 'Inactive',
+}
 
 // Role badge variants
-const roleVariantMap: Record<string, "role-owner" | "role-admin" | "role-member"> = {
-  owner: "role-owner",
-  admin: "role-admin",
-  member: "role-member",
-};
+const roleVariantMap: Record<string, 'role-owner' | 'role-admin' | 'role-member'> = {
+  owner: 'role-owner',
+  admin: 'role-admin',
+  member: 'role-member',
+}
 
 const roleLabelMap: Record<string, string> = {
-  owner: "Owner",
-  admin: "Admin",
-  member: "Member",
-};
+  owner: 'Owner',
+  admin: 'Admin',
+  member: 'Member',
+}
 
 // Workspace status badge variants
 const workspaceStatusVariantMap: Record<
   WorkspaceStatus,
-  "status-active" | "status-suspended" | "status-trial"
+  'status-active' | 'status-suspended' | 'status-trial'
 > = {
-  active: "status-active",
-  suspended: "status-suspended",
-  trial: "status-trial",
-};
+  active: 'status-active',
+  suspended: 'status-suspended',
+  trial: 'status-trial',
+}
 
 // Plan badge variants
-const planVariantMap: Record<WorkspacePlan, "plan-free" | "plan-pro" | "plan-enterprise"> = {
-  free: "plan-free",
-  pro: "plan-pro",
-  enterprise: "plan-enterprise",
-};
+const planVariantMap: Record<WorkspacePlan, 'plan-free' | 'plan-pro' | 'plan-enterprise'> = {
+  free: 'plan-free',
+  pro: 'plan-pro',
+  enterprise: 'plan-enterprise',
+}
 
 // Stats card component
 function StatItem({
@@ -85,24 +85,24 @@ function StatItem({
   accentColor,
   delay,
 }: {
-  icon: React.ReactNode;
-  label: string;
-  value: string | number;
-  subValue?: string;
-  accentColor: string;
-  delay: number;
+  icon: React.ReactNode
+  label: string
+  value: string | number
+  subValue?: string
+  accentColor: string
+  delay: number
 }) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), delay);
-    return () => clearTimeout(timer);
-  }, [delay]);
+    const timer = setTimeout(() => setIsVisible(true), delay)
+    return () => clearTimeout(timer)
+  }, [delay])
 
   return (
     <div
       className={`stats-card flex items-center gap-3 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/5 transition-all duration-500 ${
-        isVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
+        isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
       }`}
     >
       <div
@@ -128,7 +128,7 @@ function StatItem({
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 // Section component for card sections
@@ -138,14 +138,14 @@ function Section({
   children,
   className,
 }: {
-  title: string;
-  badge?: React.ReactNode;
-  children: React.ReactNode;
-  className?: string;
+  title: string
+  badge?: React.ReactNode
+  children: React.ReactNode
+  className?: string
 }) {
   return (
     <div
-      className={cn("animate-fade-in-up rounded-xl bg-card ring-1 ring-foreground/5", className)}
+      className={cn('animate-fade-in-up rounded-xl bg-card ring-1 ring-foreground/5', className)}
     >
       <div className="flex items-center justify-between border-border border-b px-4 py-3">
         <h3 className="font-semibold">{title}</h3>
@@ -153,7 +153,7 @@ function Section({
       </div>
       <div className="p-4">{children}</div>
     </div>
-  );
+  )
 }
 
 // Info row component
@@ -163,23 +163,23 @@ function InfoRow({
   value,
   mono = false,
 }: {
-  icon: React.ReactNode;
-  label: string;
-  value: React.ReactNode;
-  mono?: boolean;
+  icon: React.ReactNode
+  label: string
+  value: React.ReactNode
+  mono?: boolean
 }) {
   return (
     <div className="flex items-center gap-2 text-sm">
       <span className="text-muted-foreground">{icon}</span>
       <span className="text-muted-foreground">{label}</span>
-      <span className={mono ? "font-mono" : ""}>{value}</span>
+      <span className={mono ? 'font-mono' : ''}>{value}</span>
     </div>
-  );
+  )
 }
 
 // Progress bar component
 function ProgressBar({ current, total, color }: { current: number; total: number; color: string }) {
-  const percentage = total > 0 ? (current / total) * 100 : 0;
+  const percentage = total > 0 ? (current / total) * 100 : 0
   return (
     <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
       <div
@@ -190,22 +190,22 @@ function ProgressBar({ current, total, color }: { current: number; total: number
         }}
       />
     </div>
-  );
+  )
 }
 
 export function UserDetailContent({ user: data }: UserDetailContentProps) {
-  const router = useRouter();
-  const { impersonateUser, isPending } = useImpersonation();
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const { user, workspace, stats, recentProjects, recentVideos } = data;
+  const router = useRouter()
+  const { impersonateUser, isPending } = useImpersonation()
+  const [editDialogOpen, setEditDialogOpen] = useState(false)
+  const { user, workspace, stats, recentProjects, recentVideos } = data
 
   // Get initials for avatar
   const initials = user.name
-    .split(" ")
+    .split(' ')
     .map((n) => n[0])
-    .join("")
+    .join('')
     .toUpperCase()
-    .slice(0, 2);
+    .slice(0, 2)
 
   return (
     <div className="space-y-6">
@@ -218,8 +218,8 @@ export function UserDetailContent({ user: data }: UserDetailContentProps) {
             <AvatarFallback
               className="font-bold text-lg"
               style={{
-                backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
-                color: "var(--accent-teal)",
+                backgroundColor: 'color-mix(in oklch, var(--primary) 15%, transparent)',
+                color: 'var(--primary)',
               }}
             >
               {initials}
@@ -271,7 +271,7 @@ export function UserDetailContent({ user: data }: UserDetailContentProps) {
           value={stats.imagesGenerated.toLocaleString()}
         />
         <StatItem
-          accentColor="var(--accent-teal)"
+          accentColor="var(--primary)"
           delay={50}
           icon={<IconFolder className="h-4 w-4" />}
           label="Projects"
@@ -318,7 +318,7 @@ export function UserDetailContent({ user: data }: UserDetailContentProps) {
               <InfoRow
                 icon={<IconCalendar className="h-4 w-4" />}
                 label="Joined:"
-                value={format(user.createdAt, "MMM d, yyyy")}
+                value={format(user.createdAt, 'MMM d, yyyy')}
               />
               <InfoRow
                 icon={<IconCalendar className="h-4 w-4" />}
@@ -360,8 +360,8 @@ export function UserDetailContent({ user: data }: UserDetailContentProps) {
                   <div
                     className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-bold text-sm"
                     style={{
-                      backgroundColor: "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
-                      color: "var(--accent-violet)",
+                      backgroundColor: 'color-mix(in oklch, var(--accent-violet) 15%, transparent)',
+                      color: 'var(--accent-violet)',
                     }}
                   >
                     {workspace.name.charAt(0).toUpperCase()}
@@ -406,16 +406,16 @@ export function UserDetailContent({ user: data }: UserDetailContentProps) {
                   <div>
                     <p className="font-medium text-sm">{project.name}</p>
                     <p className="text-muted-foreground text-xs">
-                      {format(project.createdAt, "MMM d, yyyy")}
+                      {format(project.createdAt, 'MMM d, yyyy')}
                     </p>
                   </div>
                   <Badge
                     variant={
-                      project.status === "completed"
-                        ? "status-completed"
-                        : project.status === "processing"
-                          ? "status-active"
-                          : "status-pending"
+                      project.status === 'completed'
+                        ? 'status-completed'
+                        : project.status === 'processing'
+                          ? 'status-active'
+                          : 'status-pending'
                     }
                   >
                     {project.status}
@@ -424,7 +424,7 @@ export function UserDetailContent({ user: data }: UserDetailContentProps) {
                 <div className="flex items-center gap-2">
                   <ProgressBar
                     color={
-                      project.status === "completed" ? "var(--accent-green)" : "var(--accent-teal)"
+                      project.status === 'completed' ? 'var(--accent-green)' : 'var(--primary)'
                     }
                     current={project.completedCount}
                     total={project.imageCount}
@@ -454,18 +454,18 @@ export function UserDetailContent({ user: data }: UserDetailContentProps) {
                   <div>
                     <p className="font-medium text-sm">{video.name}</p>
                     <p className="text-muted-foreground text-xs">
-                      {format(video.createdAt, "MMM d, yyyy")}
+                      {format(video.createdAt, 'MMM d, yyyy')}
                     </p>
                   </div>
                   <Badge
                     variant={
-                      video.status === "completed"
-                        ? "status-completed"
-                        : video.status === "generating" || video.status === "compiling"
-                          ? "status-active"
-                          : video.status === "failed"
-                            ? "destructive"
-                            : "status-pending"
+                      video.status === 'completed'
+                        ? 'status-completed'
+                        : video.status === 'generating' || video.status === 'compiling'
+                          ? 'status-active'
+                          : video.status === 'failed'
+                            ? 'destructive'
+                            : 'status-pending'
                     }
                   >
                     {video.status}
@@ -474,11 +474,11 @@ export function UserDetailContent({ user: data }: UserDetailContentProps) {
                 <div className="flex items-center gap-2">
                   <ProgressBar
                     color={
-                      video.status === "completed"
-                        ? "var(--accent-green)"
-                        : video.status === "failed"
-                          ? "var(--accent-red)"
-                          : "var(--accent-teal)"
+                      video.status === 'completed'
+                        ? 'var(--accent-green)'
+                        : video.status === 'failed'
+                          ? 'var(--accent-red)'
+                          : 'var(--primary)'
                     }
                     current={video.completedClipCount}
                     total={video.clipCount}
@@ -504,5 +504,5 @@ export function UserDetailContent({ user: data }: UserDetailContentProps) {
         user={user}
       />
     </div>
-  );
+  )
 }

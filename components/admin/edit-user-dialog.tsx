@@ -1,10 +1,10 @@
-"use client";
+'use client'
 
-import { IconCheck, IconEdit, IconLoader2, IconShieldCheck, IconTrash } from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
-import * as React from "react";
-import { useState, useTransition } from "react";
-import { toast } from "sonner";
+import { IconCheck, IconEdit, IconLoader2, IconShieldCheck, IconTrash } from '@tabler/icons-react'
+import { useRouter } from 'next/navigation'
+import * as React from 'react'
+import { useState, useTransition } from 'react'
+import { toast } from 'sonner'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,148 +14,148 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
+} from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
 import {
   deleteUserAction,
   toggleSystemAdminAction,
   updateUserNameAction,
   updateUserRoleAction,
-} from "@/lib/actions/admin";
-import type { AdminUserDetail, UserRole } from "@/lib/types/admin";
+} from '@/lib/actions/admin'
+import type { AdminUserDetail, UserRole } from '@/lib/types/admin'
 
 interface EditUserDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  user: AdminUserDetail["user"];
-  onSuccess?: () => void;
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  user: AdminUserDetail['user']
+  onSuccess?: () => void
 }
 
 const roleOptions: { value: UserRole; label: string; color: string }[] = [
-  { value: "owner", label: "Owner", color: "var(--accent-amber)" },
-  { value: "admin", label: "Admin", color: "var(--accent-violet)" },
-  { value: "member", label: "Member", color: "var(--accent-teal)" },
-];
+  { value: 'owner', label: 'Owner', color: 'var(--accent-amber)' },
+  { value: 'admin', label: 'Admin', color: 'var(--accent-violet)' },
+  { value: 'member', label: 'Member', color: 'var(--primary)' },
+]
 
 export function EditUserDialog({ open, onOpenChange, user, onSuccess }: EditUserDialogProps) {
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-  const [saved, setSaved] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
+  const [saved, setSaved] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   // Form state
-  const [name, setName] = useState(user.name);
-  const [role, setRole] = useState<UserRole>(user.role);
-  const [isSystemAdmin, setIsSystemAdmin] = useState(user.isSystemAdmin);
+  const [name, setName] = useState(user.name)
+  const [role, setRole] = useState<UserRole>(user.role)
+  const [isSystemAdmin, setIsSystemAdmin] = useState(user.isSystemAdmin)
 
   // Reset form when user changes
   React.useEffect(() => {
-    setName(user.name);
-    setRole(user.role);
-    setIsSystemAdmin(user.isSystemAdmin);
-  }, [user]);
+    setName(user.name)
+    setRole(user.role)
+    setIsSystemAdmin(user.isSystemAdmin)
+  }, [user])
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
     startTransition(async () => {
       try {
         // Track what changed
-        const nameChanged = name !== user.name;
-        const roleChanged = role !== user.role;
-        const adminChanged = isSystemAdmin !== user.isSystemAdmin;
+        const nameChanged = name !== user.name
+        const roleChanged = role !== user.role
+        const adminChanged = isSystemAdmin !== user.isSystemAdmin
 
         // Update name if changed
         if (nameChanged) {
-          const result = await updateUserNameAction(user.id, name);
+          const result = await updateUserNameAction(user.id, name)
           if (!result.success) {
-            toast.error(result.error);
-            return;
+            toast.error(result.error)
+            return
           }
         }
 
         // Update role if changed
         if (roleChanged) {
-          const result = await updateUserRoleAction(user.id, role);
+          const result = await updateUserRoleAction(user.id, role)
           if (!result.success) {
-            toast.error(result.error);
-            return;
+            toast.error(result.error)
+            return
           }
         }
 
         // Update system admin if changed
         if (adminChanged) {
-          const result = await toggleSystemAdminAction(user.id, isSystemAdmin);
+          const result = await toggleSystemAdminAction(user.id, isSystemAdmin)
           if (!result.success) {
-            toast.error(result.error);
-            return;
+            toast.error(result.error)
+            return
           }
         }
 
-        setSaved(true);
-        toast.success("User updated successfully");
+        setSaved(true)
+        toast.success('User updated successfully')
 
         // Close after showing success
         setTimeout(() => {
-          setSaved(false);
-          onOpenChange(false);
-          onSuccess?.();
-        }, 1000);
+          setSaved(false)
+          onOpenChange(false)
+          onSuccess?.()
+        }, 1000)
       } catch {
-        toast.error("Failed to update user");
+        toast.error('Failed to update user')
       }
-    });
-  };
+    })
+  }
 
   const handleDelete = async () => {
     startTransition(async () => {
       try {
-        const result = await deleteUserAction(user.id);
+        const result = await deleteUserAction(user.id)
         if (!result.success) {
-          toast.error(result.error);
-          return;
+          toast.error(result.error)
+          return
         }
 
-        toast.success("User deleted successfully");
-        setShowDeleteConfirm(false);
-        onOpenChange(false);
-        router.push("/admin/users");
+        toast.success('User deleted successfully')
+        setShowDeleteConfirm(false)
+        onOpenChange(false)
+        router.push('/admin/users')
       } catch {
-        toast.error("Failed to delete user");
+        toast.error('Failed to delete user')
       }
-    });
-  };
+    })
+  }
 
   const handleClose = () => {
     if (!isPending) {
       // Reset to original values
-      setName(user.name);
-      setRole(user.role);
-      setIsSystemAdmin(user.isSystemAdmin);
-      setSaved(false);
-      onOpenChange(false);
+      setName(user.name)
+      setRole(user.role)
+      setIsSystemAdmin(user.isSystemAdmin)
+      setSaved(false)
+      onOpenChange(false)
     }
-  };
+  }
 
   const hasChanges =
-    name !== user.name || role !== user.role || isSystemAdmin !== user.isSystemAdmin;
+    name !== user.name || role !== user.role || isSystemAdmin !== user.isSystemAdmin
 
   return (
     <>
@@ -168,10 +168,10 @@ export function EditUserDialog({ open, onOpenChange, user, onSuccess }: EditUser
                 <div
                   className="flex h-8 w-8 items-center justify-center rounded-lg"
                   style={{
-                    backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
+                    backgroundColor: 'color-mix(in oklch, var(--primary) 15%, transparent)',
                   }}
                 >
-                  <IconEdit className="h-4 w-4" style={{ color: "var(--accent-teal)" }} />
+                  <IconEdit className="h-4 w-4" style={{ color: 'var(--primary)' }} />
                 </div>
                 Edit User
               </DialogTitle>
@@ -189,10 +189,10 @@ export function EditUserDialog({ open, onOpenChange, user, onSuccess }: EditUser
                 <div
                   className="flex h-16 w-16 items-center justify-center rounded-full"
                   style={{
-                    backgroundColor: "color-mix(in oklch, var(--accent-green) 15%, transparent)",
+                    backgroundColor: 'color-mix(in oklch, var(--accent-green) 15%, transparent)',
                   }}
                 >
-                  <IconCheck className="h-8 w-8" style={{ color: "var(--accent-green)" }} />
+                  <IconCheck className="h-8 w-8" style={{ color: 'var(--accent-green)' }} />
                 </div>
                 <div>
                   <p className="font-semibold text-lg">User Updated!</p>
@@ -269,16 +269,16 @@ export function EditUserDialog({ open, onOpenChange, user, onSuccess }: EditUser
                         className="flex h-10 w-10 items-center justify-center rounded-lg"
                         style={{
                           backgroundColor: isSystemAdmin
-                            ? "color-mix(in oklch, var(--accent-green) 15%, transparent)"
-                            : "color-mix(in oklch, var(--muted-foreground) 10%, transparent)",
+                            ? 'color-mix(in oklch, var(--accent-green) 15%, transparent)'
+                            : 'color-mix(in oklch, var(--muted-foreground) 10%, transparent)',
                         }}
                       >
                         <IconShieldCheck
                           className="h-5 w-5"
                           style={{
                             color: isSystemAdmin
-                              ? "var(--accent-green)"
-                              : "var(--muted-foreground)",
+                              ? 'var(--accent-green)'
+                              : 'var(--muted-foreground)',
                           }}
                         />
                       </div>
@@ -336,7 +336,7 @@ export function EditUserDialog({ open, onOpenChange, user, onSuccess }: EditUser
                 className="min-w-[120px] gap-2"
                 disabled={!hasChanges || isPending}
                 onClick={handleSubmit}
-                style={{ backgroundColor: "var(--accent-teal)" }}
+                style={{ backgroundColor: 'var(--primary)' }}
               >
                 {isPending ? (
                   <>
@@ -388,5 +388,5 @@ export function EditUserDialog({ open, onOpenChange, user, onSuccess }: EditUser
         </AlertDialogContent>
       </AlertDialog>
     </>
-  );
+  )
 }

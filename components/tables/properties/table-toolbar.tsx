@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import { IconFilter, IconSearch, IconX } from "@tabler/icons-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { IconFilter, IconSearch, IconX } from '@tabler/icons-react'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -10,43 +10,43 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/dropdown-menu'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { usePropertyFilters } from "@/hooks/use-property-filters";
+} from '@/components/ui/select'
+import { usePropertyFilters } from '@/hooks/use-property-filters'
 import {
   ALL_STATUSES,
   ALL_TAGS,
   type PropertyStatus,
   type PropertyTag,
-} from "@/lib/mock/properties";
+} from '@/lib/mock/properties'
 
 const statusLabels: Record<PropertyStatus, string> = {
-  active: "Active",
-  pending: "Pending",
-  completed: "Completed",
-  archived: "Archived",
-};
+  active: 'Active',
+  pending: 'Pending',
+  completed: 'Completed',
+  archived: 'Archived',
+}
 
 const tagLabels: Record<PropertyTag, string> = {
-  residential: "Residential",
-  commercial: "Commercial",
-  luxury: "Luxury",
-  staging: "Staging",
-  exterior: "Exterior",
-  interior: "Interior",
-  renovation: "Renovation",
-};
+  residential: 'Residential',
+  commercial: 'Commercial',
+  luxury: 'Luxury',
+  staging: 'Staging',
+  exterior: 'Exterior',
+  interior: 'Interior',
+  renovation: 'Renovation',
+}
 
 export function TableToolbar() {
   const { filters, hasActiveFilters, setSearch, setStatus, toggleTag, clearFilter, clearAll } =
-    usePropertyFilters();
+    usePropertyFilters()
 
   return (
     <div className="space-y-3">
@@ -59,7 +59,7 @@ export function TableToolbar() {
             className="focus-ring border-foreground/10 bg-background/80 pl-9 transition-shadow"
             onChange={(e) => setSearch(e.target.value || null)}
             placeholder="Search properties..."
-            value={filters.q || ""}
+            value={filters.q || ''}
           />
         </div>
 
@@ -67,8 +67,8 @@ export function TableToolbar() {
         <div className="flex flex-wrap items-center gap-2">
           {/* Status filter */}
           <Select
-            onValueChange={(value) => setStatus(value === "all" ? null : (value as PropertyStatus))}
-            value={filters.status || "all"}
+            onValueChange={(value) => setStatus(value === 'all' ? null : (value as PropertyStatus))}
+            value={filters.status || 'all'}
           >
             <SelectTrigger className="w-full border-foreground/10 bg-background/80 sm:w-[150px]">
               <SelectValue placeholder="Status" />
@@ -92,7 +92,7 @@ export function TableToolbar() {
                 {filters.tags && filters.tags.length > 0 && (
                   <span
                     className="flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 font-medium text-white text-xs"
-                    style={{ backgroundColor: "var(--accent-teal)" }}
+                    style={{ backgroundColor: 'var(--primary)' }}
                   >
                     {filters.tags.length}
                   </span>
@@ -138,13 +138,13 @@ export function TableToolbar() {
           {filters.q && (
             <Badge
               className="animate-scale-in gap-1.5 pr-1.5"
-              style={{ animationDelay: "0ms" }}
+              style={{ animationDelay: '0ms' }}
               variant="secondary"
             >
               <span className="text-muted-foreground">Search:</span> {filters.q}
               <button
                 className="ml-0.5 rounded-full p-0.5 transition-colors hover:bg-foreground/10"
-                onClick={() => clearFilter("q")}
+                onClick={() => clearFilter('q')}
               >
                 <IconX className="h-3 w-3" />
               </button>
@@ -154,13 +154,13 @@ export function TableToolbar() {
           {filters.status && (
             <Badge
               className="animate-scale-in gap-1.5 pr-1.5"
-              style={{ animationDelay: "50ms" }}
+              style={{ animationDelay: '50ms' }}
               variant="secondary"
             >
               <span className="text-muted-foreground">Status:</span> {statusLabels[filters.status]}
               <button
                 className="ml-0.5 rounded-full p-0.5 transition-colors hover:bg-foreground/10"
-                onClick={() => clearFilter("status")}
+                onClick={() => clearFilter('status')}
               >
                 <IconX className="h-3 w-3" />
               </button>
@@ -186,5 +186,5 @@ export function TableToolbar() {
         </div>
       )}
     </div>
-  );
+  )
 }

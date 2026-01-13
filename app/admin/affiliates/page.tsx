@@ -1,22 +1,22 @@
-import { IconUsers } from "@tabler/icons-react";
-import { AffiliateTab } from "@/components/admin/affiliate/affiliate-tab";
-import { requireSystemAdmin } from "@/lib/admin-auth";
+import { IconUsers } from '@tabler/icons-react'
+import { AffiliateTab } from '@/components/admin/affiliate/affiliate-tab'
+import { requireSystemAdmin } from '@/lib/admin-auth'
 import {
   getAffiliateEarnings,
   getAffiliateRelationships,
   getAffiliateStats,
-} from "@/lib/db/queries";
+} from '@/lib/db/queries'
 
 export default async function AdminAffiliatesPage() {
   // Ensure user is system admin
-  await requireSystemAdmin();
+  await requireSystemAdmin()
 
   // Fetch affiliate data in parallel
   const [relationships, earnings, stats] = await Promise.all([
     getAffiliateRelationships(),
     getAffiliateEarnings(),
     getAffiliateStats(),
-  ]);
+  ])
 
   return (
     <div className="space-y-6 px-4 md:px-6 lg:px-8">
@@ -25,7 +25,7 @@ export default async function AdminAffiliatesPage() {
         <div className="flex items-center gap-3">
           <div
             className="flex h-11 w-11 items-center justify-center rounded-xl shadow-sm ring-1 ring-white/10"
-            style={{ backgroundColor: "var(--accent-teal)" }}
+            style={{ backgroundColor: 'var(--primary)' }}
           >
             <IconUsers className="h-5 w-5 text-white" />
           </div>
@@ -43,5 +43,5 @@ export default async function AdminAffiliatesPage() {
         <AffiliateTab earnings={earnings} relationships={relationships} stats={stats} />
       </div>
     </div>
-  );
+  )
 }

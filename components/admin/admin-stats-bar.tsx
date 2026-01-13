@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   IconActivity,
@@ -7,30 +7,30 @@ import {
   IconCurrencyDollar,
   IconPhoto,
   IconUsers,
-} from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+} from '@tabler/icons-react'
+import { useEffect, useState } from 'react'
 
 type StatItemProps = {
-  icon: React.ReactNode;
-  label: string;
-  value: string | number;
-  subValue?: string;
-  accentColor: string;
-  delay: number;
-};
+  icon: React.ReactNode
+  label: string
+  value: string | number
+  subValue?: string
+  accentColor: string
+  delay: number
+}
 
 function StatItem({ icon, label, value, subValue, accentColor, delay }: StatItemProps) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), delay);
-    return () => clearTimeout(timer);
-  }, [delay]);
+    const timer = setTimeout(() => setIsVisible(true), delay)
+    return () => clearTimeout(timer)
+  }, [delay])
 
   return (
     <div
       className={`stats-card flex items-center gap-3 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/5 transition-all duration-500 ${
-        isVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
+        isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
       }`}
     >
       <div
@@ -56,20 +56,20 @@ function StatItem({ icon, label, value, subValue, accentColor, delay }: StatItem
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 type AdminStatsBarProps = {
-  totalWorkspaces: number;
-  activeWorkspaces: number;
-  totalUsers: number;
-  activeUsers: number;
-  totalImages: number;
-  imagesThisMonth: number;
-  totalRevenue: number;
-  revenueThisMonth: number;
-  activeSessions: number;
-};
+  totalWorkspaces: number
+  activeWorkspaces: number
+  totalUsers: number
+  activeUsers: number
+  totalImages: number
+  imagesThisMonth: number
+  totalRevenue: number
+  revenueThisMonth: number
+  activeSessions: number
+}
 
 export function AdminStatsBar({
   totalWorkspaces,
@@ -93,7 +93,7 @@ export function AdminStatsBar({
         value={totalWorkspaces.toLocaleString()}
       />
       <StatItem
-        accentColor="var(--accent-teal)"
+        accentColor="var(--primary)"
         delay={50}
         icon={<IconUsers className="h-4 w-4" />}
         label="Users"
@@ -109,7 +109,7 @@ export function AdminStatsBar({
         value={activeSessions.toLocaleString()}
       />
       <StatItem
-        accentColor="var(--accent-teal)"
+        accentColor="var(--primary)"
         delay={150}
         icon={<IconPhoto className="h-4 w-4" />}
         label="Total Images"
@@ -132,5 +132,5 @@ export function AdminStatsBar({
         value={`$${totalRevenue.toFixed(2)}`}
       />
     </div>
-  );
+  )
 }

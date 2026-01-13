@@ -1,7 +1,7 @@
-"use client";
+'use client'
 
-import { IconPhotoPlus, IconSearch, IconSparkles } from "@tabler/icons-react";
-import { Button } from "@/components/ui/button";
+import { IconPhotoPlus, IconSearch, IconSparkles } from '@tabler/icons-react'
+import { Button } from '@/components/ui/button'
 
 export function EmptyProjectsState() {
   return (
@@ -23,7 +23,7 @@ export function EmptyProjectsState() {
         <div className="relative mb-6 animate-fade-in-up">
           <div
             className="flex h-20 w-20 items-center justify-center rounded-2xl shadow-lg ring-1 ring-white/10"
-            style={{ backgroundColor: "var(--accent-teal)" }}
+            style={{ backgroundColor: 'var(--primary)' }}
           >
             <IconSparkles className="h-10 w-10 text-white" />
           </div>
@@ -40,14 +40,14 @@ export function EmptyProjectsState() {
         <Button
           className="hover-lift stagger-3 animate-fade-in-up gap-2"
           size="lg"
-          style={{ backgroundColor: "var(--accent-teal)" }}
+          style={{ backgroundColor: 'var(--primary)' }}
         >
           <IconPhotoPlus className="h-5 w-5" />
           Create your first project
         </Button>
       </div>
     </div>
-  );
+  )
 }
 
 export function NoProjectResults() {
@@ -58,7 +58,7 @@ export function NoProjectResults() {
         className="absolute inset-0 opacity-50"
         style={{
           background:
-            "radial-gradient(ellipse at center, color-mix(in oklch, var(--accent-teal) 5%, transparent) 0%, transparent 70%)",
+            'radial-gradient(ellipse at center, color-mix(in oklch, var(--primary) 5%, transparent) 0%, transparent 70%)',
         }}
       />
 
@@ -79,5 +79,5 @@ export function NoProjectResults() {
         </p>
       </div>
     </div>
-  );
+  )
 }

@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import { IconLoader2, IconUserOff } from "@tabler/icons-react";
-import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { useVirtualizer } from "@tanstack/react-virtual";
+import { IconLoader2, IconUserOff } from '@tabler/icons-react'
+import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import {
   useCallback,
   useDeferredValue,
@@ -11,53 +11,53 @@ import {
   useRef,
   useState,
   useTransition,
-} from "react";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { useAdminUserFilters } from "@/hooks/use-admin-user-filters";
-import { useImpersonation } from "@/hooks/use-impersonation";
-import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
-import { fetchAdminUsersAction } from "@/lib/actions/admin";
-import type { AdminUserRow, AdminUsersMeta } from "@/lib/types/admin";
-import { createUserColumns } from "./columns";
-import { UsersTableHeader } from "./table-header";
-import { UsersTableToolbar } from "./table-toolbar";
-import { UserVirtualRow } from "./virtual-row";
+} from 'react'
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
+import { useAdminUserFilters } from '@/hooks/use-admin-user-filters'
+import { useImpersonation } from '@/hooks/use-impersonation'
+import { useInfiniteScroll } from '@/hooks/use-infinite-scroll'
+import { fetchAdminUsersAction } from '@/lib/actions/admin'
+import type { AdminUserRow, AdminUsersMeta } from '@/lib/types/admin'
+import { createUserColumns } from './columns'
+import { UsersTableHeader } from './table-header'
+import { UsersTableToolbar } from './table-toolbar'
+import { UserVirtualRow } from './virtual-row'
 
-const ROW_HEIGHT = 60;
+const ROW_HEIGHT = 60
 
 interface UsersDataTableProps {
-  initialData: AdminUserRow[];
-  initialMeta: AdminUsersMeta;
+  initialData: AdminUserRow[]
+  initialMeta: AdminUsersMeta
 }
 
 export function UsersDataTable({ initialData, initialMeta }: UsersDataTableProps) {
-  const parentRef = useRef<HTMLDivElement>(null);
-  const { startImpersonation } = useImpersonation();
+  const parentRef = useRef<HTMLDivElement>(null)
+  const { startImpersonation } = useImpersonation()
 
   // Get filters from URL state
   const { userFilters, hasActiveFilters, sortColumn, sortDirection, toggleSort } =
-    useAdminUserFilters();
+    useAdminUserFilters()
 
   // Defer search to debounce filtering
-  const deferredFilters = useDeferredValue(userFilters);
-  const [, startTransition] = useTransition();
+  const deferredFilters = useDeferredValue(userFilters)
+  const [, startTransition] = useTransition()
 
   // Pagination state - initialize with SSR data
-  const [pages, setPages] = useState<AdminUserRow[][]>([initialData]);
-  const [cursor, setCursor] = useState<string | null>(initialMeta.cursor);
-  const [hasNextPage, setHasNextPage] = useState(initialMeta.hasMore);
-  const [filteredTotal, setFilteredTotal] = useState(initialMeta.total);
-  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
-  const [isInitialLoad] = useState(false); // Already loaded via SSR
+  const [pages, setPages] = useState<AdminUserRow[][]>([initialData])
+  const [cursor, setCursor] = useState<string | null>(initialMeta.cursor)
+  const [hasNextPage, setHasNextPage] = useState(initialMeta.hasMore)
+  const [filteredTotal, setFilteredTotal] = useState(initialMeta.total)
+  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false)
+  const [isInitialLoad] = useState(false) // Already loaded via SSR
 
   // Create columns with impersonation handler
   const columns = useMemo(
     () =>
       createUserColumns((user) => {
-        startImpersonation(user);
+        startImpersonation(user)
       }),
     [startImpersonation],
-  );
+  )
 
   // Reset pagination when filters change
   useEffect(() => {
@@ -66,10 +66,10 @@ export function UsersDataTable({ initialData, initialMeta }: UsersDataTableProps
       deferredFilters.search !== userFilters.search ||
       deferredFilters.role !== userFilters.role ||
       deferredFilters.status !== userFilters.status ||
-      deferredFilters.workspaceId !== userFilters.workspaceId;
+      deferredFilters.workspaceId !== userFilters.workspaceId
 
     if (!filtersChanged && pages[0] === initialData) {
-      return;
+      return
     }
 
     startTransition(async () => {
@@ -83,25 +83,25 @@ export function UsersDataTable({ initialData, initialMeta }: UsersDataTableProps
           workspaceId: deferredFilters.workspaceId || undefined,
         },
         sortColumn && sortDirection ? [sortColumn, sortDirection] : undefined,
-      );
+      )
 
       if (result.success) {
-        setPages([result.data.data]);
-        setCursor(result.data.meta.cursor);
-        setHasNextPage(result.data.meta.hasMore);
-        setFilteredTotal(result.data.meta.total);
+        setPages([result.data.data])
+        setCursor(result.data.meta.cursor)
+        setHasNextPage(result.data.meta.hasMore)
+        setFilteredTotal(result.data.meta.total)
       }
-    });
-  }, [deferredFilters, sortColumn, sortDirection]);
+    })
+  }, [deferredFilters, sortColumn, sortDirection])
 
   // Flatten all pages into single array
-  const tableData = useMemo(() => pages.flat(), [pages]);
+  const tableData = useMemo(() => pages.flat(), [pages])
 
   // Fetch next page function
   const fetchNextPage = useCallback(async () => {
-    if (isFetchingNextPage || !hasNextPage) return;
+    if (isFetchingNextPage || !hasNextPage) return
 
-    setIsFetchingNextPage(true);
+    setIsFetchingNextPage(true)
 
     const result = await fetchAdminUsersAction(
       cursor,
@@ -113,17 +113,17 @@ export function UsersDataTable({ initialData, initialMeta }: UsersDataTableProps
         workspaceId: deferredFilters.workspaceId || undefined,
       },
       sortColumn && sortDirection ? [sortColumn, sortDirection] : undefined,
-    );
+    )
 
     if (result.success) {
-      setPages((prev) => [...prev, result.data.data]);
-      setCursor(result.data.meta.cursor);
-      setHasNextPage(result.data.meta.hasMore);
-      setFilteredTotal(result.data.meta.total);
+      setPages((prev) => [...prev, result.data.data])
+      setCursor(result.data.meta.cursor)
+      setHasNextPage(result.data.meta.hasMore)
+      setFilteredTotal(result.data.meta.total)
     }
 
-    setIsFetchingNextPage(false);
-  }, [cursor, hasNextPage, isFetchingNextPage, deferredFilters, sortColumn, sortDirection]);
+    setIsFetchingNextPage(false)
+  }, [cursor, hasNextPage, isFetchingNextPage, deferredFilters, sortColumn, sortDirection])
 
   // Set up TanStack Table
   const table = useReactTable({
@@ -131,9 +131,9 @@ export function UsersDataTable({ initialData, initialMeta }: UsersDataTableProps
     getRowId: (row) => row.id,
     columns,
     getCoreRowModel: getCoreRowModel(),
-  });
+  })
 
-  const rows = table.getRowModel().rows;
+  const rows = table.getRowModel().rows
 
   // Set up row virtualization
   const rowVirtualizer = useVirtualizer({
@@ -141,7 +141,7 @@ export function UsersDataTable({ initialData, initialMeta }: UsersDataTableProps
     getScrollElement: () => parentRef.current,
     estimateSize: () => ROW_HEIGHT,
     overscan: 10,
-  });
+  })
 
   // Infinite scroll hook
   useInfiniteScroll({
@@ -152,7 +152,7 @@ export function UsersDataTable({ initialData, initialMeta }: UsersDataTableProps
     isFetchingNextPage,
     fetchNextPage,
     threshold: 15,
-  });
+  })
 
   // Loading skeleton state
   if (isInitialLoad) {
@@ -201,7 +201,7 @@ export function UsersDataTable({ initialData, initialMeta }: UsersDataTableProps
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   // Empty state
@@ -213,10 +213,10 @@ export function UsersDataTable({ initialData, initialMeta }: UsersDataTableProps
           <div
             className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl"
             style={{
-              backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
+              backgroundColor: 'color-mix(in oklch, var(--primary) 15%, transparent)',
             }}
           >
-            <IconUserOff className="h-6 w-6" style={{ color: "var(--accent-teal)" }} />
+            <IconUserOff className="h-6 w-6" style={{ color: 'var(--primary)' }} />
           </div>
           <h3 className="font-semibold text-lg">No users yet</h3>
           <p className="mt-1 text-muted-foreground text-sm">
@@ -224,7 +224,7 @@ export function UsersDataTable({ initialData, initialMeta }: UsersDataTableProps
           </p>
         </div>
       </div>
-    );
+    )
   }
 
   // No results with filters
@@ -242,10 +242,10 @@ export function UsersDataTable({ initialData, initialMeta }: UsersDataTableProps
           </p>
         </div>
       </div>
-    );
+    )
   }
 
-  const virtualItems = rowVirtualizer.getVirtualItems();
+  const virtualItems = rowVirtualizer.getVirtualItems()
 
   return (
     <div className="space-y-4">
@@ -267,14 +267,14 @@ export function UsersDataTable({ initialData, initialMeta }: UsersDataTableProps
         <div
           className="scrollbar-thin overflow-auto"
           ref={parentRef}
-          style={{ height: "calc(100vh - 400px)", minHeight: "300px" }}
+          style={{ height: 'calc(100vh - 400px)', minHeight: '300px' }}
         >
           <Table>
             <TableBody className="relative block" style={{ height: rowVirtualizer.getTotalSize() }}>
               {virtualItems.length > 0 ? (
                 virtualItems.map((virtualRow) => {
-                  const row = rows[virtualRow.index];
-                  if (!row) return null;
+                  const row = rows[virtualRow.index]
+                  if (!row) return null
 
                   return (
                     <UserVirtualRow
@@ -283,7 +283,7 @@ export function UsersDataTable({ initialData, initialMeta }: UsersDataTableProps
                       rowHeight={ROW_HEIGHT}
                       virtualStart={virtualRow.start}
                     />
-                  );
+                  )
                 })
               ) : (
                 <TableRow>
@@ -306,13 +306,13 @@ export function UsersDataTable({ initialData, initialMeta }: UsersDataTableProps
 
         {/* Footer with count */}
         <div className="border-t px-4 py-3 text-muted-foreground text-sm">
-          <span className="font-mono font-semibold" style={{ color: "var(--accent-teal)" }}>
+          <span className="font-mono font-semibold" style={{ color: 'var(--primary)' }}>
             {tableData.length}
-          </span>{" "}
+          </span>{' '}
           of {filteredTotal} users
-          {hasNextPage && " (scroll for more)"}
+          {hasNextPage && ' (scroll for more)'}
         </div>
       </div>
     </div>
-  );
+  )
 }

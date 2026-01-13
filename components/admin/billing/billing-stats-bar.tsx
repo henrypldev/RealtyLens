@@ -1,10 +1,10 @@
-"use client";
+'use client'
 
-import { IconCheck, IconClock, IconFileInvoice, IconReceipt } from "@tabler/icons-react";
-import { type BillingStats, formatNOK } from "@/lib/mock/admin-billing";
+import { IconCheck, IconClock, IconFileInvoice, IconReceipt } from '@tabler/icons-react'
+import { type BillingStats, formatNOK } from '@/lib/mock/admin-billing'
 
 interface BillingStatsBarProps {
-  stats: BillingStats;
+  stats: BillingStats
 }
 
 export function BillingStatsBar({ stats }: BillingStatsBarProps) {
@@ -16,23 +16,23 @@ export function BillingStatsBar({ stats }: BillingStatsBarProps) {
           <div
             className="flex h-10 w-10 items-center justify-center rounded-lg"
             style={{
-              backgroundColor: "color-mix(in oklch, var(--accent-amber) 15%, transparent)",
+              backgroundColor: 'color-mix(in oklch, var(--accent-amber) 15%, transparent)',
             }}
           >
-            <IconClock className="h-5 w-5" style={{ color: "var(--accent-amber)" }} />
+            <IconClock className="h-5 w-5" style={{ color: 'var(--accent-amber)' }} />
           </div>
           <div>
             <p className="text-muted-foreground text-sm">Ikke fakturert</p>
             <div className="flex items-baseline gap-2">
               <span
                 className="font-bold text-2xl tabular-nums"
-                style={{ color: "var(--accent-amber)" }}
+                style={{ color: 'var(--accent-amber)' }}
               >
                 {stats.uninvoicedCount}
               </span>
               <span className="text-muted-foreground text-sm">prosjekter</span>
             </div>
-            <p className="font-medium text-sm" style={{ color: "var(--accent-amber)" }}>
+            <p className="font-medium text-sm" style={{ color: 'var(--accent-amber)' }}>
               {formatNOK(stats.uninvoicedAmount)}
             </p>
           </div>
@@ -45,23 +45,20 @@ export function BillingStatsBar({ stats }: BillingStatsBarProps) {
           <div
             className="flex h-10 w-10 items-center justify-center rounded-lg"
             style={{
-              backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
+              backgroundColor: 'color-mix(in oklch, var(--primary) 15%, transparent)',
             }}
           >
-            <IconFileInvoice className="h-5 w-5" style={{ color: "var(--accent-teal)" }} />
+            <IconFileInvoice className="h-5 w-5" style={{ color: 'var(--primary)' }} />
           </div>
           <div>
             <p className="text-muted-foreground text-sm">Venter betaling</p>
             <div className="flex items-baseline gap-2">
-              <span
-                className="font-bold text-2xl tabular-nums"
-                style={{ color: "var(--accent-teal)" }}
-              >
+              <span className="font-bold text-2xl tabular-nums" style={{ color: 'var(--primary)' }}>
                 {stats.pendingPayment}
               </span>
               <span className="text-muted-foreground text-sm">fakturaer</span>
             </div>
-            <p className="font-medium text-sm" style={{ color: "var(--accent-teal)" }}>
+            <p className="font-medium text-sm" style={{ color: 'var(--primary)' }}>
               {formatNOK(stats.pendingPaymentAmount)}
             </p>
           </div>
@@ -74,23 +71,23 @@ export function BillingStatsBar({ stats }: BillingStatsBarProps) {
           <div
             className="flex h-10 w-10 items-center justify-center rounded-lg"
             style={{
-              backgroundColor: "color-mix(in oklch, var(--accent-green) 15%, transparent)",
+              backgroundColor: 'color-mix(in oklch, var(--accent-green) 15%, transparent)',
             }}
           >
-            <IconCheck className="h-5 w-5" style={{ color: "var(--accent-green)" }} />
+            <IconCheck className="h-5 w-5" style={{ color: 'var(--accent-green)' }} />
           </div>
           <div>
             <p className="text-muted-foreground text-sm">Denne måneden</p>
             <div className="flex items-baseline gap-2">
               <span
                 className="font-bold text-2xl tabular-nums"
-                style={{ color: "var(--accent-green)" }}
+                style={{ color: 'var(--accent-green)' }}
               >
                 {stats.invoicedThisMonth}
               </span>
               <span className="text-muted-foreground text-sm">fakturaer</span>
             </div>
-            <p className="font-medium text-sm" style={{ color: "var(--accent-green)" }}>
+            <p className="font-medium text-sm" style={{ color: 'var(--accent-green)' }}>
               {formatNOK(stats.invoicedAmountThisMonth)}
             </p>
           </div>
@@ -103,28 +100,28 @@ export function BillingStatsBar({ stats }: BillingStatsBarProps) {
           <div
             className="flex h-10 w-10 items-center justify-center rounded-lg"
             style={{
-              backgroundColor: "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
+              backgroundColor: 'color-mix(in oklch, var(--accent-violet) 15%, transparent)',
             }}
           >
-            <IconReceipt className="h-5 w-5" style={{ color: "var(--accent-violet)" }} />
+            <IconReceipt className="h-5 w-5" style={{ color: 'var(--accent-violet)' }} />
           </div>
           <div>
             <p className="text-muted-foreground text-sm">Totalt fakturert</p>
             <div className="flex items-baseline gap-2">
               <span
                 className="font-bold text-2xl tabular-nums"
-                style={{ color: "var(--accent-violet)" }}
+                style={{ color: 'var(--accent-violet)' }}
               >
                 {stats.invoicedCount}
               </span>
               <span className="text-muted-foreground text-sm">fakturaer</span>
             </div>
-            <p className="font-medium text-sm" style={{ color: "var(--accent-violet)" }}>
+            <p className="font-medium text-sm" style={{ color: 'var(--accent-violet)' }}>
               {formatNOK(stats.invoicedAmount)}
             </p>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }

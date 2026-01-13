@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   IconBuilding,
@@ -8,40 +8,40 @@ import {
   IconSettings,
   IconUserPlus,
   IconUsers,
-} from "@tabler/icons-react";
-import { useState, useTransition } from "react";
-import { toast } from "sonner";
-import { InviteMemberDialog } from "@/components/settings/invite-member-dialog";
-import { TeamMembersTable } from "@/components/settings/team-members-table";
-import { WorkspaceForm } from "@/components/settings/workspace-form";
-import { Button } from "@/components/ui/button";
-import { createBillingPortalSession } from "@/lib/actions/payments";
-import type { Workspace } from "@/lib/db/schema";
-import type { TeamMember } from "@/lib/mock/workspace";
+} from '@tabler/icons-react'
+import { useState, useTransition } from 'react'
+import { toast } from 'sonner'
+import { InviteMemberDialog } from '@/components/settings/invite-member-dialog'
+import { TeamMembersTable } from '@/components/settings/team-members-table'
+import { WorkspaceForm } from '@/components/settings/workspace-form'
+import { Button } from '@/components/ui/button'
+import { createBillingPortalSession } from '@/lib/actions/payments'
+import type { Workspace } from '@/lib/db/schema'
+import type { TeamMember } from '@/lib/mock/workspace'
 
 interface SettingsContentProps {
-  workspace: Workspace;
-  members: TeamMember[];
-  currentUserId: string;
+  workspace: Workspace
+  members: TeamMember[]
+  currentUserId: string
 }
 
 export function SettingsContent({ workspace, members, currentUserId }: SettingsContentProps) {
-  const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
-  const [isBillingPending, startBillingTransition] = useTransition();
+  const [inviteDialogOpen, setInviteDialogOpen] = useState(false)
+  const [isBillingPending, startBillingTransition] = useTransition()
 
-  const activeMembers = members.filter((m) => m.status === "active").length;
-  const pendingInvites = members.filter((m) => m.status === "pending").length;
+  const activeMembers = members.filter((m) => m.status === 'active').length
+  const pendingInvites = members.filter((m) => m.status === 'pending').length
 
   const handleManageBilling = () => {
     startBillingTransition(async () => {
-      const result = await createBillingPortalSession();
+      const result = await createBillingPortalSession()
       if (result.success) {
-        window.open(result.data.url, "_blank");
+        window.open(result.data.url, '_blank')
       } else {
-        toast.error(result.error);
+        toast.error(result.error)
       }
-    });
-  };
+    })
+  }
 
   return (
     <div className="space-y-8 px-4 pb-8 md:px-6 lg:px-8">
@@ -50,7 +50,7 @@ export function SettingsContent({ workspace, members, currentUserId }: SettingsC
         <div className="flex items-center gap-3">
           <div
             className="flex h-11 w-11 items-center justify-center rounded-xl shadow-sm ring-1 ring-white/10"
-            style={{ backgroundColor: "var(--accent-teal)" }}
+            style={{ backgroundColor: 'var(--primary)' }}
           >
             <IconSettings className="h-5 w-5 text-white" />
           </div>
@@ -67,10 +67,10 @@ export function SettingsContent({ workspace, members, currentUserId }: SettingsC
           <div
             className="flex h-8 w-8 items-center justify-center rounded-lg"
             style={{
-              backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
+              backgroundColor: 'color-mix(in oklch, var(--primary) 15%, transparent)',
             }}
           >
-            <IconBuilding className="h-4 w-4" style={{ color: "var(--accent-teal)" }} />
+            <IconBuilding className="h-4 w-4" style={{ color: 'var(--primary)' }} />
           </div>
           <div>
             <h2 className="font-semibold text-lg">Workspace</h2>
@@ -89,10 +89,10 @@ export function SettingsContent({ workspace, members, currentUserId }: SettingsC
           <div
             className="flex h-8 w-8 items-center justify-center rounded-lg"
             style={{
-              backgroundColor: "color-mix(in oklch, var(--accent-amber) 15%, transparent)",
+              backgroundColor: 'color-mix(in oklch, var(--accent-amber) 15%, transparent)',
             }}
           >
-            <IconCreditCard className="h-4 w-4" style={{ color: "var(--accent-amber)" }} />
+            <IconCreditCard className="h-4 w-4" style={{ color: 'var(--accent-amber)' }} />
           </div>
           <div>
             <h2 className="font-semibold text-lg">Billing</h2>
@@ -134,20 +134,20 @@ export function SettingsContent({ workspace, members, currentUserId }: SettingsC
             <div
               className="flex h-8 w-8 items-center justify-center rounded-lg"
               style={{
-                backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
+                backgroundColor: 'color-mix(in oklch, var(--primary) 15%, transparent)',
               }}
             >
-              <IconUsers className="h-4 w-4" style={{ color: "var(--accent-teal)" }} />
+              <IconUsers className="h-4 w-4" style={{ color: 'var(--primary)' }} />
             </div>
             <div>
               <h2 className="font-semibold text-lg">Team Members</h2>
               <p className="text-muted-foreground text-sm">
-                {activeMembers} active member{activeMembers !== 1 ? "s" : ""}
+                {activeMembers} active member{activeMembers !== 1 ? 's' : ''}
                 {pendingInvites > 0 && (
                   <span className="text-amber-600 dark:text-amber-400">
-                    {" "}
+                    {' '}
                     &bull; {pendingInvites} pending invite
-                    {pendingInvites !== 1 ? "s" : ""}
+                    {pendingInvites !== 1 ? 's' : ''}
                   </span>
                 )}
               </p>
@@ -157,7 +157,7 @@ export function SettingsContent({ workspace, members, currentUserId }: SettingsC
           <Button
             className="gap-2 shadow-sm transition-all duration-200 hover:opacity-90 hover:shadow-md"
             onClick={() => setInviteDialogOpen(true)}
-            style={{ backgroundColor: "var(--accent-teal)" }}
+            style={{ backgroundColor: 'var(--primary)' }}
           >
             <IconUserPlus className="h-4 w-4" />
             <span className="hidden sm:inline">Invite Member</span>
@@ -172,5 +172,5 @@ export function SettingsContent({ workspace, members, currentUserId }: SettingsC
       {/* Invite Dialog */}
       <InviteMemberDialog onOpenChange={setInviteDialogOpen} open={inviteDialogOpen} />
     </div>
-  );
+  )
 }

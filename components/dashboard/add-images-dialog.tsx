@@ -195,7 +195,7 @@ export function AddImagesDialog({
                 className={cn(
                   'relative flex min-h-[160px] cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-6 transition-all duration-200',
                   isDragging
-                    ? 'border-[var(--accent-teal)] bg-[var(--accent-teal)]/5'
+                    ? 'border-primary bg-primary/5'
                     : 'border-foreground/10 bg-muted/30 hover:border-foreground/20 hover:bg-muted/50',
                 )}
                 onClick={handleClick}
@@ -219,14 +219,14 @@ export function AddImagesDialog({
                   )}
                   style={{
                     backgroundColor: isDragging
-                      ? 'var(--accent-teal)'
-                      : 'color-mix(in oklch, var(--accent-teal) 15%, transparent)',
+                      ? 'var(--primary)'
+                      : 'color-mix(in oklch, var(--primary) 15%, transparent)',
                   }}
                 >
                   <IconUpload
                     className={cn('h-6 w-6 transition-colors', isDragging ? 'text-white' : '')}
                     style={{
-                      color: isDragging ? undefined : 'var(--accent-teal)',
+                      color: isDragging ? undefined : 'var(--primary)',
                     }}
                   />
                 </div>

@@ -35,7 +35,7 @@ function ViewToggle({
       >
         <IconLayoutGrid
           className="h-4 w-4"
-          style={{ color: view === 'grid' ? 'var(--accent-teal)' : undefined }}
+          style={{ color: view === 'grid' ? 'var(--primary)' : undefined }}
         />
       </button>
       <button
@@ -50,7 +50,7 @@ function ViewToggle({
       >
         <IconTable
           className="h-4 w-4"
-          style={{ color: view === 'table' ? 'var(--accent-teal)' : undefined }}
+          style={{ color: view === 'table' ? 'var(--primary)' : undefined }}
         />
       </button>
     </div>
@@ -84,7 +84,7 @@ export function DashboardContent({ projects, stats }: DashboardContentProps) {
           <div className="flex items-center gap-3">
             <div
               className="flex h-11 w-11 items-center justify-center rounded-xl shadow-sm ring-1 ring-white/10"
-              style={{ backgroundColor: 'var(--accent-teal)' }}
+              style={{ backgroundColor: 'var(--primary)' }}
             >
               <IconSparkles className="h-5 w-5 text-white" />
             </div>

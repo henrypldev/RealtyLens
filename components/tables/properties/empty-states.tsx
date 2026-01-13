@@ -1,7 +1,7 @@
-"use client";
+'use client'
 
-import { IconBuilding, IconPhotoPlus, IconSearch, IconSparkles } from "@tabler/icons-react";
-import { Button } from "@/components/ui/button";
+import { IconBuilding, IconPhotoPlus, IconSearch, IconSparkles } from '@tabler/icons-react'
+import { Button } from '@/components/ui/button'
 
 export function EmptyState() {
   return (
@@ -23,13 +23,13 @@ export function EmptyState() {
         <div className="relative mb-6 animate-fade-in-up">
           <div
             className="flex h-20 w-20 items-center justify-center rounded-2xl shadow-lg ring-1 ring-white/10"
-            style={{ backgroundColor: "var(--accent-teal)" }}
+            style={{ backgroundColor: 'var(--primary)' }}
           >
             <IconBuilding className="h-10 w-10 text-white" />
           </div>
           {/* Floating sparkle */}
           <div className="absolute -top-2 -right-2 flex h-8 w-8 animate-pulse-subtle items-center justify-center rounded-full bg-background shadow-md ring-1 ring-foreground/10">
-            <IconSparkles className="h-4 w-4" style={{ color: "var(--accent-amber)" }} />
+            <IconSparkles className="h-4 w-4" style={{ color: 'var(--accent-amber)' }} />
           </div>
         </div>
 
@@ -44,14 +44,14 @@ export function EmptyState() {
         <Button
           className="hover-lift stagger-3 animate-fade-in-up gap-2"
           size="lg"
-          style={{ backgroundColor: "var(--accent-teal)" }}
+          style={{ backgroundColor: 'var(--primary)' }}
         >
           <IconPhotoPlus className="h-5 w-5" />
           Upload your first photo
         </Button>
       </div>
     </div>
-  );
+  )
 }
 
 export function NoResults() {
@@ -62,7 +62,7 @@ export function NoResults() {
         className="absolute inset-0 opacity-50"
         style={{
           background:
-            "radial-gradient(ellipse at center, color-mix(in oklch, var(--accent-teal) 5%, transparent) 0%, transparent 70%)",
+            'radial-gradient(ellipse at center, color-mix(in oklch, var(--primary) 5%, transparent) 0%, transparent 70%)',
         }}
       />
 
@@ -83,5 +83,5 @@ export function NoResults() {
         </p>
       </div>
     </div>
-  );
+  )
 }

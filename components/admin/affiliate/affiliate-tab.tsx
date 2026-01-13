@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   IconArrowRight,
@@ -8,14 +8,14 @@ import {
   IconLoader2,
   IconPercentage,
   IconUsers,
-} from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
-import { toast } from "sonner";
-import { Alert, AlertAction, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+} from '@tabler/icons-react'
+import { useRouter } from 'next/navigation'
+import { useMemo, useState } from 'react'
+import { toast } from 'sonner'
+import { Alert, AlertAction, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   Table,
   TableBody,
@@ -23,30 +23,30 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { markEarningsAsPaidOutAction } from "@/lib/actions/affiliate";
+} from '@/components/ui/table'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { markEarningsAsPaidOutAction } from '@/lib/actions/affiliate'
 import type {
   AffiliateEarningRow,
   AffiliateRelationshipRow,
   AffiliateStats,
-} from "@/lib/db/queries";
+} from '@/lib/db/queries'
 
 // Format Norwegian currency
 function formatNOK(amountOre: number): string {
-  const nok = amountOre / 100;
-  return new Intl.NumberFormat("nb-NO", {
-    style: "currency",
-    currency: "NOK",
+  const nok = amountOre / 100
+  return new Intl.NumberFormat('nb-NO', {
+    style: 'currency',
+    currency: 'NOK',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(nok);
+  }).format(nok)
 }
 
 interface AffiliateTabProps {
-  relationships: AffiliateRelationshipRow[];
-  earnings: AffiliateEarningRow[];
-  stats: AffiliateStats;
+  relationships: AffiliateRelationshipRow[]
+  earnings: AffiliateEarningRow[]
+  stats: AffiliateStats
 }
 
 export function AffiliateTab({ relationships, earnings, stats }: AffiliateTabProps) {
@@ -67,7 +67,7 @@ export function AffiliateTab({ relationships, earnings, stats }: AffiliateTabPro
         <AffiliateEarningsTable earnings={earnings} />
       </div>
     </div>
-  );
+  )
 }
 
 // Stats Bar Component
@@ -79,16 +79,16 @@ function AffiliateStatsBar({ stats }: { stats: AffiliateStats }) {
           <div
             className="flex h-10 w-10 items-center justify-center rounded-lg"
             style={{
-              backgroundColor: "color-mix(in oklch, var(--accent-amber) 15%, transparent)",
+              backgroundColor: 'color-mix(in oklch, var(--accent-amber) 15%, transparent)',
             }}
           >
-            <IconCash className="h-5 w-5" style={{ color: "var(--accent-amber)" }} />
+            <IconCash className="h-5 w-5" style={{ color: 'var(--accent-amber)' }} />
           </div>
           <div>
             <p className="text-muted-foreground text-xs">Venter pa utbetaling</p>
             <p
               className="font-semibold text-lg tabular-nums"
-              style={{ color: "var(--accent-amber)" }}
+              style={{ color: 'var(--accent-amber)' }}
             >
               {formatNOK(stats.totalPendingEarningsOre)}
             </p>
@@ -101,16 +101,16 @@ function AffiliateStatsBar({ stats }: { stats: AffiliateStats }) {
           <div
             className="flex h-10 w-10 items-center justify-center rounded-lg"
             style={{
-              backgroundColor: "color-mix(in oklch, var(--accent-green) 15%, transparent)",
+              backgroundColor: 'color-mix(in oklch, var(--accent-green) 15%, transparent)',
             }}
           >
-            <IconCheck className="h-5 w-5" style={{ color: "var(--accent-green)" }} />
+            <IconCheck className="h-5 w-5" style={{ color: 'var(--accent-green)' }} />
           </div>
           <div>
             <p className="text-muted-foreground text-xs">Utbetalt totalt</p>
             <p
               className="font-semibold text-lg tabular-nums"
-              style={{ color: "var(--accent-green)" }}
+              style={{ color: 'var(--accent-green)' }}
             >
               {formatNOK(stats.totalPaidOutEarningsOre)}
             </p>
@@ -123,17 +123,14 @@ function AffiliateStatsBar({ stats }: { stats: AffiliateStats }) {
           <div
             className="flex h-10 w-10 items-center justify-center rounded-lg"
             style={{
-              backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
+              backgroundColor: 'color-mix(in oklch, var(--primary) 15%, transparent)',
             }}
           >
-            <IconUsers className="h-5 w-5" style={{ color: "var(--accent-teal)" }} />
+            <IconUsers className="h-5 w-5" style={{ color: 'var(--primary)' }} />
           </div>
           <div>
             <p className="text-muted-foreground text-xs">Aktive affiliates</p>
-            <p
-              className="font-semibold text-lg tabular-nums"
-              style={{ color: "var(--accent-teal)" }}
-            >
+            <p className="font-semibold text-lg tabular-nums" style={{ color: 'var(--primary)' }}>
               {stats.activeAffiliatesCount}
             </p>
           </div>
@@ -145,16 +142,16 @@ function AffiliateStatsBar({ stats }: { stats: AffiliateStats }) {
           <div
             className="flex h-10 w-10 items-center justify-center rounded-lg"
             style={{
-              backgroundColor: "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
+              backgroundColor: 'color-mix(in oklch, var(--accent-violet) 15%, transparent)',
             }}
           >
-            <IconPercentage className="h-5 w-5" style={{ color: "var(--accent-violet)" }} />
+            <IconPercentage className="h-5 w-5" style={{ color: 'var(--accent-violet)' }} />
           </div>
           <div>
             <p className="text-muted-foreground text-xs">Ventende utbetalinger</p>
             <p
               className="font-semibold text-lg tabular-nums"
-              style={{ color: "var(--accent-violet)" }}
+              style={{ color: 'var(--accent-violet)' }}
             >
               {stats.pendingPayoutsCount}
             </p>
@@ -162,14 +159,14 @@ function AffiliateStatsBar({ stats }: { stats: AffiliateStats }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 // Relationships Table Component
 function AffiliateRelationshipsTable({
   relationships,
 }: {
-  relationships: AffiliateRelationshipRow[];
+  relationships: AffiliateRelationshipRow[]
 }) {
   if (relationships.length === 0) {
     return (
@@ -177,17 +174,17 @@ function AffiliateRelationshipsTable({
         <div
           className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl"
           style={{
-            backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
+            backgroundColor: 'color-mix(in oklch, var(--primary) 15%, transparent)',
           }}
         >
-          <IconUsers className="h-6 w-6" style={{ color: "var(--accent-teal)" }} />
+          <IconUsers className="h-6 w-6" style={{ color: 'var(--primary)' }} />
         </div>
         <h3 className="font-semibold text-lg">Ingen affiliates enna</h3>
         <p className="mt-1 text-muted-foreground text-sm">
           Affiliate-relasjoner vil vises her nar de opprettes.
         </p>
       </div>
-    );
+    )
   }
 
   return (
@@ -211,10 +208,10 @@ function AffiliateRelationshipsTable({
                   <div
                     className="flex h-7 w-7 items-center justify-center rounded-md"
                     style={{
-                      backgroundColor: "color-mix(in oklch, var(--accent-teal) 15%, transparent)",
+                      backgroundColor: 'color-mix(in oklch, var(--primary) 15%, transparent)',
                     }}
                   >
-                    <IconBuilding className="h-4 w-4" style={{ color: "var(--accent-teal)" }} />
+                    <IconBuilding className="h-4 w-4" style={{ color: 'var(--primary)' }} />
                   </div>
                   <span className="font-medium">{rel.affiliateWorkspaceName}</span>
                 </div>
@@ -227,10 +224,10 @@ function AffiliateRelationshipsTable({
                   <div
                     className="flex h-7 w-7 items-center justify-center rounded-md"
                     style={{
-                      backgroundColor: "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
+                      backgroundColor: 'color-mix(in oklch, var(--accent-violet) 15%, transparent)',
                     }}
                   >
-                    <IconBuilding className="h-4 w-4" style={{ color: "var(--accent-violet)" }} />
+                    <IconBuilding className="h-4 w-4" style={{ color: 'var(--accent-violet)' }} />
                   </div>
                   <span className="text-sm">{rel.referredWorkspaceName}</span>
                 </div>
@@ -239,9 +236,9 @@ function AffiliateRelationshipsTable({
                 <Badge
                   className="font-mono"
                   style={{
-                    borderColor: "color-mix(in oklch, var(--accent-amber) 30%, transparent)",
-                    backgroundColor: "color-mix(in oklch, var(--accent-amber) 10%, transparent)",
-                    color: "var(--accent-amber)",
+                    borderColor: 'color-mix(in oklch, var(--accent-amber) 30%, transparent)',
+                    backgroundColor: 'color-mix(in oklch, var(--accent-amber) 10%, transparent)',
+                    color: 'var(--accent-amber)',
                   }}
                   variant="outline"
                 >
@@ -267,10 +264,10 @@ function AffiliateRelationshipsTable({
               </TableCell>
               <TableCell>
                 <span className="text-muted-foreground text-sm">
-                  {rel.createdAt.toLocaleDateString("nb-NO", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
+                  {rel.createdAt.toLocaleDateString('nb-NO', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
                   })}
                 </span>
               </TableCell>
@@ -281,75 +278,75 @@ function AffiliateRelationshipsTable({
 
       {/* Footer */}
       <div className="border-t px-4 py-3 text-muted-foreground text-sm">
-        <span className="font-mono font-semibold" style={{ color: "var(--accent-teal)" }}>
+        <span className="font-mono font-semibold" style={{ color: 'var(--primary)' }}>
           {relationships.length}
-        </span>{" "}
+        </span>{' '}
         affiliate-relasjoner
       </div>
     </div>
-  );
+  )
 }
 
 // Earnings Table Component
 function AffiliateEarningsTable({ earnings }: { earnings: AffiliateEarningRow[] }) {
-  const router = useRouter();
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [isPaying, setIsPaying] = useState(false);
+  const router = useRouter()
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [isPaying, setIsPaying] = useState(false)
 
-  const pendingEarnings = useMemo(() => earnings.filter((e) => e.status === "pending"), [earnings]);
+  const pendingEarnings = useMemo(() => earnings.filter((e) => e.status === 'pending'), [earnings])
 
-  const allSelected = pendingEarnings.length > 0 && selectedIds.size === pendingEarnings.length;
-  const someSelected = selectedIds.size > 0 && !allSelected;
+  const allSelected = pendingEarnings.length > 0 && selectedIds.size === pendingEarnings.length
+  const someSelected = selectedIds.size > 0 && !allSelected
 
   const toggleAll = () => {
     if (allSelected) {
-      setSelectedIds(new Set());
+      setSelectedIds(new Set())
     } else {
-      setSelectedIds(new Set(pendingEarnings.map((e) => e.id)));
+      setSelectedIds(new Set(pendingEarnings.map((e) => e.id)))
     }
-  };
+  }
 
   const toggleItem = (id: string) => {
-    const newSet = new Set(selectedIds);
+    const newSet = new Set(selectedIds)
     if (newSet.has(id)) {
-      newSet.delete(id);
+      newSet.delete(id)
     } else {
-      newSet.add(id);
+      newSet.add(id)
     }
-    setSelectedIds(newSet);
-  };
+    setSelectedIds(newSet)
+  }
 
   const selectedTotal = useMemo(() => {
     return earnings
       .filter((e) => selectedIds.has(e.id))
-      .reduce((sum, e) => sum + e.earningAmountOre, 0);
-  }, [earnings, selectedIds]);
+      .reduce((sum, e) => sum + e.earningAmountOre, 0)
+  }, [earnings, selectedIds])
 
   const handleMarkAsPaid = async () => {
-    if (selectedIds.size === 0) return;
+    if (selectedIds.size === 0) return
 
-    setIsPaying(true);
+    setIsPaying(true)
     try {
       const result = await markEarningsAsPaidOutAction({
         earningIds: Array.from(selectedIds),
-        reference: `Utbetalt ${new Date().toLocaleDateString("nb-NO")}`,
-      });
+        reference: `Utbetalt ${new Date().toLocaleDateString('nb-NO')}`,
+      })
 
       if (result.success) {
-        toast.success("Provisjoner utbetalt", {
+        toast.success('Provisjoner utbetalt', {
           description: `${result.data?.count ?? selectedIds.size} provisjoner markert som utbetalt`,
-        });
-        setSelectedIds(new Set());
-        router.refresh();
+        })
+        setSelectedIds(new Set())
+        router.refresh()
       } else {
-        toast.error("Feil", { description: result.error });
+        toast.error('Feil', { description: result.error })
       }
     } catch {
-      toast.error("Feil", { description: "Kunne ikke markere som utbetalt" });
+      toast.error('Feil', { description: 'Kunne ikke markere som utbetalt' })
     } finally {
-      setIsPaying(false);
+      setIsPaying(false)
     }
-  };
+  }
 
   if (earnings.length === 0) {
     return (
@@ -357,17 +354,17 @@ function AffiliateEarningsTable({ earnings }: { earnings: AffiliateEarningRow[] 
         <div
           className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl"
           style={{
-            backgroundColor: "color-mix(in oklch, var(--accent-amber) 15%, transparent)",
+            backgroundColor: 'color-mix(in oklch, var(--accent-amber) 15%, transparent)',
           }}
         >
-          <IconCash className="h-6 w-6" style={{ color: "var(--accent-amber)" }} />
+          <IconCash className="h-6 w-6" style={{ color: 'var(--accent-amber)' }} />
         </div>
         <h3 className="font-semibold text-lg">Ingen provisjoner enna</h3>
         <p className="mt-1 text-muted-foreground text-sm">
           Provisjoner vil vises her nar fakturaer blir betalt.
         </p>
       </div>
-    );
+    )
   }
 
   return (
@@ -381,7 +378,7 @@ function AffiliateEarningsTable({ earnings }: { earnings: AffiliateEarningRow[] 
               <>
                 <AlertTitle className="flex items-center gap-2">
                   {selectedIds.size} provisjon
-                  {selectedIds.size !== 1 ? "er" : ""} valgt
+                  {selectedIds.size !== 1 ? 'er' : ''} valgt
                   <Badge className="font-mono font-normal" variant="outline">
                     {formatNOK(selectedTotal)}
                   </Badge>
@@ -409,7 +406,7 @@ function AffiliateEarningsTable({ earnings }: { earnings: AffiliateEarningRow[] 
                 )}
                 {selectedIds.size > 0
                   ? `Marker ${selectedIds.size} som utbetalt`
-                  : "Marker som utbetalt"}
+                  : 'Marker som utbetalt'}
               </Button>
             </AlertAction>
           </Alert>
@@ -424,7 +421,7 @@ function AffiliateEarningsTable({ earnings }: { earnings: AffiliateEarningRow[] 
                   <TableHead className="w-12">
                     <Checkbox
                       aria-label="Velg alle ventende"
-                      checked={allSelected || (someSelected ? "indeterminate" : false)}
+                      checked={allSelected || (someSelected ? 'indeterminate' : false)}
                       onCheckedChange={toggleAll}
                     />
                   </TableHead>
@@ -440,11 +437,11 @@ function AffiliateEarningsTable({ earnings }: { earnings: AffiliateEarningRow[] 
             </TableHeader>
             <TableBody>
               {earnings.map((earning) => {
-                const isPending = earning.status === "pending";
+                const isPending = earning.status === 'pending'
 
                 return (
                   <TableRow
-                    className={`${isPending ? "cursor-pointer hover:bg-muted/50" : ""} ${selectedIds.has(earning.id) ? "bg-muted/30" : ""}`}
+                    className={`${isPending ? 'cursor-pointer hover:bg-muted/50' : ''} ${selectedIds.has(earning.id) ? 'bg-muted/30' : ''}`}
                     key={earning.id}
                     onClick={() => isPending && toggleItem(earning.id)}
                   >
@@ -471,7 +468,7 @@ function AffiliateEarningsTable({ earnings }: { earnings: AffiliateEarningRow[] 
                     </TableCell>
                     <TableCell>
                       <span className="font-mono text-sm">
-                        {earning.invoiceNumber ? `#${earning.invoiceNumber}` : "-"}
+                        {earning.invoiceNumber ? `#${earning.invoiceNumber}` : '-'}
                       </span>
                     </TableCell>
                     <TableCell className="text-right">
@@ -487,13 +484,13 @@ function AffiliateEarningsTable({ earnings }: { earnings: AffiliateEarningRow[] 
                     <TableCell className="text-right">
                       <span
                         className="font-mono font-semibold"
-                        style={{ color: "var(--accent-amber)" }}
+                        style={{ color: 'var(--accent-amber)' }}
                       >
                         {formatNOK(earning.earningAmountOre)}
                       </span>
                     </TableCell>
                     <TableCell>
-                      {earning.status === "paid_out" ? (
+                      {earning.status === 'paid_out' ? (
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Badge
@@ -504,7 +501,7 @@ function AffiliateEarningsTable({ earnings }: { earnings: AffiliateEarningRow[] 
                             </Badge>
                           </TooltipTrigger>
                           <TooltipContent>
-                            {earning.paidOutAt ? earning.paidOutAt.toLocaleDateString("nb-NO") : ""}
+                            {earning.paidOutAt ? earning.paidOutAt.toLocaleDateString('nb-NO') : ''}
                             {earning.paidOutReference && (
                               <>
                                 <br />
@@ -523,20 +520,20 @@ function AffiliateEarningsTable({ earnings }: { earnings: AffiliateEarningRow[] 
                       )}
                     </TableCell>
                   </TableRow>
-                );
+                )
               })}
             </TableBody>
           </Table>
 
           {/* Footer */}
           <div className="border-t px-4 py-3 text-muted-foreground text-sm">
-            <span className="font-mono font-semibold" style={{ color: "var(--accent-amber)" }}>
+            <span className="font-mono font-semibold" style={{ color: 'var(--accent-amber)' }}>
               {earnings.length}
-            </span>{" "}
+            </span>{' '}
             provisjoner totalt
           </div>
         </div>
       </div>
     </TooltipProvider>
-  );
+  )
 }

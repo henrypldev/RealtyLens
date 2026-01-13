@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   IconBuilding,
@@ -8,52 +8,52 @@ import {
   IconMail,
   IconUpload,
   IconUser,
-} from "@tabler/icons-react";
-import { useActionState, useEffect, useRef } from "react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { updateWorkspaceSettings, type WorkspaceActionResult } from "@/lib/actions";
-import type { Workspace } from "@/lib/db/schema";
-import { cn } from "@/lib/utils";
+} from '@tabler/icons-react'
+import { useActionState, useEffect, useRef } from 'react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { updateWorkspaceSettings, type WorkspaceActionResult } from '@/lib/actions'
+import type { Workspace } from '@/lib/db/schema'
+import { cn } from '@/lib/utils'
 
 interface WorkspaceFormProps {
-  workspace: Workspace;
+  workspace: Workspace
 }
 
-type FormState = WorkspaceActionResult | null;
+type FormState = WorkspaceActionResult | null
 
 export function WorkspaceForm({ workspace }: WorkspaceFormProps) {
-  const formRef = useRef<HTMLFormElement>(null);
-  const lastResultRef = useRef<FormState>(null);
+  const formRef = useRef<HTMLFormElement>(null)
+  const lastResultRef = useRef<FormState>(null)
 
   const [state, formAction, isPending] = useActionState<FormState, FormData>(
     async (_prevState, formData) => {
-      const name = formData.get("name") as string;
+      const name = formData.get('name') as string
 
       // Client-side validation
       if (!name.trim()) {
-        return { success: false, error: "Workspace name is required" };
+        return { success: false, error: 'Workspace name is required' }
       }
 
-      const result = await updateWorkspaceSettings(formData);
-      return result;
+      const result = await updateWorkspaceSettings(formData)
+      return result
     },
     null,
-  );
+  )
 
   // Show toast when state changes (only once per state change)
   useEffect(() => {
     if (state && state !== lastResultRef.current) {
       if (state.success) {
-        toast.success("Changes saved successfully");
+        toast.success('Changes saved successfully')
       } else if (state.error) {
-        toast.error(state.error);
+        toast.error(state.error)
       }
-      lastResultRef.current = state;
+      lastResultRef.current = state
     }
-  }, [state]);
+  }, [state])
 
   return (
     <form action={formAction} className="space-y-6" ref={formRef}>
@@ -66,11 +66,11 @@ export function WorkspaceForm({ workspace }: WorkspaceFormProps) {
             style={{
               background: workspace.logo
                 ? `url(${workspace.logo}) center/cover`
-                : "linear-gradient(135deg, color-mix(in oklch, var(--accent-teal) 20%, transparent) 0%, color-mix(in oklch, var(--accent-teal) 5%, transparent) 100%)",
+                : 'linear-gradient(135deg, color-mix(in oklch, var(--primary) 20%, transparent) 0%, color-mix(in oklch, var(--primary) 5%, transparent) 100%)',
             }}
           >
             {!workspace.logo && (
-              <IconBuilding className="h-8 w-8" style={{ color: "var(--accent-teal)" }} />
+              <IconBuilding className="h-8 w-8" style={{ color: 'var(--primary)' }} />
             )}
           </div>
           <div className="space-y-1">
@@ -114,7 +114,7 @@ export function WorkspaceForm({ workspace }: WorkspaceFormProps) {
             <IconHash className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               className="pl-10"
-              defaultValue={workspace.organizationNumber || ""}
+              defaultValue={workspace.organizationNumber || ''}
               disabled={isPending}
               id="org-number"
               name="organizationNumber"
@@ -132,7 +132,7 @@ export function WorkspaceForm({ workspace }: WorkspaceFormProps) {
             <IconMail className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               className="pl-10"
-              defaultValue={workspace.contactEmail || ""}
+              defaultValue={workspace.contactEmail || ''}
               disabled={isPending}
               id="contact-email"
               name="contactEmail"
@@ -151,7 +151,7 @@ export function WorkspaceForm({ workspace }: WorkspaceFormProps) {
             <IconUser className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               className="pl-10"
-              defaultValue={workspace.contactPerson || ""}
+              defaultValue={workspace.contactPerson || ''}
               disabled={isPending}
               id="contact-person"
               name="contactPerson"
@@ -164,10 +164,10 @@ export function WorkspaceForm({ workspace }: WorkspaceFormProps) {
       {/* Save button */}
       <div className="flex items-center justify-end border-t pt-4">
         <Button
-          className={cn("gap-2 shadow-sm transition-all")}
+          className={cn('gap-2 shadow-sm transition-all')}
           disabled={isPending}
           style={{
-            backgroundColor: "var(--accent-teal)",
+            backgroundColor: 'var(--primary)',
           }}
           type="submit"
         >
@@ -185,5 +185,5 @@ export function WorkspaceForm({ workspace }: WorkspaceFormProps) {
         </Button>
       </div>
     </form>
-  );
+  )
 }
