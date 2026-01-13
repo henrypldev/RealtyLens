@@ -1,25 +1,25 @@
-"use client";
+'use client'
 
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
-import { Suspense } from "react";
-import { useSession } from "@/lib/auth-client";
-import { Button } from "../ui/button";
+import { ArrowRight } from 'lucide-react'
+import Link from 'next/link'
+import { Suspense } from 'react'
+import { useSession } from '@/lib/auth-client'
+import { Button } from '../ui/button'
 
 function CtaAuthButton() {
-  const { data: session, isPending } = useSession();
+  const { data: session, isPending } = useSession()
 
   if (isPending) {
     return (
       <div
         className="h-14 w-48 animate-pulse rounded-full"
-        style={{ backgroundColor: "var(--landing-border)" }}
+        style={{ backgroundColor: 'var(--landing-border)' }}
       />
-    );
+    )
   }
 
-  const href = session ? "/dashboard" : "/sign-in";
-  const text = session ? "Go to Dashboard" : "Get Started Free";
+  const href = session ? '/dashboard' : '/sign-in'
+  const text = session ? 'Go to Dashboard' : 'Get Started Free'
 
   return (
     <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -35,7 +35,7 @@ function CtaAuthButton() {
         }
       />
     </div>
-  );
+  )
 }
 
 export function LandingCta() {
@@ -55,7 +55,7 @@ export function LandingCta() {
               fallback={
                 <div
                   className="mx-auto h-14 w-48 animate-pulse rounded-full"
-                  style={{ backgroundColor: "var(--landing-border)" }}
+                  style={{ backgroundColor: 'var(--landing-border)' }}
                 />
               }
             >
@@ -72,5 +72,5 @@ export function LandingCta() {
         </div>
       </div>
     </section>
-  );
+  )
 }

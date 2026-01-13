@@ -1,39 +1,39 @@
-import { IconArrowLeft, IconPhoto } from "@tabler/icons-react";
-import { headers } from "next/headers";
-import Link from "next/link";
-import { redirect } from "next/navigation";
-import { ProjectDetailContent } from "@/components/dashboard/project-detail-content";
-import { Button } from "@/components/ui/button";
-import { auth } from "@/lib/auth";
-import { getProjectById, getUserWithWorkspace } from "@/lib/db/queries";
+import { IconArrowLeft, IconPhoto } from '@tabler/icons-react'
+import { headers } from 'next/headers'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { ProjectDetailContent } from '@/components/dashboard/project-detail-content'
+import { Button } from '@/components/ui/button'
+import { auth } from '@/lib/auth'
+import { getProjectById, getUserWithWorkspace } from '@/lib/db/queries'
 
 interface PageProps {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{ payment?: string }>;
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ payment?: string }>
 }
 
 export default async function ProjectDetailPage({ params, searchParams }: PageProps) {
-  const { id } = await params;
-  const { payment: paymentParam } = await searchParams;
+  const { id } = await params
+  const { payment: paymentParam } = await searchParams
 
   // Get session
   const session = await auth.api.getSession({
     headers: await headers(),
-  });
+  })
 
   if (!session) {
-    redirect("/sign-in");
+    redirect('/sign-in')
   }
 
   // Get user with workspace
-  const userData = await getUserWithWorkspace(session.user.id);
+  const userData = await getUserWithWorkspace(session.user.id)
 
   if (!userData) {
-    redirect("/onboarding");
+    redirect('/onboarding')
   }
 
   // Get project with images
-  const projectData = await getProjectById(id);
+  const projectData = await getProjectById(id)
 
   // Check if project exists and belongs to user's workspace
   if (!projectData || projectData.project.workspaceId !== userData.workspace.id) {
@@ -53,19 +53,19 @@ export default async function ProjectDetailPage({ params, searchParams }: PagePr
           </Link>
         </Button>
       </div>
-    );
+    )
   }
 
   // Get payment status
-  const { getProjectPaymentStatus } = await import("@/lib/actions/payments");
-  const paymentStatus = await getProjectPaymentStatus(id);
+  const { getProjectPaymentStatus } = await import('@/lib/actions/payments')
+  const paymentStatus = await getProjectPaymentStatus(id)
 
   return (
     <ProjectDetailContent
       images={projectData.images}
-      paymentRequired={!paymentStatus.isPaid && paymentParam !== "success"}
+      paymentRequired={!paymentStatus.isPaid && paymentParam !== 'success'}
       paymentStatus={paymentStatus}
       project={projectData.project}
     />
-  );
+  )
 }

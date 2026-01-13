@@ -1,46 +1,46 @@
-import { eq } from "drizzle-orm";
-import { headers } from "next/headers";
-import { notFound } from "next/navigation";
-import { getInvitationByTokenAction } from "@/lib/actions/invitations";
-import { auth } from "@/lib/auth";
-import { constructMetadata } from "@/lib/constructMetadata";
-import { db } from "@/lib/db";
-import { user } from "@/lib/db/schema";
-import { InviteAcceptForm } from "./invite-accept-form";
+import { eq } from 'drizzle-orm'
+import { headers } from 'next/headers'
+import { notFound } from 'next/navigation'
+import { getInvitationByTokenAction } from '@/lib/actions/invitations'
+import { auth } from '@/lib/auth'
+import { constructMetadata } from '@/lib/constructMetadata'
+import { db } from '@/lib/db'
+import { user } from '@/lib/db/schema'
+import { InviteAcceptForm } from './invite-accept-form'
 
 export const metadata = constructMetadata({
-  title: "Accept Invitation | RealtyLens",
-  description: "Join a workspace on RealtyLens",
+  title: 'Accept Invitation | RealtyLens',
+  description: 'Join a workspace on RealtyLens',
   noIndex: true,
-});
+})
 
 interface InvitePageProps {
-  params: Promise<{ token: string }>;
+  params: Promise<{ token: string }>
 }
 
 export default async function InvitePage({ params }: InvitePageProps) {
-  const { token } = await params;
+  const { token } = await params
 
-  const result = await getInvitationByTokenAction(token);
+  const result = await getInvitationByTokenAction(token)
 
   if (!result.success) {
-    notFound();
+    notFound()
   }
 
-  const { invitation, workspaceName, isExpired, isAccepted } = result.data;
+  const { invitation, workspaceName, isExpired, isAccepted } = result.data
 
   // Check if user with this email already exists
   const [existingUser] = await db
     .select({ id: user.id })
     .from(user)
-    .where(eq(user.email, invitation.email.toLowerCase()));
+    .where(eq(user.email, invitation.email.toLowerCase()))
 
-  const hasExistingAccount = Boolean(existingUser);
+  const hasExistingAccount = Boolean(existingUser)
 
   // Check if current user is logged in
-  const session = await auth.api.getSession({ headers: await headers() });
-  const isLoggedIn = Boolean(session?.user);
-  const loggedInEmail = session?.user?.email;
+  const session = await auth.api.getSession({ headers: await headers() })
+  const isLoggedIn = Boolean(session?.user)
+  const loggedInEmail = session?.user?.email
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -58,5 +58,5 @@ export default async function InvitePage({ params }: InvitePageProps) {
         />
       </div>
     </div>
-  );
+  )
 }

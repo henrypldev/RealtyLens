@@ -1,46 +1,46 @@
-"use client";
+'use client'
 
-import { IconFileSearch, IconSearch } from "@tabler/icons-react";
-import { useMemo } from "react";
-import { useBlogFilters } from "@/hooks/use-blog-filters";
-import type { BlogPostMeta } from "@/lib/blog";
-import { BlogCard } from "./blog-card";
-import { LandingFooter } from "./landing-footer";
-import { LandingNav } from "./landing-nav";
+import { IconFileSearch, IconSearch } from '@tabler/icons-react'
+import { useMemo } from 'react'
+import { useBlogFilters } from '@/hooks/use-blog-filters'
+import type { BlogPostMeta } from '@/lib/blog'
+import { BlogCard } from './blog-card'
+import { LandingFooter } from './landing-footer'
+import { LandingNav } from './landing-nav'
 
 interface BlogPageProps {
-  posts: BlogPostMeta[];
-  categories: string[];
+  posts: BlogPostMeta[]
+  categories: string[]
 }
 
 export function BlogPage({ posts, categories }: BlogPageProps) {
-  const { category, setCategory, search, setSearch } = useBlogFilters();
+  const { category, setCategory, search, setSearch } = useBlogFilters()
 
   // Filter posts based on category and search
   const filteredPosts = useMemo(() => {
     return posts.filter((post) => {
       // Category filter
       if (category && post.category !== category) {
-        return false;
+        return false
       }
       // Search filter
       if (search) {
-        const searchLower = search.toLowerCase();
-        const matchesTitle = post.title.toLowerCase().includes(searchLower);
-        const matchesDescription = post.description.toLowerCase().includes(searchLower);
+        const searchLower = search.toLowerCase()
+        const matchesTitle = post.title.toLowerCase().includes(searchLower)
+        const matchesDescription = post.description.toLowerCase().includes(searchLower)
         if (!(matchesTitle || matchesDescription)) {
-          return false;
+          return false
         }
       }
-      return true;
-    });
-  }, [posts, category, search]);
+      return true
+    })
+  }, [posts, category, search])
 
-  const featuredPosts = filteredPosts.filter((post) => post.featured);
-  const regularPosts = filteredPosts.filter((post) => !post.featured);
+  const featuredPosts = filteredPosts.filter((post) => post.featured)
+  const regularPosts = filteredPosts.filter((post) => !post.featured)
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "var(--landing-bg)" }}>
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--landing-bg)' }}>
       <LandingNav />
 
       <main>
@@ -49,19 +49,19 @@ export function BlogPage({ posts, categories }: BlogPageProps) {
           <div className="mx-auto max-w-3xl">
             <p
               className="font-semibold text-sm uppercase tracking-wider"
-              style={{ color: "var(--landing-accent)" }}
+              style={{ color: 'var(--landing-accent)' }}
             >
               Our Blog
             </p>
             <h1
               className="mt-3 font-bold text-4xl tracking-tight sm:text-5xl md:text-6xl"
-              style={{ color: "var(--landing-text)" }}
+              style={{ color: 'var(--landing-text)' }}
             >
               Insights & Resources
             </h1>
             <p
               className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed md:text-xl"
-              style={{ color: "var(--landing-text-muted)" }}
+              style={{ color: 'var(--landing-text-muted)' }}
             >
               Tips, guides, and industry insights to help you create stunning property listings.
               Learn from experts and elevate your real estate photography.
@@ -79,13 +79,13 @@ export function BlogPage({ posts, categories }: BlogPageProps) {
                 style={
                   category
                     ? {
-                        backgroundColor: "var(--landing-card)",
-                        color: "var(--landing-text)",
-                        border: "1px solid var(--landing-border)",
+                        backgroundColor: 'var(--landing-card)',
+                        color: 'var(--landing-text)',
+                        border: '1px solid var(--landing-border)',
                       }
                     : {
-                        backgroundColor: "var(--landing-accent)",
-                        color: "var(--landing-accent-foreground)",
+                        backgroundColor: 'var(--landing-accent)',
+                        color: 'var(--landing-accent-foreground)',
                       }
                 }
                 type="button"
@@ -100,13 +100,13 @@ export function BlogPage({ posts, categories }: BlogPageProps) {
                   style={
                     category === cat
                       ? {
-                          backgroundColor: "var(--landing-accent)",
-                          color: "var(--landing-accent-foreground)",
+                          backgroundColor: 'var(--landing-accent)',
+                          color: 'var(--landing-accent-foreground)',
                         }
                       : {
-                          backgroundColor: "var(--landing-card)",
-                          color: "var(--landing-text)",
-                          border: "1px solid var(--landing-border)",
+                          backgroundColor: 'var(--landing-card)',
+                          color: 'var(--landing-text)',
+                          border: '1px solid var(--landing-border)',
                         }
                   }
                   type="button"
@@ -125,7 +125,7 @@ export function BlogPage({ posts, categories }: BlogPageProps) {
               <div className="mb-8 flex items-center justify-between">
                 <h2
                   className="font-semibold text-sm uppercase tracking-wider"
-                  style={{ color: "var(--landing-text-muted)" }}
+                  style={{ color: 'var(--landing-text-muted)' }}
                 >
                   Featured
                 </h2>
@@ -140,20 +140,20 @@ export function BlogPage({ posts, categories }: BlogPageProps) {
         )}
 
         {/* All Posts Grid */}
-        <section className="px-6 py-16" style={{ backgroundColor: "var(--landing-bg-alt)" }}>
+        <section className="px-6 py-16" style={{ backgroundColor: 'var(--landing-bg-alt)' }}>
           <div className="mx-auto max-w-5xl">
             <div className="mb-8 flex items-center justify-between">
               <h2
                 className="font-semibold text-sm uppercase tracking-wider"
-                style={{ color: "var(--landing-text-muted)" }}
+                style={{ color: 'var(--landing-text-muted)' }}
               >
-                {category ? category : "All Articles"}
+                {category ? category : 'All Articles'}
                 {search && ` matching "${search}"`}
               </h2>
               <div className="relative">
                 <IconSearch
                   className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
-                  style={{ color: "var(--landing-text-muted)" }}
+                  style={{ color: 'var(--landing-text-muted)' }}
                 />
                 <input
                   aria-label="Search articles"
@@ -161,12 +161,12 @@ export function BlogPage({ posts, categories }: BlogPageProps) {
                   onChange={(e) => setSearch(e.target.value || null)}
                   placeholder="Search…"
                   style={{
-                    backgroundColor: "var(--landing-card)",
-                    color: "var(--landing-text)",
-                    border: "1px solid var(--landing-border)",
+                    backgroundColor: 'var(--landing-card)',
+                    color: 'var(--landing-text)',
+                    border: '1px solid var(--landing-border)',
                   }}
                   type="text"
-                  value={search ?? ""}
+                  value={search ?? ''}
                 />
               </div>
             </div>
@@ -182,36 +182,36 @@ export function BlogPage({ posts, categories }: BlogPageProps) {
                 <div
                   className="mx-auto mb-6 flex size-16 items-center justify-center rounded-full"
                   style={{
-                    backgroundColor: "var(--landing-bg)",
-                    border: "1px solid var(--landing-border)",
+                    backgroundColor: 'var(--landing-bg)',
+                    border: '1px solid var(--landing-border)',
                   }}
                 >
                   <IconFileSearch
                     className="size-8"
-                    style={{ color: "var(--landing-text-muted)" }}
+                    style={{ color: 'var(--landing-text-muted)' }}
                   />
                 </div>
-                <h3 className="font-semibold text-lg" style={{ color: "var(--landing-text)" }}>
+                <h3 className="font-semibold text-lg" style={{ color: 'var(--landing-text)' }}>
                   No articles found
                 </h3>
                 <p
                   className="mx-auto mt-2 max-w-sm text-sm"
-                  style={{ color: "var(--landing-text-muted)" }}
+                  style={{ color: 'var(--landing-text-muted)' }}
                 >
                   {search || category
                     ? "Try adjusting your filters or search term to find what you're looking for."
-                    : "Check back soon for new content."}
+                    : 'Check back soon for new content.'}
                 </p>
                 {(search || category) && (
                   <button
                     className="mt-6 inline-flex h-10 items-center rounded-full px-6 font-medium text-sm transition-all duration-200 hover:scale-[1.03]"
                     onClick={() => {
-                      setCategory(null);
-                      setSearch(null);
+                      setCategory(null)
+                      setSearch(null)
                     }}
                     style={{
-                      backgroundColor: "var(--landing-accent)",
-                      color: "var(--landing-accent-foreground)",
+                      backgroundColor: 'var(--landing-accent)',
+                      color: 'var(--landing-accent-foreground)',
                     }}
                     type="button"
                   >
@@ -228,20 +228,20 @@ export function BlogPage({ posts, categories }: BlogPageProps) {
           <div
             className="mx-auto max-w-4xl rounded-3xl px-8 py-16 text-center md:px-16"
             style={{
-              backgroundColor: "var(--landing-card)",
-              boxShadow: "0 25px 50px -12px var(--landing-shadow)",
-              border: "1px solid var(--landing-border)",
+              backgroundColor: 'var(--landing-card)',
+              boxShadow: '0 25px 50px -12px var(--landing-shadow)',
+              border: '1px solid var(--landing-border)',
             }}
           >
             <h2
               className="font-bold text-3xl tracking-tight sm:text-4xl"
-              style={{ color: "var(--landing-text)" }}
+              style={{ color: 'var(--landing-text)' }}
             >
               Stay in the loop
             </h2>
             <p
               className="mx-auto mt-4 max-w-lg text-lg leading-relaxed"
-              style={{ color: "var(--landing-text-muted)" }}
+              style={{ color: 'var(--landing-text-muted)' }}
             >
               Get the latest tips, guides, and product updates delivered to your inbox. No spam,
               unsubscribe anytime.
@@ -252,17 +252,17 @@ export function BlogPage({ posts, categories }: BlogPageProps) {
                 className="h-12 flex-1 rounded-full px-5 text-base outline-none transition-all placeholder:opacity-50 focus:ring-2"
                 placeholder="your@email.com"
                 style={{
-                  backgroundColor: "var(--landing-bg)",
-                  color: "var(--landing-text)",
-                  border: "1px solid var(--landing-border)",
+                  backgroundColor: 'var(--landing-bg)',
+                  color: 'var(--landing-text)',
+                  border: '1px solid var(--landing-border)',
                 }}
                 type="email"
               />
               <button
                 className="h-12 rounded-full px-6 font-medium text-base transition-all duration-200 hover:scale-[1.03]"
                 style={{
-                  backgroundColor: "var(--landing-accent)",
-                  color: "var(--landing-accent-foreground)",
+                  backgroundColor: 'var(--landing-accent)',
+                  color: 'var(--landing-accent-foreground)',
                 }}
                 type="submit"
               >
@@ -275,5 +275,5 @@ export function BlogPage({ posts, categories }: BlogPageProps) {
 
       <LandingFooter />
     </div>
-  );
+  )
 }

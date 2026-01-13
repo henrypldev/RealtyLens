@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   IconBuilding,
@@ -8,121 +8,121 @@ import {
   IconLoader2,
   IconMail,
   IconPlus,
-} from "@tabler/icons-react";
-import type * as React from "react";
-import { useState, useTransition } from "react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+} from '@tabler/icons-react'
+import type * as React from 'react'
+import { useState, useTransition } from 'react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { createWorkspaceWithInviteAction } from "@/lib/actions/invitations";
-import type { WorkspacePlan } from "@/lib/db/schema";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { createWorkspaceWithInviteAction } from '@/lib/actions/invitations'
+import type { WorkspacePlan } from '@/lib/db/schema'
+import { cn } from '@/lib/utils'
 
 interface CreateWorkspaceDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSuccess?: () => void;
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onSuccess?: () => void
 }
 
 const planOptions: {
-  value: WorkspacePlan;
-  label: string;
-  description: string;
+  value: WorkspacePlan
+  label: string
+  description: string
 }[] = [
   {
-    value: "free",
-    label: "Free",
-    description: "Basic features for small teams",
+    value: 'free',
+    label: 'Free',
+    description: 'Basic features for small teams',
   },
   {
-    value: "pro",
-    label: "Pro",
-    description: "Advanced features and priority support",
+    value: 'pro',
+    label: 'Pro',
+    description: 'Advanced features and priority support',
   },
   {
-    value: "enterprise",
-    label: "Enterprise",
-    description: "Custom solutions for large organizations",
+    value: 'enterprise',
+    label: 'Enterprise',
+    description: 'Custom solutions for large organizations',
   },
-];
+]
 
 export function CreateWorkspaceDialog({
   open,
   onOpenChange,
   onSuccess,
 }: CreateWorkspaceDialogProps) {
-  const [isPending, startTransition] = useTransition();
-  const [sent, setSent] = useState(false);
-  const [createdEmail, setCreatedEmail] = useState("");
-  const [inviteLink, setInviteLink] = useState("");
-  const [copied, setCopied] = useState(false);
+  const [isPending, startTransition] = useTransition()
+  const [sent, setSent] = useState(false)
+  const [createdEmail, setCreatedEmail] = useState('')
+  const [inviteLink, setInviteLink] = useState('')
+  const [copied, setCopied] = useState(false)
 
   // Form state
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [plan, setPlan] = useState<WorkspacePlan>("free");
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [plan, setPlan] = useState<WorkspacePlan>('free')
 
   const handleCopyLink = async () => {
     try {
-      await navigator.clipboard.writeText(inviteLink);
-      setCopied(true);
-      toast.success("Invite link copied to clipboard");
-      setTimeout(() => setCopied(false), 2000);
+      await navigator.clipboard.writeText(inviteLink)
+      setCopied(true)
+      toast.success('Invite link copied to clipboard')
+      setTimeout(() => setCopied(false), 2000)
     } catch {
-      toast.error("Failed to copy link");
+      toast.error('Failed to copy link')
     }
-  };
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!(name.trim() && email.trim())) return;
+    e.preventDefault()
+    if (!(name.trim() && email.trim())) return
 
     startTransition(async () => {
-      const result = await createWorkspaceWithInviteAction(name.trim(), email.trim(), plan);
+      const result = await createWorkspaceWithInviteAction(name.trim(), email.trim(), plan)
 
       if (result.success) {
-        setCreatedEmail(email);
-        setInviteLink(result.data.inviteLink);
-        setSent(true);
-        toast.success(`Workspace created and invitation sent to ${email}`);
+        setCreatedEmail(email)
+        setInviteLink(result.data.inviteLink)
+        setSent(true)
+        toast.success(`Workspace created and invitation sent to ${email}`)
       } else {
-        toast.error(result.error);
+        toast.error(result.error)
       }
-    });
-  };
+    })
+  }
 
   const handleDone = () => {
-    setSent(false);
-    setName("");
-    setEmail("");
-    setPlan("free");
-    setCreatedEmail("");
-    setInviteLink("");
-    setCopied(false);
-    onOpenChange(false);
-    onSuccess?.();
-  };
+    setSent(false)
+    setName('')
+    setEmail('')
+    setPlan('free')
+    setCreatedEmail('')
+    setInviteLink('')
+    setCopied(false)
+    onOpenChange(false)
+    onSuccess?.()
+  }
 
   const handleClose = () => {
     if (!(isPending || sent)) {
-      setName("");
-      setEmail("");
-      setPlan("free");
-      setSent(false);
-      setCreatedEmail("");
-      setInviteLink("");
-      setCopied(false);
-      onOpenChange(false);
+      setName('')
+      setEmail('')
+      setPlan('free')
+      setSent(false)
+      setCreatedEmail('')
+      setInviteLink('')
+      setCopied(false)
+      onOpenChange(false)
     }
-  };
+  }
 
   return (
     <Dialog onOpenChange={handleClose} open={open}>
@@ -134,10 +134,10 @@ export function CreateWorkspaceDialog({
               <div
                 className="flex h-8 w-8 items-center justify-center rounded-lg"
                 style={{
-                  backgroundColor: "color-mix(in oklch, var(--accent-green) 15%, transparent)",
+                  backgroundColor: 'color-mix(in oklch, var(--accent-green) 15%, transparent)',
                 }}
               >
-                <IconPlus className="h-4 w-4" style={{ color: "var(--accent-green)" }} />
+                <IconPlus className="h-4 w-4" style={{ color: 'var(--accent-green)' }} />
               </div>
               New Workspace
             </DialogTitle>
@@ -155,10 +155,10 @@ export function CreateWorkspaceDialog({
               <div
                 className="flex h-16 w-16 items-center justify-center rounded-full"
                 style={{
-                  backgroundColor: "color-mix(in oklch, var(--accent-green) 15%, transparent)",
+                  backgroundColor: 'color-mix(in oklch, var(--accent-green) 15%, transparent)',
                 }}
               >
-                <IconCheck className="h-8 w-8" style={{ color: "var(--accent-green)" }} />
+                <IconCheck className="h-8 w-8" style={{ color: 'var(--accent-green)' }} />
               </div>
               <div>
                 <p className="font-semibold text-lg">Workspace Created!</p>
@@ -250,10 +250,10 @@ export function CreateWorkspaceDialog({
                   {planOptions.map((option) => (
                     <button
                       className={cn(
-                        "flex items-start gap-3 rounded-xl p-4 text-left ring-2 transition-all duration-200",
+                        'flex items-start gap-3 rounded-xl p-4 text-left ring-2 transition-all duration-200',
                         plan === option.value
-                          ? "bg-[var(--accent-green)]/5 ring-[var(--accent-green)]"
-                          : "ring-foreground/5 hover:bg-muted/30 hover:ring-foreground/10",
+                          ? 'bg-[var(--accent-green)]/5 ring-[var(--accent-green)]'
+                          : 'ring-foreground/5 hover:bg-muted/30 hover:ring-foreground/10',
                       )}
                       disabled={isPending}
                       key={option.value}
@@ -266,7 +266,7 @@ export function CreateWorkspaceDialog({
                           {plan === option.value && (
                             <IconCheck
                               className="h-4 w-4"
-                              style={{ color: "var(--accent-green)" }}
+                              style={{ color: 'var(--accent-green)' }}
                             />
                           )}
                         </div>
@@ -286,7 +286,7 @@ export function CreateWorkspaceDialog({
             <Button
               className="min-w-[100px] gap-2"
               onClick={handleDone}
-              style={{ backgroundColor: "var(--accent-green)" }}
+              style={{ backgroundColor: 'var(--accent-green)' }}
             >
               <IconCheck className="h-4 w-4" />
               Done
@@ -300,7 +300,7 @@ export function CreateWorkspaceDialog({
                 className="min-w-[160px] gap-2"
                 disabled={!(name.trim() && email.trim()) || isPending}
                 onClick={handleSubmit}
-                style={{ backgroundColor: "var(--accent-green)" }}
+                style={{ backgroundColor: 'var(--accent-green)' }}
               >
                 {isPending ? (
                   <>
@@ -319,5 +319,5 @@ export function CreateWorkspaceDialog({
         </div>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

@@ -1,12 +1,12 @@
-import { IconShieldCheck } from "@tabler/icons-react";
-import { AdminStatsBar } from "@/components/admin/admin-stats-bar";
-import { RecentActivityList } from "@/components/admin/recent-activity";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getAdminStats, getRecentActivity } from "@/lib/mock/admin-stats";
+import { IconShieldCheck } from '@tabler/icons-react'
+import { AdminStatsBar } from '@/components/admin/admin-stats-bar'
+import { RecentActivityList } from '@/components/admin/recent-activity'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { getAdminStats, getRecentActivity } from '@/lib/mock/admin-stats'
 
 export default function AdminOverviewPage() {
-  const stats = getAdminStats();
-  const recentActivity = getRecentActivity(12);
+  const stats = getAdminStats()
+  const recentActivity = getRecentActivity(12)
 
   return (
     <div className="space-y-6 px-4 md:px-6 lg:px-8">
@@ -15,7 +15,7 @@ export default function AdminOverviewPage() {
         <div className="flex items-center gap-3">
           <div
             className="flex h-11 w-11 items-center justify-center rounded-xl shadow-sm ring-1 ring-white/10"
-            style={{ backgroundColor: "var(--accent-violet)" }}
+            style={{ backgroundColor: 'var(--accent-violet)' }}
           >
             <IconShieldCheck className="h-5 w-5 text-white" />
           </div>
@@ -55,5 +55,5 @@ export default function AdminOverviewPage() {
         </Card>
       </div>
     </div>
-  );
+  )
 }

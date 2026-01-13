@@ -11,6 +11,7 @@ import {
   IconUpload,
 } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
+import posthog from 'posthog-js'
 import * as React from 'react'
 import { ConfirmStep } from '@/components/projects/steps/confirm-step'
 import { RoomTypeStep } from '@/components/projects/steps/room-type-step'
@@ -123,6 +124,15 @@ export function NewProjectDialog({ open, onOpenChange }: NewProjectDialogProps) 
       }
 
       const project = projectResult.data
+
+      // Capture project creation event
+      posthog.capture('project_created', {
+        project_id: project.id,
+        project_name: creation.projectName,
+        style_template: creation.selectedTemplate.id,
+        room_type: creation.roomType,
+        image_count: creation.images.length,
+      })
 
       // Step 2: Upload images directly to Supabase (client-side)
       // Note: Processing is gated by payment status in the server action

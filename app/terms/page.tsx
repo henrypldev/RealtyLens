@@ -1,12 +1,12 @@
-import { LegalPage, LegalSection } from "@/components/landing/legal-page";
-import { constructMetadata } from "@/lib/constructMetadata";
+import { LegalPage, LegalSection } from '@/components/landing/legal-page'
+import { constructMetadata } from '@/lib/constructMetadata'
 
 export const metadata = constructMetadata({
-  title: "Terms of Service - RealtyLens",
-  description: "Terms and conditions for using RealtyLens services.",
-  canonical: "/terms",
+  title: 'Terms of Service - RealtyLens',
+  description: 'Terms and conditions for using RealtyLens services.',
+  canonical: '/terms',
   noIndex: true,
-});
+})
 
 export default function TermsPage() {
   return (
@@ -65,10 +65,10 @@ export default function TermsPage() {
       <LegalSection title="5. Refund Policy">
         <p>
           If you are not satisfied with the results of our AI processing, you may request a refund
-          within 24 hours of the processing completion. Refund requests should be submitted to{" "}
+          within 24 hours of the processing completion. Refund requests should be submitted to{' '}
           <a className="underline" href="mailto:support@proppi.tech">
             support@proppi.tech
-          </a>{" "}
+          </a>{' '}
           with your order details and reason for dissatisfaction.
         </p>
         <p>
@@ -182,17 +182,17 @@ export default function TermsPage() {
         <p className="mt-2">
           <strong>RealtyLens</strong>
           <br />
-          Email:{" "}
+          Email:{' '}
           <a className="underline" href="mailto:legal@proppi.tech">
             legal@proppi.tech
           </a>
           <br />
-          General inquiries:{" "}
+          General inquiries:{' '}
           <a className="underline" href="mailto:hello@proppi.tech">
             hello@proppi.tech
           </a>
         </p>
       </LegalSection>
     </LegalPage>
-  );
+  )
 }

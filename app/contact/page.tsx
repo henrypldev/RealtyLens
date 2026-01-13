@@ -1,12 +1,12 @@
-import { ContactPage } from "@/components/landing/contact-page";
-import { constructMetadata } from "@/lib/constructMetadata";
+import { ContactPage } from '@/components/landing/contact-page'
+import { constructMetadata } from '@/lib/constructMetadata'
 
 export const metadata = constructMetadata({
-  title: "Contact - RealtyLens",
+  title: 'Contact - RealtyLens',
   description: "Get in touch with us. We'd love to hear from you.",
-  canonical: "/contact",
-});
+  canonical: '/contact',
+})
 
 export default function Page() {
-  return <ContactPage />;
+  return <ContactPage />
 }

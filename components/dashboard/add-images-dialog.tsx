@@ -2,6 +2,7 @@
 
 import { IconLoader2, IconPhoto, IconSparkles, IconUpload, IconX } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
+import posthog from 'posthog-js'
 import * as React from 'react'
 import { useCallback, useState } from 'react'
 import { Button } from '@/components/ui/button'
@@ -153,6 +154,12 @@ export function AddImagesDialog({
       const uploadSuccess = await imageUpload.uploadImages(projectId, files, roomTypes)
 
       if (uploadSuccess) {
+        // Capture images added event
+        posthog.capture('images_added_to_project', {
+          project_id: projectId,
+          images_added: images.length,
+          new_total_images: currentImageCount + images.length,
+        })
         handleReset()
         onOpenChange(false)
         router.refresh()
@@ -164,7 +171,7 @@ export function AddImagesDialog({
       console.error('Upload error:', error)
       setIsSubmitting(false)
     }
-  }, [images, projectId, imageUpload, handleReset, onOpenChange, router])
+  }, [images, projectId, imageUpload, handleReset, onOpenChange, router, currentImageCount])
 
   return (
     <Dialog onOpenChange={handleClose} open={open}>

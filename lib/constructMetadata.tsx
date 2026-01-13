@@ -1,63 +1,63 @@
-import type { Metadata } from "next";
-import { siteConfig } from "./siteconfig";
+import type { Metadata } from 'next'
+import { siteConfig } from './siteconfig'
 
-const TRAILING_SLASHES_REGEX = /\/+$/;
+const TRAILING_SLASHES_REGEX = /\/+$/
 
 function normalizeBaseUrl(url: string): string {
-  return url.trim().replace(TRAILING_SLASHES_REGEX, "");
+  return url.trim().replace(TRAILING_SLASHES_REGEX, '')
 }
 
 export function getMetadataBaseUrl(): string {
   // Prefer explicit overrides so the same build can be deployed to multiple domains.
-  const explicit = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL;
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL
   if (explicit) {
-    return normalizeBaseUrl(explicit);
+    return normalizeBaseUrl(explicit)
   }
 
   // Use Vercel preview URLs when available.
-  const vercelEnv = process.env.NEXT_PUBLIC_VERCEL_ENV || process.env.VERCEL_ENV;
-  const vercelUrl = process.env.NEXT_PUBLIC_VERCEL_URL || process.env.VERCEL_URL;
-  if (vercelEnv === "preview" && vercelUrl) {
-    return `https://${vercelUrl}`;
+  const vercelEnv = process.env.NEXT_PUBLIC_VERCEL_ENV || process.env.VERCEL_ENV
+  const vercelUrl = process.env.NEXT_PUBLIC_VERCEL_URL || process.env.VERCEL_URL
+  if (vercelEnv === 'preview' && vercelUrl) {
+    return `https://${vercelUrl}`
   }
 
   // Default fallbacks.
-  if (vercelEnv === "production" || process.env.NODE_ENV === "production") {
-    return "https://www.proppi.tech";
+  if (vercelEnv === 'production' || process.env.NODE_ENV === 'production') {
+    return 'https://www.proppi.tech'
   }
 
-  return "http://localhost:3000";
+  return 'http://localhost:3000'
 }
 
 interface ConstructMetadataOptions {
-  title?: string;
-  description?: string;
-  image?: string;
-  icons?: string;
-  noIndex?: boolean;
+  title?: string
+  description?: string
+  image?: string
+  icons?: string
+  noIndex?: boolean
   /** Custom canonical URL path (relative to base URL, e.g., "/blog/my-post") */
-  canonical?: string;
+  canonical?: string
   /** Override default keywords */
-  keywords?: string[];
+  keywords?: string[]
   /** Article publish date (ISO 8601) - sets OpenGraph type to "article" */
-  publishedTime?: string;
+  publishedTime?: string
   /** Article modified date (ISO 8601) */
-  modifiedTime?: string;
+  modifiedTime?: string
   /** Article authors */
-  authors?: string[];
+  authors?: string[]
   /** Article section/category */
-  section?: string;
+  section?: string
   /** Article tags */
-  tags?: string[];
+  tags?: string[]
   /** OpenGraph type - defaults to "website", set to "article" for blog posts */
-  type?: "website" | "article";
+  type?: 'website' | 'article'
 }
 
 export function constructMetadata({
   title = siteConfig.title,
   description = siteConfig.description,
   image = siteConfig.ogImage,
-  icons = "/favicon.ico",
+  icons = '/favicon.ico',
   noIndex = false,
   canonical,
   keywords,
@@ -68,16 +68,16 @@ export function constructMetadata({
   tags,
   type,
 }: ConstructMetadataOptions = {}): Metadata {
-  const metadataBaseUrl = getMetadataBaseUrl();
+  const metadataBaseUrl = getMetadataBaseUrl()
   const canonicalUrl = canonical
-    ? `${metadataBaseUrl}${canonical.startsWith("/") ? canonical : `/${canonical}`}`
-    : metadataBaseUrl;
+    ? `${metadataBaseUrl}${canonical.startsWith('/') ? canonical : `/${canonical}`}`
+    : metadataBaseUrl
 
   // Determine OG type - auto-detect article type if publishedTime is provided
-  const ogType = type || (publishedTime ? "article" : "website");
+  const ogType = type || (publishedTime ? 'article' : 'website')
 
   // Build OpenGraph object
-  const openGraph: Metadata["openGraph"] = {
+  const openGraph: Metadata['openGraph'] = {
     title,
     description,
     type: ogType,
@@ -92,24 +92,24 @@ export function constructMetadata({
         alt: title || siteConfig.name,
       },
     ],
-  };
+  }
 
   // Add article-specific metadata if type is article
-  if (ogType === "article" && openGraph) {
+  if (ogType === 'article' && openGraph) {
     if (publishedTime) {
-      (openGraph as Record<string, unknown>).publishedTime = publishedTime;
+      ;(openGraph as Record<string, unknown>).publishedTime = publishedTime
     }
     if (modifiedTime) {
-      (openGraph as Record<string, unknown>).modifiedTime = modifiedTime;
+      ;(openGraph as Record<string, unknown>).modifiedTime = modifiedTime
     }
     if (authors) {
-      (openGraph as Record<string, unknown>).authors = authors;
+      ;(openGraph as Record<string, unknown>).authors = authors
     }
     if (section) {
-      (openGraph as Record<string, unknown>).section = section;
+      ;(openGraph as Record<string, unknown>).section = section
     }
     if (tags) {
-      (openGraph as Record<string, unknown>).tags = tags;
+      ;(openGraph as Record<string, unknown>).tags = tags
     }
   }
 
@@ -127,7 +127,7 @@ export function constructMetadata({
     },
     openGraph,
     twitter: {
-      card: "summary_large_image",
+      card: 'summary_large_image',
       title,
       description,
       images: [image],
@@ -141,5 +141,5 @@ export function constructMetadata({
         follow: false,
       },
     }),
-  };
+  }
 }

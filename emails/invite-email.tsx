@@ -1,11 +1,11 @@
-import { Button, Heading, Section, Text } from "@react-email/components";
-import { siteConfig } from "../lib/siteconfig";
-import { EmailLayout } from "./components/email-layout";
+import { Button, Heading, Section, Text } from '@react-email/components'
+import { siteConfig } from '../lib/siteconfig'
+import { EmailLayout } from './components/email-layout'
 
 interface InviteEmailProps {
-  inviterName: string;
-  workspaceName: string;
-  inviteLink: string;
+  inviterName: string
+  workspaceName: string
+  inviteLink: string
 }
 
 export function InviteEmail({ inviterName, workspaceName, inviteLink }: InviteEmailProps) {
@@ -16,7 +16,7 @@ export function InviteEmail({ inviterName, workspaceName, inviteLink }: InviteEm
       <Heading style={heading}>You&apos;ve been invited!</Heading>
 
       <Text style={paragraph}>
-        <strong>{inviterName}</strong> has invited you to join <strong>{workspaceName}</strong> on{" "}
+        <strong>{inviterName}</strong> has invited you to join <strong>{workspaceName}</strong> on{' '}
         {siteConfig.name}.
       </Text>
 
@@ -48,85 +48,85 @@ export function InviteEmail({ inviterName, workspaceName, inviteLink }: InviteEm
         The {siteConfig.name} Team
       </Text>
     </EmailLayout>
-  );
+  )
 }
 
 // Styles
 const heading = {
-  color: "#1A1A1A",
-  fontSize: "24px",
-  fontWeight: "600" as const,
-  lineHeight: "32px",
-  margin: "0 0 24px",
-};
+  color: '#1A1A1A',
+  fontSize: '24px',
+  fontWeight: '600' as const,
+  lineHeight: '32px',
+  margin: '0 0 24px',
+}
 
 const paragraph = {
-  color: "#1A1A1A",
-  fontSize: "16px",
-  lineHeight: "26px",
-  margin: "0 0 16px",
-};
+  color: '#1A1A1A',
+  fontSize: '16px',
+  lineHeight: '26px',
+  margin: '0 0 16px',
+}
 
 const inviteBox = {
-  backgroundColor: "#f6f9fc",
-  borderRadius: "8px",
-  padding: "24px",
-  margin: "24px 0",
-  textAlign: "center" as const,
-  border: "1px solid #E5E7EB",
-};
+  backgroundColor: '#f6f9fc',
+  borderRadius: '8px',
+  padding: '24px',
+  margin: '24px 0',
+  textAlign: 'center' as const,
+  border: '1px solid #E5E7EB',
+}
 
 const workspaceLabel = {
-  color: "#6B7280",
-  fontSize: "12px",
-  fontWeight: "500" as const,
-  textTransform: "uppercase" as const,
-  letterSpacing: "0.05em",
-  margin: "0 0 8px",
-};
+  color: '#6B7280',
+  fontSize: '12px',
+  fontWeight: '500' as const,
+  textTransform: 'uppercase' as const,
+  letterSpacing: '0.05em',
+  margin: '0 0 8px',
+}
 
 const workspaceNameStyle = {
-  color: "#1A1A1A",
-  fontSize: "20px",
-  fontWeight: "600" as const,
-  margin: "0 0 8px",
-};
+  color: '#1A1A1A',
+  fontSize: '20px',
+  fontWeight: '600' as const,
+  margin: '0 0 8px',
+}
 
 const invitedBy = {
-  color: "#6B7280",
-  fontSize: "14px",
-  margin: "0",
-};
+  color: '#6B7280',
+  fontSize: '14px',
+  margin: '0',
+}
 
 const buttonContainer = {
-  textAlign: "center" as const,
-  margin: "32px 0",
-};
+  textAlign: 'center' as const,
+  margin: '32px 0',
+}
 
 const button = {
-  backgroundColor: "#3B9B9B",
-  borderRadius: "8px",
-  color: "#ffffff",
-  fontSize: "16px",
-  fontWeight: "600" as const,
-  textDecoration: "none",
-  textAlign: "center" as const,
-  display: "inline-block",
-  padding: "14px 32px",
-};
+  backgroundColor: '#3B9B9B',
+  borderRadius: '8px',
+  color: '#ffffff',
+  fontSize: '16px',
+  fontWeight: '600' as const,
+  textDecoration: 'none',
+  textAlign: 'center' as const,
+  display: 'inline-block',
+  padding: '14px 32px',
+}
 
 const note = {
-  color: "#6B7280",
-  fontSize: "14px",
-  lineHeight: "22px",
-  margin: "24px 0 0",
-};
+  color: '#6B7280',
+  fontSize: '14px',
+  lineHeight: '22px',
+  margin: '24px 0 0',
+}
 
 const signature = {
-  color: "#1A1A1A",
-  fontSize: "16px",
-  lineHeight: "26px",
-  margin: "32px 0 0",
-};
+  color: '#1A1A1A',
+  fontSize: '16px',
+  lineHeight: '26px',
+  margin: '32px 0 0',
+}
 
-export default InviteEmail;
+export default InviteEmail

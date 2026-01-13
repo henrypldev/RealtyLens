@@ -9,6 +9,7 @@ import {
   IconUser,
   IconUserPlus,
 } from '@tabler/icons-react'
+import posthog from 'posthog-js'
 import type * as React from 'react'
 import { useState, useTransition } from 'react'
 import { toast } from 'sonner'
@@ -65,6 +66,11 @@ export function InviteMemberDialog({ open, onOpenChange }: InviteMemberDialogPro
     startTransition(async () => {
       const result = await createWorkspaceMemberInvitation(email, role)
       if (result.success) {
+        // Capture team member invited event
+        posthog.capture('team_member_invited', {
+          invited_email: email,
+          role: role,
+        })
         setInviteUrl(result.data.inviteUrl)
       } else {
         toast.error(result.error)

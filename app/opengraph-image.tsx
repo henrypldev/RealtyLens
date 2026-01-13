@@ -1,68 +1,68 @@
-import { ImageResponse } from "next/og";
-import { loadOutfitFont } from "@/lib/og-fonts";
-import { OG_COLORS, OG_FONTS, OG_SIZE } from "@/lib/og-styles";
+import { ImageResponse } from 'next/og'
+import { loadOutfitFont } from '@/lib/og-fonts'
+import { OG_COLORS, OG_FONTS, OG_SIZE } from '@/lib/og-styles'
 
-export const runtime = "edge";
-export const alt = "RealtyLens - AI-Powered Real Estate Photo Editor";
-export const size = OG_SIZE;
-export const contentType = "image/png";
+export const runtime = 'edge'
+export const alt = 'RealtyLens - AI-Powered Real Estate Photo Editor'
+export const size = OG_SIZE
+export const contentType = 'image/png'
 
 export default async function Image() {
-  const title = "RealtyLens";
-  const tagline = "AI-Powered Real Estate Photo Editor";
+  const title = 'RealtyLens'
+  const tagline = 'AI-Powered Real Estate Photo Editor'
 
   const [fontBold, fontRegular] = await Promise.all([
     loadOutfitFont(title, 700),
     loadOutfitFont(tagline, 400),
-  ]);
+  ])
 
   return new ImageResponse(
     <div
       style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
         background: `linear-gradient(135deg, ${OG_COLORS.background} 0%, ${OG_COLORS.backgroundGradientEnd} 100%)`,
-        padding: "60px",
-        fontFamily: "Outfit",
-        position: "relative",
-        overflow: "hidden",
+        padding: '60px',
+        fontFamily: 'Outfit',
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
       {/* Decorative circles */}
       <div
         style={{
-          position: "absolute",
-          top: "-100px",
-          right: "-100px",
-          width: "400px",
-          height: "400px",
-          borderRadius: "50%",
+          position: 'absolute',
+          top: '-100px',
+          right: '-100px',
+          width: '400px',
+          height: '400px',
+          borderRadius: '50%',
           background: `linear-gradient(180deg, ${OG_COLORS.accent}20 0%, transparent 70%)`,
         }}
       />
       <div
         style={{
-          position: "absolute",
-          bottom: "-150px",
-          left: "-150px",
-          width: "500px",
-          height: "500px",
-          borderRadius: "50%",
+          position: 'absolute',
+          bottom: '-150px',
+          left: '-150px',
+          width: '500px',
+          height: '500px',
+          borderRadius: '50%',
           background: `linear-gradient(0deg, ${OG_COLORS.secondary}60 0%, transparent 70%)`,
         }}
       />
       <div
         style={{
-          position: "absolute",
-          top: "50%",
-          right: "80px",
-          width: "200px",
-          height: "200px",
-          borderRadius: "50%",
+          position: 'absolute',
+          top: '50%',
+          right: '80px',
+          width: '200px',
+          height: '200px',
+          borderRadius: '50%',
           border: `3px solid ${OG_COLORS.accent}30`,
         }}
       />
@@ -70,22 +70,22 @@ export default async function Image() {
       {/* Main content */}
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
           flex: 1,
-          gap: "24px",
+          gap: '24px',
           zIndex: 1,
         }}
       >
         {/* Brand name */}
         <div
           style={{
-            fontSize: "80px",
+            fontSize: '80px',
             fontWeight: 700,
             color: OG_COLORS.text,
-            letterSpacing: "-2px",
+            letterSpacing: '-2px',
           }}
         >
           {title}
@@ -94,33 +94,33 @@ export default async function Image() {
         {/* Accent bar */}
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
           }}
         >
           <div
             style={{
-              width: "60px",
-              height: "4px",
+              width: '60px',
+              height: '4px',
               backgroundColor: OG_COLORS.accent,
-              borderRadius: "2px",
+              borderRadius: '2px',
             }}
           />
           <div
             style={{
-              width: "12px",
-              height: "12px",
+              width: '12px',
+              height: '12px',
               backgroundColor: OG_COLORS.accent,
-              borderRadius: "50%",
+              borderRadius: '50%',
             }}
           />
           <div
             style={{
-              width: "60px",
-              height: "4px",
+              width: '60px',
+              height: '4px',
               backgroundColor: OG_COLORS.accent,
-              borderRadius: "2px",
+              borderRadius: '2px',
             }}
           />
         </div>
@@ -131,8 +131,8 @@ export default async function Image() {
             fontSize: OG_FONTS.subheading + 4,
             color: OG_COLORS.text,
             opacity: 0.7,
-            textAlign: "center",
-            maxWidth: "700px",
+            textAlign: 'center',
+            maxWidth: '700px',
           }}
         >
           {tagline}
@@ -142,12 +142,12 @@ export default async function Image() {
       {/* Footer */}
       <div
         style={{
-          display: "flex",
-          width: "100%",
-          justifyContent: "space-between",
-          alignItems: "center",
+          display: 'flex',
+          width: '100%',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           borderTop: `1px solid ${OG_COLORS.border}`,
-          paddingTop: "24px",
+          paddingTop: '24px',
           zIndex: 1,
         }}
       >
@@ -174,18 +174,18 @@ export default async function Image() {
       ...size,
       fonts: [
         {
-          name: "Outfit",
+          name: 'Outfit',
           data: fontBold,
           weight: 700,
-          style: "normal",
+          style: 'normal',
         },
         {
-          name: "Outfit",
+          name: 'Outfit',
           data: fontRegular,
           weight: 400,
-          style: "normal",
+          style: 'normal',
         },
       ],
     },
-  );
+  )
 }

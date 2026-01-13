@@ -1,22 +1,22 @@
-import { IconArrowLeft } from "@tabler/icons-react";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { UserDetailContent } from "@/components/admin/user-detail-content";
-import { Button } from "@/components/ui/button";
-import { requireSystemAdmin } from "@/lib/admin-auth";
-import { getAdminUserDetail } from "@/lib/db/queries";
+import { IconArrowLeft } from '@tabler/icons-react'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import { UserDetailContent } from '@/components/admin/user-detail-content'
+import { Button } from '@/components/ui/button'
+import { requireSystemAdmin } from '@/lib/admin-auth'
+import { getAdminUserDetail } from '@/lib/db/queries'
 
 interface AdminUserDetailPageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>
 }
 
 export default async function AdminUserDetailPage({ params }: AdminUserDetailPageProps) {
-  await requireSystemAdmin();
-  const { id } = await params;
+  await requireSystemAdmin()
+  const { id } = await params
 
-  const userDetail = await getAdminUserDetail(id);
+  const userDetail = await getAdminUserDetail(id)
   if (!userDetail) {
-    notFound();
+    notFound()
   }
 
   return (
@@ -34,5 +34,5 @@ export default async function AdminUserDetailPage({ params }: AdminUserDetailPag
       {/* User Detail Content */}
       <UserDetailContent user={userDetail} />
     </div>
-  );
+  )
 }

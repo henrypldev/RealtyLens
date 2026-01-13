@@ -1,43 +1,43 @@
-"use client";
+'use client'
 
-import { Globe, Layers, Palette, Shield, Sparkles, Zap } from "lucide-react";
+import { Globe, Layers, Palette, Shield, Sparkles, Zap } from 'lucide-react'
 
 const features = [
   {
     icon: Sparkles,
-    title: "AI-Powered Enhancement",
+    title: 'AI-Powered Enhancement',
     description:
-      "Our advanced AI transforms ordinary photos into stunning, professional-quality images automatically.",
+      'Our advanced AI transforms ordinary photos into stunning, professional-quality images automatically.',
   },
   {
     icon: Palette,
-    title: "Multiple Style Templates",
+    title: 'Multiple Style Templates',
     description:
-      "Choose from a variety of professionally designed styles to match your brand and property type.",
+      'Choose from a variety of professionally designed styles to match your brand and property type.',
   },
   {
     icon: Zap,
-    title: "Results in Seconds",
-    description: "No waiting around. Get your enhanced photos back in seconds, not hours or days.",
+    title: 'Results in Seconds',
+    description: 'No waiting around. Get your enhanced photos back in seconds, not hours or days.',
   },
   {
     icon: Layers,
-    title: "Batch Processing",
-    description: "Upload multiple photos at once and process entire property shoots in one go.",
+    title: 'Batch Processing',
+    description: 'Upload multiple photos at once and process entire property shoots in one go.',
   },
   {
     icon: Globe,
-    title: "No Software Required",
+    title: 'No Software Required',
     description:
-      "Everything runs in your browser. No downloads, no installations, no technical skills needed.",
+      'Everything runs in your browser. No downloads, no installations, no technical skills needed.',
   },
   {
     icon: Shield,
-    title: "Secure & Private",
+    title: 'Secure & Private',
     description:
-      "Your photos are encrypted and automatically deleted after processing. Your data stays yours.",
+      'Your photos are encrypted and automatically deleted after processing. Your data stays yours.',
   },
-];
+]
 
 export function LandingFeatures() {
   return (
@@ -70,5 +70,5 @@ export function LandingFeatures() {
         </div>
       </div>
     </section>
-  );
+  )
 }

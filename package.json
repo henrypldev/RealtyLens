@@ -47,6 +47,8 @@
     "nuqs": "^2.8.6",
     "pg": "^8.16.3",
     "postgres": "^3.4.8",
+    "posthog-js": "^1.319.0",
+    "posthog-node": "^5.20.0",
     "radix-ui": "^1.4.3",
     "react": "19.2.3",
     "react-dom": "19.2.3",

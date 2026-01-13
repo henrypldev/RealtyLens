@@ -130,5 +130,5 @@ export default function WorkspaceDetailLoading() {
         </div>
       </div>
     </div>
-  );
+  )
 }

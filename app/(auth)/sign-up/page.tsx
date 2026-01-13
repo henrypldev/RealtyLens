@@ -1,11 +1,12 @@
-"use client";
+'use client'
 
-import { IconLoader } from "@tabler/icons-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { IconLoader } from '@tabler/icons-react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import posthog from 'posthog-js'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -13,57 +14,67 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { authClient } from "@/lib/auth-client";
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { authClient } from '@/lib/auth-client'
 
 export default function SignUpPage() {
-  const router = useRouter();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter()
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!name.trim()) {
-      toast.error("Please enter your name");
-      return;
+      toast.error('Please enter your name')
+      return
     }
 
     if (!email.trim()) {
-      toast.error("Please enter your email");
-      return;
+      toast.error('Please enter your email')
+      return
     }
 
     if (password.length < 8) {
-      toast.error("Password must be at least 8 characters");
-      return;
+      toast.error('Password must be at least 8 characters')
+      return
     }
 
-    setIsLoading(true);
+    setIsLoading(true)
 
     await authClient.signUp.email(
       {
         email,
         password,
         name,
-        callbackURL: "/onboarding",
+        callbackURL: '/onboarding',
       },
       {
         onSuccess: () => {
-          toast.success("Account created successfully");
-          router.push("/onboarding");
+          // Identify user in PostHog
+          posthog.identify(email, {
+            email: email,
+            name: name,
+          })
+          // Capture sign up event
+          posthog.capture('user_signed_up', {
+            email: email,
+            name: name,
+          })
+          toast.success('Account created successfully')
+          router.push('/onboarding')
         },
         onError: (ctx) => {
-          toast.error(ctx.error.message || "Failed to create account");
-          setIsLoading(false);
+          toast.error(ctx.error.message || 'Failed to create account')
+          setIsLoading(false)
         },
       },
-    );
-  };
+    )
+  }
 
   return (
     <Card>
@@ -116,14 +127,14 @@ export default function SignUpPage() {
                 Creating account...
               </>
             ) : (
-              "Create account"
+              'Create account'
             )}
           </Button>
         </form>
       </CardContent>
       <CardFooter className="justify-center">
         <p className="text-muted-foreground text-sm">
-          Already have an account?{" "}
+          Already have an account?{' '}
           <Link
             className="text-foreground underline underline-offset-4 hover:text-foreground/80"
             href="/sign-in"
@@ -133,5 +144,5 @@ export default function SignUpPage() {
         </p>
       </CardFooter>
     </Card>
-  );
+  )
 }

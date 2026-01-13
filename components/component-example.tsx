@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   IconArrowRight,
@@ -30,11 +30,11 @@ import {
   IconShield,
   IconSun,
   IconUser,
-} from "@tabler/icons-react";
-import Link from "next/link";
-import * as React from "react";
-import { Suspense } from "react";
-import { Example, ExampleWrapper } from "@/components/example";
+} from '@tabler/icons-react'
+import Link from 'next/link'
+import * as React from 'react'
+import { Suspense } from 'react'
+import { Example, ExampleWrapper } from '@/components/example'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -46,9 +46,9 @@ import {
   AlertDialogMedia,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/alert-dialog'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardAction,
@@ -57,7 +57,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card'
 import {
   Combobox,
   ComboboxContent,
@@ -65,7 +65,7 @@ import {
   ComboboxInput,
   ComboboxItem,
   ComboboxList,
-} from "@/components/ui/combobox";
+} from '@/components/ui/combobox'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -82,9 +82,9 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/dropdown-menu'
+import { Field, FieldGroup, FieldLabel } from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
@@ -92,15 +92,15 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { useSession } from "@/lib/auth-client";
+} from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { useSession } from '@/lib/auth-client'
 
 function AuthButtons() {
-  const { data: session, isPending } = useSession();
+  const { data: session, isPending } = useSession()
 
   if (isPending) {
-    return <div className="skeleton h-11 w-32 rounded-md" />;
+    return <div className="skeleton h-11 w-32 rounded-md" />
   }
 
   if (session) {
@@ -111,7 +111,7 @@ function AuthButtons() {
           <IconArrowRight className="size-4" />
         </Link>
       </Button>
-    );
+    )
   }
 
   return (
@@ -121,7 +121,7 @@ function AuthButtons() {
         <IconArrowRight className="size-4" />
       </Link>
     </Button>
-  );
+  )
 }
 
 export function ComponentExample() {
@@ -144,7 +144,7 @@ export function ComponentExample() {
       {/* <CardExample />
       <FormExample /> */}
     </ExampleWrapper>
-  );
+  )
 }
 
 function CardExample() {
@@ -195,18 +195,18 @@ function CardExample() {
         </CardFooter>
       </Card>
     </Example>
-  );
+  )
 }
 
-const frameworks = ["Next.js", "SvelteKit", "Nuxt.js", "Remix", "Astro"] as const;
+const frameworks = ['Next.js', 'SvelteKit', 'Nuxt.js', 'Remix', 'Astro'] as const
 
 function FormExample() {
   const [notifications, setNotifications] = React.useState({
     email: true,
     sms: false,
     push: true,
-  });
-  const [theme, setTheme] = React.useState("light");
+  })
+  const [theme, setTheme] = React.useState('light')
 
   return (
     <Example title="Form">
@@ -509,5 +509,5 @@ function FormExample() {
         </CardContent>
       </Card>
     </Example>
-  );
+  )
 }

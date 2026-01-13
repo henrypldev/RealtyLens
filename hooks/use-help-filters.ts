@@ -1,17 +1,17 @@
-"use client";
+'use client'
 
-import { parseAsString, useQueryState } from "nuqs";
+import { parseAsString, useQueryState } from 'nuqs'
 
 export function useHelpFilters() {
-  const [search, setSearch] = useQueryState("q", parseAsString);
+  const [search, setSearch] = useQueryState('q', parseAsString)
 
   const clearSearch = () => {
-    setSearch(null);
-  };
+    setSearch(null)
+  }
 
   return {
     search,
     setSearch,
     clearSearch,
-  };
+  }
 }

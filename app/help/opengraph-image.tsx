@@ -1,62 +1,62 @@
-import { ImageResponse } from "next/og";
-import { loadOutfitFont } from "@/lib/og-fonts";
-import { OG_COLORS, OG_FONTS, OG_SIZE } from "@/lib/og-styles";
+import { ImageResponse } from 'next/og'
+import { loadOutfitFont } from '@/lib/og-fonts'
+import { OG_COLORS, OG_FONTS, OG_SIZE } from '@/lib/og-styles'
 
-export const runtime = "edge";
-export const alt = "Help Center - RealtyLens";
-export const size = OG_SIZE;
-export const contentType = "image/png";
+export const runtime = 'edge'
+export const alt = 'Help Center - RealtyLens'
+export const size = OG_SIZE
+export const contentType = 'image/png'
 
 export default async function Image() {
-  const title = "Help Center";
-  const description = "Guides, tutorials, and answers to help you get the most out of RealtyLens";
+  const title = 'Help Center'
+  const description = 'Guides, tutorials, and answers to help you get the most out of RealtyLens'
 
   const [fontBold, fontRegular] = await Promise.all([
     loadOutfitFont(title, 700),
     loadOutfitFont(description, 400),
-  ]);
+  ])
 
   return new ImageResponse(
     <div
       style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
         background: `linear-gradient(135deg, ${OG_COLORS.background} 0%, ${OG_COLORS.backgroundGradientEnd} 100%)`,
-        padding: "60px",
-        fontFamily: "Outfit",
-        position: "relative",
-        overflow: "hidden",
+        padding: '60px',
+        fontFamily: 'Outfit',
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
       {/* Question mark pattern decoration */}
       <div
         style={{
-          position: "absolute",
-          top: "60px",
-          right: "80px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "24px",
+          position: 'absolute',
+          top: '60px',
+          right: '80px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '24px',
         }}
       >
         <div
           style={{
-            display: "flex",
-            gap: "24px",
+            display: 'flex',
+            gap: '24px',
           }}
         >
           <div
             style={{
-              width: "80px",
-              height: "80px",
-              borderRadius: "20px",
+              width: '80px',
+              height: '80px',
+              borderRadius: '20px',
               backgroundColor: `${OG_COLORS.accent}15`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "40px",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '40px',
               color: OG_COLORS.accent,
             }}
           >
@@ -64,33 +64,33 @@ export default async function Image() {
           </div>
           <div
             style={{
-              width: "60px",
-              height: "60px",
-              borderRadius: "50%",
+              width: '60px',
+              height: '60px',
+              borderRadius: '50%',
               border: `2px solid ${OG_COLORS.secondary}`,
             }}
           />
         </div>
         <div
           style={{
-            display: "flex",
-            gap: "24px",
-            marginLeft: "30px",
+            display: 'flex',
+            gap: '24px',
+            marginLeft: '30px',
           }}
         >
           <div
             style={{
-              width: "50px",
-              height: "50px",
-              borderRadius: "12px",
+              width: '50px',
+              height: '50px',
+              borderRadius: '12px',
               border: `2px solid ${OG_COLORS.accent}30`,
             }}
           />
           <div
             style={{
-              width: "70px",
-              height: "50px",
-              borderRadius: "25px",
+              width: '70px',
+              height: '50px',
+              borderRadius: '25px',
               backgroundColor: `${OG_COLORS.secondary}80`,
             }}
           />
@@ -100,11 +100,11 @@ export default async function Image() {
       {/* Bottom wave decoration */}
       <div
         style={{
-          position: "absolute",
-          bottom: "-50px",
-          left: "0",
-          right: "0",
-          height: "150px",
+          position: 'absolute',
+          bottom: '-50px',
+          left: '0',
+          right: '0',
+          height: '150px',
           background: `linear-gradient(180deg, transparent 0%, ${OG_COLORS.secondary}30 100%)`,
         }}
       />
@@ -112,38 +112,38 @@ export default async function Image() {
       {/* Main content */}
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
+          display: 'flex',
+          flexDirection: 'column',
           flex: 1,
-          justifyContent: "center",
-          gap: "24px",
-          maxWidth: "650px",
+          justifyContent: 'center',
+          gap: '24px',
+          maxWidth: '650px',
           zIndex: 1,
         }}
       >
         {/* Badge */}
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
           }}
         >
           <div
             style={{
-              width: "8px",
-              height: "8px",
-              borderRadius: "50%",
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
               backgroundColor: OG_COLORS.accent,
             }}
           />
           <span
             style={{
-              fontSize: "18px",
+              fontSize: '18px',
               color: OG_COLORS.accent,
               fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "2px",
+              textTransform: 'uppercase',
+              letterSpacing: '2px',
             }}
           >
             Support
@@ -156,7 +156,7 @@ export default async function Image() {
             fontSize: OG_FONTS.heading,
             fontWeight: 700,
             color: OG_COLORS.text,
-            letterSpacing: "-1px",
+            letterSpacing: '-1px',
             lineHeight: 1.1,
           }}
         >
@@ -178,19 +178,19 @@ export default async function Image() {
         {/* Help categories hint */}
         <div
           style={{
-            display: "flex",
-            gap: "12px",
-            marginTop: "8px",
+            display: 'flex',
+            gap: '12px',
+            marginTop: '8px',
           }}
         >
-          {["Guides", "FAQs", "Contact"].map((item) => (
+          {['Guides', 'FAQs', 'Contact'].map((item) => (
             <div
               key={item}
               style={{
-                padding: "8px 16px",
-                borderRadius: "20px",
+                padding: '8px 16px',
+                borderRadius: '20px',
                 backgroundColor: `${OG_COLORS.secondary}80`,
-                fontSize: "16px",
+                fontSize: '16px',
                 color: OG_COLORS.text,
               }}
             >
@@ -203,12 +203,12 @@ export default async function Image() {
       {/* Footer */}
       <div
         style={{
-          display: "flex",
-          width: "100%",
-          justifyContent: "space-between",
-          alignItems: "center",
+          display: 'flex',
+          width: '100%',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           borderTop: `1px solid ${OG_COLORS.border}`,
-          paddingTop: "24px",
+          paddingTop: '24px',
           zIndex: 1,
         }}
       >
@@ -235,18 +235,18 @@ export default async function Image() {
       ...size,
       fonts: [
         {
-          name: "Outfit",
+          name: 'Outfit',
           data: fontBold,
           weight: 700,
-          style: "normal",
+          style: 'normal',
         },
         {
-          name: "Outfit",
+          name: 'Outfit',
           data: fontRegular,
           weight: 400,
-          style: "normal",
+          style: 'normal',
         },
       ],
     },
-  );
+  )
 }

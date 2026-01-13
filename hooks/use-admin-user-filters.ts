@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import { parseAsArrayOf, parseAsString, parseAsStringLiteral, useQueryStates } from "nuqs";
+import { parseAsArrayOf, parseAsString, parseAsStringLiteral, useQueryStates } from 'nuqs'
 import {
   ALL_USER_ROLES,
   ALL_USER_STATUSES,
@@ -8,7 +8,7 @@ import {
   type SortDirection,
   type UserRole,
   type UserStatus,
-} from "@/lib/types/admin";
+} from '@/lib/types/admin'
 
 // Parsers for URL state
 const userFiltersParsers = {
@@ -17,17 +17,17 @@ const userFiltersParsers = {
   role: parseAsStringLiteral(ALL_USER_ROLES),
   status: parseAsStringLiteral(ALL_USER_STATUSES),
   sort: parseAsArrayOf(parseAsString), // [column, direction]
-};
+}
 
 export function useAdminUserFilters() {
   const [filters, setFilters] = useQueryStates(userFiltersParsers, {
-    history: "push",
+    history: 'push',
     shallow: true,
-  });
+  })
 
   // Parse sort state
-  const sortColumn = filters.sort?.[0] as SortableUserColumn | null;
-  const sortDirection = filters.sort?.[1] as SortDirection | null;
+  const sortColumn = filters.sort?.[0] as SortableUserColumn | null
+  const sortDirection = filters.sort?.[1] as SortDirection | null
 
   // Convert to UserFilters format for the data layer
   const userFilters = {
@@ -39,55 +39,55 @@ export function useAdminUserFilters() {
       sortColumn && sortDirection
         ? ([sortColumn, sortDirection] as [SortableUserColumn, SortDirection])
         : undefined,
-  };
+  }
 
   // Helper to check if any filters are active
-  const hasActiveFilters = !!(filters.q || filters.workspaceId || filters.role || filters.status);
+  const hasActiveFilters = !!(filters.q || filters.workspaceId || filters.role || filters.status)
 
   // Update search
   const setSearch = (value: string | null) => {
-    setFilters({ q: value || null });
-  };
+    setFilters({ q: value || null })
+  }
 
   // Update workspace
   const setWorkspace = (value: string | null) => {
-    setFilters({ workspaceId: value });
-  };
+    setFilters({ workspaceId: value })
+  }
 
   // Update role
   const setRole = (value: UserRole | null) => {
-    setFilters({ role: value });
-  };
+    setFilters({ role: value })
+  }
 
   // Update status
   const setStatus = (value: UserStatus | null) => {
-    setFilters({ status: value });
-  };
+    setFilters({ status: value })
+  }
 
   // Clear a specific filter
-  const clearFilter = (key: "q" | "workspaceId" | "role" | "status") => {
-    setFilters({ [key]: null });
-  };
+  const clearFilter = (key: 'q' | 'workspaceId' | 'role' | 'status') => {
+    setFilters({ [key]: null })
+  }
 
   // Clear all filters
   const clearAll = () => {
-    setFilters({ q: null, workspaceId: null, role: null, status: null });
-  };
+    setFilters({ q: null, workspaceId: null, role: null, status: null })
+  }
 
   // Cycle sort: null -> asc -> desc -> null
   const toggleSort = (column: SortableUserColumn) => {
     if (sortColumn === column) {
-      if (sortDirection === "asc") {
-        setFilters({ sort: [column, "desc"] });
-      } else if (sortDirection === "desc") {
-        setFilters({ sort: null });
+      if (sortDirection === 'asc') {
+        setFilters({ sort: [column, 'desc'] })
+      } else if (sortDirection === 'desc') {
+        setFilters({ sort: null })
       } else {
-        setFilters({ sort: [column, "asc"] });
+        setFilters({ sort: [column, 'asc'] })
       }
     } else {
-      setFilters({ sort: [column, "asc"] });
+      setFilters({ sort: [column, 'asc'] })
     }
-  };
+  }
 
   return {
     // Raw URL state
@@ -107,7 +107,7 @@ export function useAdminUserFilters() {
     setStatus,
     clearFilter,
     clearAll,
-  };
+  }
 }
 
-export type { SortableUserColumn, SortDirection };
+export type { SortableUserColumn, SortDirection }

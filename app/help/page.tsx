@@ -1,28 +1,28 @@
-import { Suspense } from "react";
-import { HelpPage } from "@/components/landing/help-page";
-import { constructMetadata } from "@/lib/constructMetadata";
+import { Suspense } from 'react'
+import { HelpPage } from '@/components/landing/help-page'
+import { constructMetadata } from '@/lib/constructMetadata'
 import {
   getAllHelpArticles,
   getArticlesByCategory,
   getPopularArticles,
   helpCategories,
-} from "@/lib/help";
+} from '@/lib/help'
 
 export const metadata = constructMetadata({
-  title: "Help Center | RealtyLens",
+  title: 'Help Center | RealtyLens',
   description:
-    "Get help with RealtyLens. Browse our knowledge base for guides, tutorials, and answers to frequently asked questions.",
-  canonical: "/help",
-});
+    'Get help with RealtyLens. Browse our knowledge base for guides, tutorials, and answers to frequently asked questions.',
+  canonical: '/help',
+})
 
 export default function Help() {
-  const articles = getAllHelpArticles();
-  const popularArticles = getPopularArticles();
+  const articles = getAllHelpArticles()
+  const popularArticles = getPopularArticles()
 
   // Calculate article count per category
-  const articleCountByCategory: Record<string, number> = {};
+  const articleCountByCategory: Record<string, number> = {}
   for (const category of helpCategories) {
-    articleCountByCategory[category.slug] = getArticlesByCategory(category.slug).length;
+    articleCountByCategory[category.slug] = getArticlesByCategory(category.slug).length
   }
 
   return (
@@ -34,5 +34,5 @@ export default function Help() {
         popularArticles={popularArticles}
       />
     </Suspense>
-  );
+  )
 }

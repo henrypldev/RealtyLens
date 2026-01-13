@@ -1,11 +1,12 @@
-"use client";
+'use client'
 
-import { IconLoader } from "@tabler/icons-react";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { IconLoader } from '@tabler/icons-react'
+import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
+import posthog from 'posthog-js'
+import { Suspense, useState } from 'react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -13,34 +14,34 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { authClient } from "@/lib/auth-client";
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { authClient } from '@/lib/auth-client'
 
 function SignInForm() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || "/dashboard";
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get('redirect') || '/dashboard'
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!email.trim()) {
-      toast.error("Please enter your email");
-      return;
+      toast.error('Please enter your email')
+      return
     }
 
     if (!password) {
-      toast.error("Please enter your password");
-      return;
+      toast.error('Please enter your password')
+      return
     }
 
-    setIsLoading(true);
+    setIsLoading(true)
 
     await authClient.signIn.email(
       {
@@ -49,16 +50,24 @@ function SignInForm() {
       },
       {
         onSuccess: () => {
-          toast.success("Signed in successfully");
-          router.push(redirectTo);
+          // Identify user in PostHog
+          posthog.identify(email, {
+            email: email,
+          })
+          // Capture sign in event
+          posthog.capture('user_signed_in', {
+            email: email,
+          })
+          toast.success('Signed in successfully')
+          router.push(redirectTo)
         },
         onError: (ctx) => {
-          toast.error(ctx.error.message || "Invalid email or password");
-          setIsLoading(false);
+          toast.error(ctx.error.message || 'Invalid email or password')
+          setIsLoading(false)
         },
       },
-    );
-  };
+    )
+  }
 
   return (
     <Card>
@@ -99,14 +108,14 @@ function SignInForm() {
                 Signing in...
               </>
             ) : (
-              "Sign in"
+              'Sign in'
             )}
           </Button>
         </form>
       </CardContent>
       <CardFooter className="justify-center">
         <p className="text-muted-foreground text-sm">
-          Don&apos;t have an account?{" "}
+          Don&apos;t have an account?{' '}
           <Link
             className="text-foreground underline underline-offset-4 hover:text-foreground/80"
             href="/sign-up"
@@ -116,7 +125,7 @@ function SignInForm() {
         </p>
       </CardFooter>
     </Card>
-  );
+  )
 }
 
 export default function SignInPage() {
@@ -124,5 +133,5 @@ export default function SignInPage() {
     <Suspense>
       <SignInForm />
     </Suspense>
-  );
+  )
 }

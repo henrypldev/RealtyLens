@@ -1,19 +1,19 @@
-import { IconArrowLeft, IconClock } from "@tabler/icons-react";
-import Link from "next/link";
-import type { HelpArticle, HelpArticleMeta, HelpCategory } from "@/lib/help";
-import { HelpArticleCard } from "./help-article-card";
-import { LandingFooter } from "./landing-footer";
-import { LandingNav } from "./landing-nav";
+import { IconArrowLeft, IconClock } from '@tabler/icons-react'
+import Link from 'next/link'
+import type { HelpArticle, HelpArticleMeta, HelpCategory } from '@/lib/help'
+import { HelpArticleCard } from './help-article-card'
+import { LandingFooter } from './landing-footer'
+import { LandingNav } from './landing-nav'
 
 interface HelpArticlePageProps {
-  article: HelpArticle;
-  category: HelpCategory;
-  relatedArticles: HelpArticleMeta[];
+  article: HelpArticle
+  category: HelpCategory
+  relatedArticles: HelpArticleMeta[]
 }
 
 export function HelpArticlePage({ article, category, relatedArticles }: HelpArticlePageProps) {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "var(--landing-bg)" }}>
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--landing-bg)' }}>
       <LandingNav />
 
       <main>
@@ -24,7 +24,7 @@ export function HelpArticlePage({ article, category, relatedArticles }: HelpArti
             <Link
               className="mb-6 inline-flex items-center gap-2 text-sm transition-colors hover:opacity-70"
               href={`/help/${category.slug}`}
-              style={{ color: "var(--landing-text-muted)" }}
+              style={{ color: 'var(--landing-text-muted)' }}
             >
               <IconArrowLeft className="size-4" />
               {category.title}
@@ -32,21 +32,21 @@ export function HelpArticlePage({ article, category, relatedArticles }: HelpArti
 
             <h1
               className="font-bold text-3xl leading-tight tracking-tight sm:text-4xl"
-              style={{ color: "var(--landing-text)" }}
+              style={{ color: 'var(--landing-text)' }}
             >
               {article.title}
             </h1>
 
             <p
               className="mt-4 text-lg leading-relaxed"
-              style={{ color: "var(--landing-text-muted)" }}
+              style={{ color: 'var(--landing-text-muted)' }}
             >
               {article.description}
             </p>
 
             <div
               className="mt-6 flex items-center gap-2 text-sm"
-              style={{ color: "var(--landing-text-muted)" }}
+              style={{ color: 'var(--landing-text-muted)' }}
             >
               <IconClock className="size-4" />
               <span>{article.readingTime}&nbsp;min read</span>
@@ -63,17 +63,17 @@ export function HelpArticlePage({ article, category, relatedArticles }: HelpArti
               dangerouslySetInnerHTML={{ __html: article.content }}
               style={
                 {
-                  "--tw-prose-body": "var(--landing-text-muted)",
-                  "--tw-prose-headings": "var(--landing-text)",
-                  "--tw-prose-links": "var(--landing-accent)",
-                  "--tw-prose-bold": "var(--landing-text)",
-                  "--tw-prose-bullets": "var(--landing-accent)",
-                  "--tw-prose-counters": "var(--landing-accent)",
-                  "--tw-prose-quotes": "var(--landing-text)",
-                  "--tw-prose-quote-borders": "var(--landing-accent)",
-                  "--tw-prose-code": "var(--landing-text)",
-                  "--tw-prose-pre-code": "var(--landing-text-muted)",
-                  "--tw-prose-pre-bg": "var(--landing-bg-alt)",
+                  '--tw-prose-body': 'var(--landing-text-muted)',
+                  '--tw-prose-headings': 'var(--landing-text)',
+                  '--tw-prose-links': 'var(--landing-accent)',
+                  '--tw-prose-bold': 'var(--landing-text)',
+                  '--tw-prose-bullets': 'var(--landing-accent)',
+                  '--tw-prose-counters': 'var(--landing-accent)',
+                  '--tw-prose-quotes': 'var(--landing-text)',
+                  '--tw-prose-quote-borders': 'var(--landing-accent)',
+                  '--tw-prose-code': 'var(--landing-text)',
+                  '--tw-prose-pre-code': 'var(--landing-text-muted)',
+                  '--tw-prose-pre-bg': 'var(--landing-bg-alt)',
                 } as React.CSSProperties
               }
             />
@@ -82,11 +82,11 @@ export function HelpArticlePage({ article, category, relatedArticles }: HelpArti
 
         {/* Related Articles */}
         {relatedArticles.length > 0 && (
-          <section className="px-6 py-16" style={{ backgroundColor: "var(--landing-bg-alt)" }}>
+          <section className="px-6 py-16" style={{ backgroundColor: 'var(--landing-bg-alt)' }}>
             <div className="mx-auto max-w-3xl">
               <h2
                 className="mb-6 font-semibold text-sm uppercase tracking-wider"
-                style={{ color: "var(--landing-text-muted)" }}
+                style={{ color: 'var(--landing-text-muted)' }}
               >
                 Related Articles
               </h2>
@@ -105,7 +105,7 @@ export function HelpArticlePage({ article, category, relatedArticles }: HelpArti
             <Link
               className="inline-flex items-center gap-2 text-sm transition-colors hover:opacity-70"
               href="/help"
-              style={{ color: "var(--landing-accent)" }}
+              style={{ color: 'var(--landing-accent)' }}
             >
               <IconArrowLeft className="size-4" />
               Back to Help Center
@@ -116,5 +116,5 @@ export function HelpArticlePage({ article, category, relatedArticles }: HelpArti
 
       <LandingFooter />
     </div>
-  );
+  )
 }

@@ -1,37 +1,37 @@
-"use client";
+'use client'
 
-import { IconSearch, IconX } from "@tabler/icons-react";
-import { useMemo } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { IconSearch, IconX } from '@tabler/icons-react'
+import { useMemo } from 'react'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { useAdminUserFilters } from "@/hooks/use-admin-user-filters";
+} from '@/components/ui/select'
+import { useAdminUserFilters } from '@/hooks/use-admin-user-filters'
 import {
   ALL_USER_ROLES,
   ALL_USER_STATUSES,
   type UserRole,
   type UserStatus,
-} from "@/lib/mock/admin-users";
-import { getAllWorkspaces } from "@/lib/mock/admin-workspaces";
+} from '@/lib/mock/admin-users'
+import { getAllWorkspaces } from '@/lib/mock/admin-workspaces'
 
 const roleLabels: Record<UserRole, string> = {
-  owner: "Owner",
-  admin: "Admin",
-  member: "Member",
-};
+  owner: 'Owner',
+  admin: 'Admin',
+  member: 'Member',
+}
 
 const statusLabels: Record<UserStatus, string> = {
-  active: "Active",
-  pending: "Pending",
-  inactive: "Inactive",
-};
+  active: 'Active',
+  pending: 'Pending',
+  inactive: 'Inactive',
+}
 
 export function UsersTableToolbar() {
   const {
@@ -43,11 +43,11 @@ export function UsersTableToolbar() {
     setStatus,
     clearFilter,
     clearAll,
-  } = useAdminUserFilters();
+  } = useAdminUserFilters()
 
   // Get workspaces for dropdown
-  const workspaces = useMemo(() => getAllWorkspaces(), []);
-  const selectedWorkspace = workspaces.find((w) => w.id === filters.workspaceId);
+  const workspaces = useMemo(() => getAllWorkspaces(), [])
+  const selectedWorkspace = workspaces.find((w) => w.id === filters.workspaceId)
 
   return (
     <div className="space-y-3">
@@ -60,7 +60,7 @@ export function UsersTableToolbar() {
             className="focus-ring border-foreground/10 bg-background/80 pl-9 transition-shadow"
             onChange={(e) => setSearch(e.target.value || null)}
             placeholder="Search users..."
-            value={filters.q || ""}
+            value={filters.q || ''}
           />
         </div>
 
@@ -68,8 +68,8 @@ export function UsersTableToolbar() {
         <div className="flex flex-wrap items-center gap-2">
           {/* Workspace filter */}
           <Select
-            onValueChange={(value) => setWorkspace(value === "all" ? null : value)}
-            value={filters.workspaceId || "all"}
+            onValueChange={(value) => setWorkspace(value === 'all' ? null : value)}
+            value={filters.workspaceId || 'all'}
           >
             <SelectTrigger className="w-full border-foreground/10 bg-background/80 sm:w-[180px]">
               <SelectValue placeholder="Workspace" />
@@ -86,8 +86,8 @@ export function UsersTableToolbar() {
 
           {/* Role filter */}
           <Select
-            onValueChange={(value) => setRole(value === "all" ? null : (value as UserRole))}
-            value={filters.role || "all"}
+            onValueChange={(value) => setRole(value === 'all' ? null : (value as UserRole))}
+            value={filters.role || 'all'}
           >
             <SelectTrigger className="w-full border-foreground/10 bg-background/80 sm:w-[120px]">
               <SelectValue placeholder="Role" />
@@ -104,8 +104,8 @@ export function UsersTableToolbar() {
 
           {/* Status filter */}
           <Select
-            onValueChange={(value) => setStatus(value === "all" ? null : (value as UserStatus))}
-            value={filters.status || "all"}
+            onValueChange={(value) => setStatus(value === 'all' ? null : (value as UserStatus))}
+            value={filters.status || 'all'}
           >
             <SelectTrigger className="w-full border-foreground/10 bg-background/80 sm:w-[120px]">
               <SelectValue placeholder="Status" />
@@ -146,7 +146,7 @@ export function UsersTableToolbar() {
               <span className="text-muted-foreground">Search:</span> {filters.q}
               <button
                 className="ml-0.5 rounded-full p-0.5 transition-colors hover:bg-foreground/10"
-                onClick={() => clearFilter("q")}
+                onClick={() => clearFilter('q')}
               >
                 <IconX className="h-3 w-3" />
               </button>
@@ -158,7 +158,7 @@ export function UsersTableToolbar() {
               <span className="text-muted-foreground">Workspace:</span> {selectedWorkspace.name}
               <button
                 className="ml-0.5 rounded-full p-0.5 transition-colors hover:bg-foreground/10"
-                onClick={() => clearFilter("workspaceId")}
+                onClick={() => clearFilter('workspaceId')}
               >
                 <IconX className="h-3 w-3" />
               </button>
@@ -170,7 +170,7 @@ export function UsersTableToolbar() {
               <span className="text-muted-foreground">Role:</span> {roleLabels[filters.role]}
               <button
                 className="ml-0.5 rounded-full p-0.5 transition-colors hover:bg-foreground/10"
-                onClick={() => clearFilter("role")}
+                onClick={() => clearFilter('role')}
               >
                 <IconX className="h-3 w-3" />
               </button>
@@ -182,7 +182,7 @@ export function UsersTableToolbar() {
               <span className="text-muted-foreground">Status:</span> {statusLabels[filters.status]}
               <button
                 className="ml-0.5 rounded-full p-0.5 transition-colors hover:bg-foreground/10"
-                onClick={() => clearFilter("status")}
+                onClick={() => clearFilter('status')}
               >
                 <IconX className="h-3 w-3" />
               </button>
@@ -191,5 +191,5 @@ export function UsersTableToolbar() {
         </div>
       )}
     </div>
-  );
+  )
 }

@@ -1,59 +1,57 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { HelpArticlePage } from "@/components/landing/help-article-page";
-import { constructMetadata } from "@/lib/constructMetadata";
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { HelpArticlePage } from '@/components/landing/help-article-page'
+import { constructMetadata } from '@/lib/constructMetadata'
 import {
   getAllHelpArticlePaths,
   getCategoryBySlug,
   getHelpArticle,
   getRelatedArticles,
-} from "@/lib/help";
+} from '@/lib/help'
 
 interface HelpArticlePageProps {
-  params: Promise<{ category: string; slug: string }>;
+  params: Promise<{ category: string; slug: string }>
 }
 
 export function generateStaticParams() {
-  const paths = getAllHelpArticlePaths();
+  const paths = getAllHelpArticlePaths()
   return paths.map(({ category, slug }) => ({
     category,
     slug,
-  }));
+  }))
 }
 
-export const dynamicParams = false;
+export const dynamicParams = false
 
 export async function generateMetadata({ params }: HelpArticlePageProps): Promise<Metadata> {
-  const { category: categorySlug, slug } = await params;
-  const article = await getHelpArticle(categorySlug, slug);
+  const { category: categorySlug, slug } = await params
+  const article = await getHelpArticle(categorySlug, slug)
 
   if (!article) {
     return constructMetadata({
-      title: "Article Not Found | RealtyLens Help",
+      title: 'Article Not Found | RealtyLens Help',
       noIndex: true,
-    });
+    })
   }
 
   return constructMetadata({
     title: `${article.title} | RealtyLens Help`,
     description: article.description,
     canonical: `/help/${categorySlug}/${slug}`,
-  });
+  })
 }
 
 export default async function HelpArticle({ params }: HelpArticlePageProps) {
-  const { category: categorySlug, slug } = await params;
+  const { category: categorySlug, slug } = await params
 
-  const article = await getHelpArticle(categorySlug, slug);
-  const category = getCategoryBySlug(categorySlug);
+  const article = await getHelpArticle(categorySlug, slug)
+  const category = getCategoryBySlug(categorySlug)
 
   if (!(article && category)) {
-    notFound();
+    notFound()
   }
 
-  const relatedArticles = getRelatedArticles(slug, categorySlug, 3);
+  const relatedArticles = getRelatedArticles(slug, categorySlug, 3)
 
-  return (
-    <HelpArticlePage article={article} category={category} relatedArticles={relatedArticles} />
-  );
+  return <HelpArticlePage article={article} category={category} relatedArticles={relatedArticles} />
 }

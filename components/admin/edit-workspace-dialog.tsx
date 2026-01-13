@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   IconAlertTriangle,
@@ -9,59 +9,59 @@ import {
   IconMail,
   IconReceipt,
   IconUser,
-} from "@tabler/icons-react";
-import * as React from "react";
-import { useState, useTransition } from "react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+} from '@tabler/icons-react'
+import * as React from 'react'
+import { useState, useTransition } from 'react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
+import { Textarea } from '@/components/ui/textarea'
 import {
   updateWorkspaceDetailsAction,
   updateWorkspacePlanAction,
   updateWorkspaceStatusAction,
-} from "@/lib/actions/admin";
-import type { Workspace, WorkspacePlan, WorkspaceStatus } from "@/lib/db/schema";
-import { cn } from "@/lib/utils";
+} from '@/lib/actions/admin'
+import type { Workspace, WorkspacePlan, WorkspaceStatus } from '@/lib/db/schema'
+import { cn } from '@/lib/utils'
 
 interface EditWorkspaceDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  workspace: Workspace;
-  onSuccess?: () => void;
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  workspace: Workspace
+  onSuccess?: () => void
 }
 
 const statusOptions: {
-  value: WorkspaceStatus;
-  label: string;
-  color: string;
+  value: WorkspaceStatus
+  label: string
+  color: string
 }[] = [
-  { value: "active", label: "Active", color: "var(--accent-green)" },
-  { value: "trial", label: "Trial", color: "var(--accent-amber)" },
-  { value: "suspended", label: "Suspended", color: "var(--accent-red)" },
-];
+  { value: 'active', label: 'Active', color: 'var(--accent-green)' },
+  { value: 'trial', label: 'Trial', color: 'var(--accent-amber)' },
+  { value: 'suspended', label: 'Suspended', color: 'var(--accent-red)' },
+]
 
 const planOptions: { value: WorkspacePlan; label: string }[] = [
-  { value: "free", label: "Free" },
-  { value: "pro", label: "Pro" },
-  { value: "enterprise", label: "Enterprise" },
-];
+  { value: 'free', label: 'Free' },
+  { value: 'pro', label: 'Pro' },
+  { value: 'enterprise', label: 'Enterprise' },
+]
 
 export function EditWorkspaceDialog({
   open,
@@ -69,47 +69,47 @@ export function EditWorkspaceDialog({
   workspace,
   onSuccess,
 }: EditWorkspaceDialogProps) {
-  const [isPending, startTransition] = useTransition();
-  const [saved, setSaved] = useState(false);
+  const [isPending, startTransition] = useTransition()
+  const [saved, setSaved] = useState(false)
 
   // Form state
-  const [name, setName] = useState(workspace.name);
-  const [organizationNumber, setOrganizationNumber] = useState(workspace.organizationNumber || "");
-  const [contactEmail, setContactEmail] = useState(workspace.contactEmail || "");
-  const [contactPerson, setContactPerson] = useState(workspace.contactPerson || "");
-  const [status, setStatus] = useState<WorkspaceStatus>(workspace.status as WorkspaceStatus);
-  const [plan, setPlan] = useState<WorkspacePlan>(workspace.plan as WorkspacePlan);
-  const [suspendedReason, setSuspendedReason] = useState(workspace.suspendedReason || "");
-  const [invoiceEligible, setInvoiceEligible] = useState(workspace.invoiceEligible);
+  const [name, setName] = useState(workspace.name)
+  const [organizationNumber, setOrganizationNumber] = useState(workspace.organizationNumber || '')
+  const [contactEmail, setContactEmail] = useState(workspace.contactEmail || '')
+  const [contactPerson, setContactPerson] = useState(workspace.contactPerson || '')
+  const [status, setStatus] = useState<WorkspaceStatus>(workspace.status as WorkspaceStatus)
+  const [plan, setPlan] = useState<WorkspacePlan>(workspace.plan as WorkspacePlan)
+  const [suspendedReason, setSuspendedReason] = useState(workspace.suspendedReason || '')
+  const [invoiceEligible, setInvoiceEligible] = useState(workspace.invoiceEligible)
 
   // Reset form when workspace changes
   React.useEffect(() => {
-    setName(workspace.name);
-    setOrganizationNumber(workspace.organizationNumber || "");
-    setContactEmail(workspace.contactEmail || "");
-    setContactPerson(workspace.contactPerson || "");
-    setStatus(workspace.status as WorkspaceStatus);
-    setPlan(workspace.plan as WorkspacePlan);
-    setSuspendedReason(workspace.suspendedReason || "");
-    setInvoiceEligible(workspace.invoiceEligible);
-  }, [workspace]);
+    setName(workspace.name)
+    setOrganizationNumber(workspace.organizationNumber || '')
+    setContactEmail(workspace.contactEmail || '')
+    setContactPerson(workspace.contactPerson || '')
+    setStatus(workspace.status as WorkspaceStatus)
+    setPlan(workspace.plan as WorkspacePlan)
+    setSuspendedReason(workspace.suspendedReason || '')
+    setInvoiceEligible(workspace.invoiceEligible)
+  }, [workspace])
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name.trim()) return;
+    e.preventDefault()
+    if (!name.trim()) return
 
     startTransition(async () => {
       try {
         // Track what changed
         const detailsChanged =
           name !== workspace.name ||
-          organizationNumber !== (workspace.organizationNumber || "") ||
-          contactEmail !== (workspace.contactEmail || "") ||
-          contactPerson !== (workspace.contactPerson || "");
+          organizationNumber !== (workspace.organizationNumber || '') ||
+          contactEmail !== (workspace.contactEmail || '') ||
+          contactPerson !== (workspace.contactPerson || '')
 
-        const statusChanged = status !== workspace.status;
-        const planChanged = plan !== workspace.plan;
-        const invoiceEligibleChanged = invoiceEligible !== workspace.invoiceEligible;
+        const statusChanged = status !== workspace.status
+        const planChanged = plan !== workspace.plan
+        const invoiceEligibleChanged = invoiceEligible !== workspace.invoiceEligible
 
         // Update details if changed
         if (detailsChanged) {
@@ -118,10 +118,10 @@ export function EditWorkspaceDialog({
             organizationNumber: organizationNumber.trim() || undefined,
             contactEmail: contactEmail.trim() || undefined,
             contactPerson: contactPerson.trim() || undefined,
-          });
+          })
           if (!result.success) {
-            toast.error(result.error);
-            return;
+            toast.error(result.error)
+            return
           }
         }
 
@@ -130,73 +130,73 @@ export function EditWorkspaceDialog({
           const result = await updateWorkspaceStatusAction(
             workspace.id,
             status,
-            status === "suspended" ? suspendedReason.trim() : undefined,
-          );
+            status === 'suspended' ? suspendedReason.trim() : undefined,
+          )
           if (!result.success) {
-            toast.error(result.error);
-            return;
+            toast.error(result.error)
+            return
           }
         }
 
         // Update plan if changed
         if (planChanged) {
-          const result = await updateWorkspacePlanAction(workspace.id, plan);
+          const result = await updateWorkspacePlanAction(workspace.id, plan)
           if (!result.success) {
-            toast.error(result.error);
-            return;
+            toast.error(result.error)
+            return
           }
         }
 
         // Update invoice eligibility if changed
         if (invoiceEligibleChanged) {
-          const { setWorkspaceInvoiceEligibility } = await import("@/lib/actions/payments");
-          const result = await setWorkspaceInvoiceEligibility(workspace.id, invoiceEligible);
+          const { setWorkspaceInvoiceEligibility } = await import('@/lib/actions/payments')
+          const result = await setWorkspaceInvoiceEligibility(workspace.id, invoiceEligible)
           if (!result.success) {
-            toast.error(result.error);
-            return;
+            toast.error(result.error)
+            return
           }
         }
 
-        setSaved(true);
-        toast.success("Workspace updated successfully");
+        setSaved(true)
+        toast.success('Workspace updated successfully')
 
         // Close after showing success
         setTimeout(() => {
-          setSaved(false);
-          onOpenChange(false);
-          onSuccess?.();
-        }, 1000);
+          setSaved(false)
+          onOpenChange(false)
+          onSuccess?.()
+        }, 1000)
       } catch {
-        toast.error("Failed to update workspace");
+        toast.error('Failed to update workspace')
       }
-    });
-  };
+    })
+  }
 
   const handleClose = () => {
     if (!isPending) {
       // Reset to original values
-      setName(workspace.name);
-      setOrganizationNumber(workspace.organizationNumber || "");
-      setContactEmail(workspace.contactEmail || "");
-      setContactPerson(workspace.contactPerson || "");
-      setStatus(workspace.status as WorkspaceStatus);
-      setPlan(workspace.plan as WorkspacePlan);
-      setSuspendedReason(workspace.suspendedReason || "");
-      setInvoiceEligible(workspace.invoiceEligible);
-      setSaved(false);
-      onOpenChange(false);
+      setName(workspace.name)
+      setOrganizationNumber(workspace.organizationNumber || '')
+      setContactEmail(workspace.contactEmail || '')
+      setContactPerson(workspace.contactPerson || '')
+      setStatus(workspace.status as WorkspaceStatus)
+      setPlan(workspace.plan as WorkspacePlan)
+      setSuspendedReason(workspace.suspendedReason || '')
+      setInvoiceEligible(workspace.invoiceEligible)
+      setSaved(false)
+      onOpenChange(false)
     }
-  };
+  }
 
   const hasChanges =
     name !== workspace.name ||
-    organizationNumber !== (workspace.organizationNumber || "") ||
-    contactEmail !== (workspace.contactEmail || "") ||
-    contactPerson !== (workspace.contactPerson || "") ||
+    organizationNumber !== (workspace.organizationNumber || '') ||
+    contactEmail !== (workspace.contactEmail || '') ||
+    contactPerson !== (workspace.contactPerson || '') ||
     status !== workspace.status ||
     plan !== workspace.plan ||
     invoiceEligible !== workspace.invoiceEligible ||
-    (status === "suspended" && suspendedReason !== (workspace.suspendedReason || ""));
+    (status === 'suspended' && suspendedReason !== (workspace.suspendedReason || ''))
 
   return (
     <Dialog onOpenChange={handleClose} open={open}>
@@ -208,10 +208,10 @@ export function EditWorkspaceDialog({
               <div
                 className="flex h-8 w-8 items-center justify-center rounded-lg"
                 style={{
-                  backgroundColor: "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
+                  backgroundColor: 'color-mix(in oklch, var(--accent-violet) 15%, transparent)',
                 }}
               >
-                <IconEdit className="h-4 w-4" style={{ color: "var(--accent-violet)" }} />
+                <IconEdit className="h-4 w-4" style={{ color: 'var(--accent-violet)' }} />
               </div>
               Edit Workspace
             </DialogTitle>
@@ -227,10 +227,10 @@ export function EditWorkspaceDialog({
               <div
                 className="flex h-16 w-16 items-center justify-center rounded-full"
                 style={{
-                  backgroundColor: "color-mix(in oklch, var(--accent-green) 15%, transparent)",
+                  backgroundColor: 'color-mix(in oklch, var(--accent-green) 15%, transparent)',
                 }}
               >
-                <IconCheck className="h-8 w-8" style={{ color: "var(--accent-green)" }} />
+                <IconCheck className="h-8 w-8" style={{ color: 'var(--accent-green)' }} />
               </div>
               <div>
                 <p className="font-semibold text-lg">Workspace Updated!</p>
@@ -376,11 +376,11 @@ export function EditWorkspaceDialog({
                 </div>
 
                 {/* Suspension Reason (only shown when suspended) */}
-                {status === "suspended" && (
+                {status === 'suspended' && (
                   <div
                     className={cn(
-                      "space-y-2 rounded-lg border border-destructive/20 bg-destructive/5 p-4",
-                      "animate-fade-in-up",
+                      'space-y-2 rounded-lg border border-destructive/20 bg-destructive/5 p-4',
+                      'animate-fade-in-up',
                     )}
                   >
                     <div className="flex items-center gap-2 font-medium text-destructive text-sm">
@@ -411,10 +411,10 @@ export function EditWorkspaceDialog({
                       className="flex h-9 w-9 items-center justify-center rounded-lg"
                       style={{
                         backgroundColor:
-                          "color-mix(in oklch, var(--accent-amber) 15%, transparent)",
+                          'color-mix(in oklch, var(--accent-amber) 15%, transparent)',
                       }}
                     >
-                      <IconReceipt className="h-4 w-4" style={{ color: "var(--accent-amber)" }} />
+                      <IconReceipt className="h-4 w-4" style={{ color: 'var(--accent-amber)' }} />
                     </div>
                     <div className="space-y-0.5">
                       <Label className="font-medium text-sm">Invoice Billing</Label>
@@ -444,7 +444,7 @@ export function EditWorkspaceDialog({
               className="min-w-[120px] gap-2"
               disabled={!(name.trim() && hasChanges) || isPending}
               onClick={handleSubmit}
-              style={{ backgroundColor: "var(--accent-violet)" }}
+              style={{ backgroundColor: 'var(--accent-violet)' }}
             >
               {isPending ? (
                 <>
@@ -462,5 +462,5 @@ export function EditWorkspaceDialog({
         )}
       </DialogContent>
     </Dialog>
-  );
+  )
 }

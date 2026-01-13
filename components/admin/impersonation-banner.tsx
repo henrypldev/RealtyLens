@@ -1,14 +1,14 @@
-"use client";
+'use client'
 
-import { IconEyeOff, IconX } from "@tabler/icons-react";
-import { Button } from "@/components/ui/button";
-import { useImpersonation } from "@/hooks/use-impersonation";
+import { IconEyeOff, IconX } from '@tabler/icons-react'
+import { Button } from '@/components/ui/button'
+import { useImpersonation } from '@/hooks/use-impersonation'
 
 export function ImpersonationBanner() {
-  const { isImpersonating, targetUser, endImpersonation } = useImpersonation();
+  const { isImpersonating, targetUser, endImpersonation } = useImpersonation()
 
   if (!(isImpersonating && targetUser)) {
-    return null;
+    return null
   }
 
   return (
@@ -22,7 +22,7 @@ export function ImpersonationBanner() {
           <span className="font-semibold">{targetUser.name}</span>
           <span className="hidden text-amber-900/80 md:inline"> ({targetUser.email})</span>
           <span className="hidden text-amber-900/70 lg:inline">
-            {" "}
+            {' '}
             &middot; {targetUser.workspaceName}
           </span>
         </div>
@@ -38,5 +38,5 @@ export function ImpersonationBanner() {
         <span className="hidden sm:inline">Exit</span>
       </Button>
     </div>
-  );
+  )
 }

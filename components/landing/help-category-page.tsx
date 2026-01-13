@@ -1,27 +1,27 @@
-import { IconArrowLeft, IconCreditCard, IconRocket, IconUser, IconWand } from "@tabler/icons-react";
-import Link from "next/link";
-import type { HelpArticleMeta, HelpCategory } from "@/lib/help";
-import { HelpArticleCard } from "./help-article-card";
-import { LandingFooter } from "./landing-footer";
-import { LandingNav } from "./landing-nav";
+import { IconArrowLeft, IconCreditCard, IconRocket, IconUser, IconWand } from '@tabler/icons-react'
+import Link from 'next/link'
+import type { HelpArticleMeta, HelpCategory } from '@/lib/help'
+import { HelpArticleCard } from './help-article-card'
+import { LandingFooter } from './landing-footer'
+import { LandingNav } from './landing-nav'
 
 const iconMap = {
   IconRocket,
   IconWand,
   IconCreditCard,
   IconUser,
-} as const;
+} as const
 
 interface HelpCategoryPageProps {
-  category: HelpCategory;
-  articles: HelpArticleMeta[];
+  category: HelpCategory
+  articles: HelpArticleMeta[]
 }
 
 export function HelpCategoryPage({ category, articles }: HelpCategoryPageProps) {
-  const Icon = iconMap[category.icon as keyof typeof iconMap] || IconRocket;
+  const Icon = iconMap[category.icon as keyof typeof iconMap] || IconRocket
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "var(--landing-bg)" }}>
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--landing-bg)' }}>
       <LandingNav />
 
       <main>
@@ -32,7 +32,7 @@ export function HelpCategoryPage({ category, articles }: HelpCategoryPageProps) 
             <Link
               className="mb-6 inline-flex items-center gap-2 text-sm transition-colors hover:opacity-70"
               href="/help"
-              style={{ color: "var(--landing-text-muted)" }}
+              style={{ color: 'var(--landing-text-muted)' }}
             >
               <IconArrowLeft className="size-4" />
               Help Center
@@ -42,20 +42,20 @@ export function HelpCategoryPage({ category, articles }: HelpCategoryPageProps) 
               <div
                 className="flex size-14 shrink-0 items-center justify-center rounded-xl"
                 style={{
-                  backgroundColor: "var(--landing-card)",
-                  border: "1px solid var(--landing-border)",
+                  backgroundColor: 'var(--landing-card)',
+                  border: '1px solid var(--landing-border)',
                 }}
               >
-                <Icon className="size-7" style={{ color: "var(--landing-accent)" }} />
+                <Icon className="size-7" style={{ color: 'var(--landing-accent)' }} />
               </div>
               <div>
                 <h1
                   className="font-bold text-3xl tracking-tight sm:text-4xl"
-                  style={{ color: "var(--landing-text)" }}
+                  style={{ color: 'var(--landing-text)' }}
                 >
                   {category.title}
                 </h1>
-                <p className="mt-2 text-lg" style={{ color: "var(--landing-text-muted)" }}>
+                <p className="mt-2 text-lg" style={{ color: 'var(--landing-text-muted)' }}>
                   {category.description}
                 </p>
               </div>
@@ -69,8 +69,8 @@ export function HelpCategoryPage({ category, articles }: HelpCategoryPageProps) 
             <div
               className="rounded-2xl p-2"
               style={{
-                backgroundColor: "var(--landing-bg-alt)",
-                border: "1px solid var(--landing-border)",
+                backgroundColor: 'var(--landing-bg-alt)',
+                border: '1px solid var(--landing-border)',
               }}
             >
               {articles.length > 0 ? (
@@ -81,7 +81,7 @@ export function HelpCategoryPage({ category, articles }: HelpCategoryPageProps) 
                 </div>
               ) : (
                 <div className="py-12 text-center">
-                  <p style={{ color: "var(--landing-text-muted)" }}>
+                  <p style={{ color: 'var(--landing-text-muted)' }}>
                     No articles in this category yet.
                   </p>
                 </div>
@@ -96,7 +96,7 @@ export function HelpCategoryPage({ category, articles }: HelpCategoryPageProps) 
             <Link
               className="inline-flex items-center gap-2 text-sm transition-colors hover:opacity-70"
               href="/help"
-              style={{ color: "var(--landing-accent)" }}
+              style={{ color: 'var(--landing-accent)' }}
             >
               <IconArrowLeft className="size-4" />
               Back to Help Center
@@ -107,5 +107,5 @@ export function HelpCategoryPage({ category, articles }: HelpCategoryPageProps) 
 
       <LandingFooter />
     </div>
-  );
+  )
 }

@@ -1,24 +1,24 @@
-import { Check, ImageIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Check, ImageIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 export function PricingSection() {
   const plans = [
     {
-      name: "Image Enhancement",
-      price: "$99",
-      period: "/project",
-      description: "Professional AI enhancement for your property photos.",
+      name: 'Image Enhancement',
+      price: '$99',
+      period: '/project',
+      description: 'Professional AI enhancement for your property photos.',
       icon: ImageIcon,
       features: [
-        "Up to 50 photos per project",
-        "AI sky replacement",
-        "Color correction & HDR",
-        "Object removal",
-        "Virtual staging options",
-        "4K resolution output",
-        "24-hour turnaround",
+        'Up to 50 photos per project',
+        'AI sky replacement',
+        'Color correction & HDR',
+        'Object removal',
+        'Virtual staging options',
+        '4K resolution output',
+        '24-hour turnaround',
       ],
-      cta: "Start Project",
+      cta: 'Start Project',
     },
     // {
     //   name: "Video Enhancement",
@@ -38,7 +38,7 @@ export function PricingSection() {
     //   cta: "Start Project",
     //   popular: false,
     // },
-  ];
+  ]
 
   return (
     <section id="pricing" className="py-20 md:py-28 bg-secondary/30">
@@ -88,5 +88,5 @@ export function PricingSection() {
         </div>
       </div>
     </section>
-  );
+  )
 }

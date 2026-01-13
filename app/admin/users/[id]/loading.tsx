@@ -128,5 +128,5 @@ export default function AdminUserDetailLoading() {
         </div>
       </div>
     </div>
-  );
+  )
 }

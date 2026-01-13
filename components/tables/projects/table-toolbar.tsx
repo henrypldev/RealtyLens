@@ -1,29 +1,29 @@
-"use client";
+'use client'
 
-import { IconSearch, IconX } from "@tabler/icons-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { IconSearch, IconX } from '@tabler/icons-react'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { ALL_PROJECT_STATUSES_LIST, useProjectFilters } from "@/hooks/use-project-filters";
-import type { ProjectStatus } from "@/lib/db/schema";
+} from '@/components/ui/select'
+import { ALL_PROJECT_STATUSES_LIST, useProjectFilters } from '@/hooks/use-project-filters'
+import type { ProjectStatus } from '@/lib/db/schema'
 
 const statusLabels: Record<ProjectStatus, string> = {
-  pending: "Pending",
-  processing: "Processing",
-  completed: "Completed",
-  failed: "Failed",
-};
+  pending: 'Pending',
+  processing: 'Processing',
+  completed: 'Completed',
+  failed: 'Failed',
+}
 
 export function ProjectsTableToolbar() {
   const { filters, hasActiveFilters, setSearch, setStatus, clearFilter, clearAll } =
-    useProjectFilters();
+    useProjectFilters()
 
   return (
     <div className="space-y-3">
@@ -36,7 +36,7 @@ export function ProjectsTableToolbar() {
             className="focus-ring border-foreground/10 bg-background/80 pl-9 transition-shadow"
             onChange={(e) => setSearch(e.target.value || null)}
             placeholder="Search projects…"
-            value={filters.q || ""}
+            value={filters.q || ''}
           />
         </div>
 
@@ -44,8 +44,8 @@ export function ProjectsTableToolbar() {
         <div className="flex flex-wrap items-center gap-2">
           {/* Status filter */}
           <Select
-            onValueChange={(value) => setStatus(value === "all" ? null : (value as ProjectStatus))}
-            value={filters.status || "all"}
+            onValueChange={(value) => setStatus(value === 'all' ? null : (value as ProjectStatus))}
+            value={filters.status || 'all'}
           >
             <SelectTrigger className="w-full border-foreground/10 bg-background/80 sm:w-[150px]">
               <SelectValue placeholder="Status" />
@@ -84,13 +84,13 @@ export function ProjectsTableToolbar() {
           {filters.q && (
             <Badge
               className="animate-scale-in gap-1.5 pr-1.5"
-              style={{ animationDelay: "0ms" }}
+              style={{ animationDelay: '0ms' }}
               variant="secondary"
             >
               <span className="text-muted-foreground">Search:</span> {filters.q}
               <button
                 className="ml-0.5 rounded-full p-0.5 transition-colors hover:bg-foreground/10"
-                onClick={() => clearFilter("q")}
+                onClick={() => clearFilter('q')}
                 type="button"
               >
                 <IconX className="h-3 w-3" />
@@ -101,13 +101,13 @@ export function ProjectsTableToolbar() {
           {filters.status && (
             <Badge
               className="animate-scale-in gap-1.5 pr-1.5"
-              style={{ animationDelay: "50ms" }}
+              style={{ animationDelay: '50ms' }}
               variant="secondary"
             >
               <span className="text-muted-foreground">Status:</span> {statusLabels[filters.status]}
               <button
                 className="ml-0.5 rounded-full p-0.5 transition-colors hover:bg-foreground/10"
-                onClick={() => clearFilter("status")}
+                onClick={() => clearFilter('status')}
                 type="button"
               >
                 <IconX className="h-3 w-3" />
@@ -117,5 +117,5 @@ export function ProjectsTableToolbar() {
         </div>
       )}
     </div>
-  );
+  )
 }

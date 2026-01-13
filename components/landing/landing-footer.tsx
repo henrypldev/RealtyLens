@@ -1,29 +1,29 @@
-import { IconBrandGithub } from "@tabler/icons-react";
-import { Camera } from "lucide-react";
-import Link from "next/link";
-import { siteConfig } from "@/lib/siteconfig";
+import { IconBrandGithub } from '@tabler/icons-react'
+import { Camera } from 'lucide-react'
+import Link from 'next/link'
+import { siteConfig } from '@/lib/siteconfig'
 
 const footerLinks = {
   product: [
-    { label: "Features", href: "#features" },
-    { label: "How It Works", href: "#how-it-works" },
-    { label: "Pricing", href: "#pricing" },
+    { label: 'Features', href: '#features' },
+    { label: 'How It Works', href: '#how-it-works' },
+    { label: 'Pricing', href: '#pricing' },
   ],
   company: [
     // { label: "About", href: "/about" },
     // { label: "Blog", href: "/blog" },
     // { label: "Help Center", href: "/help" },
-    { label: "Contact", href: "/contact" },
+    { label: 'Contact', href: '/contact' },
   ],
   legal: [
-    { label: "Privacy", href: "/privacy" },
-    { label: "Terms", href: "/terms" },
-    { label: "Source Code", href: siteConfig.sourceCode, external: true },
+    { label: 'Privacy', href: '/privacy' },
+    { label: 'Terms', href: '/terms' },
+    { label: 'Source Code', href: siteConfig.sourceCode, external: true },
   ],
-};
+}
 
 export function LandingFooter() {
-  const currentYear = new Date().getFullYear();
+  const currentYear = new Date().getFullYear()
 
   return (
     <footer className="border-t border-border bg-card">
@@ -83,7 +83,7 @@ export function LandingFooter() {
                       className="inline-flex items-center gap-1 text-sm transition-colors hover:opacity-70"
                       href={link.href}
                       rel="noopener noreferrer"
-                      style={{ color: "var(--landing-text-muted)" }}
+                      style={{ color: 'var(--landing-text-muted)' }}
                       target="_blank"
                     >
                       <IconBrandGithub className="size-4" />
@@ -93,7 +93,7 @@ export function LandingFooter() {
                     <Link
                       className="text-sm transition-colors hover:opacity-70"
                       href={link.href}
-                      style={{ color: "var(--landing-text-muted)" }}
+                      style={{ color: 'var(--landing-text-muted)' }}
                     >
                       {link.label}
                     </Link>
@@ -131,5 +131,5 @@ export function LandingFooter() {
         </div>
       </div>
     </footer>
-  );
+  )
 }

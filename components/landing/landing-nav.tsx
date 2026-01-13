@@ -1,27 +1,27 @@
-"use client";
+'use client'
 
-import { IconArrowRight } from "@tabler/icons-react";
-import { Camera, Menu, X } from "lucide-react";
-import Link from "next/link";
-import { Suspense, useState } from "react";
-import { useSession } from "@/lib/auth-client";
-import { siteConfig } from "@/lib/siteconfig";
-import { Button } from "../ui/button";
+import { IconArrowRight } from '@tabler/icons-react'
+import { Camera, Menu, X } from 'lucide-react'
+import Link from 'next/link'
+import { Suspense, useState } from 'react'
+import { useSession } from '@/lib/auth-client'
+import { siteConfig } from '@/lib/siteconfig'
+import { Button } from '../ui/button'
 
 function AuthButton() {
-  const { data: session, isPending } = useSession();
+  const { data: session, isPending } = useSession()
 
   if (isPending) {
     return (
       <div
         className="h-10 w-28 animate-pulse rounded-full"
-        style={{ backgroundColor: "var(--landing-border)" }}
+        style={{ backgroundColor: 'var(--landing-border)' }}
       />
-    );
+    )
   }
 
-  const href = session ? "/dashboard" : "/sign-in";
-  const text = session ? "Dashboard" : "Get Started";
+  const href = session ? '/dashboard' : '/sign-in'
+  const text = session ? 'Dashboard' : 'Get Started'
 
   return (
     <Button
@@ -33,11 +33,11 @@ function AuthButton() {
         </Link>
       }
     />
-  );
+  )
 }
 
 export function LandingNav() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
@@ -80,7 +80,7 @@ export function LandingNav() {
               fallback={
                 <div
                   className="h-10 w-28 animate-pulse rounded-full"
-                  style={{ backgroundColor: "var(--landing-border)" }}
+                  style={{ backgroundColor: 'var(--landing-border)' }}
                 />
               }
             >
@@ -129,5 +129,5 @@ export function LandingNav() {
         )}
       </div>
     </header>
-  );
+  )
 }

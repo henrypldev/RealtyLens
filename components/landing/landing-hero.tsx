@@ -1,26 +1,26 @@
-"use client";
+'use client'
 
-import { IconArrowRight } from "@tabler/icons-react";
-import { Play } from "lucide-react";
-import Link from "next/link";
-import { Suspense } from "react";
-import { Button } from "@/components/ui/button";
-import { useSession } from "@/lib/auth-client";
+import { IconArrowRight } from '@tabler/icons-react'
+import { Play } from 'lucide-react'
+import Link from 'next/link'
+import { Suspense } from 'react'
+import { Button } from '@/components/ui/button'
+import { useSession } from '@/lib/auth-client'
 
 function HeroAuthButton() {
-  const { data: session, isPending } = useSession();
+  const { data: session, isPending } = useSession()
 
   if (isPending) {
     return (
       <div
         className="h-12 w-36 animate-pulse rounded-full"
-        style={{ backgroundColor: "var(--landing-border)" }}
+        style={{ backgroundColor: 'var(--landing-border)' }}
       />
-    );
+    )
   }
 
-  const href = session ? "/dashboard" : "/sign-in";
-  const text = session ? "Go to Dashboard" : "Get Started";
+  const href = session ? '/dashboard' : '/sign-in'
+  const text = session ? 'Go to Dashboard' : 'Get Started'
 
   return (
     <Button
@@ -34,7 +34,7 @@ function HeroAuthButton() {
         </Link>
       }
     />
-  );
+  )
 }
 
 export function LandingHero() {
@@ -64,7 +64,7 @@ export function LandingHero() {
               fallback={
                 <div
                   className="h-12 w-36 animate-pulse rounded-full"
-                  style={{ backgroundColor: "var(--landing-border)" }}
+                  style={{ backgroundColor: 'var(--landing-border)' }}
                 />
               }
             >
@@ -111,5 +111,5 @@ export function LandingHero() {
         </div>
       </div>
     </section>
-  );
+  )
 }

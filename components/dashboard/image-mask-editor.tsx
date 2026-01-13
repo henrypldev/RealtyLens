@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   IconArrowBackUp,
@@ -7,9 +7,10 @@ import {
   IconSparkles,
   IconTrash,
   IconX,
-} from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
-import * as React from "react";
+} from '@tabler/icons-react'
+import { useRouter } from 'next/navigation'
+import posthog from 'posthog-js'
+import * as React from 'react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,264 +20,264 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Slider } from "@/components/ui/slider";
-import { useInpaint } from "@/hooks/use-inpaint";
-import type { ImageGeneration } from "@/lib/db/schema";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Slider } from '@/components/ui/slider'
+import { useInpaint } from '@/hooks/use-inpaint'
+import type { ImageGeneration } from '@/lib/db/schema'
+import { cn } from '@/lib/utils'
 
 // Common real estate staging suggestions
 const OBJECT_SUGGESTIONS = [
-  "Chair",
-  "Plant",
-  "Lamp",
-  "Painting",
-  "Rug",
-  "Coffee table",
-  "Sofa",
-  "Mirror",
-  "Vase",
-  "Bookshelf",
-];
+  'Chair',
+  'Plant',
+  'Lamp',
+  'Painting',
+  'Rug',
+  'Coffee table',
+  'Sofa',
+  'Mirror',
+  'Vase',
+  'Bookshelf',
+]
 
 interface MaskBounds {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
+  x: number
+  y: number
+  width: number
+  height: number
 }
 
 interface ImageMaskEditorProps {
-  image: ImageGeneration;
-  latestVersion: number;
-  onClose: () => void;
+  image: ImageGeneration
+  latestVersion: number
+  onClose: () => void
 }
 
 export function ImageMaskEditor({ image, latestVersion, onClose }: ImageMaskEditorProps) {
-  const router = useRouter();
-  const { inpaint, isProcessing, error } = useInpaint();
+  const router = useRouter()
+  const { inpaint, isProcessing, error } = useInpaint()
 
-  const canvasRef = React.useRef<HTMLCanvasElement>(null);
-  const fabricRef = React.useRef<InstanceType<typeof import("fabric").Canvas> | null>(null);
-  const containerRef = React.useRef<HTMLDivElement>(null);
+  const canvasRef = React.useRef<HTMLCanvasElement>(null)
+  const fabricRef = React.useRef<InstanceType<typeof import('fabric').Canvas> | null>(null)
+  const containerRef = React.useRef<HTMLDivElement>(null)
 
-  type EditMode = "remove" | "add";
-  const [brushSize, setBrushSize] = React.useState(30);
-  const [mode, setMode] = React.useState<EditMode>("remove");
-  const [objectToAdd, setObjectToAdd] = React.useState("");
+  type EditMode = 'remove' | 'add'
+  const [brushSize, setBrushSize] = React.useState(30)
+  const [mode, setMode] = React.useState<EditMode>('remove')
+  const [objectToAdd, setObjectToAdd] = React.useState('')
   const [imageDimensions, setImageDimensions] = React.useState({
     width: 0,
     height: 0,
-  });
-  const [isCanvasReady, setIsCanvasReady] = React.useState(false);
-  const [imageLoaded, setImageLoaded] = React.useState(false);
-  const [canvasHistory, setCanvasHistory] = React.useState<string[]>([]);
+  })
+  const [isCanvasReady, setIsCanvasReady] = React.useState(false)
+  const [imageLoaded, setImageLoaded] = React.useState(false)
+  const [canvasHistory, setCanvasHistory] = React.useState<string[]>([])
   const [cursorPosition, setCursorPosition] = React.useState<{
-    x: number;
-    y: number;
-  } | null>(null);
-  const [maskBounds, setMaskBounds] = React.useState<MaskBounds | null>(null);
-  const [showReplaceDialog, setShowReplaceDialog] = React.useState(false);
+    x: number
+    y: number
+  } | null>(null)
+  const [maskBounds, setMaskBounds] = React.useState<MaskBounds | null>(null)
+  const [showReplaceDialog, setShowReplaceDialog] = React.useState(false)
   const [pendingSubmitData, setPendingSubmitData] = React.useState<{
-    maskDataUrl: string;
-    prompt: string;
-    mode: EditMode;
-  } | null>(null);
+    maskDataUrl: string
+    prompt: string
+    mode: EditMode
+  } | null>(null)
 
   // Check if we're editing an older version
-  const currentVersion = image.version || 1;
-  const isEditingOldVersion = currentVersion < latestVersion;
+  const currentVersion = image.version || 1
+  const isEditingOldVersion = currentVersion < latestVersion
 
   // Use result image if available, otherwise original
-  const sourceImageUrl = image.resultImageUrl || image.originalImageUrl;
+  const sourceImageUrl = image.resultImageUrl || image.originalImageUrl
 
   // Step 1: Load image to get dimensions
   React.useEffect(() => {
-    const img = new window.Image();
-    img.crossOrigin = "anonymous";
+    const img = new window.Image()
+    img.crossOrigin = 'anonymous'
 
     img.onload = () => {
-      const container = containerRef.current;
-      if (!container) return;
+      const container = containerRef.current
+      if (!container) return
 
       // Calculate dimensions to fit container while maintaining aspect ratio
-      const containerWidth = container.clientWidth - 64; // account for padding
-      const containerHeight = container.clientHeight - 64;
-      const imgAspect = img.width / img.height;
-      const containerAspect = containerWidth / containerHeight;
+      const containerWidth = container.clientWidth - 64 // account for padding
+      const containerHeight = container.clientHeight - 64
+      const imgAspect = img.width / img.height
+      const containerAspect = containerWidth / containerHeight
 
-      let canvasWidth: number;
-      let canvasHeight: number;
+      let canvasWidth: number
+      let canvasHeight: number
 
       if (imgAspect > containerAspect) {
-        canvasWidth = Math.min(containerWidth, img.width);
-        canvasHeight = canvasWidth / imgAspect;
+        canvasWidth = Math.min(containerWidth, img.width)
+        canvasHeight = canvasWidth / imgAspect
       } else {
-        canvasHeight = Math.min(containerHeight, img.height);
-        canvasWidth = canvasHeight * imgAspect;
+        canvasHeight = Math.min(containerHeight, img.height)
+        canvasWidth = canvasHeight * imgAspect
       }
 
-      setImageDimensions({ width: canvasWidth, height: canvasHeight });
-      setImageLoaded(true);
-    };
+      setImageDimensions({ width: canvasWidth, height: canvasHeight })
+      setImageLoaded(true)
+    }
 
     img.onerror = () => {
-      console.error("Failed to load image:", sourceImageUrl);
-    };
+      console.error('Failed to load image:', sourceImageUrl)
+    }
 
-    img.src = sourceImageUrl;
-  }, [sourceImageUrl]);
+    img.src = sourceImageUrl
+  }, [sourceImageUrl])
 
   // Step 2: Initialize Fabric.js after canvas is rendered
   React.useEffect(() => {
-    if (!(imageLoaded && canvasRef.current) || imageDimensions.width === 0) return;
+    if (!(imageLoaded && canvasRef.current) || imageDimensions.width === 0) return
 
     // Dynamic import to avoid SSR issues
     const initFabric = async () => {
-      const { Canvas, PencilBrush } = await import("fabric");
+      const { Canvas, PencilBrush } = await import('fabric')
 
       // Dispose existing canvas if any
       if (fabricRef.current) {
-        fabricRef.current.dispose();
+        fabricRef.current.dispose()
       }
 
       const canvas = new Canvas(canvasRef.current!, {
         width: imageDimensions.width,
         height: imageDimensions.height,
         isDrawingMode: true,
-        backgroundColor: "transparent",
-      });
+        backgroundColor: 'transparent',
+      })
 
       // Set up brush with mode-based color
-      const brush = new PencilBrush(canvas);
-      brush.color = "rgba(239, 68, 68, 0.6)"; // Red for remove (default mode)
-      brush.width = brushSize;
-      canvas.freeDrawingBrush = brush;
+      const brush = new PencilBrush(canvas)
+      brush.color = 'rgba(239, 68, 68, 0.6)' // Red for remove (default mode)
+      brush.width = brushSize
+      canvas.freeDrawingBrush = brush
 
-      fabricRef.current = canvas;
-      setIsCanvasReady(true);
-    };
+      fabricRef.current = canvas
+      setIsCanvasReady(true)
+    }
 
-    initFabric();
+    initFabric()
 
     return () => {
       if (fabricRef.current) {
-        fabricRef.current.dispose();
-        fabricRef.current = null;
+        fabricRef.current.dispose()
+        fabricRef.current = null
       }
-    };
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imageLoaded, imageDimensions]);
+  }, [imageLoaded, imageDimensions])
 
   // Update brush settings based on mode
   React.useEffect(() => {
-    if (!(fabricRef.current?.freeDrawingBrush && isCanvasReady)) return;
+    if (!(fabricRef.current?.freeDrawingBrush && isCanvasReady)) return
 
-    fabricRef.current.freeDrawingBrush.width = brushSize;
+    fabricRef.current.freeDrawingBrush.width = brushSize
     // Visual feedback colors - red for remove, green for add
     fabricRef.current.freeDrawingBrush.color =
-      mode === "remove"
-        ? "rgba(239, 68, 68, 0.6)" // Red for remove
-        : "rgba(34, 197, 94, 0.6)"; // Green for add
-  }, [brushSize, mode, isCanvasReady]);
+      mode === 'remove'
+        ? 'rgba(239, 68, 68, 0.6)' // Red for remove
+        : 'rgba(34, 197, 94, 0.6)' // Green for add
+  }, [brushSize, mode, isCanvasReady])
 
   // Calculate mask bounds from paths
   const calculateMaskBounds = React.useCallback(() => {
-    const paths = fabricRef.current?.getObjects("path");
+    const paths = fabricRef.current?.getObjects('path')
     if (!paths?.length) {
-      setMaskBounds(null);
-      return;
+      setMaskBounds(null)
+      return
     }
 
-    let minX = Number.POSITIVE_INFINITY;
-    let minY = Number.POSITIVE_INFINITY;
-    let maxX = 0;
-    let maxY = 0;
+    let minX = Number.POSITIVE_INFINITY
+    let minY = Number.POSITIVE_INFINITY
+    let maxX = 0
+    let maxY = 0
 
     paths.forEach((path) => {
-      const bounds = path.getBoundingRect();
-      minX = Math.min(minX, bounds.left);
-      minY = Math.min(minY, bounds.top);
-      maxX = Math.max(maxX, bounds.left + bounds.width);
-      maxY = Math.max(maxY, bounds.top + bounds.height);
-    });
+      const bounds = path.getBoundingRect()
+      minX = Math.min(minX, bounds.left)
+      minY = Math.min(minY, bounds.top)
+      maxX = Math.max(maxX, bounds.left + bounds.width)
+      maxY = Math.max(maxY, bounds.top + bounds.height)
+    })
 
     setMaskBounds({
       x: minX,
       y: maxY, // Position below the mask
       width: maxX - minX,
       height: maxY - minY,
-    });
-  }, []);
+    })
+  }, [])
 
   // Track canvas history for undo
   React.useEffect(() => {
-    if (!(fabricRef.current && isCanvasReady)) return;
+    if (!(fabricRef.current && isCanvasReady)) return
 
-    const canvas = fabricRef.current;
+    const canvas = fabricRef.current
     const handlePathCreated = () => {
       // Save current state before the new path for undo
-      const json = JSON.stringify(canvas.toJSON());
-      setCanvasHistory((prev) => [...prev, json]);
+      const json = JSON.stringify(canvas.toJSON())
+      setCanvasHistory((prev) => [...prev, json])
       // Calculate mask bounds for floating input positioning
-      calculateMaskBounds();
-    };
+      calculateMaskBounds()
+    }
 
-    canvas.on("path:created", handlePathCreated);
+    canvas.on('path:created', handlePathCreated)
     return () => {
-      canvas.off("path:created", handlePathCreated);
-    };
-  }, [isCanvasReady, calculateMaskBounds]);
+      canvas.off('path:created', handlePathCreated)
+    }
+  }, [isCanvasReady, calculateMaskBounds])
 
   const handleUndo = React.useCallback(() => {
-    if (!fabricRef.current || canvasHistory.length === 0) return;
+    if (!fabricRef.current || canvasHistory.length === 0) return
 
-    const canvas = fabricRef.current;
+    const canvas = fabricRef.current
     // Remove the last state (current)
-    const newHistory = canvasHistory.slice(0, -1);
+    const newHistory = canvasHistory.slice(0, -1)
 
     if (newHistory.length === 0) {
       // No more history, clear canvas
-      canvas.clear();
-      canvas.backgroundColor = "transparent";
-      canvas.renderAll();
-      setMaskBounds(null);
+      canvas.clear()
+      canvas.backgroundColor = 'transparent'
+      canvas.renderAll()
+      setMaskBounds(null)
     } else {
       // Load previous state
-      const prevState = newHistory[newHistory.length - 1];
+      const prevState = newHistory[newHistory.length - 1]
       canvas.loadFromJSON(prevState, () => {
-        canvas.renderAll();
-        calculateMaskBounds();
-      });
+        canvas.renderAll()
+        calculateMaskBounds()
+      })
     }
 
-    setCanvasHistory(newHistory);
-  }, [canvasHistory, calculateMaskBounds]);
+    setCanvasHistory(newHistory)
+  }, [canvasHistory, calculateMaskBounds])
 
   const handleClear = React.useCallback(() => {
-    if (!fabricRef.current) return;
-    fabricRef.current.clear();
-    fabricRef.current.backgroundColor = "transparent";
-    fabricRef.current.renderAll();
-    setCanvasHistory([]);
-    setMaskBounds(null);
-    setObjectToAdd("");
-  }, []);
+    if (!fabricRef.current) return
+    fabricRef.current.clear()
+    fabricRef.current.backgroundColor = 'transparent'
+    fabricRef.current.renderAll()
+    setCanvasHistory([])
+    setMaskBounds(null)
+    setObjectToAdd('')
+  }, [])
 
   // Track cursor position for brush preview
   const handleCanvasMouseMove = React.useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
+    const rect = e.currentTarget.getBoundingClientRect()
     setCursorPosition({
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
-    });
-  }, []);
+    })
+  }, [])
 
   const handleCanvasMouseLeave = React.useCallback(() => {
-    setCursorPosition(null);
-  }, []);
+    setCursorPosition(null)
+  }, [])
 
   // Execute the actual API call
   const executeInpaint = React.useCallback(
@@ -286,119 +287,125 @@ export function ImageMaskEditor({ image, latestVersion, onClose }: ImageMaskEdit
       editMode: EditMode,
       replaceNewerVersions: boolean,
     ) => {
-      const result = await inpaint(image.id, maskDataUrl, prompt, editMode, replaceNewerVersions);
+      const result = await inpaint(image.id, maskDataUrl, prompt, editMode, replaceNewerVersions)
 
       if (result.success) {
+        // Capture image edited event
+        posthog.capture('image_edited', {
+          image_id: image.id,
+          edit_mode: editMode,
+          object_to_add: editMode === 'add' ? prompt : undefined,
+        })
         // The task is now running in the background
         // Close the editor and let the project detail page poll/track progress
-        router.refresh();
-        onClose();
+        router.refresh()
+        onClose()
       }
     },
     [image.id, inpaint, router, onClose],
-  );
+  )
 
   // Handle confirmed replace
   const handleConfirmReplace = React.useCallback(async () => {
-    if (!pendingSubmitData) return;
+    if (!pendingSubmitData) return
 
-    setShowReplaceDialog(false);
+    setShowReplaceDialog(false)
     await executeInpaint(
       pendingSubmitData.maskDataUrl,
       pendingSubmitData.prompt,
       pendingSubmitData.mode,
       true, // replaceNewerVersions
-    );
-    setPendingSubmitData(null);
-  }, [pendingSubmitData, executeInpaint]);
+    )
+    setPendingSubmitData(null)
+  }, [pendingSubmitData, executeInpaint])
 
   const handleSubmit = React.useCallback(async () => {
-    if (!fabricRef.current) return;
-    if (mode === "add" && !objectToAdd.trim()) return;
+    if (!fabricRef.current) return
+    if (mode === 'add' && !objectToAdd.trim()) return
 
     // Auto-generate prompt based on mode
-    let generatedPrompt: string;
-    if (mode === "remove") {
+    let generatedPrompt: string
+    if (mode === 'remove') {
       generatedPrompt =
-        "Empty background, seamless continuation of the surrounding walls, floor and room environment, clean space, no objects";
+        'Empty background, seamless continuation of the surrounding walls, floor and room environment, clean space, no objects'
     } else {
       // For Add mode, use Nano Banana with a descriptive prompt
-      const object = objectToAdd.trim().toLowerCase();
-      generatedPrompt = `Interior room photo with a ${object} added. Keep the existing furniture, walls, and layout exactly the same. Add a stylish ${object} that matches the room's aesthetic and lighting.`;
+      const object = objectToAdd.trim().toLowerCase()
+      generatedPrompt = `Interior room photo with a ${object} added. Keep the existing furniture, walls, and layout exactly the same. Add a stylish ${object} that matches the room's aesthetic and lighting.`
     }
 
     // Helper to proceed with submission (or show dialog)
     const proceedWithSubmit = async (maskDataUrl: string) => {
       if (isEditingOldVersion) {
         // Show confirmation dialog
-        setPendingSubmitData({ maskDataUrl, prompt: generatedPrompt, mode });
-        setShowReplaceDialog(true);
+        setPendingSubmitData({ maskDataUrl, prompt: generatedPrompt, mode })
+        setShowReplaceDialog(true)
       } else {
         // Submit directly
-        await executeInpaint(maskDataUrl, generatedPrompt, mode, false);
+        await executeInpaint(maskDataUrl, generatedPrompt, mode, false)
       }
-    };
+    }
 
-    if (mode === "remove") {
+    if (mode === 'remove') {
       // REMOVE MODE: Create mask and use FLUX Fill
-      const tempCanvas = document.createElement("canvas");
-      tempCanvas.width = imageDimensions.width;
-      tempCanvas.height = imageDimensions.height;
-      const tempCtx = tempCanvas.getContext("2d");
+      const tempCanvas = document.createElement('canvas')
+      tempCanvas.width = imageDimensions.width
+      tempCanvas.height = imageDimensions.height
+      const tempCtx = tempCanvas.getContext('2d')
 
-      if (!tempCtx) return;
+      if (!tempCtx) return
 
       // Fill with black (no edit areas)
-      tempCtx.fillStyle = "black";
-      tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+      tempCtx.fillStyle = 'black'
+      tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height)
 
       // Draw the fabric canvas content - convert colored strokes to white for mask
-      const fabricCanvas = fabricRef.current;
-      const originalPaths = fabricCanvas.getObjects("path");
+      const fabricCanvas = fabricRef.current
+      const originalPaths = fabricCanvas.getObjects('path')
 
       // Temporarily change all path colors to white for the mask
       originalPaths.forEach((path) => {
-        path.set("stroke", "white");
-      });
-      fabricCanvas.renderAll();
+        path.set('stroke', 'white')
+      })
+      fabricCanvas.renderAll()
 
       const fabricDataUrl = fabricCanvas.toDataURL({
-        format: "png",
+        format: 'png',
         multiplier: 1,
-      });
+      })
 
       // Restore original colors
       originalPaths.forEach((path) => {
-        path.set("stroke", "rgba(239, 68, 68, 0.6)");
-      });
-      fabricCanvas.renderAll();
+        path.set('stroke', 'rgba(239, 68, 68, 0.6)')
+      })
+      fabricCanvas.renderAll()
 
-      const maskImg = new window.Image();
+      const maskImg = new window.Image()
       maskImg.onload = async () => {
-        tempCtx.drawImage(maskImg, 0, 0);
+        tempCtx.drawImage(maskImg, 0, 0)
 
         // Get the final mask as data URL
-        const maskDataUrl = tempCanvas.toDataURL("image/png");
+        const maskDataUrl = tempCanvas.toDataURL('image/png')
 
-        await proceedWithSubmit(maskDataUrl);
-      };
-      maskImg.src = fabricDataUrl;
+        await proceedWithSubmit(maskDataUrl)
+      }
+      maskImg.src = fabricDataUrl
     } else {
       // ADD MODE: Use Nano Banana (no mask needed)
-      await proceedWithSubmit("");
+      await proceedWithSubmit('')
     }
-  }, [mode, objectToAdd, imageDimensions, isEditingOldVersion, executeInpaint]);
+  }, [mode, objectToAdd, imageDimensions, isEditingOldVersion, executeInpaint])
 
   // Handle escape key
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && !isProcessing) {
-        onClose();
+      if (e.key === 'Escape' && !isProcessing) {
+        onClose()
       }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onClose, isProcessing]);
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [onClose, isProcessing])
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-black/95">
@@ -411,10 +418,10 @@ export function ImageMaskEditor({ image, latestVersion, onClose }: ImageMaskEdit
           <div className="flex items-center gap-1 rounded-lg bg-white/10 p-1">
             <Button
               className={cn(
-                "gap-1.5 text-white hover:bg-white/20 hover:text-white",
-                mode === "remove" && "bg-red-500/30",
+                'gap-1.5 text-white hover:bg-white/20 hover:text-white',
+                mode === 'remove' && 'bg-red-500/30',
               )}
-              onClick={() => setMode("remove")}
+              onClick={() => setMode('remove')}
               size="sm"
               variant="ghost"
             >
@@ -423,10 +430,10 @@ export function ImageMaskEditor({ image, latestVersion, onClose }: ImageMaskEdit
             </Button>
             <Button
               className={cn(
-                "gap-1.5 text-white hover:bg-white/20 hover:text-white",
-                mode === "add" && "bg-green-500/30",
+                'gap-1.5 text-white hover:bg-white/20 hover:text-white',
+                mode === 'add' && 'bg-green-500/30',
               )}
-              onClick={() => setMode("add")}
+              onClick={() => setMode('add')}
               size="sm"
               variant="ghost"
             >
@@ -519,7 +526,7 @@ export function ImageMaskEditor({ image, latestVersion, onClose }: ImageMaskEdit
             <canvas
               className="absolute inset-0 rounded-lg"
               ref={canvasRef}
-              style={{ cursor: "none" }}
+              style={{ cursor: 'none' }}
             />
 
             {/* Brush size preview cursor */}
@@ -531,9 +538,9 @@ export function ImageMaskEditor({ image, latestVersion, onClose }: ImageMaskEdit
                   height: brushSize,
                   left: cursorPosition.x - brushSize / 2,
                   top: cursorPosition.y - brushSize / 2,
-                  borderColor: mode === "remove" ? "rgb(239, 68, 68)" : "rgb(34, 197, 94)",
+                  borderColor: mode === 'remove' ? 'rgb(239, 68, 68)' : 'rgb(34, 197, 94)',
                   backgroundColor:
-                    mode === "remove" ? "rgba(239, 68, 68, 0.2)" : "rgba(34, 197, 94, 0.2)",
+                    mode === 'remove' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(34, 197, 94, 0.2)',
                 }}
               />
             )}
@@ -546,7 +553,7 @@ export function ImageMaskEditor({ image, latestVersion, onClose }: ImageMaskEdit
             )}
 
             {/* Floating input panel for Add mode */}
-            {mode === "add" && maskBounds && canvasHistory.length > 0 && (
+            {mode === 'add' && maskBounds && canvasHistory.length > 0 && (
               <div
                 className="absolute z-10 w-64 rounded-lg border border-white/20 bg-black/90 p-3 shadow-xl backdrop-blur-sm"
                 style={{
@@ -559,10 +566,10 @@ export function ImageMaskEditor({ image, latestVersion, onClose }: ImageMaskEdit
                   {OBJECT_SUGGESTIONS.map((suggestion) => (
                     <button
                       className={cn(
-                        "rounded-full px-2.5 py-1 font-medium text-xs transition-colors",
+                        'rounded-full px-2.5 py-1 font-medium text-xs transition-colors',
                         objectToAdd === suggestion
-                          ? "bg-green-500 text-white"
-                          : "bg-white/10 text-white/80 hover:bg-white/20",
+                          ? 'bg-green-500 text-white'
+                          : 'bg-white/10 text-white/80 hover:bg-white/20',
                       )}
                       key={suggestion}
                       onClick={() => setObjectToAdd(suggestion)}
@@ -577,8 +584,8 @@ export function ImageMaskEditor({ image, latestVersion, onClose }: ImageMaskEdit
                     disabled={isProcessing}
                     onChange={(e) => setObjectToAdd(e.target.value)}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter" && objectToAdd.trim()) {
-                        handleSubmit();
+                      if (e.key === 'Enter' && objectToAdd.trim()) {
+                        handleSubmit()
                       }
                     }}
                     placeholder="Or type custom…"
@@ -607,7 +614,7 @@ export function ImageMaskEditor({ image, latestVersion, onClose }: ImageMaskEdit
       {/* Footer */}
       <div className="border-white/10 border-t bg-black/50 px-4 py-4 backdrop-blur-sm">
         <div className="mx-auto flex max-w-2xl items-center justify-center gap-3">
-          {mode === "remove" ? (
+          {mode === 'remove' ? (
             <>
               <p className="text-white/70">Draw on the object you want to remove</p>
               <Button
@@ -631,8 +638,8 @@ export function ImageMaskEditor({ image, latestVersion, onClose }: ImageMaskEdit
           ) : (
             <p className="text-white/70">
               {canvasHistory.length === 0
-                ? "Draw where you want to add the object"
-                : "Select or type what to add in the panel above"}
+                ? 'Draw where you want to add the object'
+                : 'Select or type what to add in the panel above'}
             </p>
           )}
         </div>
@@ -640,8 +647,8 @@ export function ImageMaskEditor({ image, latestVersion, onClose }: ImageMaskEdit
         {error && <p className="mt-2 text-center text-red-400 text-sm">{error}</p>}
 
         <p className="mt-2 text-center text-white/50 text-xs">
-          {mode === "remove"
-            ? "The AI will fill the marked area with seamless background."
+          {mode === 'remove'
+            ? 'The AI will fill the marked area with seamless background.'
             : "The AI will add the object matching the room's style."}
         </p>
       </div>
@@ -652,7 +659,7 @@ export function ImageMaskEditor({ image, latestVersion, onClose }: ImageMaskEdit
           <AlertDialogHeader>
             <AlertDialogTitle>Replace newer versions?</AlertDialogTitle>
             <AlertDialogDescription>
-              You&apos;re editing version {currentVersion}. This will replace{" "}
+              You&apos;re editing version {currentVersion}. This will replace{' '}
               {latestVersion - currentVersion === 1
                 ? `version ${latestVersion}`
                 : `versions ${currentVersion + 1} through ${latestVersion}`}
@@ -671,5 +678,5 @@ export function ImageMaskEditor({ image, latestVersion, onClose }: ImageMaskEdit
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  );
+  )
 }

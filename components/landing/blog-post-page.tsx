@@ -1,24 +1,24 @@
-import { IconArrowLeft, IconCalendar, IconClock, IconUser } from "@tabler/icons-react";
-import Link from "next/link";
-import type { BlogPost, BlogPostMeta } from "@/lib/blog";
-import { BlogCard } from "./blog-card";
-import { LandingFooter } from "./landing-footer";
-import { LandingNav } from "./landing-nav";
+import { IconArrowLeft, IconCalendar, IconClock, IconUser } from '@tabler/icons-react'
+import Link from 'next/link'
+import type { BlogPost, BlogPostMeta } from '@/lib/blog'
+import { BlogCard } from './blog-card'
+import { LandingFooter } from './landing-footer'
+import { LandingNav } from './landing-nav'
 
 interface BlogPostPageProps {
-  post: BlogPost;
-  relatedPosts: BlogPostMeta[];
+  post: BlogPost
+  relatedPosts: BlogPostMeta[]
 }
 
 export function BlogPostPage({ post, relatedPosts }: BlogPostPageProps) {
-  const formattedDate = new Date(post.date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const formattedDate = new Date(post.date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "var(--landing-bg)" }}>
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--landing-bg)' }}>
       <LandingNav />
 
       <main>
@@ -29,7 +29,7 @@ export function BlogPostPage({ post, relatedPosts }: BlogPostPageProps) {
             <Link
               className="mb-8 inline-flex items-center gap-2 text-sm transition-colors hover:opacity-70"
               href="/blog"
-              style={{ color: "var(--landing-text-muted)" }}
+              style={{ color: 'var(--landing-text-muted)' }}
             >
               <IconArrowLeft className="size-4" />
               Back to blog
@@ -40,8 +40,8 @@ export function BlogPostPage({ post, relatedPosts }: BlogPostPageProps) {
               <span
                 className="rounded-full px-3 py-1 font-medium text-xs"
                 style={{
-                  backgroundColor: "var(--landing-accent)",
-                  color: "var(--landing-accent-foreground)",
+                  backgroundColor: 'var(--landing-accent)',
+                  color: 'var(--landing-accent-foreground)',
                 }}
               >
                 {post.category}
@@ -51,7 +51,7 @@ export function BlogPostPage({ post, relatedPosts }: BlogPostPageProps) {
             {/* Title */}
             <h1
               className="font-bold text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl"
-              style={{ color: "var(--landing-text)" }}
+              style={{ color: 'var(--landing-text)' }}
             >
               {post.title}
             </h1>
@@ -59,7 +59,7 @@ export function BlogPostPage({ post, relatedPosts }: BlogPostPageProps) {
             {/* Description */}
             <p
               className="mt-6 text-lg leading-relaxed md:text-xl"
-              style={{ color: "var(--landing-text-muted)" }}
+              style={{ color: 'var(--landing-text-muted)' }}
             >
               {post.description}
             </p>
@@ -68,8 +68,8 @@ export function BlogPostPage({ post, relatedPosts }: BlogPostPageProps) {
             <div
               className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-t pt-6 text-sm"
               style={{
-                color: "var(--landing-text-muted)",
-                borderColor: "var(--landing-border)",
+                color: 'var(--landing-text-muted)',
+                borderColor: 'var(--landing-border)',
               }}
             >
               <span className="flex items-center gap-2">
@@ -94,13 +94,13 @@ export function BlogPostPage({ post, relatedPosts }: BlogPostPageProps) {
             <div
               className="flex aspect-[21/9] items-center justify-center rounded-3xl"
               style={{
-                backgroundColor: "var(--landing-bg-alt)",
-                border: "1px solid var(--landing-border)",
+                backgroundColor: 'var(--landing-bg-alt)',
+                border: '1px solid var(--landing-border)',
               }}
             >
               <div
                 className="font-bold text-6xl opacity-10"
-                style={{ color: "var(--landing-accent)" }}
+                style={{ color: 'var(--landing-accent)' }}
               >
                 RealtyLens
               </div>
@@ -117,17 +117,17 @@ export function BlogPostPage({ post, relatedPosts }: BlogPostPageProps) {
               dangerouslySetInnerHTML={{ __html: post.content }}
               style={
                 {
-                  "--tw-prose-body": "var(--landing-text-muted)",
-                  "--tw-prose-headings": "var(--landing-text)",
-                  "--tw-prose-links": "var(--landing-accent)",
-                  "--tw-prose-bold": "var(--landing-text)",
-                  "--tw-prose-bullets": "var(--landing-accent)",
-                  "--tw-prose-counters": "var(--landing-accent)",
-                  "--tw-prose-quotes": "var(--landing-text)",
-                  "--tw-prose-quote-borders": "var(--landing-accent)",
-                  "--tw-prose-code": "var(--landing-text)",
-                  "--tw-prose-pre-code": "var(--landing-text-muted)",
-                  "--tw-prose-pre-bg": "var(--landing-bg-alt)",
+                  '--tw-prose-body': 'var(--landing-text-muted)',
+                  '--tw-prose-headings': 'var(--landing-text)',
+                  '--tw-prose-links': 'var(--landing-accent)',
+                  '--tw-prose-bold': 'var(--landing-text)',
+                  '--tw-prose-bullets': 'var(--landing-accent)',
+                  '--tw-prose-counters': 'var(--landing-accent)',
+                  '--tw-prose-quotes': 'var(--landing-text)',
+                  '--tw-prose-quote-borders': 'var(--landing-accent)',
+                  '--tw-prose-code': 'var(--landing-text)',
+                  '--tw-prose-pre-code': 'var(--landing-text-muted)',
+                  '--tw-prose-pre-bg': 'var(--landing-bg-alt)',
                 } as React.CSSProperties
               }
             />
@@ -140,30 +140,30 @@ export function BlogPostPage({ post, relatedPosts }: BlogPostPageProps) {
             <div
               className="rounded-2xl p-6 md:p-8"
               style={{
-                backgroundColor: "var(--landing-card)",
-                border: "1px solid var(--landing-border)",
+                backgroundColor: 'var(--landing-card)',
+                border: '1px solid var(--landing-border)',
               }}
             >
               <div className="flex items-start gap-4">
                 <div
                   className="flex size-14 shrink-0 items-center justify-center rounded-full font-semibold text-lg"
                   style={{
-                    backgroundColor: "var(--landing-bg-alt)",
-                    color: "var(--landing-accent)",
+                    backgroundColor: 'var(--landing-bg-alt)',
+                    color: 'var(--landing-accent)',
                   }}
                 >
                   {post.author
-                    .split(" ")
+                    .split(' ')
                     .map((n) => n[0])
-                    .join("")}
+                    .join('')}
                 </div>
                 <div>
-                  <p className="font-semibold" style={{ color: "var(--landing-text)" }}>
+                  <p className="font-semibold" style={{ color: 'var(--landing-text)' }}>
                     {post.author}
                   </p>
                   <p
                     className="mt-1 text-sm leading-relaxed"
-                    style={{ color: "var(--landing-text-muted)" }}
+                    style={{ color: 'var(--landing-text-muted)' }}
                   >
                     Helping real estate professionals create stunning property listings with
                     AI-powered photo enhancement.
@@ -176,11 +176,11 @@ export function BlogPostPage({ post, relatedPosts }: BlogPostPageProps) {
 
         {/* Related Posts */}
         {relatedPosts.length > 0 && (
-          <section className="px-6 py-16" style={{ backgroundColor: "var(--landing-bg-alt)" }}>
+          <section className="px-6 py-16" style={{ backgroundColor: 'var(--landing-bg-alt)' }}>
             <div className="mx-auto max-w-5xl">
               <h2
                 className="mb-8 text-center font-bold text-2xl tracking-tight sm:text-3xl"
-                style={{ color: "var(--landing-text)" }}
+                style={{ color: 'var(--landing-text)' }}
               >
                 Related Articles
               </h2>
@@ -198,20 +198,20 @@ export function BlogPostPage({ post, relatedPosts }: BlogPostPageProps) {
           <div
             className="mx-auto max-w-4xl rounded-3xl px-8 py-16 text-center md:px-16"
             style={{
-              backgroundColor: "var(--landing-card)",
-              boxShadow: "0 25px 50px -12px var(--landing-shadow)",
-              border: "1px solid var(--landing-border)",
+              backgroundColor: 'var(--landing-card)',
+              boxShadow: '0 25px 50px -12px var(--landing-shadow)',
+              border: '1px solid var(--landing-border)',
             }}
           >
             <h2
               className="font-bold text-3xl tracking-tight sm:text-4xl"
-              style={{ color: "var(--landing-text)" }}
+              style={{ color: 'var(--landing-text)' }}
             >
               Ready to transform your listings?
             </h2>
             <p
               className="mx-auto mt-4 max-w-lg text-lg leading-relaxed"
-              style={{ color: "var(--landing-text-muted)" }}
+              style={{ color: 'var(--landing-text-muted)' }}
             >
               Join thousands of real estate professionals who use RealtyLens to create stunning
               property photos.
@@ -221,8 +221,8 @@ export function BlogPostPage({ post, relatedPosts }: BlogPostPageProps) {
                 className="inline-flex h-12 items-center rounded-full px-8 font-medium text-base transition-all duration-200 hover:scale-[1.03]"
                 href="/dashboard"
                 style={{
-                  backgroundColor: "var(--landing-accent)",
-                  color: "var(--landing-accent-foreground)",
+                  backgroundColor: 'var(--landing-accent)',
+                  color: 'var(--landing-accent-foreground)',
                 }}
               >
                 Try RealtyLens Free
@@ -231,9 +231,9 @@ export function BlogPostPage({ post, relatedPosts }: BlogPostPageProps) {
                 className="inline-flex h-12 items-center rounded-full px-8 font-medium text-base transition-colors hover:opacity-80"
                 href="/blog"
                 style={{
-                  backgroundColor: "var(--landing-bg)",
-                  color: "var(--landing-text)",
-                  border: "1px solid var(--landing-border)",
+                  backgroundColor: 'var(--landing-bg)',
+                  color: 'var(--landing-text)',
+                  border: '1px solid var(--landing-border)',
                 }}
               >
                 Read More Articles
@@ -245,5 +245,5 @@ export function BlogPostPage({ post, relatedPosts }: BlogPostPageProps) {
 
       <LandingFooter />
     </div>
-  );
+  )
 }

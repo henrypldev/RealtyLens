@@ -1,9 +1,9 @@
-"use client";
+'use client'
 
-import { useState } from "react";
+import { useState } from 'react'
 
 export function BeforeAfterSection() {
-  const [sliderPosition, setSliderPosition] = useState(50);
+  const [sliderPosition, setSliderPosition] = useState(50)
 
   return (
     <section className="py-20 md:py-28">
@@ -76,5 +76,5 @@ export function BeforeAfterSection() {
         </div>
       </div>
     </section>
-  );
+  )
 }

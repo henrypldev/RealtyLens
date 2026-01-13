@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   IconAlertTriangle,
@@ -9,27 +9,28 @@ import {
   IconLock,
   IconLogin,
   IconUser,
-} from "@tabler/icons-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
-import { toast } from "sonner";
+} from '@tabler/icons-react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import posthog from 'posthog-js'
+import { useState, useTransition } from 'react'
+import { toast } from 'sonner'
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { acceptInvitationAction, acceptInvitationAsLoggedInUser } from "@/lib/actions/invitations";
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { acceptInvitationAction, acceptInvitationAsLoggedInUser } from '@/lib/actions/invitations'
 
 interface InviteAcceptFormProps {
-  token: string;
-  email: string;
-  workspaceName: string;
-  isExpired: boolean;
-  isAccepted: boolean;
-  role: string;
-  hasExistingAccount?: boolean;
-  isLoggedIn?: boolean;
-  loggedInEmail?: string;
+  token: string
+  email: string
+  workspaceName: string
+  isExpired: boolean
+  isAccepted: boolean
+  role: string
+  hasExistingAccount?: boolean
+  isLoggedIn?: boolean
+  loggedInEmail?: string
 }
 
 export function InviteAcceptForm({
@@ -43,53 +44,70 @@ export function InviteAcceptForm({
   isLoggedIn = false,
   loggedInEmail,
 }: InviteAcceptFormProps) {
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showSignUpForm, setShowSignUpForm] = useState(!hasExistingAccount);
+  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
+  const [name, setName] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [showSignUpForm, setShowSignUpForm] = useState(!hasExistingAccount)
 
-  const roleLabel = role === "admin" ? "an admin" : role === "owner" ? "the owner" : "a member";
+  const roleLabel = role === 'admin' ? 'an admin' : role === 'owner' ? 'the owner' : 'a member'
 
   // Handler for logged-in users accepting directly
   const handleAcceptAsLoggedIn = () => {
     startTransition(async () => {
-      const result = await acceptInvitationAsLoggedInUser(token);
+      const result = await acceptInvitationAsLoggedInUser(token)
 
       if (result.success) {
-        toast.success("Welcome! You've joined the workspace.");
-        router.push(result.data.redirectTo);
+        // Capture invitation accepted event
+        posthog.capture('invitation_accepted', {
+          workspace_name: workspaceName,
+          role: role,
+          is_new_user: false,
+        })
+        toast.success("Welcome! You've joined the workspace.")
+        router.push(result.data.redirectTo)
       } else {
-        toast.error(result.error);
+        toast.error(result.error)
       }
-    });
-  };
+    })
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
-      return;
+      toast.error('Passwords do not match')
+      return
     }
 
     if (password.length < 8) {
-      toast.error("Password must be at least 8 characters");
-      return;
+      toast.error('Password must be at least 8 characters')
+      return
     }
 
     startTransition(async () => {
-      const result = await acceptInvitationAction(token, name.trim(), password);
+      const result = await acceptInvitationAction(token, name.trim(), password)
 
       if (result.success) {
-        toast.success("Welcome! Your account has been created.");
-        router.push(result.data.redirectTo);
+        // Identify the new user
+        posthog.identify(email, {
+          email: email,
+          name: name.trim(),
+        })
+        // Capture invitation accepted event
+        posthog.capture('invitation_accepted', {
+          workspace_name: workspaceName,
+          role: role,
+          is_new_user: true,
+        })
+        toast.success('Welcome! Your account has been created.')
+        router.push(result.data.redirectTo)
       } else {
-        toast.error(result.error);
+        toast.error(result.error)
       }
-    });
-  };
+    })
+  }
 
   // Show expired state
   if (isExpired) {
@@ -98,10 +116,10 @@ export function InviteAcceptForm({
         <div
           className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full"
           style={{
-            backgroundColor: "color-mix(in oklch, var(--accent-amber) 15%, transparent)",
+            backgroundColor: 'color-mix(in oklch, var(--accent-amber) 15%, transparent)',
           }}
         >
-          <IconClock className="h-8 w-8" style={{ color: "var(--accent-amber)" }} />
+          <IconClock className="h-8 w-8" style={{ color: 'var(--accent-amber)' }} />
         </div>
         <h1 className="mb-2 font-bold text-xl">Invitation Expired</h1>
         <p className="text-muted-foreground">
@@ -109,7 +127,7 @@ export function InviteAcceptForm({
           new invitation.
         </p>
       </div>
-    );
+    )
   }
 
   // Show already accepted state
@@ -119,20 +137,20 @@ export function InviteAcceptForm({
         <div
           className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full"
           style={{
-            backgroundColor: "color-mix(in oklch, var(--accent-green) 15%, transparent)",
+            backgroundColor: 'color-mix(in oklch, var(--accent-green) 15%, transparent)',
           }}
         >
-          <IconCheck className="h-8 w-8" style={{ color: "var(--accent-green)" }} />
+          <IconCheck className="h-8 w-8" style={{ color: 'var(--accent-green)' }} />
         </div>
         <h1 className="mb-2 font-bold text-xl">Already Accepted</h1>
         <p className="mb-4 text-muted-foreground">
           This invitation has already been accepted. You can sign in to access your workspace.
         </p>
-        <Button className="gap-2" onClick={() => router.push("/sign-in")}>
+        <Button className="gap-2" onClick={() => router.push('/sign-in')}>
           Go to Sign In
         </Button>
       </div>
-    );
+    )
   }
 
   // User is logged in with wrong email
@@ -142,10 +160,10 @@ export function InviteAcceptForm({
         <div
           className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full"
           style={{
-            backgroundColor: "color-mix(in oklch, var(--accent-amber) 15%, transparent)",
+            backgroundColor: 'color-mix(in oklch, var(--accent-amber) 15%, transparent)',
           }}
         >
-          <IconAlertTriangle className="h-8 w-8" style={{ color: "var(--accent-amber)" }} />
+          <IconAlertTriangle className="h-8 w-8" style={{ color: 'var(--accent-amber)' }} />
         </div>
         <h1 className="mb-2 font-bold text-xl">Wrong Account</h1>
         <p className="mb-2 text-muted-foreground">
@@ -157,11 +175,11 @@ export function InviteAcceptForm({
         <p className="mb-4 text-muted-foreground text-sm">
           Please sign out and sign in with the correct email to accept this invitation.
         </p>
-        <Button className="gap-2" onClick={() => router.push("/dashboard")}>
+        <Button className="gap-2" onClick={() => router.push('/dashboard')}>
           Go to Dashboard
         </Button>
       </div>
-    );
+    )
   }
 
   // User is logged in with correct email - show direct accept
@@ -173,10 +191,10 @@ export function InviteAcceptForm({
           <div
             className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl"
             style={{
-              backgroundColor: "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
+              backgroundColor: 'color-mix(in oklch, var(--accent-violet) 15%, transparent)',
             }}
           >
-            <IconBuilding className="h-7 w-7" style={{ color: "var(--accent-violet)" }} />
+            <IconBuilding className="h-7 w-7" style={{ color: 'var(--accent-violet)' }} />
           </div>
           <h1 className="font-bold text-xl">Join {workspaceName}</h1>
           <p className="mt-1 text-muted-foreground text-sm">
@@ -196,7 +214,7 @@ export function InviteAcceptForm({
             className="w-full gap-2"
             disabled={isPending}
             onClick={handleAcceptAsLoggedIn}
-            style={{ backgroundColor: "var(--accent-violet)" }}
+            style={{ backgroundColor: 'var(--accent-violet)' }}
           >
             {isPending ? (
               <>
@@ -217,7 +235,7 @@ export function InviteAcceptForm({
           By accepting, you agree to our Terms of Service and Privacy Policy
         </div>
       </div>
-    );
+    )
   }
 
   // User has existing account - show sign in prompt
@@ -229,10 +247,10 @@ export function InviteAcceptForm({
           <div
             className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl"
             style={{
-              backgroundColor: "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
+              backgroundColor: 'color-mix(in oklch, var(--accent-violet) 15%, transparent)',
             }}
           >
-            <IconBuilding className="h-7 w-7" style={{ color: "var(--accent-violet)" }} />
+            <IconBuilding className="h-7 w-7" style={{ color: 'var(--accent-violet)' }} />
           </div>
           <h1 className="font-bold text-xl">Join {workspaceName}</h1>
           <p className="mt-1 text-muted-foreground text-sm">
@@ -251,7 +269,7 @@ export function InviteAcceptForm({
           <Button
             asChild
             className="w-full gap-2"
-            style={{ backgroundColor: "var(--accent-violet)" }}
+            style={{ backgroundColor: 'var(--accent-violet)' }}
           >
             <Link href={`/sign-in?redirect=/invite/${token}`}>
               <IconLogin className="h-4 w-4" />
@@ -278,7 +296,7 @@ export function InviteAcceptForm({
           By accepting, you agree to our Terms of Service and Privacy Policy
         </div>
       </div>
-    );
+    )
   }
 
   // Sign up form (default for new accounts)
@@ -289,10 +307,10 @@ export function InviteAcceptForm({
         <div
           className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl"
           style={{
-            backgroundColor: "color-mix(in oklch, var(--accent-violet) 15%, transparent)",
+            backgroundColor: 'color-mix(in oklch, var(--accent-violet) 15%, transparent)',
           }}
         >
-          <IconBuilding className="h-7 w-7" style={{ color: "var(--accent-violet)" }} />
+          <IconBuilding className="h-7 w-7" style={{ color: 'var(--accent-violet)' }} />
         </div>
         <h1 className="font-bold text-xl">Join {workspaceName}</h1>
         <p className="mt-1 text-muted-foreground text-sm">
@@ -382,7 +400,7 @@ export function InviteAcceptForm({
           disabled={
             isPending || !name.trim() || password.length < 8 || password !== confirmPassword
           }
-          style={{ backgroundColor: "var(--accent-violet)" }}
+          style={{ backgroundColor: 'var(--accent-violet)' }}
           type="submit"
         >
           {isPending ? (
@@ -426,5 +444,5 @@ export function InviteAcceptForm({
         By accepting, you agree to our Terms of Service and Privacy Policy
       </div>
     </div>
-  );
+  )
 }

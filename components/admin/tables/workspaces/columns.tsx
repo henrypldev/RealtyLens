@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   IconBan,
@@ -7,52 +7,52 @@ import {
   IconPlayerPlay,
   IconTrash,
   IconUserCircle,
-} from "@tabler/icons-react";
-import type { ColumnDef } from "@tanstack/react-table";
-import { format } from "date-fns";
-import Link from "next/link";
-import { memo } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+} from '@tabler/icons-react'
+import type { ColumnDef } from '@tanstack/react-table'
+import { format } from 'date-fns'
+import Link from 'next/link'
+import { memo } from 'react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import type { WorkspacePlan, WorkspaceStatus } from "@/lib/db/schema";
-import type { AdminWorkspaceRow } from "@/lib/types/admin";
+} from '@/components/ui/dropdown-menu'
+import type { WorkspacePlan, WorkspaceStatus } from '@/lib/db/schema'
+import type { AdminWorkspaceRow } from '@/lib/types/admin'
 
 // Status badge variants
 const statusVariantMap: Record<
   WorkspaceStatus,
-  "status-active" | "status-suspended" | "status-trial"
+  'status-active' | 'status-suspended' | 'status-trial'
 > = {
-  active: "status-active",
-  suspended: "status-suspended",
-  trial: "status-trial",
-};
+  active: 'status-active',
+  suspended: 'status-suspended',
+  trial: 'status-trial',
+}
 
 const statusLabelMap: Record<WorkspaceStatus, string> = {
-  active: "Active",
-  suspended: "Suspended",
-  trial: "Trial",
-};
+  active: 'Active',
+  suspended: 'Suspended',
+  trial: 'Trial',
+}
 
 // Plan badge variants
-const planVariantMap: Record<WorkspacePlan, "plan-free" | "plan-pro" | "plan-enterprise"> = {
-  free: "plan-free",
-  pro: "plan-pro",
-  enterprise: "plan-enterprise",
-};
+const planVariantMap: Record<WorkspacePlan, 'plan-free' | 'plan-pro' | 'plan-enterprise'> = {
+  free: 'plan-free',
+  pro: 'plan-pro',
+  enterprise: 'plan-enterprise',
+}
 
 const planLabelMap: Record<WorkspacePlan, string> = {
-  free: "Free",
-  pro: "Pro",
-  enterprise: "Enterprise",
-};
+  free: 'Free',
+  pro: 'Pro',
+  enterprise: 'Enterprise',
+}
 
 // Memoized cell components
 const WorkspaceCell = memo(({ name, slug }: { name: string; slug: string }) => (
@@ -60,21 +60,21 @@ const WorkspaceCell = memo(({ name, slug }: { name: string; slug: string }) => (
     <span className="truncate font-medium">{name}</span>
     <span className="truncate font-mono text-muted-foreground text-xs">/{slug}</span>
   </div>
-));
-WorkspaceCell.displayName = "WorkspaceCell";
+))
+WorkspaceCell.displayName = 'WorkspaceCell'
 
 const OwnerCell = memo(
   ({ name, email, image }: { name: string | null; email: string | null; image: string | null }) => {
     if (!(name && email)) {
-      return <span className="text-muted-foreground text-sm italic">No owner</span>;
+      return <span className="text-muted-foreground text-sm italic">No owner</span>
     }
 
     const initials = name
-      .split(" ")
+      .split(' ')
       .map((n) => n[0])
-      .join("")
+      .join('')
       .toUpperCase()
-      .slice(0, 2);
+      .slice(0, 2)
 
     return (
       <div className="flex min-w-0 items-center gap-2.5">
@@ -87,50 +87,50 @@ const OwnerCell = memo(
           <span className="truncate text-muted-foreground text-xs">{email}</span>
         </div>
       </div>
-    );
+    )
   },
-);
-OwnerCell.displayName = "OwnerCell";
+)
+OwnerCell.displayName = 'OwnerCell'
 
 const MemberCountCell = memo(({ count }: { count: number }) => (
   <Badge className="font-mono" variant="secondary">
     {count}
   </Badge>
-));
-MemberCountCell.displayName = "MemberCountCell";
+))
+MemberCountCell.displayName = 'MemberCountCell'
 
 const ImagesCell = memo(({ count }: { count: number }) => (
   <span className="font-mono text-sm">{count.toLocaleString()}</span>
-));
-ImagesCell.displayName = "ImagesCell";
+))
+ImagesCell.displayName = 'ImagesCell'
 
 const VideosCell = memo(({ count }: { count: number }) => (
   <span className="font-mono text-sm">{count.toLocaleString()}</span>
-));
-VideosCell.displayName = "VideosCell";
+))
+VideosCell.displayName = 'VideosCell'
 
 const StatusCell = memo(({ status }: { status: WorkspaceStatus }) => (
   <Badge variant={statusVariantMap[status]}>{statusLabelMap[status]}</Badge>
-));
-StatusCell.displayName = "StatusCell";
+))
+StatusCell.displayName = 'StatusCell'
 
 const PlanCell = memo(({ plan }: { plan: WorkspacePlan }) => (
   <Badge variant={planVariantMap[plan]}>{planLabelMap[plan]}</Badge>
-));
-PlanCell.displayName = "PlanCell";
+))
+PlanCell.displayName = 'PlanCell'
 
 const SpendCell = memo(({ amount }: { amount: number }) => (
-  <span className="font-medium font-mono text-sm" style={{ color: "var(--accent-amber)" }}>
+  <span className="font-medium font-mono text-sm" style={{ color: 'var(--accent-amber)' }}>
     ${amount.toFixed(2)}
   </span>
-));
-SpendCell.displayName = "SpendCell";
+))
+SpendCell.displayName = 'SpendCell'
 
 const DateCell = memo(({ date }: { date: Date }) => {
-  const formatted = format(date, "MMM d, yyyy");
-  return <span className="text-muted-foreground text-sm">{formatted}</span>;
-});
-DateCell.displayName = "DateCell";
+  const formatted = format(date, 'MMM d, yyyy')
+  return <span className="text-muted-foreground text-sm">{formatted}</span>
+})
+DateCell.displayName = 'DateCell'
 
 const ActionsCell = memo(
   ({
@@ -145,25 +145,25 @@ const ActionsCell = memo(
     onActivate,
     onDelete,
   }: {
-    workspaceId: string;
-    ownerId: string | null;
-    ownerName: string | null;
-    ownerEmail: string | null;
-    workspaceName: string;
-    status: WorkspaceStatus;
+    workspaceId: string
+    ownerId: string | null
+    ownerName: string | null
+    ownerEmail: string | null
+    workspaceName: string
+    status: WorkspaceStatus
     onImpersonate?: (user: {
-      id: string;
-      name: string;
-      email: string;
-      workspaceId: string;
-      workspaceName: string;
-    }) => void;
-    onSuspend?: (workspaceId: string, workspaceName: string) => void;
-    onActivate?: (workspaceId: string, workspaceName: string) => void;
-    onDelete?: (workspaceId: string, workspaceName: string) => void;
+      id: string
+      name: string
+      email: string
+      workspaceId: string
+      workspaceName: string
+    }) => void
+    onSuspend?: (workspaceId: string, workspaceName: string) => void
+    onActivate?: (workspaceId: string, workspaceName: string) => void
+    onDelete?: (workspaceId: string, workspaceName: string) => void
   }) => {
-    const canImpersonate = ownerId && ownerName && ownerEmail;
-    const isSuspended = status === "suspended";
+    const canImpersonate = ownerId && ownerName && ownerEmail
+    const isSuspended = status === 'suspended'
 
     return (
       <div className="flex items-center justify-center">
@@ -191,7 +191,7 @@ const ActionsCell = memo(
                       email: ownerEmail,
                       workspaceId,
                       workspaceName,
-                    });
+                    })
                   }
                 }}
               >
@@ -227,36 +227,36 @@ const ActionsCell = memo(
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    );
+    )
   },
-);
-ActionsCell.displayName = "ActionsCell";
+)
+ActionsCell.displayName = 'ActionsCell'
 
 export function createWorkspaceColumns(options?: {
   onImpersonate?: (user: {
-    id: string;
-    name: string;
-    email: string;
-    workspaceId: string;
-    workspaceName: string;
-  }) => void;
-  onSuspend?: (workspaceId: string, workspaceName: string) => void;
-  onActivate?: (workspaceId: string, workspaceName: string) => void;
-  onDelete?: (workspaceId: string, workspaceName: string) => void;
+    id: string
+    name: string
+    email: string
+    workspaceId: string
+    workspaceName: string
+  }) => void
+  onSuspend?: (workspaceId: string, workspaceName: string) => void
+  onActivate?: (workspaceId: string, workspaceName: string) => void
+  onDelete?: (workspaceId: string, workspaceName: string) => void
 }): ColumnDef<AdminWorkspaceRow>[] {
   return [
     {
-      id: "workspace",
-      accessorKey: "name",
-      header: "Workspace",
+      id: 'workspace',
+      accessorKey: 'name',
+      header: 'Workspace',
       size: 220,
       minSize: 180,
       cell: ({ row }) => <WorkspaceCell name={row.original.name} slug={row.original.slug} />,
     },
     {
-      id: "owner",
-      accessorKey: "ownerName",
-      header: "Owner",
+      id: 'owner',
+      accessorKey: 'ownerName',
+      header: 'Owner',
       size: 220,
       minSize: 180,
       cell: ({ row }) => (
@@ -268,71 +268,71 @@ export function createWorkspaceColumns(options?: {
       ),
     },
     {
-      id: "memberCount",
-      accessorKey: "memberCount",
-      header: "Members",
+      id: 'memberCount',
+      accessorKey: 'memberCount',
+      header: 'Members',
       size: 90,
       minSize: 70,
       maxSize: 100,
       cell: ({ row }) => <MemberCountCell count={row.original.memberCount} />,
     },
     {
-      id: "imagesGenerated",
-      accessorKey: "imagesGenerated",
-      header: "Images",
+      id: 'imagesGenerated',
+      accessorKey: 'imagesGenerated',
+      header: 'Images',
       size: 90,
       minSize: 70,
       maxSize: 100,
       cell: ({ row }) => <ImagesCell count={row.original.imagesGenerated} />,
     },
     {
-      id: "videosGenerated",
-      accessorKey: "videosGenerated",
-      header: "Videos",
+      id: 'videosGenerated',
+      accessorKey: 'videosGenerated',
+      header: 'Videos',
       size: 90,
       minSize: 70,
       maxSize: 100,
       cell: ({ row }) => <VideosCell count={row.original.videosGenerated} />,
     },
     {
-      id: "status",
-      accessorKey: "status",
-      header: "Status",
+      id: 'status',
+      accessorKey: 'status',
+      header: 'Status',
       size: 110,
       minSize: 90,
       maxSize: 130,
       cell: ({ row }) => <StatusCell status={row.original.status} />,
     },
     {
-      id: "plan",
-      accessorKey: "plan",
-      header: "Plan",
+      id: 'plan',
+      accessorKey: 'plan',
+      header: 'Plan',
       size: 110,
       minSize: 90,
       maxSize: 130,
       cell: ({ row }) => <PlanCell plan={row.original.plan} />,
     },
     {
-      id: "totalSpend",
-      accessorKey: "totalSpend",
-      header: "Spend",
+      id: 'totalSpend',
+      accessorKey: 'totalSpend',
+      header: 'Spend',
       size: 100,
       minSize: 80,
       maxSize: 120,
       cell: ({ row }) => <SpendCell amount={row.original.totalSpend} />,
     },
     {
-      id: "createdAt",
-      accessorKey: "createdAt",
-      header: "Created",
+      id: 'createdAt',
+      accessorKey: 'createdAt',
+      header: 'Created',
       size: 120,
       minSize: 100,
       maxSize: 140,
       cell: ({ row }) => <DateCell date={row.original.createdAt} />,
     },
     {
-      id: "actions",
-      header: "",
+      id: 'actions',
+      header: '',
       size: 60,
       minSize: 60,
       maxSize: 60,
@@ -354,5 +354,5 @@ export function createWorkspaceColumns(options?: {
         />
       ),
     },
-  ];
+  ]
 }

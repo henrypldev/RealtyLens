@@ -1,12 +1,12 @@
-import { LegalPage, LegalSection } from "@/components/landing/legal-page";
-import { constructMetadata } from "@/lib/constructMetadata";
+import { LegalPage, LegalSection } from '@/components/landing/legal-page'
+import { constructMetadata } from '@/lib/constructMetadata'
 
 export const metadata = constructMetadata({
-  title: "Privacy Policy - RealtyLens",
-  description: "How we collect, use, and protect your personal information.",
-  canonical: "/privacy",
+  title: 'Privacy Policy - RealtyLens',
+  description: 'How we collect, use, and protect your personal information.',
+  canonical: '/privacy',
   noIndex: true,
-});
+})
 
 export default function PrivacyPage() {
   return (
@@ -117,7 +117,7 @@ export default function PrivacyPage() {
           </li>
         </ul>
         <p>
-          To exercise any of these rights, please contact us at{" "}
+          To exercise any of these rights, please contact us at{' '}
           <a className="underline" href="mailto:privacy@proppi.tech">
             privacy@proppi.tech
           </a>
@@ -157,17 +157,17 @@ export default function PrivacyPage() {
         <p className="mt-2">
           <strong>RealtyLens</strong>
           <br />
-          Email:{" "}
+          Email:{' '}
           <a className="underline" href="mailto:privacy@proppi.tech">
             privacy@proppi.tech
           </a>
           <br />
-          General inquiries:{" "}
+          General inquiries:{' '}
           <a className="underline" href="mailto:hello@proppi.tech">
             hello@proppi.tech
           </a>
         </p>
       </LegalSection>
     </LegalPage>
-  );
+  )
 }

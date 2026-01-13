@@ -10,15 +10,15 @@ export {
   retryImageProcessing,
   triggerInpaintTask,
   updateImageStatus,
-} from "./images";
-export { completeOnboarding } from "./onboarding";
+} from './images'
+export { completeOnboarding } from './onboarding'
 export {
   type ActionResult,
   createProjectAction,
   deleteProjectAction,
   updateProjectAction,
-} from "./projects";
+} from './projects'
 export {
   updateWorkspaceSettings,
   type WorkspaceActionResult,
-} from "./workspace";
+} from './workspace'

@@ -9,6 +9,7 @@ import {
   IconX,
 } from '@tabler/icons-react'
 import Image from 'next/image'
+import posthog from 'posthog-js'
 import * as React from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
@@ -86,6 +87,12 @@ export function SelectImagesStep({ images, onAddImages, onRemoveImage }: SelectI
                 roomLabel: '',
               },
             ])
+
+            // Capture video image selected event
+            posthog.capture('video_images_selected', {
+              image_id: result.imageId,
+              action: 'added',
+            })
 
             // Remove from uploading list after a short delay
             setTimeout(() => {

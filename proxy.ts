@@ -1,6 +1,6 @@
-import { getSessionCookie } from "better-auth/cookies";
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+import { getSessionCookie } from 'better-auth/cookies'
+import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 
 /**
  * Next.js Proxy (formerly Middleware).
@@ -11,19 +11,19 @@ import { NextResponse } from "next/server";
 export function proxy(request: NextRequest) {
   // Optimistic cookie-only check (NOT full validation).
   // This is the recommended approach for Next.js Proxy to avoid blocking requests.
-  const sessionCookie = getSessionCookie(request);
+  const sessionCookie = getSessionCookie(request)
 
   if (!sessionCookie) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/sign-in";
+    const url = request.nextUrl.clone()
+    url.pathname = '/sign-in'
     // Keep it simple; the sign-in page can decide whether to use this param.
-    url.searchParams.set("redirect", request.nextUrl.pathname);
-    return NextResponse.redirect(url);
+    url.searchParams.set('redirect', request.nextUrl.pathname)
+    return NextResponse.redirect(url)
   }
 
-  return NextResponse.next();
+  return NextResponse.next()
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
-};
+  matcher: ['/dashboard/:path*'],
+}

@@ -1,13 +1,13 @@
-import { AboutPage } from "@/components/landing/about-page";
-import { constructMetadata } from "@/lib/constructMetadata";
+import { AboutPage } from '@/components/landing/about-page'
+import { constructMetadata } from '@/lib/constructMetadata'
 
 export const metadata = constructMetadata({
-  title: "About - RealtyLens",
+  title: 'About - RealtyLens',
   description:
-    "Learn about RealtyLens, the AI-powered photo enhancement platform for real estate professionals.",
-  canonical: "/about",
-});
+    'Learn about RealtyLens, the AI-powered photo enhancement platform for real estate professionals.',
+  canonical: '/about',
+})
 
 export default function Page() {
-  return <AboutPage />;
+  return <AboutPage />
 }

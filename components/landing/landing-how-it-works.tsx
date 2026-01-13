@@ -1,30 +1,30 @@
-"use client";
+'use client'
 
-import { Download, Upload, Wand2 } from "lucide-react";
+import { Download, Upload, Wand2 } from 'lucide-react'
 
 const steps = [
   {
     icon: Upload,
-    step: "01",
-    title: "Upload Your Photos",
+    step: '01',
+    title: 'Upload Your Photos',
     description:
-      "Drag and drop your property photos or select them from your device. We support all common image formats.",
+      'Drag and drop your property photos or select them from your device. We support all common image formats.',
   },
   {
     icon: Wand2,
-    step: "02",
-    title: "Choose a Style",
+    step: '02',
+    title: 'Choose a Style',
     description:
-      "Select from our collection of professional style templates designed for different property types and aesthetics.",
+      'Select from our collection of professional style templates designed for different property types and aesthetics.',
   },
   {
     icon: Download,
-    step: "03",
-    title: "Download & Share",
+    step: '03',
+    title: 'Download & Share',
     description:
-      "Get your enhanced photos instantly. Download in high resolution, ready for your listings and marketing.",
+      'Get your enhanced photos instantly. Download in high resolution, ready for your listings and marketing.',
   },
-];
+]
 
 export function LandingHowItWorks() {
   return (
@@ -56,5 +56,5 @@ export function LandingHowItWorks() {
         </div>
       </div>
     </section>
-  );
+  )
 }

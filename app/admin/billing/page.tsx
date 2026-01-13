@@ -1,13 +1,13 @@
-import { IconFileInvoice } from "@tabler/icons-react";
-import { BillingStatsBar } from "@/components/admin/billing/billing-stats-bar";
-import { BillingTabs } from "@/components/admin/billing/billing-tabs";
-import { requireSystemAdmin } from "@/lib/admin-auth";
-import { getBillingStats, getInvoiceHistory } from "@/lib/db/queries";
+import { IconFileInvoice } from '@tabler/icons-react'
+import { BillingStatsBar } from '@/components/admin/billing/billing-stats-bar'
+import { BillingTabs } from '@/components/admin/billing/billing-tabs'
+import { requireSystemAdmin } from '@/lib/admin-auth'
+import { getBillingStats, getInvoiceHistory } from '@/lib/db/queries'
 
 export default async function AdminBillingPage() {
-  await requireSystemAdmin();
+  await requireSystemAdmin()
 
-  const [stats, invoices] = await Promise.all([getBillingStats(), getInvoiceHistory()]);
+  const [stats, invoices] = await Promise.all([getBillingStats(), getInvoiceHistory()])
 
   // Transform stats for the stats bar component (convert ore to NOK)
   const formattedStats = {
@@ -19,7 +19,7 @@ export default async function AdminBillingPage() {
     invoicedAmountThisMonth: stats.invoicedThisMonthAmountOre / 100,
     invoicedCount: stats.totalInvoicedCount,
     invoicedAmount: stats.totalInvoicedAmountOre / 100,
-  };
+  }
 
   return (
     <div className="space-y-6 px-4 md:px-6 lg:px-8">
@@ -28,7 +28,7 @@ export default async function AdminBillingPage() {
         <div className="flex items-center gap-3">
           <div
             className="flex h-11 w-11 items-center justify-center rounded-xl shadow-sm ring-1 ring-white/10"
-            style={{ backgroundColor: "var(--accent-amber)" }}
+            style={{ backgroundColor: 'var(--accent-amber)' }}
           >
             <IconFileInvoice className="h-5 w-5 text-white" />
           </div>
@@ -51,5 +51,5 @@ export default async function AdminBillingPage() {
         <BillingTabs invoices={invoices} />
       </div>
     </div>
-  );
+  )
 }

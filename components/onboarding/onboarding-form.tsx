@@ -1,23 +1,24 @@
-"use client";
+'use client'
 
-import { IconLoader } from "@tabler/icons-react";
-import { useActionState } from "react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { completeOnboarding } from "@/lib/actions";
+import { IconLoader } from '@tabler/icons-react'
+import posthog from 'posthog-js'
+import { useActionState } from 'react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { completeOnboarding } from '@/lib/actions'
 
 interface OnboardingFormProps {
-  initialName: string;
-  initialEmail: string;
-  initialWorkspaceName: string;
+  initialName: string
+  initialEmail: string
+  initialWorkspaceName: string
 }
 
 type FormState = {
-  error?: string;
-} | null;
+  error?: string
+} | null
 
 export function OnboardingForm({
   initialName,
@@ -26,40 +27,50 @@ export function OnboardingForm({
 }: OnboardingFormProps) {
   const [state, formAction, isPending] = useActionState<FormState, FormData>(
     async (_prevState, formData) => {
-      const name = formData.get("name") as string;
-      const workspaceName = formData.get("workspaceName") as string;
-      const organizationNumber = formData.get("organizationNumber") as string;
+      const name = formData.get('name') as string
+      const workspaceName = formData.get('workspaceName') as string
+      const organizationNumber = formData.get('organizationNumber') as string
 
       // Client-side validation
       if (!name.trim()) {
-        return { error: "Please enter your name" };
+        return { error: 'Please enter your name' }
       }
 
       if (!workspaceName.trim()) {
-        return { error: "Please enter a workspace name" };
+        return { error: 'Please enter a workspace name' }
       }
 
       // Validate Norwegian org number format if provided (9 digits)
       if (organizationNumber && !/^\d{9}$/.test(organizationNumber)) {
-        return { error: "Organization number must be 9 digits" };
+        return { error: 'Organization number must be 9 digits' }
       }
 
       try {
         // Server action will redirect on success
-        await completeOnboarding(formData);
-        return null;
+        await completeOnboarding(formData)
+        // Capture onboarding completed event
+        posthog.capture('onboarding_completed', {
+          workspace_name: workspaceName,
+          has_organization_number: !!organizationNumber,
+        })
+        // Update user properties
+        posthog.setPersonProperties({
+          name: name,
+          workspace_name: workspaceName,
+        })
+        return null
       } catch (error) {
         return {
-          error: error instanceof Error ? error.message : "Something went wrong",
-        };
+          error: error instanceof Error ? error.message : 'Something went wrong',
+        }
       }
     },
     null,
-  );
+  )
 
   // Show toast on error
   if (state?.error) {
-    toast.error(state.error);
+    toast.error(state.error)
   }
 
   return (
@@ -146,11 +157,11 @@ export function OnboardingForm({
                 Saving…
               </>
             ) : (
-              "Continue to dashboard"
+              'Continue to dashboard'
             )}
           </Button>
         </form>
       </CardContent>
     </Card>
-  );
+  )
 }

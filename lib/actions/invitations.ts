@@ -1,14 +1,14 @@
-"use server";
+'use server'
 
-import { addDays } from "date-fns";
-import { and, eq, gt, isNull } from "drizzle-orm";
-import { nanoid } from "nanoid";
-import { revalidatePath } from "next/cache";
-import { headers } from "next/headers";
-import type { ActionResult } from "@/lib/actions/admin";
-import { verifySystemAdmin } from "@/lib/admin-auth";
-import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
+import { addDays } from 'date-fns'
+import { and, eq, gt, isNull } from 'drizzle-orm'
+import { nanoid } from 'nanoid'
+import { revalidatePath } from 'next/cache'
+import { headers } from 'next/headers'
+import type { ActionResult } from '@/lib/actions/admin'
+import { verifySystemAdmin } from '@/lib/admin-auth'
+import { auth } from '@/lib/auth'
+import { db } from '@/lib/db'
 import {
   type Invitation,
   invitation,
@@ -16,8 +16,8 @@ import {
   user,
   type WorkspacePlan,
   workspace,
-} from "@/lib/db/schema";
-import { sendInviteEmail } from "@/lib/email";
+} from '@/lib/db/schema'
+import { sendInviteEmail } from '@/lib/email'
 
 // ============================================================================
 // Create Workspace with Invitation (Admin only)
@@ -30,30 +30,30 @@ export async function createWorkspaceWithInviteAction(
   sendEmail = true,
 ): Promise<
   ActionResult<{
-    workspace: { id: string; name: string };
-    invitation: Invitation;
-    inviteLink: string;
+    workspace: { id: string; name: string }
+    invitation: Invitation
+    inviteLink: string
   }>
 > {
-  const adminCheck = await verifySystemAdmin();
+  const adminCheck = await verifySystemAdmin()
   if (adminCheck.error) {
-    return { success: false, error: adminCheck.error };
+    return { success: false, error: adminCheck.error }
   }
 
   try {
     // Generate unique slug from name
     const baseSlug = name
       .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, "");
-    const slug = `${baseSlug}-${nanoid(6)}`;
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '')
+    const slug = `${baseSlug}-${nanoid(6)}`
 
     // Generate invitation token
-    const token = nanoid(32);
-    const expiresAt = addDays(new Date(), 7); // 7 days to accept
+    const token = nanoid(32)
+    const expiresAt = addDays(new Date(), 7) // 7 days to accept
 
     // Create workspace
-    const workspaceId = nanoid();
+    const workspaceId = nanoid()
     const [newWorkspace] = await db
       .insert(workspace)
       .values({
@@ -61,10 +61,10 @@ export async function createWorkspaceWithInviteAction(
         name: name.trim(),
         slug,
         plan,
-        status: "active",
+        status: 'active',
         onboardingCompleted: false,
       })
-      .returning();
+      .returning()
 
     // Create invitation
     const [newInvitation] = await db
@@ -73,26 +73,26 @@ export async function createWorkspaceWithInviteAction(
         id: nanoid(),
         email: email.toLowerCase().trim(),
         workspaceId: newWorkspace.id,
-        role: "owner",
+        role: 'owner',
         token,
         expiresAt,
       })
-      .returning();
+      .returning()
 
     // Build invite link
-    const inviteLink = `${process.env.NEXT_PUBLIC_APP_URL}/invite/${token}`;
+    const inviteLink = `${process.env.NEXT_PUBLIC_APP_URL}/invite/${token}`
 
     // Send invite email if requested
     if (sendEmail) {
       try {
-        await sendInviteEmail(email, "RealtyLens Admin", newWorkspace.name, inviteLink);
+        await sendInviteEmail(email, 'RealtyLens Admin', newWorkspace.name, inviteLink)
       } catch (emailError) {
-        console.error("[invitations:createWorkspaceWithInvite] Email failed:", emailError);
+        console.error('[invitations:createWorkspaceWithInvite] Email failed:', emailError)
         // Don't fail the action if email fails - user can copy the link
       }
     }
 
-    revalidatePath("/admin/workspaces");
+    revalidatePath('/admin/workspaces')
 
     return {
       success: true,
@@ -101,13 +101,13 @@ export async function createWorkspaceWithInviteAction(
         invitation: newInvitation,
         inviteLink,
       },
-    };
+    }
   } catch (error) {
-    console.error("[invitations:createWorkspaceWithInvite] Error:", error);
+    console.error('[invitations:createWorkspaceWithInvite] Error:', error)
     return {
       success: false,
-      error: "Failed to create workspace and send invitation",
-    };
+      error: 'Failed to create workspace and send invitation',
+    }
   }
 }
 
@@ -118,9 +118,9 @@ export async function createWorkspaceWithInviteAction(
 export async function resendInvitationAction(
   invitationId: string,
 ): Promise<ActionResult<{ expiresAt: Date }>> {
-  const adminCheck = await verifySystemAdmin();
+  const adminCheck = await verifySystemAdmin()
   if (adminCheck.error) {
-    return { success: false, error: adminCheck.error };
+    return { success: false, error: adminCheck.error }
   }
 
   try {
@@ -132,19 +132,19 @@ export async function resendInvitationAction(
       })
       .from(invitation)
       .innerJoin(workspace, eq(invitation.workspaceId, workspace.id))
-      .where(eq(invitation.id, invitationId));
+      .where(eq(invitation.id, invitationId))
 
     if (!existingInvite) {
-      return { success: false, error: "Invitation not found" };
+      return { success: false, error: 'Invitation not found' }
     }
 
     if (existingInvite.invitation.acceptedAt) {
-      return { success: false, error: "Invitation has already been accepted" };
+      return { success: false, error: 'Invitation has already been accepted' }
     }
 
     // Generate new token and extend expiry
-    const newToken = nanoid(32);
-    const newExpiresAt = addDays(new Date(), 7);
+    const newToken = nanoid(32)
+    const newExpiresAt = addDays(new Date(), 7)
 
     // Update invitation
     await db
@@ -153,21 +153,21 @@ export async function resendInvitationAction(
         token: newToken,
         expiresAt: newExpiresAt,
       })
-      .where(eq(invitation.id, invitationId));
+      .where(eq(invitation.id, invitationId))
 
     // Send new invite email
-    const inviteLink = `${process.env.NEXT_PUBLIC_APP_URL}/invite/${newToken}`;
+    const inviteLink = `${process.env.NEXT_PUBLIC_APP_URL}/invite/${newToken}`
     await sendInviteEmail(
       existingInvite.invitation.email,
-      "RealtyLens Admin",
+      'RealtyLens Admin',
       existingInvite.workspaceName,
       inviteLink,
-    );
+    )
 
-    return { success: true, data: { expiresAt: newExpiresAt } };
+    return { success: true, data: { expiresAt: newExpiresAt } }
   } catch (error) {
-    console.error("[invitations:resendInvitation] Error:", error);
-    return { success: false, error: "Failed to resend invitation" };
+    console.error('[invitations:resendInvitation] Error:', error)
+    return { success: false, error: 'Failed to resend invitation' }
   }
 }
 
@@ -177,10 +177,10 @@ export async function resendInvitationAction(
 
 export async function getInvitationByTokenAction(token: string): Promise<
   ActionResult<{
-    invitation: Invitation;
-    workspaceName: string;
-    isExpired: boolean;
-    isAccepted: boolean;
+    invitation: Invitation
+    workspaceName: string
+    isExpired: boolean
+    isAccepted: boolean
   }>
 > {
   try {
@@ -191,14 +191,14 @@ export async function getInvitationByTokenAction(token: string): Promise<
       })
       .from(invitation)
       .innerJoin(workspace, eq(invitation.workspaceId, workspace.id))
-      .where(eq(invitation.token, token));
+      .where(eq(invitation.token, token))
 
     if (!result) {
-      return { success: false, error: "Invitation not found or has expired" };
+      return { success: false, error: 'Invitation not found or has expired' }
     }
 
-    const isExpired = new Date() > result.invitation.expiresAt;
-    const isAccepted = Boolean(result.invitation.acceptedAt);
+    const isExpired = new Date() > result.invitation.expiresAt
+    const isAccepted = Boolean(result.invitation.acceptedAt)
 
     return {
       success: true,
@@ -208,10 +208,10 @@ export async function getInvitationByTokenAction(token: string): Promise<
         isExpired,
         isAccepted,
       },
-    };
+    }
   } catch (error) {
-    console.error("[invitations:getInvitationByToken] Error:", error);
-    return { success: false, error: "Failed to get invitation" };
+    console.error('[invitations:getInvitationByToken] Error:', error)
+    return { success: false, error: 'Failed to get invitation' }
   }
 }
 
@@ -233,21 +233,21 @@ export async function acceptInvitationAction(
       })
       .from(invitation)
       .innerJoin(workspace, eq(invitation.workspaceId, workspace.id))
-      .where(and(eq(invitation.token, token), gt(invitation.expiresAt, new Date())));
+      .where(and(eq(invitation.token, token), gt(invitation.expiresAt, new Date())))
 
     if (!result) {
-      return { success: false, error: "Invitation not found or has expired" };
+      return { success: false, error: 'Invitation not found or has expired' }
     }
 
     if (result.invitation.acceptedAt) {
-      return { success: false, error: "Invitation has already been accepted" };
+      return { success: false, error: 'Invitation has already been accepted' }
     }
 
     // Check if user already exists with this email
     const [existingUser] = await db
       .select()
       .from(user)
-      .where(eq(user.email, result.invitation.email));
+      .where(eq(user.email, result.invitation.email))
 
     if (existingUser) {
       // User exists - just link them to the workspace
@@ -258,26 +258,26 @@ export async function acceptInvitationAction(
           role: result.invitation.role,
           updatedAt: new Date(),
         })
-        .where(eq(user.id, existingUser.id));
+        .where(eq(user.id, existingUser.id))
 
       // Mark invitation as accepted
       await db
         .update(invitation)
         .set({ acceptedAt: new Date() })
-        .where(eq(invitation.id, result.invitation.id));
+        .where(eq(invitation.id, result.invitation.id))
 
       // Mark workspace onboarding as needing completion
       await db
         .update(workspace)
         .set({ onboardingCompleted: false })
-        .where(eq(workspace.id, result.workspaceId));
+        .where(eq(workspace.id, result.workspaceId))
 
-      return { success: true, data: { redirectTo: "/onboarding" } };
+      return { success: true, data: { redirectTo: '/onboarding' } }
     }
 
     // Create new user with better-auth
-    const { auth } = await import("@/lib/auth");
-    const { headers } = await import("next/headers");
+    const { auth } = await import('@/lib/auth')
+    const { headers } = await import('next/headers')
 
     // Use better-auth to create account
     const signUpResult = await auth.api.signUpEmail({
@@ -287,10 +287,10 @@ export async function acceptInvitationAction(
         name,
       },
       headers: await headers(),
-    });
+    })
 
     if (!signUpResult) {
-      return { success: false, error: "Failed to create account" };
+      return { success: false, error: 'Failed to create account' }
     }
 
     // Update the created user with workspace info
@@ -300,18 +300,18 @@ export async function acceptInvitationAction(
         workspaceId: result.workspaceId,
         role: result.invitation.role,
       })
-      .where(eq(user.email, result.invitation.email));
+      .where(eq(user.email, result.invitation.email))
 
     // Mark invitation as accepted
     await db
       .update(invitation)
       .set({ acceptedAt: new Date() })
-      .where(eq(invitation.id, result.invitation.id));
+      .where(eq(invitation.id, result.invitation.id))
 
-    return { success: true, data: { redirectTo: "/onboarding" } };
+    return { success: true, data: { redirectTo: '/onboarding' } }
   } catch (error) {
-    console.error("[invitations:acceptInvitation] Error:", error);
-    return { success: false, error: "Failed to accept invitation" };
+    console.error('[invitations:acceptInvitation] Error:', error)
+    return { success: false, error: 'Failed to accept invitation' }
   }
 }
 
@@ -320,26 +320,26 @@ export async function acceptInvitationAction(
 // ============================================================================
 
 export async function deleteInvitationAction(invitationId: string): Promise<ActionResult<void>> {
-  const adminCheck = await verifySystemAdmin();
+  const adminCheck = await verifySystemAdmin()
   if (adminCheck.error) {
-    return { success: false, error: adminCheck.error };
+    return { success: false, error: adminCheck.error }
   }
 
   try {
     const [deleted] = await db
       .delete(invitation)
       .where(eq(invitation.id, invitationId))
-      .returning({ id: invitation.id });
+      .returning({ id: invitation.id })
 
     if (!deleted) {
-      return { success: false, error: "Invitation not found" };
+      return { success: false, error: 'Invitation not found' }
     }
 
-    revalidatePath("/admin/workspaces");
-    return { success: true, data: undefined };
+    revalidatePath('/admin/workspaces')
+    return { success: true, data: undefined }
   } catch (error) {
-    console.error("[invitations:deleteInvitation] Error:", error);
-    return { success: false, error: "Failed to delete invitation" };
+    console.error('[invitations:deleteInvitation] Error:', error)
+    return { success: false, error: 'Failed to delete invitation' }
   }
 }
 
@@ -356,40 +356,40 @@ export async function createWorkspaceMemberInvitation(
   role: UserRole,
 ): Promise<ActionResult<{ token: string; inviteUrl: string }>> {
   try {
-    const session = await auth.api.getSession({ headers: await headers() });
+    const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return { success: false, error: "Not authenticated" };
+      return { success: false, error: 'Not authenticated' }
     }
 
     // Get current user with workspace
-    const [currentUser] = await db.select().from(user).where(eq(user.id, session.user.id));
+    const [currentUser] = await db.select().from(user).where(eq(user.id, session.user.id))
 
     if (!currentUser?.workspaceId) {
-      return { success: false, error: "Workspace not found" };
+      return { success: false, error: 'Workspace not found' }
     }
 
     // Check if user is owner or admin
-    if (currentUser.role !== "owner" && currentUser.role !== "admin") {
+    if (currentUser.role !== 'owner' && currentUser.role !== 'admin') {
       return {
         success: false,
-        error: "Only owners and admins can invite members",
-      };
+        error: 'Only owners and admins can invite members',
+      }
     }
 
-    const workspaceId = currentUser.workspaceId;
-    const normalizedEmail = email.toLowerCase().trim();
+    const workspaceId = currentUser.workspaceId
+    const normalizedEmail = email.toLowerCase().trim()
 
     // Check if user is already a member of this workspace
     const [existingMember] = await db
       .select()
       .from(user)
-      .where(and(eq(user.email, normalizedEmail), eq(user.workspaceId, workspaceId)));
+      .where(and(eq(user.email, normalizedEmail), eq(user.workspaceId, workspaceId)))
 
     if (existingMember) {
       return {
         success: false,
-        error: "This user is already a member of your workspace",
-      };
+        error: 'This user is already a member of your workspace',
+      }
     }
 
     // Check if there's already a pending invitation for this email
@@ -403,23 +403,23 @@ export async function createWorkspaceMemberInvitation(
           isNull(invitation.acceptedAt),
           gt(invitation.expiresAt, new Date()),
         ),
-      );
+      )
 
     if (existingInvitation) {
       // Return existing invitation link
-      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
       return {
         success: true,
         data: {
           token: existingInvitation.token,
           inviteUrl: `${baseUrl}/invite/${existingInvitation.token}`,
         },
-      };
+      }
     }
 
     // Create new invitation (expires in 7 days)
-    const token = nanoid(32);
-    const expiresAt = addDays(new Date(), 7);
+    const token = nanoid(32)
+    const expiresAt = addDays(new Date(), 7)
 
     await db.insert(invitation).values({
       id: nanoid(),
@@ -428,20 +428,20 @@ export async function createWorkspaceMemberInvitation(
       role,
       token,
       expiresAt,
-    });
+    })
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const inviteUrl = `${baseUrl}/invite/${token}`;
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    const inviteUrl = `${baseUrl}/invite/${token}`
 
-    revalidatePath("/dashboard/settings");
+    revalidatePath('/dashboard/settings')
 
     return {
       success: true,
       data: { token, inviteUrl },
-    };
+    }
   } catch (error) {
-    console.error("[invitations:createWorkspaceMember] Error:", error);
-    return { success: false, error: "Failed to create invitation" };
+    console.error('[invitations:createWorkspaceMember] Error:', error)
+    return { success: false, error: 'Failed to create invitation' }
   }
 }
 
@@ -451,25 +451,25 @@ export async function createWorkspaceMemberInvitation(
 export async function getWorkspacePendingInvitations(): Promise<
   ActionResult<
     {
-      id: string;
-      email: string;
-      role: UserRole;
-      token: string;
-      expiresAt: Date;
-      createdAt: Date;
+      id: string
+      email: string
+      role: UserRole
+      token: string
+      expiresAt: Date
+      createdAt: Date
     }[]
   >
 > {
   try {
-    const session = await auth.api.getSession({ headers: await headers() });
+    const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return { success: false, error: "Not authenticated" };
+      return { success: false, error: 'Not authenticated' }
     }
 
-    const [currentUser] = await db.select().from(user).where(eq(user.id, session.user.id));
+    const [currentUser] = await db.select().from(user).where(eq(user.id, session.user.id))
 
     if (!currentUser?.workspaceId) {
-      return { success: false, error: "Workspace not found" };
+      return { success: false, error: 'Workspace not found' }
     }
 
     const invitations = await db
@@ -489,7 +489,7 @@ export async function getWorkspacePendingInvitations(): Promise<
           gt(invitation.expiresAt, new Date()),
         ),
       )
-      .orderBy(invitation.createdAt);
+      .orderBy(invitation.createdAt)
 
     return {
       success: true,
@@ -497,10 +497,10 @@ export async function getWorkspacePendingInvitations(): Promise<
         ...inv,
         role: inv.role as UserRole,
       })),
-    };
+    }
   } catch (error) {
-    console.error("[invitations:getWorkspacePending] Error:", error);
-    return { success: false, error: "Failed to get invitations" };
+    console.error('[invitations:getWorkspacePending] Error:', error)
+    return { success: false, error: 'Failed to get invitations' }
   }
 }
 
@@ -512,12 +512,12 @@ export async function acceptInvitationAsLoggedInUser(
   token: string,
 ): Promise<ActionResult<{ redirectTo: string }>> {
   try {
-    const session = await auth.api.getSession({ headers: await headers() });
+    const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
       return {
         success: false,
-        error: "You must be logged in to accept an invitation",
-      };
+        error: 'You must be logged in to accept an invitation',
+      }
     }
 
     // Get the invitation
@@ -531,23 +531,23 @@ export async function acceptInvitationAsLoggedInUser(
         acceptedAt: invitation.acceptedAt,
       })
       .from(invitation)
-      .where(eq(invitation.token, token));
+      .where(eq(invitation.token, token))
 
     if (!result) {
-      return { success: false, error: "Invitation not found" };
+      return { success: false, error: 'Invitation not found' }
     }
 
     // Check if already accepted
     if (result.acceptedAt) {
       return {
         success: false,
-        error: "This invitation has already been accepted",
-      };
+        error: 'This invitation has already been accepted',
+      }
     }
 
     // Check if expired
     if (result.expiresAt < new Date()) {
-      return { success: false, error: "This invitation has expired" };
+      return { success: false, error: 'This invitation has expired' }
     }
 
     // Verify email matches
@@ -555,7 +555,7 @@ export async function acceptInvitationAsLoggedInUser(
       return {
         success: false,
         error: `This invitation was sent to ${result.email}. Please log in with that email address.`,
-      };
+      }
     }
 
     // Update user to join the workspace
@@ -566,21 +566,21 @@ export async function acceptInvitationAsLoggedInUser(
         role: result.role,
         updatedAt: new Date(),
       })
-      .where(eq(user.id, session.user.id));
+      .where(eq(user.id, session.user.id))
 
     // Mark invitation as accepted
-    await db.update(invitation).set({ acceptedAt: new Date() }).where(eq(invitation.id, result.id));
+    await db.update(invitation).set({ acceptedAt: new Date() }).where(eq(invitation.id, result.id))
 
-    revalidatePath("/dashboard");
-    revalidatePath("/dashboard/settings");
+    revalidatePath('/dashboard')
+    revalidatePath('/dashboard/settings')
 
     return {
       success: true,
-      data: { redirectTo: "/dashboard" },
-    };
+      data: { redirectTo: '/dashboard' },
+    }
   } catch (error) {
-    console.error("[invitations:acceptAsLoggedIn] Error:", error);
-    return { success: false, error: "Failed to accept invitation" };
+    console.error('[invitations:acceptAsLoggedIn] Error:', error)
+    return { success: false, error: 'Failed to accept invitation' }
   }
 }
 
@@ -589,23 +589,23 @@ export async function acceptInvitationAsLoggedInUser(
  */
 export async function cancelWorkspaceInvitation(invitationId: string): Promise<ActionResult<void>> {
   try {
-    const session = await auth.api.getSession({ headers: await headers() });
+    const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
-      return { success: false, error: "Not authenticated" };
+      return { success: false, error: 'Not authenticated' }
     }
 
-    const [currentUser] = await db.select().from(user).where(eq(user.id, session.user.id));
+    const [currentUser] = await db.select().from(user).where(eq(user.id, session.user.id))
 
     if (!currentUser?.workspaceId) {
-      return { success: false, error: "Workspace not found" };
+      return { success: false, error: 'Workspace not found' }
     }
 
     // Check if user is owner or admin
-    if (currentUser.role !== "owner" && currentUser.role !== "admin") {
+    if (currentUser.role !== 'owner' && currentUser.role !== 'admin') {
       return {
         success: false,
-        error: "Only owners and admins can cancel invitations",
-      };
+        error: 'Only owners and admins can cancel invitations',
+      }
     }
 
     // Verify invitation belongs to this workspace
@@ -614,20 +614,20 @@ export async function cancelWorkspaceInvitation(invitationId: string): Promise<A
       .from(invitation)
       .where(
         and(eq(invitation.id, invitationId), eq(invitation.workspaceId, currentUser.workspaceId)),
-      );
+      )
 
     if (!inv) {
-      return { success: false, error: "Invitation not found" };
+      return { success: false, error: 'Invitation not found' }
     }
 
     // Delete the invitation
-    await db.delete(invitation).where(eq(invitation.id, invitationId));
+    await db.delete(invitation).where(eq(invitation.id, invitationId))
 
-    revalidatePath("/dashboard/settings");
+    revalidatePath('/dashboard/settings')
 
-    return { success: true, data: undefined };
+    return { success: true, data: undefined }
   } catch (error) {
-    console.error("[invitations:cancelWorkspace] Error:", error);
-    return { success: false, error: "Failed to cancel invitation" };
+    console.error('[invitations:cancelWorkspace] Error:', error)
+    return { success: false, error: 'Failed to cancel invitation' }
   }
 }

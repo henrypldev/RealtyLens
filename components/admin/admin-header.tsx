@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   IconBuilding,
@@ -8,55 +8,55 @@ import {
   IconLogout,
   IconPercentage,
   IconUsers,
-} from "@tabler/icons-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { siteConfig } from "@/lib/siteconfig";
-import { cn } from "@/lib/utils";
+} from '@tabler/icons-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { siteConfig } from '@/lib/siteconfig'
+import { cn } from '@/lib/utils'
 
 const navItems = [
   {
-    href: "/admin",
-    label: "Overview",
+    href: '/admin',
+    label: 'Overview',
     icon: IconChartBar,
     exact: true as const,
   },
   {
-    href: "/admin/workspaces",
-    label: "Workspaces",
+    href: '/admin/workspaces',
+    label: 'Workspaces',
     icon: IconBuilding,
     exact: false as const,
   },
   {
-    href: "/admin/users",
-    label: "Users",
+    href: '/admin/users',
+    label: 'Users',
     icon: IconUsers,
     exact: false as const,
   },
   {
-    href: "/admin/billing",
-    label: "Betalinger",
+    href: '/admin/billing',
+    label: 'Betalinger',
     icon: IconFileInvoice,
     exact: false as const,
   },
   {
-    href: "/admin/revenue",
-    label: "Revenue",
+    href: '/admin/revenue',
+    label: 'Revenue',
     icon: IconChartLine,
     exact: false as const,
   },
   {
-    href: "/admin/affiliates",
-    label: "Affiliates",
+    href: '/admin/affiliates',
+    label: 'Affiliates',
     icon: IconPercentage,
     exact: false as const,
   },
-];
+]
 
 export function AdminHeader() {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   return (
     <header className="sticky top-0 z-50 w-full border-zinc-800 border-b bg-zinc-900">
@@ -74,8 +74,8 @@ export function AdminHeader() {
               <Badge
                 className="h-5 rounded-md border-0 px-1.5 font-bold text-[10px] uppercase tracking-widest"
                 style={{
-                  backgroundColor: "var(--accent-violet)",
-                  color: "white",
+                  backgroundColor: 'var(--accent-violet)',
+                  color: 'white',
                 }}
               >
                 Admin
@@ -88,23 +88,23 @@ export function AdminHeader() {
               {navItems.map((item) => {
                 const isActive = item.exact
                   ? pathname === item.href
-                  : pathname.startsWith(item.href);
+                  : pathname.startsWith(item.href)
 
-                const Icon = item.icon;
+                const Icon = item.icon
 
                 return (
                   <Button
                     asChild
                     className={cn(
-                      "h-8 gap-2 text-zinc-400 transition-all hover:bg-zinc-800 hover:text-zinc-100",
-                      isActive && "bg-zinc-800 font-medium text-zinc-100",
+                      'h-8 gap-2 text-zinc-400 transition-all hover:bg-zinc-800 hover:text-zinc-100',
+                      isActive && 'bg-zinc-800 font-medium text-zinc-100',
                     )}
                     key={item.href}
                     size="sm"
                     style={
                       isActive
                         ? {
-                            boxShadow: "inset 0 -2px 0 var(--accent-violet)",
+                            boxShadow: 'inset 0 -2px 0 var(--accent-violet)',
                           }
                         : undefined
                     }
@@ -115,7 +115,7 @@ export function AdminHeader() {
                       <span className="hidden sm:inline">{item.label}</span>
                     </Link>
                   </Button>
-                );
+                )
               })}
             </nav>
           </div>
@@ -140,5 +140,5 @@ export function AdminHeader() {
         </div>
       </div>
     </header>
-  );
+  )
 }

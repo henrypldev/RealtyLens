@@ -1,16 +1,16 @@
-"use client";
+'use client'
 
-import { IconArrowDown, IconArrowUp } from "@tabler/icons-react";
-import { Button } from "@/components/ui/button";
-import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import type { ProjectSortableColumn, SortDirection } from "@/hooks/use-project-filters";
+import { IconArrowDown, IconArrowUp } from '@tabler/icons-react'
+import { Button } from '@/components/ui/button'
+import { TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { ProjectSortableColumn, SortDirection } from '@/hooks/use-project-filters'
 
 interface SortButtonProps {
-  label: string;
-  sortField: ProjectSortableColumn;
-  currentSortColumn: ProjectSortableColumn | null;
-  currentSortDirection: SortDirection | null;
-  onSort: (column: ProjectSortableColumn) => void;
+  label: string
+  sortField: ProjectSortableColumn
+  currentSortColumn: ProjectSortableColumn | null
+  currentSortDirection: SortDirection | null
+  onSort: (column: ProjectSortableColumn) => void
 }
 
 function SortButton({
@@ -20,7 +20,7 @@ function SortButton({
   currentSortDirection,
   onSort,
 }: SortButtonProps) {
-  const isActive = sortField === currentSortColumn;
+  const isActive = sortField === currentSortColumn
 
   return (
     <Button
@@ -29,81 +29,81 @@ function SortButton({
       variant="ghost"
     >
       <span>{label}</span>
-      {isActive && currentSortDirection === "asc" && <IconArrowUp className="h-4 w-4" />}
-      {isActive && currentSortDirection === "desc" && <IconArrowDown className="h-4 w-4" />}
+      {isActive && currentSortDirection === 'asc' && <IconArrowUp className="h-4 w-4" />}
+      {isActive && currentSortDirection === 'desc' && <IconArrowDown className="h-4 w-4" />}
     </Button>
-  );
+  )
 }
 
 interface ColumnConfig {
-  id: string;
-  label: string;
-  sortField?: ProjectSortableColumn;
-  width: number;
-  minWidth?: number;
-  maxWidth?: number;
+  id: string
+  label: string
+  sortField?: ProjectSortableColumn
+  width: number
+  minWidth?: number
+  maxWidth?: number
 }
 
 const columnConfigs: ColumnConfig[] = [
   {
-    id: "name",
-    label: "Name",
-    sortField: "name",
+    id: 'name',
+    label: 'Name',
+    sortField: 'name',
     width: 200,
     minWidth: 150,
   },
   {
-    id: "status",
-    label: "Status",
-    sortField: "status",
+    id: 'status',
+    label: 'Status',
+    sortField: 'status',
     width: 130,
     minWidth: 110,
   },
   {
-    id: "style",
-    label: "Style",
+    id: 'style',
+    label: 'Style',
     width: 140,
     minWidth: 100,
   },
   {
-    id: "progress",
-    label: "Progress",
+    id: 'progress',
+    label: 'Progress',
     width: 130,
     minWidth: 110,
   },
   {
-    id: "roomType",
-    label: "Room",
+    id: 'roomType',
+    label: 'Room',
     width: 120,
     minWidth: 90,
   },
   {
-    id: "createdAt",
-    label: "Created",
-    sortField: "createdAt",
+    id: 'createdAt',
+    label: 'Created',
+    sortField: 'createdAt',
     width: 110,
     minWidth: 90,
   },
   {
-    id: "updatedAt",
-    label: "Updated",
-    sortField: "updatedAt",
+    id: 'updatedAt',
+    label: 'Updated',
+    sortField: 'updatedAt',
     width: 110,
     minWidth: 90,
   },
   {
-    id: "actions",
-    label: "",
+    id: 'actions',
+    label: '',
     width: 60,
     minWidth: 60,
     maxWidth: 60,
   },
-];
+]
 
 interface ProjectsTableHeaderProps {
-  sortColumn: ProjectSortableColumn | null;
-  sortDirection: SortDirection | null;
-  onSort: (column: ProjectSortableColumn) => void;
+  sortColumn: ProjectSortableColumn | null
+  sortDirection: SortDirection | null
+  onSort: (column: ProjectSortableColumn) => void
 }
 
 export function ProjectsTableHeader({
@@ -115,7 +115,7 @@ export function ProjectsTableHeader({
     <TableHeader>
       <TableRow className="flex hover:bg-transparent">
         {columnConfigs.map((column) => {
-          const isFlexColumn = column.id === "name";
+          const isFlexColumn = column.id === 'name'
           return (
             <TableHead
               className="flex items-center"
@@ -142,9 +142,9 @@ export function ProjectsTableHeader({
                 <span className="font-medium text-muted-foreground">{column.label}</span>
               )}
             </TableHead>
-          );
+          )
         })}
       </TableRow>
     </TableHeader>
-  );
+  )
 }

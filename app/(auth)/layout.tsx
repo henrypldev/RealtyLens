@@ -1,11 +1,11 @@
-import { Toaster } from "@/components/ui/sonner";
-import { constructMetadata } from "@/lib/constructMetadata";
+import { Toaster } from '@/components/ui/sonner'
+import { constructMetadata } from '@/lib/constructMetadata'
 
 export const metadata = constructMetadata({
-  title: "Sign In | RealtyLens",
-  description: "Sign in to your RealtyLens account",
+  title: 'Sign In | RealtyLens',
+  description: 'Sign in to your RealtyLens account',
   noIndex: true,
-});
+})
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -13,5 +13,5 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <div className="w-full max-w-md">{children}</div>
       <Toaster position="top-center" />
     </div>
-  );
+  )
 }
