@@ -22,15 +22,10 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/storage/v1/object/public/**',
       },
-      {
-        protocol: 'https',
-        hostname: '*.brown-ling.ts.net',
-        port: '',
-        pathname: '/**',
-      },
     ],
   },
   typescript: { ignoreBuildErrors: true },
+  allowedDevOrigins: ['*.brown-ling.ts.net'],
 }
 
 export default nextConfig

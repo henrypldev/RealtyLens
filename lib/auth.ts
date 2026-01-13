@@ -1,14 +1,14 @@
-import { betterAuth } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin } from "better-auth/plugins";
-import { eq } from "drizzle-orm";
-import { nanoid } from "nanoid";
-import { db } from "./db";
-import * as schema from "./db/schema";
+import { betterAuth } from 'better-auth'
+import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import { admin } from 'better-auth/plugins'
+import { eq } from 'drizzle-orm'
+import { nanoid } from 'nanoid'
+import { db } from './db'
+import * as schema from './db/schema'
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
-    provider: "pg",
+    provider: 'pg',
     schema,
   }),
   emailAndPassword: {
@@ -30,26 +30,27 @@ export const auth = betterAuth({
         after: async (user) => {
           // Create workspace automatically when user signs up
           const slug = user.email
-            .split("@")[0]
+            .split('@')[0]
             .toLowerCase()
-            .replace(/[^a-z0-9]/g, "-");
-          const workspaceId = nanoid();
+            .replace(/[^a-z0-9]/g, '-')
+          const workspaceId = nanoid()
 
           await db.insert(schema.workspace).values({
             id: workspaceId,
             name: `${user.name}'s Workspace`,
             slug: `${slug}-${workspaceId.slice(0, 6)}`,
-          });
+          })
 
           // Update user with workspaceId and set as owner
           await db
             .update(schema.user)
-            .set({ workspaceId, role: "owner" })
-            .where(eq(schema.user.id, user.id));
+            .set({ workspaceId, role: 'owner' })
+            .where(eq(schema.user.id, user.id))
         },
       },
     },
   },
-});
+  trustedOrigins: [process.env.BETTER_AUTH_URL!],
+})
 
-export type Session = typeof auth.$Infer.Session;
+export type Session = typeof auth.$Infer.Session
