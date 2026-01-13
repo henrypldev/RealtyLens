@@ -8,7 +8,6 @@ export function getPostHogClient() {
       host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
       flushAt: 1,
       flushInterval: 0,
-      disabled: isDev,
     })
   }
   return posthogClient
