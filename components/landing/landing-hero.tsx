@@ -23,15 +23,17 @@ function HeroAuthButton() {
   const text = session ? "Go to Dashboard" : "Get Started";
 
   return (
-    <Button asChild>
-      <Link
-        className="inline-flex h-12 items-center gap-2 rounded-full px-7 font-medium text-base transition-all duration-200 hover:scale-[1.03] active:scale-[0.98]"
-        href={href}
-      >
-        {text}
-        <IconArrowRight className="size-5" />
-      </Link>
-    </Button>
+    <Button
+      render={
+        <Link
+          className="inline-flex h-12 items-center gap-2 rounded-full px-7 font-medium text-base transition-all duration-200 hover:scale-[1.03] active:scale-[0.98]"
+          href={href}
+        >
+          {text}
+          <IconArrowRight className="size-5" />
+        </Link>
+      }
+    />
   );
 }
 

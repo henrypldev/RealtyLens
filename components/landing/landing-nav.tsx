@@ -24,12 +24,15 @@ function AuthButton() {
   const text = session ? "Dashboard" : "Get Started";
 
   return (
-    <Button size="lg" asChild>
-      <Link href={href}>
-        {text}
-        <IconArrowRight className="size-4" />
-      </Link>
-    </Button>
+    <Button
+      size="lg"
+      render={
+        <Link href={href}>
+          {text}
+          <IconArrowRight className="size-4" />
+        </Link>
+      }
+    />
   );
 }
 

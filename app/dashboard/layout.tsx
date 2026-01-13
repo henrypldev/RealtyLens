@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { ImpersonationBanner } from "@/components/admin/impersonation-banner";
@@ -6,7 +7,7 @@ import { auth } from "@/lib/auth";
 import { constructMetadata } from "@/lib/constructMetadata";
 import { getUserWithWorkspace } from "@/lib/db/queries";
 
-export const metadata = constructMetadata({
+export const metadata: Metadata = constructMetadata({
   title: "Dashboard | RealtyLens",
   description: "Manage your property photos and AI edits",
   noIndex: true,
@@ -26,7 +27,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const data = await getUserWithWorkspace(session.user.id);
 
   // If no workspace or onboarding not completed, redirect to onboarding
-  if (!(data && data.workspace.onboardingCompleted)) {
+  if (!data?.workspace.onboardingCompleted) {
     redirect("/onboarding");
   }
 

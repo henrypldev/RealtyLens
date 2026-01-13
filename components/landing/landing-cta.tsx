@@ -26,14 +26,14 @@ function CtaAuthButton() {
       <Button
         size="lg"
         className="w-full sm:w-auto min-h-12 bg-primary-foreground text-primary hover:bg-primary-foreground/90 px-8"
-        asChild
-      >
-        <Link href={href}>
-          {text}
+        render={
+          <Link href={href}>
+            {text}
 
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </Link>
-      </Button>
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
+        }
+      />
     </div>
   );
 }
