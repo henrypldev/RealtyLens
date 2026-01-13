@@ -1,7 +1,7 @@
 "use client";
 
-import { IconArrowRight, IconPlayerPlay } from "@tabler/icons-react";
-import { ArrowRight, Play } from "lucide-react";
+import { IconArrowRight } from "@tabler/icons-react";
+import { Play } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
