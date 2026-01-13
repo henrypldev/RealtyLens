@@ -129,11 +129,30 @@ export async function createSignedUploadUrl(path: string): Promise<{
   }
 }
 
-// Upload to a signed URL (used by client after getting signed URL)
 export function getPublicUrl(path: string): string {
-  const { data } = supabaseAdmin.storage.from(STORAGE_BUCKET).getPublicUrl(path)
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://realtylens.studio'
+  return `${appUrl}/api/storage/${path}`
+}
 
+export function getDirectSupabaseUrl(path: string): string {
+  const { data } = supabaseAdmin.storage.from(STORAGE_BUCKET).getPublicUrl(path)
   return data.publicUrl
+}
+
+export function convertSupabaseUrlToProxied(supabaseUrl: string): string {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://realtylens.studio'
+
+  try {
+    const urlObj = new URL(supabaseUrl)
+    const pathMatch = urlObj.pathname.match(/\/storage\/v1\/object\/public\/[^/]+\/(.+)/)
+    if (pathMatch) {
+      return `${appUrl}/api/storage/${pathMatch[1]}`
+    }
+  } catch {
+    // If URL parsing fails, return original
+  }
+
+  return supabaseUrl
 }
 
 // ============================================================================
