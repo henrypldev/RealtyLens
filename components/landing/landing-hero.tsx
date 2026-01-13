@@ -87,7 +87,7 @@ export function LandingHero() {
           <div className="relative mx-auto max-w-5xl">
             <div className="rounded-2xl overflow-hidden shadow-2xl shadow-primary/10 border border-border bg-card">
               <img
-                src="/modern-real-estate-photo-editing-software-dashboar.jpg"
+                src="/hero.png"
                 alt="RealtyLens app dashboard showing AI photo enhancement"
                 className="w-full h-auto"
               />

@@ -7,6 +7,7 @@ import { LandingFooter } from "./landing-footer";
 import { LandingHero } from "./landing-hero";
 import { LandingHowItWorks } from "./landing-how-it-works";
 import { LandingNav } from "./landing-nav";
+import { PricingSection } from "./landing-pricing";
 
 export function LandingPage() {
   return (
@@ -17,7 +18,7 @@ export function LandingPage() {
         <LandingFeatures />
         <LandingHowItWorks />
         <BeforeAfterSection />
-
+        <PricingSection />
         <LandingCta />
       </main>
       <LandingFooter />
