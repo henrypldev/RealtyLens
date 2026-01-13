@@ -34,11 +34,16 @@ export function SettingsContent({ workspace, members, currentUserId }: SettingsC
 
   const handleManageBilling = () => {
     startBillingTransition(async () => {
-      const result = await createBillingPortalSession()
-      if (result.success) {
-        window.open(result.data.url, '_blank')
-      } else {
-        toast.error(result.error)
+      try {
+        const result = await createBillingPortalSession()
+        if (result.success && result.data.url) {
+          window.location.href = result.data.url
+        } else {
+          toast.error(result.error || 'Failed to open billing portal')
+        }
+      } catch (error) {
+        console.error('Billing portal error:', error)
+        toast.error('An unexpected error occurred')
       }
     })
   }

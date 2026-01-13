@@ -33,6 +33,7 @@ function HeroAuthButton() {
           <IconArrowRight className="size-5" />
         </Link>
       }
+      nativeButton={false}
     />
   )
 }

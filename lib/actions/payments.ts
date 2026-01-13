@@ -300,14 +300,24 @@ export async function createBillingPortalSession(): Promise<ActionResult<{ url: 
       return { success: false, error: customerResult.error }
     }
 
+    const returnUrl = `${getBaseUrl()}/dashboard/settings`
     const customerSession = await polar.customerSessions.create({
       customerId: customerResult.data.polarCustomerId,
-      returnUrl: `${getBaseUrl()}/dashboard/settings`,
+      returnUrl,
     })
+
+    if (!customerSession.customerPortalUrl) {
+      console.error(
+        '[payments:createBillingPortalSession] No portal URL returned:',
+        customerSession,
+      )
+      return { success: false, error: 'No billing portal URL received from payment provider' }
+    }
 
     return { success: true, data: { url: customerSession.customerPortalUrl } }
   } catch (error) {
     console.error('[payments:createBillingPortalSession] Error:', error)
-    return { success: false, error: 'Failed to create billing portal session' }
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    return { success: false, error: `Failed to create billing portal session: ${errorMessage}` }
   }
 }
