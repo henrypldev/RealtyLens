@@ -3,7 +3,7 @@ export const siteConfig = {
   title: 'RealtyLens - AI-Powered Real Estate Photo Editor',
   description:
     'Transform your real estate photos with AI. Professional virtual staging, sky replacement, and photo enhancement for property listings.',
-  url: process.env.NEXT_PUBLIC_APP_URL || 'https://www.realtylens.io',
+  url: process.env.NEXT_PUBLIC_APP_URL || 'https://www.realtylens.studio',
 
   sourceCode: 'https://github.com/henrypldev/Proppi',
 
@@ -18,13 +18,13 @@ export const siteConfig = {
     'property listing photos',
     'AI image enhancement',
   ],
-  authors: [{ name: 'RealtyLens', url: 'https://www.realtylens.io' }],
+  authors: [{ name: 'RealtyLens', url: 'https://www.realtylens.studio' }],
   creator: 'RealtyLens',
   twitterHandle: '@realtylens',
 
   email: {
-    from: 'noreply@updates.realtylens.io',
-    replyTo: 'hello@realtylens.io',
+    from: 'hello@realtylens.studio',
+    replyTo: 'hello@realtylens.studio',
   },
 
   // Links

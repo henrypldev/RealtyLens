@@ -123,7 +123,7 @@ export function AdminHeader() {
           {/* Right side: Admin info + Sign out */}
           <div className="flex items-center gap-3">
             <span className="hidden max-w-[200px] truncate text-sm text-zinc-400 md:block">
-              admin@realtylens.io
+              admin@realtylens.studio
             </span>
             <Button
               asChild
