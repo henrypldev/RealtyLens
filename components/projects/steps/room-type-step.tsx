@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   IconArmchair,
@@ -8,10 +8,10 @@ import {
   IconDesk,
   IconSofa,
   IconToolsKitchen2,
-} from "@tabler/icons-react";
-import type * as React from "react";
-import { ROOM_TYPES } from "@/lib/style-templates";
-import { cn } from "@/lib/utils";
+} from '@tabler/icons-react'
+import type * as React from 'react'
+import { ROOM_TYPES } from '@/lib/style-templates'
+import { cn } from '@/lib/utils'
 
 // Map icon names to actual icons
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -21,11 +21,11 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   IconBath,
   IconArmchair,
   IconDesk,
-};
+}
 
 interface RoomTypeStepProps {
-  selectedRoomType: string | null;
-  onSelectRoomType: (roomType: string) => void;
+  selectedRoomType: string | null
+  onSelectRoomType: (roomType: string) => void
 }
 
 export function RoomTypeStep({ selectedRoomType, onSelectRoomType }: RoomTypeStepProps) {
@@ -39,16 +39,16 @@ export function RoomTypeStep({ selectedRoomType, onSelectRoomType }: RoomTypeSte
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {ROOM_TYPES.map((roomType, index) => {
-          const isSelected = selectedRoomType === roomType.id;
-          const IconComponent = ICON_MAP[roomType.icon];
+          const isSelected = selectedRoomType === roomType.id
+          const IconComponent = ICON_MAP[roomType.icon]
 
           return (
             <button
               className={cn(
-                "group relative flex animate-fade-in-up flex-col items-center gap-3 rounded-xl p-5 text-center ring-2 transition-all duration-200",
+                'group relative flex animate-fade-in-up flex-col items-center gap-3 rounded-xl p-5 text-center ring-2 transition-all duration-200',
                 isSelected
-                  ? "bg-[var(--accent-teal)]/10 shadow-lg ring-[var(--accent-teal)]"
-                  : "bg-muted/30 ring-transparent hover:bg-muted/50 hover:ring-foreground/10",
+                  ? 'bg-primary/10 shadow-lg ring-primary'
+                  : 'bg-muted/30 ring-transparent hover:bg-muted/50 hover:ring-foreground/10',
               )}
               key={roomType.id}
               onClick={() => onSelectRoomType(roomType.id)}
@@ -58,10 +58,10 @@ export function RoomTypeStep({ selectedRoomType, onSelectRoomType }: RoomTypeSte
               {/* Icon */}
               <div
                 className={cn(
-                  "flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-200",
+                  'flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-200',
                   isSelected
-                    ? "bg-[var(--accent-teal)] text-white"
-                    : "bg-muted text-muted-foreground group-hover:text-foreground",
+                    ? 'bg-primary text-white'
+                    : 'bg-muted text-muted-foreground group-hover:text-foreground',
                 )}
               >
                 {IconComponent && <IconComponent className="h-6 w-6" />}
@@ -71,8 +71,8 @@ export function RoomTypeStep({ selectedRoomType, onSelectRoomType }: RoomTypeSte
               <div className="space-y-1">
                 <h3
                   className={cn(
-                    "font-semibold leading-tight",
-                    isSelected ? "text-foreground" : "text-foreground",
+                    'font-semibold leading-tight',
+                    isSelected ? 'text-foreground' : 'text-foreground',
                   )}
                 >
                   {roomType.label}
@@ -82,14 +82,14 @@ export function RoomTypeStep({ selectedRoomType, onSelectRoomType }: RoomTypeSte
 
               {/* Selected checkmark */}
               {isSelected && (
-                <div className="absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--accent-teal)]">
+                <div className="absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary">
                   <IconCheck className="h-3 w-3 text-white" />
                 </div>
               )}
             </button>
-          );
+          )
         })}
       </div>
     </div>
-  );
+  )
 }

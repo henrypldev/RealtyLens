@@ -1,18 +1,18 @@
-"use client";
+'use client'
 
-import { IconPhoto } from "@tabler/icons-react";
-import Image from "next/image";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import type { UploadedImage } from "@/hooks/use-project-creation";
-import type { StyleTemplate } from "@/lib/style-templates";
-import { cn } from "@/lib/utils";
+import { IconPhoto } from '@tabler/icons-react'
+import Image from 'next/image'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import type { UploadedImage } from '@/hooks/use-project-creation'
+import type { StyleTemplate } from '@/lib/style-templates'
+import { cn } from '@/lib/utils'
 
 interface ConfirmStepProps {
-  images: UploadedImage[];
-  selectedTemplate: StyleTemplate | null;
-  projectName: string;
-  onProjectNameChange: (name: string) => void;
+  images: UploadedImage[]
+  selectedTemplate: StyleTemplate | null
+  projectName: string
+  onProjectNameChange: (name: string) => void
 }
 
 export function ConfirmStep({
@@ -26,12 +26,12 @@ export function ConfirmStep({
       {/* Left: Image stack preview */}
       <div className="space-y-3">
         <h3 className="font-medium text-foreground text-sm">Images</h3>
-        <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-muted">
+        <div className="relative aspect-4/3 overflow-hidden rounded-xl bg-muted">
           {/* Stacked image preview */}
           {images.slice(0, 3).map((image, index) => (
             <div
               className={cn(
-                "absolute inset-0 overflow-hidden rounded-xl shadow-lg ring-1 ring-white/10 transition-transform duration-300",
+                'absolute inset-0 overflow-hidden rounded-xl shadow-lg ring-1 ring-white/10 transition-transform duration-300',
               )}
               key={image.id}
               style={{
@@ -47,7 +47,7 @@ export function ConfirmStep({
           {/* Image count badge */}
           <div className="absolute right-3 bottom-3 z-10 flex items-center gap-1.5 rounded-full bg-black/70 px-3 py-1.5 font-medium text-sm text-white backdrop-blur-sm">
             <IconPhoto className="h-4 w-4" />
-            {images.length} image{images.length !== 1 ? "s" : ""}
+            {images.length} image{images.length !== 1 ? 's' : ''}
           </div>
         </div>
       </div>
@@ -94,11 +94,11 @@ export function ConfirmStep({
         {/* Summary info */}
         <div className="rounded-lg bg-muted/50 p-4 ring-1 ring-foreground/5">
           <p className="text-muted-foreground text-sm">
-            {images.length} image{images.length !== 1 ? "s" : ""} will be transformed using the{" "}
+            {images.length} image{images.length !== 1 ? 's' : ''} will be transformed using the{' '}
             <span className="font-medium text-foreground">{selectedTemplate?.name}</span> style.
           </p>
         </div>
       </div>
     </div>
-  );
+  )
 }

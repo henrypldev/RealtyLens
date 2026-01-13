@@ -1,13 +1,13 @@
-"use client";
+'use client'
 
-import { IconCheck, IconClock } from "@tabler/icons-react";
-import Image from "next/image";
-import { STYLE_TEMPLATES, type StyleTemplate } from "@/lib/style-templates";
-import { cn } from "@/lib/utils";
+import { IconCheck, IconClock } from '@tabler/icons-react'
+import Image from 'next/image'
+import { STYLE_TEMPLATES, type StyleTemplate } from '@/lib/style-templates'
+import { cn } from '@/lib/utils'
 
 interface StyleStepProps {
-  selectedTemplate: StyleTemplate | null;
-  onSelectTemplate: (template: StyleTemplate) => void;
+  selectedTemplate: StyleTemplate | null
+  onSelectTemplate: (template: StyleTemplate) => void
 }
 
 export function StyleStep({ selectedTemplate, onSelectTemplate }: StyleStepProps) {
@@ -21,18 +21,18 @@ export function StyleStep({ selectedTemplate, onSelectTemplate }: StyleStepProps
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
         {STYLE_TEMPLATES.map((template, index) => {
-          const isSelected = selectedTemplate?.id === template.id;
-          const isComingSoon = template.comingSoon;
+          const isSelected = selectedTemplate?.id === template.id
+          const isComingSoon = template.comingSoon
 
           return (
             <button
               className={cn(
-                "group relative flex animate-fade-in-up flex-col overflow-hidden rounded-xl text-left ring-2 transition-all duration-200",
+                'group relative flex animate-fade-in-up flex-col overflow-hidden rounded-xl text-left ring-2 transition-all duration-200',
                 isComingSoon
-                  ? "cursor-not-allowed opacity-60 ring-transparent"
+                  ? 'cursor-not-allowed opacity-60 ring-transparent'
                   : isSelected
-                    ? "shadow-lg ring-[var(--accent-teal)]"
-                    : "ring-transparent hover:ring-foreground/10",
+                    ? 'shadow-lg ring-primary'
+                    : 'ring-transparent hover:ring-foreground/10',
               )}
               disabled={isComingSoon}
               key={template.id}
@@ -45,8 +45,8 @@ export function StyleStep({ selectedTemplate, onSelectTemplate }: StyleStepProps
                 <Image
                   alt={template.name}
                   className={cn(
-                    "object-cover transition-transform duration-300",
-                    isComingSoon ? "grayscale" : isSelected ? "scale-105" : "group-hover:scale-105",
+                    'object-cover transition-transform duration-300',
+                    isComingSoon ? 'grayscale' : isSelected ? 'scale-105' : 'group-hover:scale-105',
                   )}
                   fill
                   sizes="(max-width: 640px) 50vw, 33vw"
@@ -55,7 +55,7 @@ export function StyleStep({ selectedTemplate, onSelectTemplate }: StyleStepProps
 
                 {/* Selected checkmark */}
                 {isSelected && !isComingSoon && (
-                  <div className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-[var(--accent-teal)] shadow-md">
+                  <div className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-primary shadow-md">
                     <IconCheck className="h-4 w-4 text-white" />
                   </div>
                 )}
@@ -69,7 +69,7 @@ export function StyleStep({ selectedTemplate, onSelectTemplate }: StyleStepProps
                 )}
 
                 {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
 
                 {/* Category badge */}
                 {!isComingSoon && (
@@ -85,8 +85,8 @@ export function StyleStep({ selectedTemplate, onSelectTemplate }: StyleStepProps
               <div className="flex flex-1 flex-col gap-1 p-3">
                 <h3
                   className={cn(
-                    "font-semibold leading-tight",
-                    isComingSoon ? "text-muted-foreground" : "text-foreground",
+                    'font-semibold leading-tight',
+                    isComingSoon ? 'text-muted-foreground' : 'text-foreground',
                   )}
                 >
                   {template.name}
@@ -98,13 +98,13 @@ export function StyleStep({ selectedTemplate, onSelectTemplate }: StyleStepProps
               {isSelected && !isComingSoon && (
                 <div
                   className="absolute inset-0 rounded-xl ring-2 ring-inset"
-                  style={{ borderColor: "var(--accent-teal)" }}
+                  style={{ borderColor: 'var(--primary)' }}
                 />
               )}
             </button>
-          );
+          )
         })}
       </div>
     </div>
-  );
+  )
 }

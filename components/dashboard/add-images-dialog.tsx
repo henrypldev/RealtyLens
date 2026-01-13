@@ -328,10 +328,9 @@ export function AddImagesDialog({
             Cancel
           </Button>
           <Button
-            className="min-w-[120px] gap-2"
+            className="min-w-30 gap-2"
             disabled={images.length === 0 || isSubmitting}
             onClick={handleSubmit}
-            style={{ backgroundColor: 'var(--accent-teal)' }}
           >
             {isSubmitting ? (
               <>

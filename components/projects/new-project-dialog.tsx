@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   IconArrowLeft,
@@ -9,63 +9,64 @@ import {
   IconPalette,
   IconSparkles,
   IconUpload,
-} from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
-import * as React from "react";
-import { ConfirmStep } from "@/components/projects/steps/confirm-step";
-import { RoomTypeStep } from "@/components/projects/steps/room-type-step";
-import { StyleStep } from "@/components/projects/steps/style-step";
-import { UploadStep } from "@/components/projects/steps/upload-step";
-import { Button } from "@/components/ui/button";
+} from '@tabler/icons-react'
+import { useRouter } from 'next/navigation'
+import * as React from 'react'
+import { ConfirmStep } from '@/components/projects/steps/confirm-step'
+import { RoomTypeStep } from '@/components/projects/steps/room-type-step'
+import { StyleStep } from '@/components/projects/steps/style-step'
+import { UploadStep } from '@/components/projects/steps/upload-step'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { useImageUpload } from "@/hooks/use-image-upload";
-import { type CreationStep, useProjectCreation } from "@/hooks/use-project-creation";
-import { createProjectAction } from "@/lib/actions";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/dialog'
+import { useImageUpload } from '@/hooks/use-image-upload'
+import { type CreationStep, useProjectCreation } from '@/hooks/use-project-creation'
+import { createProjectAction } from '@/lib/actions'
+import { cn } from '@/lib/utils'
 
 interface NewProjectDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }
 
 const STEPS: { id: CreationStep; label: string; icon: React.ReactNode }[] = [
-  { id: "upload", label: "Upload", icon: <IconUpload className="h-4 w-4" /> },
-  { id: "room-type", label: "Room", icon: <IconHome className="h-4 w-4" /> },
-  { id: "style", label: "Style", icon: <IconPalette className="h-4 w-4" /> },
-  { id: "confirm", label: "Confirm", icon: <IconCheck className="h-4 w-4" /> },
-];
+  { id: 'upload', label: 'Upload', icon: <IconUpload className="h-4 w-4" /> },
+  { id: 'room-type', label: 'Room', icon: <IconHome className="h-4 w-4" /> },
+  { id: 'style', label: 'Style', icon: <IconPalette className="h-4 w-4" /> },
+  { id: 'confirm', label: 'Confirm', icon: <IconCheck className="h-4 w-4" /> },
+]
 
 function StepIndicator({ steps, currentStep }: { steps: typeof STEPS; currentStep: CreationStep }) {
-  const currentIndex = steps.findIndex((s) => s.id === currentStep);
+  const currentIndex = steps.findIndex((s) => s.id === currentStep)
 
   return (
     <div className="flex items-center justify-center gap-2">
       {steps.map((step, index) => {
-        const isActive = step.id === currentStep;
-        const isCompleted = index < currentIndex;
+        const isActive = step.id === currentStep
+        const isCompleted = index < currentIndex
 
         return (
           <React.Fragment key={step.id}>
             <div
               className={cn(
-                "flex items-center gap-2 rounded-full px-3 py-1.5 font-medium text-sm transition-all duration-200",
-                isActive && "bg-[var(--accent-teal)]/10 text-[var(--accent-teal)]",
-                isCompleted && "text-[var(--accent-teal)]",
-                !(isActive || isCompleted) && "text-muted-foreground",
+                'flex items-center gap-2 rounded-full pl-1 pr-3 py-1.5 font-medium text-sm transition-all duration-200',
+                isActive && 'bg-primary/10 text-primary',
+                isCompleted && 'text-primary',
+                !(isActive || isCompleted) && 'text-muted-foreground',
               )}
             >
               <span
                 className={cn(
-                  "flex h-6 w-6 items-center justify-center rounded-full text-xs transition-all duration-200",
-                  isActive && "bg-[var(--accent-teal)] text-white",
-                  isCompleted && "bg-[var(--accent-teal)] text-white",
-                  !(isActive || isCompleted) && "bg-muted text-muted-foreground",
+                  'flex h-6 w-6 items-center justify-center rounded-full text-xs transition-all duration-200',
+                  isActive && 'bg-primary text-white',
+                  isCompleted && 'bg-primary text-white',
+                  !(isActive || isCompleted) && 'bg-muted text-muted-foreground',
                 )}
               >
                 {isCompleted ? <IconCheck className="h-3.5 w-3.5" /> : index + 1}
@@ -76,107 +77,107 @@ function StepIndicator({ steps, currentStep }: { steps: typeof STEPS; currentSte
             {index < steps.length - 1 && (
               <div
                 className={cn(
-                  "h-px w-8 transition-colors duration-200",
-                  index < currentIndex ? "bg-[var(--accent-teal)]" : "bg-border",
+                  'h-px w-8 transition-colors duration-200',
+                  index < currentIndex ? 'bg-primary' : 'bg-border',
                 )}
               />
             )}
           </React.Fragment>
-        );
+        )
       })}
     </div>
-  );
+  )
 }
 
 export function NewProjectDialog({ open, onOpenChange }: NewProjectDialogProps) {
-  const router = useRouter();
-  const creation = useProjectCreation();
-  const imageUpload = useImageUpload();
+  const router = useRouter()
+  const creation = useProjectCreation()
+  const imageUpload = useImageUpload()
 
   const handleClose = React.useCallback(() => {
-    creation.reset();
-    imageUpload.reset();
-    onOpenChange(false);
-  }, [creation, imageUpload, onOpenChange]);
+    creation.reset()
+    imageUpload.reset()
+    onOpenChange(false)
+  }, [creation, imageUpload, onOpenChange])
 
   const handleSubmit = React.useCallback(async () => {
-    if (!(creation.canProceed() && creation.selectedTemplate)) return;
+    if (!(creation.canProceed() && creation.selectedTemplate)) return
 
-    creation.setIsSubmitting(true);
+    creation.setIsSubmitting(true)
 
     try {
       // Step 1: Create the project
-      const projectFormData = new FormData();
-      projectFormData.set("name", creation.projectName);
-      projectFormData.set("styleTemplateId", creation.selectedTemplate.id);
+      const projectFormData = new FormData()
+      projectFormData.set('name', creation.projectName)
+      projectFormData.set('styleTemplateId', creation.selectedTemplate.id)
       if (creation.roomType) {
-        projectFormData.set("roomType", creation.roomType);
+        projectFormData.set('roomType', creation.roomType)
       }
 
-      const projectResult = await createProjectAction(projectFormData);
+      const projectResult = await createProjectAction(projectFormData)
 
       if (!projectResult.success) {
-        console.error("Failed to create project:", projectResult.error);
-        creation.setIsSubmitting(false);
-        return;
+        console.error('Failed to create project:', projectResult.error)
+        creation.setIsSubmitting(false)
+        return
       }
 
-      const project = projectResult.data;
+      const project = projectResult.data
 
       // Step 2: Upload images directly to Supabase (client-side)
       // Note: Processing is gated by payment status in the server action
-      const files = creation.images.map((img) => img.file);
-      const uploadSuccess = await imageUpload.uploadImages(project.id, files);
+      const files = creation.images.map((img) => img.file)
+      const uploadSuccess = await imageUpload.uploadImages(project.id, files)
 
       if (!uploadSuccess) {
-        console.error("Failed to upload images:", imageUpload.error);
+        console.error('Failed to upload images:', imageUpload.error)
         // Project was created but images failed - still redirect to project
       }
 
       // Step 3: Handle payment via Polar checkout
-      const { createPolarCheckoutSession } = await import("@/lib/actions/payments");
+      const { createPolarCheckoutSession } = await import('@/lib/actions/payments')
 
-      const checkoutResult = await createPolarCheckoutSession(project.id);
+      const checkoutResult = await createPolarCheckoutSession(project.id)
 
       if (checkoutResult.success) {
-        window.location.href = checkoutResult.data.url;
+        window.location.href = checkoutResult.data.url
       } else {
-        console.error("Failed to create checkout:", checkoutResult.error);
-        creation.reset();
-        imageUpload.reset();
-        onOpenChange(false);
-        router.push(`/dashboard/${project.id}?payment=required`);
+        console.error('Failed to create checkout:', checkoutResult.error)
+        creation.reset()
+        imageUpload.reset()
+        onOpenChange(false)
+        router.push(`/dashboard/${project.id}?payment=required`)
       }
     } catch (error) {
-      console.error("Project creation error:", error);
-      creation.setIsSubmitting(false);
+      console.error('Project creation error:', error)
+      creation.setIsSubmitting(false)
     }
-  }, [creation, imageUpload, onOpenChange, router]);
+  }, [creation, imageUpload, onOpenChange, router])
 
   const stepTitles: Record<CreationStep, { title: string; description: string }> = {
     upload: {
-      title: "Upload Images",
-      description: "Add the real estate photos you want to enhance",
+      title: 'Upload Images',
+      description: 'Add the real estate photos you want to enhance',
     },
-    "room-type": {
-      title: "Select Room Type",
-      description: "Help the AI understand what kind of space this is",
+    'room-type': {
+      title: 'Select Room Type',
+      description: 'Help the AI understand what kind of space this is',
     },
     style: {
-      title: "Choose Style",
-      description: "Select a transformation style for your photos",
+      title: 'Choose Style',
+      description: 'Select a transformation style for your photos',
     },
     confirm: {
-      title: "Review & Confirm",
-      description: "Name your project and review before processing",
+      title: 'Review & Confirm',
+      description: 'Name your project and review before processing',
     },
-  };
+  }
 
-  const currentStepInfo = stepTitles[creation.step];
+  const currentStepInfo = stepTitles[creation.step]
 
   return (
     <Dialog onOpenChange={handleClose} open={open}>
-      <DialogContent className="flex max-h-[90vh] flex-col gap-0 overflow-hidden p-0" size="lg">
+      <DialogContent className="flex max-h-[90vh] min-w-[50vw] flex-col gap-0 overflow-hidden p-0">
         {/* Header */}
         <div className="border-b px-6 py-4">
           <DialogHeader className="space-y-3">
@@ -190,26 +191,26 @@ export function NewProjectDialog({ open, onOpenChange }: NewProjectDialogProps) 
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-6">
-          {creation.step === "upload" && (
+          {creation.step === 'upload' && (
             <UploadStep
               images={creation.images}
               onAddImages={creation.addImages}
               onRemoveImage={creation.removeImage}
             />
           )}
-          {creation.step === "room-type" && (
+          {creation.step === 'room-type' && (
             <RoomTypeStep
               onSelectRoomType={creation.setRoomType}
               selectedRoomType={creation.roomType}
             />
           )}
-          {creation.step === "style" && (
+          {creation.step === 'style' && (
             <StyleStep
               onSelectTemplate={creation.setSelectedTemplate}
               selectedTemplate={creation.selectedTemplate}
             />
           )}
-          {creation.step === "confirm" && (
+          {creation.step === 'confirm' && (
             <ConfirmStep
               images={creation.images}
               onProjectNameChange={creation.setProjectName}
@@ -220,9 +221,10 @@ export function NewProjectDialog({ open, onOpenChange }: NewProjectDialogProps) 
         </div>
 
         {/* Footer */}
+
         <div className="flex items-center justify-between border-t bg-muted/30 px-6 py-4">
           <div>
-            {creation.step !== "upload" && (
+            {creation.step !== 'upload' && (
               <Button
                 className="gap-2"
                 disabled={creation.isSubmitting}
@@ -235,44 +237,44 @@ export function NewProjectDialog({ open, onOpenChange }: NewProjectDialogProps) 
             )}
           </div>
 
-          <div className="flex items-center gap-3">
-            <Button disabled={creation.isSubmitting} onClick={handleClose} variant="outline">
-              Cancel
-            </Button>
+          <DialogFooter>
+            <div className="flex items-center gap-3">
+              <Button disabled={creation.isSubmitting} onClick={handleClose} variant="outline">
+                Cancel
+              </Button>
 
-            {creation.step === "confirm" ? (
-              <Button
-                className="min-w-[140px] gap-2"
-                disabled={!creation.canProceed() || creation.isSubmitting}
-                onClick={handleSubmit}
-                style={{ backgroundColor: "var(--accent-teal)" }}
-              >
-                {creation.isSubmitting ? (
-                  <>
-                    <IconLoader2 className="h-4 w-4 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <IconSparkles className="h-4 w-4" />
-                    Generate
-                  </>
-                )}
-              </Button>
-            ) : (
-              <Button
-                className="gap-2"
-                disabled={!creation.canProceed()}
-                onClick={creation.goToNextStep}
-                style={{ backgroundColor: "var(--accent-teal)" }}
-              >
-                Continue
-                <IconArrowRight className="h-4 w-4" />
-              </Button>
-            )}
-          </div>
+              {creation.step === 'confirm' ? (
+                <Button
+                  className="min-w-[140px] gap-2"
+                  disabled={!creation.canProceed() || creation.isSubmitting}
+                  onClick={handleSubmit}
+                >
+                  {creation.isSubmitting ? (
+                    <>
+                      <IconLoader2 className="h-4 w-4 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <IconSparkles className="h-4 w-4" />
+                      Generate
+                    </>
+                  )}
+                </Button>
+              ) : (
+                <Button
+                  className="gap-2"
+                  disabled={!creation.canProceed()}
+                  onClick={creation.goToNextStep}
+                >
+                  Continue
+                  <IconArrowRight className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          </DialogFooter>
         </div>
       </DialogContent>
     </Dialog>
-  );
+  )
 }
