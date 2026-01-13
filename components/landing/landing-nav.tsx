@@ -32,6 +32,7 @@ function AuthButton() {
           <IconArrowRight className="size-4" />
         </Link>
       }
+      nativeButton={false}
     />
   )
 }
