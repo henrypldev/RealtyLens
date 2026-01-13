@@ -156,19 +156,27 @@ DateCell.displayName = 'DateCell'
 const ActionsCell = memo(({ projectId }: { projectId: string }) => (
   <div className="flex items-center justify-center">
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button className="h-8 w-8 p-0" variant="ghost">
-          <IconDotsVertical className="h-4 w-4" />
-          <span className="sr-only">Open menu</span>
-        </Button>
-      </DropdownMenuTrigger>
+      <DropdownMenuTrigger
+        render={
+          <Button className="h-8 w-8 p-0" variant="ghost">
+            <IconDotsVertical className="h-4 w-4" />
+            <span className="sr-only">Open menu</span>
+          </Button>
+        }
+        nativeButton={false}
+      />
+
       <DropdownMenuContent align="end">
-        <DropdownMenuItem asChild>
-          <Link href={`/dashboard/${projectId}`}>
-            <IconEye className="mr-2 h-4 w-4" />
-            View project
-          </Link>
-        </DropdownMenuItem>
+        <DropdownMenuItem
+          render={
+            <Link href={`/dashboard/${projectId}`}>
+              <IconEye className="mr-2 h-4 w-4" />
+              View project
+            </Link>
+          }
+          nativeButton={false}
+        />
+
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="text-destructive focus:text-destructive"
