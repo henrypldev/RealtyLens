@@ -1,5 +1,6 @@
 'use client'
 
+import { sendGTMEvent } from '@next/third-parties/google'
 import {
   IconAlertTriangle,
   IconArrowLeft,
@@ -668,6 +669,7 @@ interface ProjectDetailContentProps {
   images: ImageGeneration[]
   paymentRequired?: boolean
   paymentStatus?: PaymentStatus
+  paymentSuccess?: boolean
 }
 
 export function ProjectDetailContent({
@@ -675,6 +677,7 @@ export function ProjectDetailContent({
   images,
   paymentRequired = false,
   paymentStatus,
+  paymentSuccess = false,
 }: ProjectDetailContentProps) {
   const router = useRouter()
   const [isRedirectingToPayment, setIsRedirectingToPayment] = React.useState(false)
@@ -703,6 +706,20 @@ export function ProjectDetailContent({
     return initialRunIds
   })
   const [accessToken, setAccessToken] = React.useState<string | null>(null)
+  const [conversionTracked, setConversionTracked] = React.useState(false)
+
+  React.useEffect(() => {
+    if (paymentSuccess && !conversionTracked) {
+      sendGTMEvent({
+        event: 'conversion',
+        send_to: 'AW-11543766872/VvQ7CMjNkIEaENjOv4Ar',
+        value: 99,
+        currency: 'USD',
+        transaction_id: project.id,
+      })
+      setConversionTracked(true)
+    }
+  }, [paymentSuccess, conversionTracked, project.id])
 
   // Update runIds when images change (e.g., after server refresh with new processing images)
   React.useEffect(() => {

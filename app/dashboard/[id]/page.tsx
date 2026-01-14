@@ -65,6 +65,7 @@ export default async function ProjectDetailPage({ params, searchParams }: PagePr
       images={projectData.images}
       paymentRequired={!paymentStatus.isPaid && paymentParam !== 'success'}
       paymentStatus={paymentStatus}
+      paymentSuccess={paymentParam === 'success'}
       project={projectData.project}
     />
   )
