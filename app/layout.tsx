@@ -2,6 +2,7 @@ import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import { constructMetadata } from '@/lib/constructMetadata'
 import './globals.css'
 import { GoogleTagManager } from '@next/third-parties/google'
+import { Analytics } from '@vercel/analytics/next'
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 
@@ -31,6 +32,7 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         <NuqsAdapter>{children}</NuqsAdapter>
+        <Analytics />
       </body>
     </html>
   )
