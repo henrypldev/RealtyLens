@@ -1,6 +1,8 @@
 import { withPostHogConfig } from '@posthog/nextjs-config'
 import type { NextConfig } from 'next'
 
+const isDev = process.env.NODE_ENV === 'development'
+
 const nextConfig: NextConfig = {
   /* config options here */
   async rewrites() {
@@ -17,7 +19,9 @@ const nextConfig: NextConfig = {
   },
   // This is required to support PostHog trailing slash API requests
   skipTrailingSlashRedirect: true,
+  ...(isDev && { assetPrefix: '/realtylens' }),
   images: {
+    ...(isDev && { path: '/realtylens/_next/image' }),
     remotePatterns: [
       {
         protocol: 'https',
