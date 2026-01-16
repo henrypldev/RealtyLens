@@ -1,4 +1,9 @@
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
+import {
+  OrganizationJsonLd,
+  SoftwareApplicationJsonLd,
+  WebSiteJsonLd,
+} from '@/components/seo/json-ld'
 import { constructMetadata } from '@/lib/constructMetadata'
 import './globals.css'
 import { GoogleTagManager } from '@next/third-parties/google'
@@ -26,6 +31,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <OrganizationJsonLd />
+        <WebSiteJsonLd />
+        <SoftwareApplicationJsonLd />
+      </head>
       <GoogleTagManager gtmId="AW-11543766872" />
       <body
         className={`${_geist.variable} ${geistMono.variable} antialiased`}

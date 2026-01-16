@@ -2,9 +2,8 @@ import { Toaster } from '@/components/ui/sonner'
 import { constructMetadata } from '@/lib/constructMetadata'
 
 export const metadata = constructMetadata({
-  title: 'Sign In | RealtyLens',
-  description: 'Sign in to your RealtyLens account',
-  noIndex: true,
+  title: 'Authentication | RealtyLens',
+  description: 'Sign in or create an account to access RealtyLens AI photo editing.',
 })
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
