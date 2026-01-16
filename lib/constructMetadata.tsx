@@ -51,12 +51,18 @@ interface ConstructMetadataOptions {
   tags?: string[]
   /** OpenGraph type - defaults to "website", set to "article" for blog posts */
   type?: 'website' | 'article'
+  /** Generate dynamic OG image with these parameters */
+  ogImageParams?: {
+    title?: string
+    description?: string
+    type?: 'default' | 'blog' | 'help'
+  }
 }
 
 export function constructMetadata({
   title = siteConfig.title,
   description = siteConfig.description,
-  image = siteConfig.ogImage,
+  image,
   icons = '/favicon.ico',
   noIndex = false,
   canonical,
@@ -67,6 +73,7 @@ export function constructMetadata({
   section,
   tags,
   type,
+  ogImageParams,
 }: ConstructMetadataOptions = {}): Metadata {
   const metadataBaseUrl = getMetadataBaseUrl()
   const canonicalUrl = canonical
@@ -75,6 +82,21 @@ export function constructMetadata({
 
   // Determine OG type - auto-detect article type if publishedTime is provided
   const ogType = type || (publishedTime ? 'article' : 'website')
+
+  // Generate OG image URL - use dynamic OG if params provided, otherwise fallback to static
+  let ogImageUrl: string
+  if (image) {
+    ogImageUrl = image
+  } else if (ogImageParams) {
+    const params = new URLSearchParams()
+    if (ogImageParams.title) params.set('title', ogImageParams.title)
+    if (ogImageParams.description) params.set('description', ogImageParams.description)
+    if (ogImageParams.type) params.set('type', ogImageParams.type)
+    ogImageUrl = `${metadataBaseUrl}/api/og?${params.toString()}`
+  } else {
+    // Default dynamic OG with site title
+    ogImageUrl = `${metadataBaseUrl}/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`
+  }
 
   // Build OpenGraph object
   const openGraph: Metadata['openGraph'] = {
@@ -86,7 +108,7 @@ export function constructMetadata({
     locale: siteConfig.locale,
     images: [
       {
-        url: image,
+        url: ogImageUrl,
         width: 1200,
         height: 630,
         alt: title || siteConfig.name,
@@ -130,7 +152,7 @@ export function constructMetadata({
       card: 'summary_large_image',
       title,
       description,
-      images: [image],
+      images: [ogImageUrl],
       creator: siteConfig.twitterHandle,
     },
     icons,
