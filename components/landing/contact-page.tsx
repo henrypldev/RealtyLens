@@ -2,7 +2,7 @@
 
 import { IconClock, IconMail, IconSend } from '@tabler/icons-react'
 import posthog from 'posthog-js'
-import { useState } from 'react'
+import { type DetailedHTMLProps, type InputHTMLAttributes, useState } from 'react'
 import { LandingFooter } from './landing-footer'
 import { LandingNav } from './landing-nav'
 
@@ -12,6 +12,17 @@ const topics = [
   { value: 'sales', label: 'Sales & Pricing' },
   { value: 'partnership', label: 'Partnership' },
 ]
+
+const Input = (
+  props: DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>,
+) => {
+  return (
+    <input
+      className="h-12 w-full rounded-xl px-4 text-sm outline-none transition-all focus:ring-2 bg-accent border border-border"
+      {...props}
+    />
+  )
+}
 
 export function ContactPage() {
   const [formData, setFormData] = useState({
@@ -32,29 +43,16 @@ export function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--landing-bg)' }}>
+    <div className="min-h-screen border-border">
       <LandingNav />
 
       <main>
         {/* Hero Section */}
         <section className="px-6 pt-20 pb-12 text-center md:pt-28 md:pb-16">
           <div className="mx-auto max-w-3xl">
-            <p
-              className="font-semibold text-sm uppercase tracking-wider"
-              style={{ color: 'var(--landing-accent)' }}
-            >
-              Contact
-            </p>
-            <h1
-              className="mt-3 font-bold text-4xl tracking-tight sm:text-5xl"
-              style={{ color: 'var(--landing-text)' }}
-            >
-              Get in touch
-            </h1>
-            <p
-              className="mt-4 text-lg leading-relaxed"
-              style={{ color: 'var(--landing-text-muted)' }}
-            >
+            <p className="font-semibold text-sm uppercase tracking-wider text-primary">Contact</p>
+            <h1 className="mt-3 font-bold text-4xl tracking-tight sm:text-5xl">Get in touch</h1>
+            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               Have questions? We&apos;d love to hear from you.
             </p>
           </div>
@@ -66,35 +64,20 @@ export function ContactPage() {
             {/* Contact Form */}
             <div className="lg:col-span-2">
               <form
-                className="rounded-2xl p-8"
+                className="rounded-2xl p-8 shadow bg-card border-border"
                 onSubmit={handleSubmit}
-                style={{
-                  backgroundColor: 'var(--landing-card)',
-                  boxShadow: '0 20px 40px -12px var(--landing-shadow)',
-                  border: '1px solid var(--landing-border)',
-                }}
               >
                 <div className="grid gap-6 sm:grid-cols-2">
                   {/* Name */}
                   <div>
-                    <label
-                      className="mb-2 block font-medium text-sm"
-                      htmlFor="name"
-                      style={{ color: 'var(--landing-text)' }}
-                    >
+                    <label className="mb-2 block font-medium text-sm" htmlFor="name">
                       Name
                     </label>
-                    <input
-                      className="h-12 w-full rounded-xl px-4 text-sm outline-none transition-all focus:ring-2"
+                    <Input
                       id="name"
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder="Your name"
                       required
-                      style={{
-                        backgroundColor: 'var(--landing-bg)',
-                        color: 'var(--landing-text)',
-                        border: '1px solid var(--landing-border)',
-                      }}
                       type="text"
                       value={formData.name}
                     />
@@ -109,17 +92,11 @@ export function ContactPage() {
                     >
                       Email
                     </label>
-                    <input
-                      className="h-12 w-full rounded-xl px-4 text-sm outline-none transition-all focus:ring-2"
+                    <Input
                       id="email"
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="you@example.com"
                       required
-                      style={{
-                        backgroundColor: 'var(--landing-bg)',
-                        color: 'var(--landing-text)',
-                        border: '1px solid var(--landing-border)',
-                      }}
                       type="email"
                       value={formData.email}
                     />
@@ -136,14 +113,12 @@ export function ContactPage() {
                     Topic
                   </label>
                   <select
-                    className="h-12 w-full rounded-xl px-4 text-sm outline-none transition-all focus:ring-2"
+                    className="h-12 w-full rounded-xl px-4 text-sm outline-none transition-all focus:ring-2 border border-border bg-accent"
                     id="topic"
                     onChange={(e) => setFormData({ ...formData, topic: e.target.value })}
                     required
                     style={{
-                      backgroundColor: 'var(--landing-bg)',
                       color: formData.topic ? 'var(--landing-text)' : 'var(--landing-text-muted)',
-                      border: '1px solid var(--landing-border)',
                     }}
                     value={formData.topic}
                   >
@@ -168,29 +143,19 @@ export function ContactPage() {
                     Message
                   </label>
                   <textarea
-                    className="w-full rounded-xl px-4 py-3 text-sm outline-none transition-all focus:ring-2"
+                    className="w-full rounded-xl px-4 py-3 text-sm outline-none transition-all focus:ring-2 bg-accent border-border"
                     id="message"
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     placeholder="How can we help you?"
                     required
                     rows={5}
-                    style={{
-                      backgroundColor: 'var(--landing-bg)',
-                      color: 'var(--landing-text)',
-                      border: '1px solid var(--landing-border)',
-                      resize: 'none',
-                    }}
                     value={formData.message}
                   />
                 </div>
 
                 {/* Submit */}
                 <button
-                  className="mt-8 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full font-medium text-base transition-all duration-200 hover:scale-[1.02] sm:w-auto sm:px-8"
-                  style={{
-                    backgroundColor: 'var(--landing-accent)',
-                    color: 'var(--landing-accent-foreground)',
-                  }}
+                  className="mt-8 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full font-medium text-base transition-all duration-200 hover:scale-[1.02] sm:w-auto sm:px-8 bg-primary text-primary-foreground"
                   type="submit"
                 >
                   Send Message
@@ -201,50 +166,22 @@ export function ContactPage() {
 
             {/* Contact Info */}
             <div className="space-y-6">
-              <div
-                className="rounded-2xl p-6"
-                style={{
-                  backgroundColor: 'var(--landing-card)',
-                  border: '1px solid var(--landing-border)',
-                }}
-              >
-                <div
-                  className="mb-4 inline-flex size-12 items-center justify-center rounded-xl"
-                  style={{
-                    backgroundColor: 'var(--landing-bg-alt)',
-                    border: '1px solid var(--landing-border)',
-                  }}
-                >
-                  <IconMail className="size-6" style={{ color: 'var(--landing-accent)' }} />
+              <div className="rounded-2xl p-6 bg-card border border-border">
+                <div className="mb-4 inline-flex size-12 items-center justify-center rounded-xl bg-primary/40 border border-border/50">
+                  <IconMail className="size-6" style={{ color: 'var(--primary-foreground)' }} />
                 </div>
-                <h3 className="font-semibold" style={{ color: 'var(--landing-text)' }}>
-                  Email us
-                </h3>
-                <p className="mt-1 text-sm" style={{ color: 'var(--landing-text-muted)' }}>
-                  hello@proppi.tech
+                <h3 className="font-semibold">Email us</h3>
+                <p className="mt-1 text-sm" style={{ color: 'var(--muted-foreground)' }}>
+                  hello@realtylens.studio
                 </p>
               </div>
 
-              <div
-                className="rounded-2xl p-6"
-                style={{
-                  backgroundColor: 'var(--landing-card)',
-                  border: '1px solid var(--landing-border)',
-                }}
-              >
-                <div
-                  className="mb-4 inline-flex size-12 items-center justify-center rounded-xl"
-                  style={{
-                    backgroundColor: 'var(--landing-bg-alt)',
-                    border: '1px solid var(--landing-border)',
-                  }}
-                >
-                  <IconClock className="size-6" style={{ color: 'var(--landing-accent)' }} />
+              <div className="rounded-2xl p-6 bg-card border border-border">
+                <div className="mb-4 inline-flex size-12 items-center justify-center rounded-xl bg-primary/40 border border-border/50">
+                  <IconClock className="size-6" style={{ color: 'var(--primary-foreground)' }} />
                 </div>
-                <h3 className="font-semibold" style={{ color: 'var(--landing-text)' }}>
-                  Response time
-                </h3>
-                <p className="mt-1 text-sm" style={{ color: 'var(--landing-text-muted)' }}>
+                <h3 className="font-semibold">Response time</h3>
+                <p className="mt-1 text-sm" style={{ color: 'var(--muted-foreground)' }}>
                   We typically respond within 24 hours during business days.
                 </p>
               </div>

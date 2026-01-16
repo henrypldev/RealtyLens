@@ -13,12 +13,7 @@ function AuthButton() {
   const { data: session, isPending } = useSession()
 
   if (isPending) {
-    return (
-      <div
-        className="h-10 w-28 animate-pulse rounded-full"
-        style={{ backgroundColor: 'var(--landing-border)' }}
-      />
-    )
+    return <div className="h-10 w-28 animate-pulse rounded-full border" />
   }
 
   const href = session ? '/dashboard' : '/sign-in'
@@ -90,12 +85,7 @@ export function LandingNav() {
             </Button>
             {/* CTA Button */}
             <Suspense
-              fallback={
-                <div
-                  className="h-10 w-28 animate-pulse rounded-full"
-                  style={{ backgroundColor: 'var(--landing-border)' }}
-                />
-              }
+              fallback={<div className="h-10 w-28 animate-pulse rounded-full border-border" />}
             >
               <AuthButton />
             </Suspense>
