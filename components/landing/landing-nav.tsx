@@ -80,9 +80,12 @@ export function LandingNav() {
           </nav>
 
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" size="sm">
-              Log in
-            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              render={<Link href="/sign-in">Log in</Link>}
+              nativeButton={false}
+            />
             {/* CTA Button */}
             <Suspense
               fallback={<div className="h-10 w-28 animate-pulse rounded-full border-border" />}
@@ -122,9 +125,12 @@ export function LandingNav() {
                 Pricing
               </Link>
               <div className="flex flex-col gap-3 pt-4">
-                <Button variant="outline" className="w-full min-h-11 bg-transparent">
-                  Log in
-                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full min-h-11 bg-transparent"
+                  render={<Link href="/sign-in">Log in</Link>}
+                  nativeButton={false}
+                />
                 <Button className="w-full min-h-11">Get Started</Button>
               </div>
             </nav>
