@@ -71,19 +71,7 @@ export function LandingHero() {
             >
               <HeroAuthButton />
             </Suspense>
-            <Button
-              variant="outline"
-              size="lg"
-              className="w-full sm:w-auto min-h-12 text-base px-8 bg-transparent"
-            >
-              <Play className="mr-2 h-4 w-4" />
-              Watch Demo
-            </Button>
           </div>
-
-          <p className="mt-4 text-sm text-muted-foreground">
-            No credit card required • Free trial included
-          </p>
         </div>
 
         <div className="mt-16 relative">

@@ -62,9 +62,6 @@ export function LandingCta() {
             >
               <CtaAuthButton />
             </Suspense>
-            <p className="mt-4 text-sm text-primary-foreground/70">
-              No credit card required • Free trial included • Cancel anytime
-            </p>
           </div>
 
           {/* Background decorative elements */}

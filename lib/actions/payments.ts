@@ -13,7 +13,13 @@ import {
   polarCustomer,
   projectPayment,
 } from '@/lib/db/schema'
-import { getBaseUrl, getProductForImageCount, polar } from '@/lib/polar'
+import {
+  getBaseUrl,
+  getProductById,
+  getProductForImageCount,
+  POLAR_CONFIG,
+  polar,
+} from '@/lib/polar'
 
 export type ActionResult<T> = { success: true; data: T } | { success: false; error: string }
 
@@ -88,7 +94,7 @@ export async function getProjectPaymentStatus(projectId: string): Promise<{
 
 export async function createPolarCheckoutSession(
   projectId: string,
-  productType: 'image' | 'video' = 'image',
+  selectedProductId?: string,
 ): Promise<ActionResult<{ url: string; checkoutId: string }>> {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
@@ -117,7 +123,12 @@ export async function createPolarCheckoutSession(
     const baseUrl = getBaseUrl()
     const imageCount = projectData.project.imageCount || 0
 
-    const product = await getProductForImageCount(imageCount)
+    let product
+    if (selectedProductId) {
+      product = await getProductById(selectedProductId)
+    } else {
+      product = await getProductForImageCount(imageCount)
+    }
     if (!product) {
       return { success: false, error: 'No suitable product found for this project' }
     }
@@ -138,7 +149,6 @@ export async function createPolarCheckoutSession(
         projectId,
         workspaceId: projectData.project.workspaceId,
         userId: session.user.id,
-        productType,
         productName: product.name,
       },
     })

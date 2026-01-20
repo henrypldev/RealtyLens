@@ -670,6 +670,7 @@ interface PolarProduct {
   priceCents: number
   currency: string
   maxImages: number
+  benefits: string[]
 }
 
 interface ProjectDetailContentProps {
@@ -715,7 +716,9 @@ export function ProjectDetailContent({
   })
   const [accessToken, setAccessToken] = React.useState<string | null>(null)
   const [conversionTracked, setConversionTracked] = React.useState(false)
-  const [applicableProduct, setApplicableProduct] = React.useState<PolarProduct | null>(null)
+  const [imageProducts, setImageProducts] = React.useState<PolarProduct[]>([])
+  const [tierSelectOpen, setTierSelectOpen] = React.useState(false)
+  const [selectedProductId, setSelectedProductId] = React.useState<string | null>(null)
 
   React.useEffect(() => {
     if (paymentRequired) {
@@ -723,26 +726,28 @@ export function ProjectDetailContent({
         .then((res) => res.json())
         .then((data) => {
           const products = (data.products || []) as PolarProduct[]
-          const imageCount = project.imageCount || 0
-          const valid = products.filter((p) => p.maxImages >= imageCount)
-          setApplicableProduct(valid[0] || products[products.length - 1] || null)
+          const imgProducts = products.filter((p) => p.maxImages > 0)
+          setImageProducts(imgProducts)
         })
         .catch(() => {})
     }
-  }, [paymentRequired, project.imageCount])
+  }, [paymentRequired])
+
+  const selectedProduct = imageProducts.find((p) => p.id === selectedProductId) || null
 
   React.useEffect(() => {
-    if (paymentSuccess && !conversionTracked && applicableProduct) {
+    if (paymentSuccess && !conversionTracked && imageProducts.length > 0) {
+      const paidProduct = imageProducts[0]
       sendGTMEvent({
         event: 'conversion',
         send_to: 'AW-11543766872/VvQ7CMjNkIEaENjOv4Ar',
-        value: applicableProduct.priceCents / 100,
+        value: paidProduct.priceCents / 100,
         currency: 'USD',
         transaction_id: project.id,
       })
       setConversionTracked(true)
     }
-  }, [paymentSuccess, conversionTracked, project.id, applicableProduct])
+  }, [paymentSuccess, conversionTracked, project.id, imageProducts])
 
   // Update runIds when images change (e.g., after server refresh with new processing images)
   React.useEffect(() => {
@@ -1083,37 +1088,11 @@ export function ProjectDetailContent({
               <Button
                 className="gap-2"
                 disabled={isRedirectingToPayment}
-                onClick={async () => {
-                  setIsRedirectingToPayment(true)
-                  try {
-                    const { createPolarCheckoutSession } = await import('@/lib/actions/payments')
-                    const result = await createPolarCheckoutSession(project.id)
-                    if (result.success) {
-                      window.location.href = result.data.url
-                    } else {
-                      toast.error(result.error || 'Failed to create checkout')
-                      setIsRedirectingToPayment(false)
-                    }
-                  } catch {
-                    toast.error('Payment failed')
-                    setIsRedirectingToPayment(false)
-                  }
-                }}
+                onClick={() => setTierSelectOpen(true)}
                 style={{ backgroundColor: 'var(--accent-amber)' }}
               >
-                {isRedirectingToPayment ? (
-                  <>
-                    <IconLoader2 className="h-4 w-4 animate-spin" />
-                    Redirecting…
-                  </>
-                ) : (
-                  <>
-                    <IconSparkles className="h-4 w-4" />
-                    {applicableProduct
-                      ? `Pay $${(applicableProduct.priceCents / 100).toFixed(0)} to Process`
-                      : 'Pay to Process'}
-                  </>
-                )}
+                <IconSparkles className="h-4 w-4" />
+                Choose Plan & Process
               </Button>
             )}
             {canAddMore && (
@@ -1414,6 +1393,120 @@ export function ProjectDetailContent({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Tier Selection Dialog */}
+      {tierSelectOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
+          <div className="relative w-full max-w-2xl rounded-2xl bg-card p-6 shadow-xl">
+            <button
+              aria-label="Close"
+              className="absolute top-4 right-4 rounded-full p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              onClick={() => setTierSelectOpen(false)}
+            >
+              <IconX className="h-5 w-5" />
+            </button>
+
+            <h3 className="mb-2 font-semibold text-xl">Choose Your Plan</h3>
+            <p className="mb-6 text-muted-foreground text-sm">
+              You have {project.imageCount} image{project.imageCount !== 1 ? 's' : ''} in this
+              project. Select a plan that fits your needs.
+            </p>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              {imageProducts.map((product) => {
+                const isSelected = selectedProductId === product.id
+                const hasEnoughImages = product.maxImages >= (project.imageCount || 0)
+                return (
+                  <button
+                    className={cn(
+                      'relative flex flex-col rounded-xl border-2 p-5 text-left transition-all',
+                      isSelected
+                        ? 'border-primary bg-primary/5'
+                        : hasEnoughImages
+                          ? 'border-border hover:border-primary/50'
+                          : 'border-border opacity-50',
+                    )}
+                    disabled={!hasEnoughImages}
+                    key={product.id}
+                    onClick={() => setSelectedProductId(product.id)}
+                  >
+                    {isSelected && (
+                      <div className="absolute top-3 right-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary">
+                        <IconCheck className="h-4 w-4 text-white" />
+                      </div>
+                    )}
+                    <div className="mb-3 flex items-center gap-2">
+                      <IconPhoto className="h-5 w-5 text-primary" />
+                      <span className="font-semibold">{product.name}</span>
+                    </div>
+                    <div className="mb-3">
+                      <span className="font-bold text-3xl">
+                        ${(product.priceCents / 100).toFixed(0)}
+                      </span>
+                      <span className="ml-1 text-muted-foreground text-sm">one-time</span>
+                    </div>
+                    <ul className="space-y-2">
+                      {product.benefits.map((benefit, i) => (
+                        <li className="flex items-center gap-2 text-sm" key={i}>
+                          <IconCheck className="h-4 w-4 text-primary" />
+                          {benefit}
+                        </li>
+                      ))}
+                    </ul>
+                    {!hasEnoughImages && (
+                      <p className="mt-3 text-red-500 text-xs">
+                        Not enough images for your project ({product.maxImages} max)
+                      </p>
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <Button onClick={() => setTierSelectOpen(false)} variant="outline">
+                Cancel
+              </Button>
+              <Button
+                className="gap-2"
+                disabled={!selectedProductId || isRedirectingToPayment}
+                onClick={async () => {
+                  if (!selectedProductId) return
+                  setIsRedirectingToPayment(true)
+                  try {
+                    const { createPolarCheckoutSession } = await import('@/lib/actions/payments')
+                    const result = await createPolarCheckoutSession(project.id, selectedProductId)
+                    if (result.success) {
+                      window.location.href = result.data.url
+                    } else {
+                      toast.error(result.error || 'Failed to create checkout')
+                      setIsRedirectingToPayment(false)
+                    }
+                  } catch {
+                    toast.error('Payment failed')
+                    setIsRedirectingToPayment(false)
+                  }
+                }}
+                style={{ backgroundColor: 'var(--primary)' }}
+              >
+                {isRedirectingToPayment ? (
+                  <>
+                    <IconLoader2 className="h-4 w-4 animate-spin" />
+                    Redirecting…
+                  </>
+                ) : (
+                  <>
+                    <IconSparkles className="h-4 w-4" />
+                    {selectedProduct
+                      ? `Pay $${(selectedProduct.priceCents / 100).toFixed(0)} & Process`
+                      : 'Select a Plan'}
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }
