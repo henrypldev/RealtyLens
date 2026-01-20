@@ -13,7 +13,7 @@ import {
   polarCustomer,
   projectPayment,
 } from '@/lib/db/schema'
-import { getBaseUrl, POLAR_CONFIG, polar } from '@/lib/polar'
+import { getBaseUrl, getProductForImageCount, polar } from '@/lib/polar'
 
 export type ActionResult<T> = { success: true; data: T } | { success: false; error: string }
 
@@ -115,8 +115,15 @@ export async function createPolarCheckoutSession(
     }
 
     const baseUrl = getBaseUrl()
-    const productId =
-      productType === 'video' ? POLAR_CONFIG.PRODUCT_ID_VIDEO : POLAR_CONFIG.PRODUCT_ID_IMAGE
+    const imageCount = projectData.project.imageCount || 0
+
+    const product = await getProductForImageCount(imageCount)
+    if (!product) {
+      return { success: false, error: 'No suitable product found for this project' }
+    }
+
+    const productId = product.id
+    const amountCents = product.priceCents
 
     const checkout = await polar.checkouts.create({
       products: [productId],
@@ -132,6 +139,7 @@ export async function createPolarCheckoutSession(
         workspaceId: projectData.project.workspaceId,
         userId: session.user.id,
         productType,
+        productName: product.name,
       },
     })
 
@@ -141,6 +149,7 @@ export async function createPolarCheckoutSession(
         .set({
           polarCheckoutId: checkout.id,
           status: 'pending',
+          amountCents,
           updatedAt: new Date(),
         })
         .where(eq(projectPayment.id, existingPayment.id))
@@ -151,10 +160,7 @@ export async function createPolarCheckoutSession(
         workspaceId: projectData.project.workspaceId,
         paymentMethod: 'polar',
         polarCheckoutId: checkout.id,
-        amountCents:
-          productType === 'video'
-            ? POLAR_CONFIG.VIDEO_PRICE_USD_CENTS
-            : POLAR_CONFIG.PROJECT_PRICE_USD_CENTS,
+        amountCents,
         currency: 'usd',
         status: 'pending',
       })

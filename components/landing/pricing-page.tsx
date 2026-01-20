@@ -1,40 +1,26 @@
 'use client'
 
-import {
-  IconArrowRight,
-  IconCheck,
-  IconMinus,
-  IconMovie,
-  IconPhoto,
-  IconPlus,
-} from '@tabler/icons-react'
+import { IconArrowRight, IconCheck, IconMinus, IconPhoto, IconPlus } from '@tabler/icons-react'
 import Link from 'next/link'
 import posthog from 'posthog-js'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import type { PolarProduct } from '@/lib/polar'
 import { LandingFooter } from './landing-footer'
 import { LandingNav } from './landing-nav'
 
-const photoFeatures = [
-  'Up to 20 images per property',
-  'AI-powered enhancement',
-  'Multiple style templates',
-  'High-resolution downloads',
-  'Ready in under 30 seconds',
-]
-
-const videoFeatures = [
-  'Professional property video',
-  'AI-powered editing',
-  'Music and transitions included',
-  'Portrait or landscape format',
-  'Ready in minutes',
-]
+function formatPrice(cents: number, currency: string): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: currency.toUpperCase(),
+    minimumFractionDigits: 0,
+  }).format(cents / 100)
+}
 
 const faqs = [
   {
     question: 'How does the pricing work?',
     answer:
-      'We charge per project, not per month. For photo enhancement, you pay 1000 NOK per property (up to 20 images). For video creation, you pay 1000 NOK per video. No subscriptions, no hidden fees.',
+      'We charge per project, not per month. Choose a plan based on how many images you need to process. No subscriptions, no hidden fees.',
   },
   {
     question: 'What image formats do you support?',
@@ -52,9 +38,9 @@ const faqs = [
       'Yes! New users get free credits to try out the platform. You can enhance a few images to see the quality before committing to a full property project.',
   },
   {
-    question: 'What if I have more than 20 images?',
+    question: 'How many edits can I make per photo?',
     answer:
-      'If your property has more than 20 images, you can create multiple projects or contact us for custom pricing on larger shoots.',
+      'You can try multiple style variations on each photo until you get the perfect result. Edit until you love it—one flat price.',
   },
   {
     question: 'Do you offer refunds?',
@@ -63,33 +49,24 @@ const faqs = [
   },
 ]
 
-function PricingCard({
-  icon: Icon,
-  title,
-  price,
-  per,
-  features,
-  popular,
-}: {
-  icon: typeof IconPhoto
-  title: string
-  price: string
-  per: string
-  features: string[]
-  popular?: boolean
-}) {
+function PricingCard({ product, isPopular }: { product: PolarProduct; isPopular: boolean }) {
+  const features =
+    product.benefits.length > 0
+      ? product.benefits
+      : [`Up to ${product.maxImages} photos per project`]
+
   return (
     <div
       className="relative flex flex-col rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1"
       style={{
-        backgroundColor: popular ? 'var(--landing-card)' : 'var(--landing-bg)',
-        boxShadow: popular
+        backgroundColor: isPopular ? 'var(--landing-card)' : 'var(--landing-bg)',
+        boxShadow: isPopular
           ? '0 20px 40px -12px var(--landing-shadow)'
           : '0 4px 24px -4px var(--landing-shadow)',
-        border: popular ? '2px solid var(--landing-accent)' : '1px solid var(--landing-border)',
+        border: isPopular ? '2px solid var(--landing-accent)' : '1px solid var(--landing-border)',
       }}
     >
-      {popular && (
+      {isPopular && (
         <div
           className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-4 py-1 font-semibold text-xs"
           style={{
@@ -101,38 +78,34 @@ function PricingCard({
         </div>
       )}
 
-      {/* Icon */}
       <div
         className="relative mb-6 inline-flex size-14 items-center justify-center rounded-xl"
         style={{
-          backgroundColor: popular ? 'var(--landing-accent)' : 'var(--landing-bg-alt)',
-          border: popular ? 'none' : '1px solid var(--landing-border)',
+          backgroundColor: isPopular ? 'var(--landing-accent)' : 'var(--landing-bg-alt)',
+          border: isPopular ? 'none' : '1px solid var(--landing-border)',
         }}
       >
-        <Icon
+        <IconPhoto
           className="size-7"
           style={{
-            color: popular ? 'var(--landing-accent-foreground)' : 'var(--landing-accent)',
+            color: isPopular ? 'var(--landing-accent-foreground)' : 'var(--landing-accent)',
           }}
         />
       </div>
 
-      {/* Title */}
       <h3 className="font-semibold text-xl" style={{ color: 'var(--landing-text)' }}>
-        {title}
+        {product.name}
       </h3>
 
-      {/* Price */}
       <div className="mt-4 flex items-baseline gap-2">
         <span className="font-bold text-4xl tabular-nums" style={{ color: 'var(--landing-text)' }}>
-          {price}
+          {formatPrice(product.priceCents, product.currency)}
         </span>
         <span className="text-sm" style={{ color: 'var(--landing-text-muted)' }}>
-          {per}
+          per project
         </span>
       </div>
 
-      {/* Features */}
       <ul className="mt-8 flex-1 space-y-4">
         {features.map((feature) => (
           <li className="flex items-start gap-3" key={feature}>
@@ -147,20 +120,19 @@ function PricingCard({
         ))}
       </ul>
 
-      {/* CTA */}
       <Link
         className="mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-full font-medium text-base transition-all duration-200 hover:scale-[1.02]"
         href="/sign-in"
         onClick={() => {
           posthog.capture('pricing_cta_clicked', {
-            plan_name: title,
-            price: price,
+            plan_name: product.name,
+            price: product.priceCents,
           })
         }}
         style={{
-          backgroundColor: popular ? 'var(--landing-accent)' : 'var(--landing-bg-alt)',
-          color: popular ? 'var(--landing-accent-foreground)' : 'var(--landing-text)',
-          border: popular ? 'none' : '1px solid var(--landing-border-strong)',
+          backgroundColor: isPopular ? 'var(--landing-accent)' : 'var(--landing-bg-alt)',
+          color: isPopular ? 'var(--landing-accent-foreground)' : 'var(--landing-text)',
+          border: isPopular ? 'none' : '1px solid var(--landing-border-strong)',
         }}
       >
         Get Started
@@ -207,13 +179,65 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
   )
 }
 
+function PricingSkeleton() {
+  return (
+    <div className="mx-auto grid max-w-4xl gap-8 md:grid-cols-2">
+      {[0, 1].map((i) => (
+        <div
+          key={i}
+          className="rounded-2xl p-8 animate-pulse"
+          style={{
+            backgroundColor: 'var(--landing-bg)',
+            border: '1px solid var(--landing-border)',
+          }}
+        >
+          <div
+            className="size-14 rounded-xl mb-6"
+            style={{ backgroundColor: 'var(--landing-border)' }}
+          />
+          <div className="h-6 w-24 rounded" style={{ backgroundColor: 'var(--landing-border)' }} />
+          <div
+            className="mt-4 h-10 w-20 rounded"
+            style={{ backgroundColor: 'var(--landing-border)' }}
+          />
+          <div className="mt-8 space-y-4">
+            {[0, 1, 2].map((j) => (
+              <div
+                key={j}
+                className="h-4 rounded"
+                style={{ backgroundColor: 'var(--landing-border)' }}
+              />
+            ))}
+          </div>
+          <div
+            className="mt-8 h-12 rounded-full"
+            style={{ backgroundColor: 'var(--landing-border)' }}
+          />
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export function PricingPage() {
+  const [products, setProducts] = useState<PolarProduct[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/products')
+      .then((res) => res.json())
+      .then((data) => {
+        setProducts(data.products || [])
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
+  }, [])
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--landing-bg)' }}>
       <LandingNav />
 
       <main>
-        {/* Hero Section */}
         <section className="px-6 pt-20 pb-16 text-center md:pt-28 md:pb-24">
           <div className="mx-auto max-w-3xl">
             <p
@@ -239,28 +263,26 @@ export function PricingPage() {
           </div>
         </section>
 
-        {/* Pricing Cards */}
         <section className="px-6 pb-24">
-          <div className="mx-auto grid max-w-4xl gap-8 md:grid-cols-2">
-            <PricingCard
-              features={photoFeatures}
-              icon={IconPhoto}
-              per="per property"
-              popular
-              price="1000 NOK"
-              title="Photo Enhancement"
-            />
-            <PricingCard
-              features={videoFeatures}
-              icon={IconMovie}
-              per="per video"
-              price="1000 NOK"
-              title="Video Creation"
-            />
-          </div>
+          {loading ? (
+            <PricingSkeleton />
+          ) : products.length > 0 ? (
+            <div className="mx-auto grid max-w-4xl gap-8 md:grid-cols-2">
+              {products.map((product, index) => (
+                <PricingCard
+                  key={product.id}
+                  product={product}
+                  isPopular={index === products.length - 1}
+                />
+              ))}
+            </div>
+          ) : (
+            <p className="text-center" style={{ color: 'var(--landing-text-muted)' }}>
+              No pricing plans available.
+            </p>
+          )}
         </section>
 
-        {/* FAQ Section */}
         <section className="px-6 py-24" style={{ backgroundColor: 'var(--landing-bg-alt)' }}>
           <div className="mx-auto max-w-3xl">
             <div className="text-center">
@@ -286,7 +308,6 @@ export function PricingPage() {
           </div>
         </section>
 
-        {/* CTA Section */}
         <section className="px-6 py-24">
           <div
             className="mx-auto max-w-4xl rounded-3xl px-8 py-16 text-center md:px-16"

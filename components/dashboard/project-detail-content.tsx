@@ -664,6 +664,14 @@ interface PaymentStatus {
   status?: 'pending' | 'completed' | 'failed' | 'refunded'
 }
 
+interface PolarProduct {
+  id: string
+  name: string
+  priceCents: number
+  currency: string
+  maxImages: number
+}
+
 interface ProjectDetailContentProps {
   project: Project
   images: ImageGeneration[]
@@ -707,19 +715,34 @@ export function ProjectDetailContent({
   })
   const [accessToken, setAccessToken] = React.useState<string | null>(null)
   const [conversionTracked, setConversionTracked] = React.useState(false)
+  const [applicableProduct, setApplicableProduct] = React.useState<PolarProduct | null>(null)
 
   React.useEffect(() => {
-    if (paymentSuccess && !conversionTracked) {
+    if (paymentRequired) {
+      fetch('/api/products')
+        .then((res) => res.json())
+        .then((data) => {
+          const products = (data.products || []) as PolarProduct[]
+          const imageCount = project.imageCount || 0
+          const valid = products.filter((p) => p.maxImages >= imageCount)
+          setApplicableProduct(valid[0] || products[products.length - 1] || null)
+        })
+        .catch(() => {})
+    }
+  }, [paymentRequired, project.imageCount])
+
+  React.useEffect(() => {
+    if (paymentSuccess && !conversionTracked && applicableProduct) {
       sendGTMEvent({
         event: 'conversion',
         send_to: 'AW-11543766872/VvQ7CMjNkIEaENjOv4Ar',
-        value: 99,
+        value: applicableProduct.priceCents / 100,
         currency: 'USD',
         transaction_id: project.id,
       })
       setConversionTracked(true)
     }
-  }, [paymentSuccess, conversionTracked, project.id])
+  }, [paymentSuccess, conversionTracked, project.id, applicableProduct])
 
   // Update runIds when images change (e.g., after server refresh with new processing images)
   React.useEffect(() => {
@@ -1086,7 +1109,9 @@ export function ProjectDetailContent({
                 ) : (
                   <>
                     <IconSparkles className="h-4 w-4" />
-                    Pay $99 to Process
+                    {applicableProduct
+                      ? `Pay $${(applicableProduct.priceCents / 100).toFixed(0)} to Process`
+                      : 'Pay to Process'}
                   </>
                 )}
               </Button>
